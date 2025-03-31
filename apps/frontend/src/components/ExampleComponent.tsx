@@ -26,7 +26,7 @@ const ExampleComponent = () => {
                 setLoading(false);
 
                 // res.data holds a JSON object with a property called score
-                // This object is created in the backend route (score.ts)
+                // This object is created in the backend route (employeeRoutes.ts)
                 // It's a good idea to define the property keys in a common constants file
                 // To avoid potential runtime errors due to typos or missing properties
                 // You can then use bracket notation to access these properties dynamically

@@ -3,10 +3,12 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import healthcheckRouter from './routes/healthcheck';
-import highscoreRouter from './routes/score.ts';
+import employeeRoutes from './routes/employeeRoutes';
 import { API_ROUTES } from 'common/src/constants';
+import PrismaClient from './bin/prisma-client.ts';
 
 const app: Express = express(); // Setup the backend
+const port = 3000;
 
 // Setup generic middlewear
 app.use(
@@ -21,11 +23,12 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
+app.use('/api', employeeRoutes);
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
 app.use(API_ROUTES.HEALTHCHECK, healthcheckRouter);
-app.use(API_ROUTES.SCORE, highscoreRouter);
+app.use(API_ROUTES.EMPLOYEE, employeeRoutes);
 
 /**
  * Catch all 404 errors, and forward them to the error handler
@@ -46,6 +49,13 @@ app.use((err: HttpError, req: Request, res: Response) => {
 
     // Reply with the error
     res.status(err.status || 500);
+});
+app.listen(port, (error) => {
+    if (!error) {
+        console.log('Server is Successfully Running, and App is listening on port ' + port);
+    } else {
+        console.log("Error occurred, server can't start", error);
+    }
 });
 
 // Export the backend, so that www.ts can start it

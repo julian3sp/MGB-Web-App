@@ -37,7 +37,7 @@ export function SignInForm(){
                 onClick={(e) => {
                     setView(!viewPW);
                 }}
-                type="button" // Prevent form submission
+                type="button"
             >
                 {viewPW ? "Hide" : "Show"} Password
             </button>

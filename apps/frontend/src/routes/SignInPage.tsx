@@ -1,6 +1,6 @@
 
 import '../styles/signInStyles.css'
-import {SignInForm} from "../components/signIn/SigInForm.tsx";
+import {SignInForm} from "../components/signIn/SignInForm.tsx";
 
 
 export default function SignInPage() {

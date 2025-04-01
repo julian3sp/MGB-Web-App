@@ -8,8 +8,6 @@ import {AppProvider, useAppContext} from "./Globals";
 
 function AppContent() {
     const { isSignedIn, firstName } = useAppContext();
-    console.log(isSignedIn);
-    console.log(firstName);
     return (
         <Router>
             <div className={'navBar'}>

@@ -1,0 +1,21 @@
+.service-request {
+    display: inline-block;
+    align-items: center; /* Centers items horizontally */
+    justify-content: center; /* Centers items vertically */
+    width: 70%; /* Makes the element take up the full width of its container */
+
+    background-color: #a9a9a9; /* Sets a light gray background */
+    border-bottom: 2px solid black; /* Adds a black bottom border with a thickness of 2px */
+
+    padding: 20px; /* Adds 20px of space inside the element */
+}
+
+.service-request .service-request-title {}
+
+.form-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    outline: solid black 2px;
+    padding: 20px;
+}

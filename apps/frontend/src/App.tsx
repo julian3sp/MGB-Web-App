@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
 import SignInPage from './routes/SignInPage.tsx';
+import ServiceRequestPage from './routes/ServiceRequestPage.tsx';
 import {AppProvider, useAppContext} from "./Globals";
 
 function AppContent() {
@@ -26,6 +27,9 @@ function AppContent() {
                             <Link to="/services" className="servBut">
                                 Services
                             </Link>
+                            <Link to="/service-request" className={"text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all"}>
+                                Services Request Forms
+                            </Link>
                         </div>
                     </div>
 
@@ -41,6 +45,7 @@ function AppContent() {
                     <Route path="/directories" element={<ExamplePage />} />
                     <Route path="/services" element={<ExamplePage />} />
                     <Route path="/login" element={<SignInPage />} />
+                    <Route path="/service-request" element={<ServiceRequestPage />} />
                 </Routes>
             </div>
         </Router>

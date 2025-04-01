@@ -6,11 +6,22 @@ function PersonalInformationForm() {
             <form className="service-form">
                 <input
                     className = {"service-request"}
-                    placeholder={"Insert email"}
+                    placeholder={"insert email ..."}
                 />
                 <input
                     className = {"service-request"}
-                    placeholder={"Insert name"}
+                    placeholder={"insert full name ..."}
+                />
+
+            </form>
+            <form className="service-form">
+                <input
+                    className = {"service-request"}
+                    placeholder={"insert phone number ..."}
+                />
+                <input
+                    className = {"service-request"}
+                    placeholder={"insert employee ID ..."}
                 />
             </form>
         </div>

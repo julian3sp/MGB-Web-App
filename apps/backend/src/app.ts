@@ -2,10 +2,8 @@ import createError, { HttpError } from 'http-errors';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import healthcheckRouter from './routes/serviceReqsRoutes.ts';
 import employeeRoutes from './routes/employeeRoutes';
 import { API_ROUTES } from 'common/src/constants';
-import PrismaClient from './bin/prisma-client.ts';
 import serviceReqsRouter from './routes/serviceReqsRoutes.ts';
 import assignedRoutes from './routes/assignedRoutes.ts';
 

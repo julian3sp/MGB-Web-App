@@ -11,36 +11,42 @@ export function SignInForm(){
 
     return(
         <form>
-            <input className={"fnBox"}
+            <h2 className ="inputHeader" id="firstNameHeader">First Name</h2>
+            <input className={"inputBox"} id="firstNameBox"
                    value={firstName}
                    onChange={(e)=>{setFirst(e.target.value)}}
                    placeholder="First Name"
             ></input><br/>
-            <input className={"lnBox"}
+            <h2 className ="inputHeader" id="lastNameHeader">Last Name</h2>
+            <input className={"inputBox"} id="lastNameBox"
                    value={lastName}
                    onChange={(e)=>{setLast(e.target.value)}}
                    placeholder="Last Name"
             ></input><br/>
-            <input className={"emailBox"}
+            <h2 className ="inputHeader" id="emailHeader">Email</h2>
+            <input className={"inputBox"} id="emailBox"
                    value={email}
                    onChange={(e)=>{setEmail(e.target.value)}}
                    placeholder="yourEmail@email.com"
             ></input><br/>
-            <input className={"pwBox"}
-                   value={password}
-                   onChange={(e) => { setPassword(e.target.value) }}
-                   placeholder="Password"
-                   type={viewPW ? "text" : "password"}
-            ></input>
-            <button
-                className={"viewPWButton"}
-                onClick={(e) => {
-                    setView(!viewPW);
-                }}
-                type="button"
-            >
-                {viewPW ? "Hide" : "Show"} Password
-            </button>
+            <h2 className ="inputHeader" id="passwordHeader">Password</h2>
+            <div id="passwordBlock">
+                <input className={"inputBox"} id="passwordBox"
+                       value={password}
+                       onChange={(e) => { setPassword(e.target.value) }}
+                       placeholder="Enter your password"
+                       type={viewPW ? "text" : "password"}
+                ></input>
+                <button
+                    id="viewPWButton"
+                    onClick={(e) => {
+                        setView(!viewPW);
+                    }}
+                    type="button"
+                >
+                    {viewPW ? "Hide" : "Show"} Password
+                </button>
+            </div>
         </form>
     )
 }

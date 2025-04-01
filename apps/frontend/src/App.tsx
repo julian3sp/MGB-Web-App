@@ -38,7 +38,7 @@ function AppContent() {
                 <Routes>
                     <Route path="/directories" element={<ExamplePage/>}/>
                     <Route path="/services" element={<ExamplePage/>}/>
-                    <Route path="/login" element={<SignInPage />}/>
+                    <Route path="/login" element={<SignInPage/>}/>
                 </Routes>
             </div>
         </Router>

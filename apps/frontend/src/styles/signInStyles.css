@@ -1,3 +1,58 @@
-.SignInPage{
-    border: 3px solid red;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); /*for Poppins font*/
+
+.SignInPage{ /*This is the white box above the bakground*/
+    margin: auto; /*should be centered in the middle of the page*/
+    padding: 42px 72px 42px 72px;
+    background-color: white;
+    border-radius: 30px; /*rounded edges*/
+    width: 540px;
+    height: 496px; /*should be 456px, once the login is fixed, for now i will change it*/
+}
+
+#signInBackground{/*Background of sign-in page*/
+    display: flex; /*center the items within it (the sign in page)*/
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    /*background-color: #003a96; !*background gradient*!*/
+    background-image: radial-gradient(circle at top left, white, #003a96);
+}
+
+.SignInTitle{ /*Header for the signin page, control font and alignment*/
+    font-family: 'Poppins', sans-serif;
+    font-weight: 550;
+    font-size: 26px;
+    text-align: center;
+}
+
+.inputBox{ /*all inputs on the form extend this class. it controls the grey border around the input boc as well as the size & font*/
+    border: 1px #ececec solid;
+    border-radius: 5px;
+    padding: 5px 5px 5px 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    width: 396px;
+    height: 48px;
+}
+
+#passwordBox{ /*overriding the password box so that we can have the show and hide password box in the same line*/
+    width: 260px;
+}
+
+.inputHeader{ /*for headers on the form. controls font and padding*/
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    padding-top: 10px;
+    padding-bottom: 3px;
+}
+
+#firstNameHeader{ /*overrides the first name header for extra padding*/
+    padding-top: 20px;
+}
+
+#viewPWButton{ /*styling for the password show/hide button*/
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    padding-left: 15px;
 }

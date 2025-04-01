@@ -3,7 +3,7 @@ import './serviceForm.css'
 function PersonalInformationForm() {
     return (
         <div className="form-container">
-            <form>
+            <form className="service-form">
                 <input
                     className = {"service-request"}
                     placeholder={"Insert email"}

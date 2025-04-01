@@ -1,18 +1,15 @@
 import express, { Router, Request, Response } from 'express';
-import { Prisma } from 'database';
-import PrismaClient from '../bin/prisma-client';
-
+import PrismaClient from '../bin/prisma-client.ts';
 const router: Router = express.Router();
 
-// Whenever a get request is made, return all employees
 router.get('/', async function (req: Request, res: Response) {
     // Fetch the latest score from database
     try {
-        const result = await PrismaClient.employee.findMany();
+        const result = await PrismaClient.language_request.findMany();
         console.log(result);
         res.json(result);
     } catch (error) {
-        console.error('error fetching employees:', error);
+        console.error('error fetching language requests:', error);
     }
 });
 

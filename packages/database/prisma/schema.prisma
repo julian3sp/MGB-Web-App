@@ -13,10 +13,10 @@ datasource db {
 
 // Example table used in the express router example
 model employee {
-  id               String             @id
-  employee_name    String
-  created_at       DateTime           @default(now())
-  language_request language_request[]
+  id            String             @id
+  employee_name String
+  created_at    DateTime           @default(now())
+  requests      language_request[]
 }
 
 model language_request {

@@ -13,15 +13,14 @@ function AppContent() {
             <div className={'navBar'}>
                 <nav className="flex justify-between items-center bg-white p-3 text-white border-b-1 border-gray-300">
                     <div className="flex items-center space-x-4">
-                        <img src={logo} alt="Mass General Brigham Logo" className="h-6" />
+                        <img src={logo} alt="Mass General Brigham Logo" className="h-6"/>
                         <div className="flex space-x-6">
-                            <Link
-                                to="/directories"
-                                className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all"
-                            >
+                            <Link to="/directories"
+                                  className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all">
                                 Directories
                             </Link>
-                            <Link to="/services" className="servBut">
+                            <Link to="/services"
+                                  className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all">
                                 Services
                             </Link>
                         </div>

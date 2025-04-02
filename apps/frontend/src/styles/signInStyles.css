@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); /*for Poppins font*/
+/*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap'); !*for Poppins font*!*/
 
-.SignInPage{ /*This is the white box above the bakground*/
+.SignInPage{ /*This is the white box above the bakground X*/
     margin: auto; /*should be centered in the middle of the page*/
     padding: 42px 72px 42px 72px;
     background-color: white;
@@ -9,13 +9,13 @@
     height: 496px; /*should be 456px, once the login is fixed, for now i will change it*/
 }
 
-#signInBackground{/*Background of sign-in page*/
+#signInBackground{/*Background of sign-in page X*/
     display: flex; /*center the items within it (the sign in page)*/
     justify-content: center;
     align-items: center;
     width: 100vw;
     height: 100vh;
-    /*background-color: #003a96; !*background gradient*!*/
+    /*background-color: blue;*/
     background-image: radial-gradient(circle at top left, white, #003a96);
 }
 

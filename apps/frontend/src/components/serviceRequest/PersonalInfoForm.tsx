@@ -4,10 +4,13 @@ import {useState} from "react";
 function PersonalInformationForm() {
     const [text, setText] = useState("")
     return (
-        <div className="form-container">
-            <form className="service-form">
-                <input
-                    value = "fullName"
+        <>
+            <h2 className={"service-form-section"}> Section 1: Employee Information </h2>
+            <div className="form-container">
+
+                <form className="service-form">
+                    <input
+                        value = "fullName"
                     className = {"service-request"}
                     placeholder={"insert email . . ."}
                 />
@@ -19,10 +22,10 @@ function PersonalInformationForm() {
                     placeholder={"insert full name . . ."}
                 />
 
-            </form>
-            <form className="service-form">
-                <input
-                    value = "phoneNumber"
+                </form>
+                <form className="service-form">
+                    <input
+                        value = "phoneNumber"
                     className = {"service-request"}
                     placeholder={"insert phone number . . ."}
                 />
@@ -32,7 +35,7 @@ function PersonalInformationForm() {
                     placeholder={"insert employee ID . . ."}
                 />
             </form>
-        </div>
+        </div></>
     )
 }
 

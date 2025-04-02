@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {useAppContext} from "../../Globals.tsx";
 import {useNavigate } from 'react-router-dom';
 import {InputHeader} from "./InputHeader.tsx";
 import {InputBox} from "./InputBox.tsx";
@@ -15,11 +14,10 @@ export function SignInForm(){
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
-    const { setFirstName, setSignedIn } = useAppContext();
 
     function handleSubmit(){
-        setFirstName(firstName)
-        setSignedIn(true)
+        localStorage.setItem("firstName", "User");
+        localStorage.setItem("isSignedIn", "true");
         navigate('../../../index.html')
     }
 

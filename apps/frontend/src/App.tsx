@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
 import SignInPage from './routes/SignInPage.tsx';
-import {AppProvider, useAppContext} from "./Globals";
 
-function AppContent() {
-    const { isSignedIn, firstName } = useAppContext();
+function App() {
+    const loginTag: string = localStorage.getItem("firstName") || "Log In"
+    const isSignedIn: boolean = localStorage.getItem("isSignedIn") === "true";
     return (
         <Router>
             <div className={'navBar'}>
@@ -28,7 +28,7 @@ function AppContent() {
 
                     <Link to="/login">
                         <button className={isSignedIn ? 'signedIn' : 'notSignedIn'}>
-                            <span className={"defaultSign"}> {isSignedIn ? firstName : 'Login'}</span>
+                            <span className={"defaultSign"}> {loginTag}</span>
                             <span className="hover-text">Sign in on another account</span>
                         </button>
                     </Link>
@@ -41,14 +41,6 @@ function AppContent() {
                 </Routes>
             </div>
         </Router>
-    );
-}
-
-function App() {
-    return (
-        <AppProvider>
-            <AppContent />
-        </AppProvider>
     );
 }
 

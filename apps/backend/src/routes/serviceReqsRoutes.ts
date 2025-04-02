@@ -7,7 +7,7 @@ import PrismaClient, {
 const router: Router = express.Router();
 import { insertLanguageRequest } from '../bin/prisma-client';
 
-router.get('/servicereqs', async function (req: Request, res: Response) {
+router.get('/', async function (req: Request, res: Response) {
     // Fetch the latest score from database
     try {
         await insertEmployee('000000000', 'Julian Espinal');

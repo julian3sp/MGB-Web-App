@@ -1,8 +1,19 @@
 import './serviceForm.css'
 import {useState} from "react";
 
-function PersonalInformationForm() {
-    const [text, setText] = useState("")
+type personalInfoType = {
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    employeeID: string;
+}
+
+type personalInfoFormProps = {
+    formData: personalInfoType;
+    setFormData: (formData: personalInfoType) => void;}
+
+function PersonalInformationForm({formData, setFormData}: personalInfoFormProps) {
+
     return (
         <>
             <h2 className={"service-form-section"}> Section 1: Employee Information </h2>
@@ -10,10 +21,13 @@ function PersonalInformationForm() {
 
                 <form className="service-form">
                     <input
-                        value = "fullName"
-                    className = {"service-request"}
-                    placeholder={"insert email . . ."}
+                        required={true}
+                        value = {formData.email}
+                        onChange ={(e) =>  setFormData({... formData, email: e.target.value}) }
+                        className = {"service-request"}
+                        placeholder={"insert email . . ."}
                 />
+                    {!formData.email.includes("@") && <p>error message</p>}
                 <input
                     id = "email"
                     name = "email"

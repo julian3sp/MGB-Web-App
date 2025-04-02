@@ -5,7 +5,6 @@ function PersonalInformationForm() {
         <>
             <h2 className={"service-form-section"}> Section 1: Employee Information </h2>
             <div className="form-container">
-
                 <form className="service-form">
                     <input
                         className = {"service-request"}

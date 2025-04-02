@@ -12,18 +12,20 @@ const SideNav: React.FC<SideNavProps> = ({ children }) => {
     };
 
     return (
-        <div>
+        <div className={"items-start"}>
             {/* Toggle button */}
             <button
                 onClick={toggleSidebar}
-                className="fixed top-1/2 left-0 z-30 text-xl p-3 bg-gray-800 text-white rounded-md focus:outline-none"
+                className={`fixed top-1/2 left-0 z-30  shadow-md text-xl text-right text-darkgray p-3 h-25 w-10 rounded-r-lg bg-[#F4F4F4]  focus:outline-none transform transition-transform duration-300 ${
+                    isOpen ? 'translate-x-64' : 'translate-x-0' // Move button 64px right when sidebar is open
+                }`}
             >
                 {isOpen ? '←': '→'}
             </button>
 
             {/* Sidebar */}
             <div
-                className={`fixed top-15 left-0 h-full bg-gray-700 text-white w-64 transform transition-transform duration-300 rounded-r-lg ${
+                className={`fixed top-15 left-0 h-full bg-[#F4F4F4] shadow-xl text-white w-64 transform transition-transform duration-300 rounded-r-lg ${
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
@@ -31,14 +33,6 @@ const SideNav: React.FC<SideNavProps> = ({ children }) => {
                     {children}
                 </div>
             </div>
-
-            {/* Overlay */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0"
-                    onClick={toggleSidebar}
-                ></div>
-            )}
         </div>
     );
 };

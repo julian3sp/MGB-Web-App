@@ -1,6 +1,7 @@
 import RequestButton from "./formTypeButton.tsx";
 import TextInput from "../TextInput.tsx";
 import React, { useState } from 'react';
+import SideNav from "../serviceRequest/sideNavigation.tsx"
 
 function ServiceFormSideBar() {
     const [searchData, setSearch] = useState('')
@@ -8,22 +9,52 @@ function ServiceFormSideBar() {
         console.log(form + "requested");
     };
 
-    return(
-    <>
-        <h2 className="text-gray-800 text-lg mb-4">Mass General</h2>
-        {/* Menu */}
-        <div className="w-full">
-            <div className="text-gray-700 font-semibold mb-2">Menu</div>
-            <div className="text-gray-700 flex items-center justify-between bg-gray-100 rounded-lg py-2 px-4 w-full">
-                <TextInput label={"Search Form:"} placeholder={"Search Form ..."} value={searchData}
-                           onChange={(e) => setSearch(e.target.value)} />
-            </div> <br />
+    return (
+        <>
+            <SideNav>
+                <h2 className="text-gray-800 text-lg mb-4">Mass General</h2>
+                <div className="flex flex-wrap items-center justify-center">
+                    <img
+                        src="./images/user.png"
+                        alt="user"
+                        width="100"
+                        height="100"
+                    />
+                    <h2 className={'text-gray-700 font-bold text-2xl'}> Account</h2>
+                </div>
 
-            <RequestButton label={"Language Interpreter Service Form"} onClick={() => handleFormRequest("Language Interpreter Service Form")}/>
+                <div className="w-full">
+                    <div className="text-gray-700 font-semibold mb-2">Menu</div>
 
-        </div>
-    </>
-    )
+
+                    <div className="p-2 bg-gray-300 rounded">
+                        <div className="text-gray-700 flex justify-between  py-2">
+                            <TextInput
+                                label={'Search Form:'}
+                                placeholder={'Search Form ...'}
+                                value={searchData}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+
+                        <RequestButton
+                            label={'Language Interpreter Service Form'}
+                            onClick={() => handleFormRequest('Language Interpreter Service Form')}
+                        />
+                        <RequestButton
+                            label={'Medical Device Form'}
+                            onClick={() => handleFormRequest('Medical Device Form')}
+                        />
+                        <RequestButton
+                            label={'Service Request Form'}
+                            onClick={() => handleFormRequest('Service Request Form')}
+                        />
+                    </div>
+
+                </div>
+            </SideNav>
+        </>
+    );
 }
 export default ServiceFormSideBar;
 

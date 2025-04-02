@@ -37,3 +37,4 @@ out
 
 **/.prettiercache
 **/.vite
+backend\package.json

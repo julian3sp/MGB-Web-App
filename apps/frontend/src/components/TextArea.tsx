@@ -7,13 +7,16 @@ type TextAreaProps = {
 
 function TextArea({ label, value, onChange, placeholder }: TextAreaProps) {
     return (
-        <div>
-            <label>{label}</label>
+
+        <div className={"p-5"}>
+            <div className={"mb-2"}>
+            <label >{label}</label>
+            </div>
             <textarea
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className="bg-white border border-gray-300 p-5 w-full rounded-md hover:border-[#a2caff] focus:outline-none"
+                className="bg-white border border-gray-300 p-2 resize-none text-sm w-full h-full rounded-md hover:border-[#a2caff] focus:outline-none"
             />
         </div>
     );

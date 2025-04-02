@@ -2,9 +2,7 @@ import React, {useState} from "react";
 import {useAppContext} from "../../Globals.tsx";
 import {useNavigate } from 'react-router-dom';
 
-
-
-export function SignInForm(){
+export function CreateAccountForm(){
     const navigate = useNavigate();
     const [firstName, setFirst] = useState<string>("")
     const [lastName, setLast] = useState<string>("")
@@ -23,6 +21,18 @@ export function SignInForm(){
         <>
             <h1 className={"SignInTitle"}>Please Sign In!</h1>
             <form className={"signInForm"} onSubmit={() => {handleSubmit()}}>
+                <input className={"fnBox"}
+                       value={firstName}
+                       onChange={(e)=>{setFirst(e.target.value)}}
+                       placeholder="First Name"
+                       required={true}
+                ></input><br/>
+                <input className={"lnBox"}
+                       value={lastName}
+                       onChange={(e)=>{setLast(e.target.value)}}
+                       placeholder="Last Name"
+                       required={true}
+                ></input><br/>
                 <input className={"emailBox"}
                        value={email}
                        onChange={(e)=>{setEmail(e.target.value)}}

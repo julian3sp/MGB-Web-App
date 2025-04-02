@@ -19,7 +19,6 @@ function LanguageRequestForm() {
     return (
         <>
             <div>
-
                 <form className="flex justify-center gap-2 mb-3">
                     <div className="border-2 rounded-lg shadow-lg overflow-hidden w-[800px]">
                         <table className="w-[800px] mx-auto text-sm text-center border-black rounded-md border-collapse">

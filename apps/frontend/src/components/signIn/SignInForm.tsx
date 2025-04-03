@@ -10,15 +10,15 @@ import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
 
 export function SignInForm(){
     const navigate = useNavigate();
-    const [firstName, setFirst] = useState<string>("")
-    const [lastName, setLast] = useState<string>("")
+    // const [firstName, setFirst] = useState<string>("")
+    // const [lastName, setLast] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
     const { setFirstName, setSignedIn } = useAppContext();
 
     function handleSubmit(){
-        setFirstName(firstName)
+        setFirstName(/*firstName*/"User")
         setSignedIn(true)
         navigate('../../../index.html')
     }
@@ -27,20 +27,20 @@ export function SignInForm(){
         <>
             <h1 className="font-[Poppins] font-[550] text-[26px] text-center">Login to your account</h1>
             <form id="signInForm" onSubmit={() => {handleSubmit()}}>
-                <InputHeader className="pt-[20px]">First Name</InputHeader>
-                <InputBox value={firstName} setState={setFirst} placeholder={"First Name"} />
-                <br/>
-                <InputHeader>Last Name</InputHeader>
-                <InputBox value={lastName} setState={setLast} placeholder={"Last Name"} />
-                <br/>
-                <InputHeader>Email</InputHeader>
+                {/*<InputHeader className="pt-[20px]">First Name</InputHeader>*/}
+                {/*<InputBox value={firstName} setState={setFirst} placeholder={"First Name"} />*/}
+                {/*<br/>*/}
+                {/*<InputHeader>Last Name</InputHeader>*/}
+                {/*<InputBox value={lastName} setState={setLast} placeholder={"Last Name"} />*/}
+                {/*<br/>*/}
+                <InputHeader className="pt-[20px]">Email</InputHeader>
                 <InputBox value={email} setState={setEmail} placeholder={"yourEmail@email.com"} />
                 <br/>
-                <InputHeader>Password</InputHeader>
+                <InputHeader className="pt-[15px]">Password</InputHeader>
                 <InputBox value={password} setState={setPassword} placeholder={"Enter your password"} width = "w-[260px]" type={viewPW ? "text" : "password"} />
                 <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
                 <br/>
-                <SubmitPasswordButton />
+                <SubmitPasswordButton>Login now</SubmitPasswordButton>
             </form>
         </>
     )

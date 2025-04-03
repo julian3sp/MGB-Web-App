@@ -9,7 +9,7 @@ export default function DepartmentPage() {
 
     /* Error handling */
     if (!department) {
-        return <p>Department not found</p>
+        return <p><strong>Department not found</strong></p>
     }
 
     return (

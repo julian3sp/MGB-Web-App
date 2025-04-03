@@ -1,7 +1,7 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import DepartmentList from "../components/DepartmentList.ts";
-import DepartmentPage from "../components/DepartmentPage.tsx";
+import DepartmentRoutes from "./DepartmentRoutes.tsx";
 
 
 const DepartmentDirectory = () => {
@@ -22,7 +22,7 @@ const DepartmentDirectory = () => {
                         {DepartmentList.map((dept) => (
                             <li key={dept.id} className="mb-2">
                                 <NavLink
-                                    to={`/DepartmentList/${dept.id}`}
+                                    to={`/directory/${dept.id}`}
                                     className={({ isActive }) =>
                                         `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold" : "text-gray-700 hover:bg-gray-100"}` /* Put departments in rounded rectangle boxes*/
                                     }
@@ -35,10 +35,7 @@ const DepartmentDirectory = () => {
                 </nav>
 
                 <div className="flex-1 bg-white p-6 border" style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}> {/*Border styling*/}
-                    <Routes> {/*Routing for URLs*/}
-                        <Route path="/DepartmentList/:deptId" element={<DepartmentPage />} />
-                        <Route path="*" element={<p className="text-gray-600">Select a department.</p>} /> {/*If no department selected, "Select a department" will be displayed*/}
-                    </Routes>
+                    <DepartmentRoutes />
                 </div>
             </div>
 

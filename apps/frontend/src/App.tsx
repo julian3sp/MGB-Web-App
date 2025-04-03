@@ -34,9 +34,9 @@ function App() {
                         </Link>
                         <div className="flex">
 
-                            <Link to="/directories"
+                            <Link to="/directory"
                                   className="text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all">
-                                Directories
+                                Directory
                             </Link>
                             <Link to="/services"
                                   className="text-sm text-black hover:bg-[#003a96]  font-[Poppins] hover:text-white  px-5 py-5 transition-all">
@@ -57,7 +57,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
                     <Route path="/services" element={<ServiceRequestPage />} />
-                    <Route path="/directories" element={<DepartmentDirectory />} />
+                    <Route path="/directory" element={<DepartmentDirectory />} />
+                    <Route path="/directory/*" element={<DepartmentDirectory />} />
                     <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                     <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 </Routes>

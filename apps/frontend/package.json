@@ -15,6 +15,7 @@
         "@auth0/auth0-react": "^2.1.1",
         "@tailwindcss/vite": "^4.0.17",
         "axios": "^1.7.4",
+        "bootstrap": "^5.3.3",
         "common": "*",
         "dotenv": "*",
         "dotenv-cli": "*",
@@ -28,6 +29,7 @@
         "serve": "^14.2.0"
     },
     "devDependencies": {
+        "@types/bootstrap": "^5",
         "@types/node": "*",
         "@types/prop-types": "^15.7.5",
         "@types/react": "^18.0.37",

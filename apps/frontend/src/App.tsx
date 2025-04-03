@@ -32,9 +32,9 @@ function App() {
                     <div className="flex items-center space-x-4">
                         <img src={logo} alt="Mass General Brigham Logo" className="h-6"/>
                         <div className="flex space-x-6">
-                            <Link to="/directories"
+                            <Link to="/directory"
                                   className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all">
-                                Directories
+                                Directory
                             </Link>
                             <Link to="/services"
                                   className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all">
@@ -55,7 +55,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
                     <Route path="/services" element={<ServiceRequestPage />} />
-                    <Route path="/directories" element={<DepartmentDirectory />} />
+                    <Route path="/directory" element={<DepartmentDirectory />} />
+                    <Route path="/directory/*" element={<DepartmentDirectory />} />
                     <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                     <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 </Routes>

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
-import WelcomePage from './routes/WelcomePage.tsx';
+import { WelcomePage } from './routes/WelcomePage.tsx';
 
 function App() {
     return (

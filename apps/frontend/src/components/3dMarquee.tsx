@@ -1,10 +1,8 @@
-import Carousel from 'react-bootstrap/Carousel';
-import basketball from '../../assets/basketball.jpeg';
-import leposter from '../../assets/lebron-poster.jpg';
-import { ThreeDMarquee } from './ui/3d-marquee';
+"use client";
+import { ThreeDMarquee } from "./ui/3d-marquee";
 
-function UncontrolledExample() {
-  const marqueeImages = [
+export function ThreeDMarqueeDemoSecond() {
+  const images = [
     "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
     "https://assets.aceternity.com/animated-modal.png",
     "https://assets.aceternity.com/animated-testimonials.webp",
@@ -37,51 +35,36 @@ function UncontrolledExample() {
     "https://assets.aceternity.com/wobble-card.png",
     "https://assets.aceternity.com/world-map.webp",
   ];
-
   return (
-    <Carousel>
-      <Carousel.Item>
-        <img 
-          src={basketball} 
-          alt="Carousel" 
-          className="h-[500px] w-full object-cover" 
-        />
-        <Carousel.Caption 
-          className="text-white font-bold" 
-          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}
-        >
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <div className="relative h-[500px] w-full">
-          <ThreeDMarquee className="h-full w-full" images={marqueeImages} />
-        </div>
-        <Carousel.Caption 
-          className="text-white font-bold" 
-          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}
-        >
-          <h3>Marquee Slide</h3>
-          <p>A dynamic 3D marquee slide.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img 
-          src={leposter} 
-          alt="Carousel" 
-          className="h-[500px] w-full object-cover" 
-        />
-        <Carousel.Caption 
-          className="text-white font-bold" 
-          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}
-        >
-          <h3>Third slide label</h3>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+    <div className="relative mx-auto my-10 flex h-screen w-full max-w-7xl flex-col items-center justify-center overflow-hidden rounded-3xl">
+      <h2 className="relative z-20 mx-auto max-w-4xl text-center text-2xl font-bold text-balance text-white md:text-4xl lg:text-6xl">
+        This is your life and it&apos;s ending one{" "}
+        <span className="relative z-20 inline-block rounded-xl bg-blue-500/40 px-4 py-1 text-white underline decoration-sky-500 decoration-[6px] underline-offset-[16px] backdrop-blur-sm">
+          moment
+        </span>{" "}
+        at a time.
+      </h2>
+      <p className="relative z-20 mx-auto max-w-2xl py-8 text-center text-sm text-neutral-200 md:text-base">
+        You are not your job, you&apos;re not how much money you have in the
+        bank. You are not the car you drive. You&apos;re not the contents of
+        your wallet.
+      </p>
+
+      <div className="relative z-20 flex flex-wrap items-center justify-center gap-4 pt-4">
+        <button className="rounded-md bg-sky-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-black focus:outline-none">
+          Join the club
+        </button>
+        <button className="rounded-md border border-white/20 bg-white/10 px-6 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20 focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black focus:outline-none">
+          Read more
+        </button>
+      </div>
+
+      {/* overlay */}
+      <div className="absolute inset-0 z-10 h-full w-full bg-black/80 dark:bg-black/40" />
+      <ThreeDMarquee
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        images={images}
+      />
+    </div>
   );
 }
-
-export default UncontrolledExample;

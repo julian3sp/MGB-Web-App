@@ -10,7 +10,7 @@ export function InputBox({ value, setState, placeholder, width="", type }: {
     return (
         <input
             {...(type && { type })}
-            className={`border-[1px] border-[#ececec] border-solid rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || "w-[396px]"}`}
+            className={`border-[1px] border-[#ececec] border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || "w-[396px]"}`}
             value={value}
             onChange={(e)=>{setState(e.target.value)}}
             placeholder={placeholder}

@@ -1,24 +1,20 @@
 type TextAreaProps = {
-    label: string;
     value: string;
-    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    setState: (value: string) => void;
     placeholder?: string; // Optional
 };
 
-function TextArea({ label, value, onChange, placeholder }: TextAreaProps) {
+function TextArea({value, setState, placeholder }: TextAreaProps) {
     return (
 
-        <div className={"p-5"}>
-            <div className={"mb-2"}>
-            <label >{label}</label>
-            </div>
+
             <textarea
                 value={value}
-                onChange={onChange}
+                onChange={(e)=>{setState(e.target.value)}}
                 placeholder={placeholder}
-                className="bg-white border border-gray-300 p-2 resize-none text-sm w-full h-full rounded-md hover:border-[#a2caff] focus:outline-none"
+                className="border-[1px] border-[#ececec] border-solid hover:border-[#a2caff] rounded-[5px] py-[20px] pl-[15px] text-[14px] font-[Poppins] resize-none text-[14px] w-full h-full rounded-md hover:border-[#a2caff]"
             />
-        </div>
+
     );
 }
 

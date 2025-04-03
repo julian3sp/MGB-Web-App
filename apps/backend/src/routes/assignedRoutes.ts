@@ -6,7 +6,6 @@ import PrismaClient, {
     insertEmployee,
     insertLanguageRequest,
 } from '../bin/prisma-client';
-
 const router: Router = express.Router();
 
 // Whenever a get request is made, return all employees

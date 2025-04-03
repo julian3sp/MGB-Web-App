@@ -4,10 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import SignInPage from './routes/SignInPage.tsx';
 import CreateAccountPage from './routes/CreateAccountPage.tsx';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
-import ExamplePage from './routes/ExamplePage.tsx';
-import WelcomePage from './routes/WelcomePage.tsx';
 import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
+import { WelcomePage } from './routes/WelcomePage.tsx';
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");

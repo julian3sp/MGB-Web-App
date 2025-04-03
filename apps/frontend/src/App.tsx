@@ -4,13 +4,19 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
 import SignInPage from './routes/SignInPage.tsx';
+import CreateAccountPage from './routes/CreateAccountPage.tsx';
 
 function App() {
-    const loginTag: string = localStorage.getItem("firstName") || "Log In"
-    const isSignedIn: boolean = localStorage.getItem("isSignedIn") === "true";
+    const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
+    const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
+    console.log('loginTag: ' + { loginTag });
+    console.log('isSignedIn: ' + isSignedIn);
+    
 
     function signOut(){
         localStorage.clear()
+        setLoginTag("Log In")
+        setIsSignedIn(false)
     }
 
     return (
@@ -30,7 +36,8 @@ function App() {
                             </Link>
                         </div>
                     </div>
-                        <Link to="/login">
+                        <Link to="/signIn">
+
                             <button className={isSignedIn ? 'signedIn' : 'notSignedIn'} onClick={signOut}>
                                 <span className={"defaultSign"}> {loginTag}</span>
                                 <span className="hover-text">Sign out</span>
@@ -41,7 +48,8 @@ function App() {
                 <Routes>
                     <Route path="/directories" element={<ExamplePage />} />
                     <Route path="/services" element={<ExamplePage />} />
-                    <Route path="/login" element={<SignInPage />} />
+                    <Route path="/signIn" element={<SignInPage />} />
+                    <Route path="/createAcc" element={<CreateAccountPage />} />
                 </Routes>
             </div>
         </Router>

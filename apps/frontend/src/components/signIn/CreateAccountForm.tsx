@@ -1,14 +1,9 @@
 import React, {useState} from "react";
-import {useAppContext} from "../../Globals.tsx";
-import {useNavigate } from 'react-router-dom';
 import {InputHeader} from "./InputHeader.tsx";
 import {InputBox} from "./InputBox.tsx";
 import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
-//import 'src/styles/mainStyles.css';
-//import './styles/signInStyles.css';
-
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 export function CreateAccountForm(){
     const [firstName, setFirst] = useState<string>("")
@@ -16,10 +11,13 @@ export function CreateAccountForm(){
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
+    const navigate = useNavigate();
+
 
     function handleSubmit(){
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("isSignedIn", "true");
+        navigate(-2)
     }
 
     return(
@@ -40,8 +38,9 @@ export function CreateAccountForm(){
                 <InputBox value={password} setState={setPassword} placeholder={"Enter your password"} width = "w-[260px]" type={viewPW ? "text" : "password"} />
                 <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
                 <br/>
-                <SubmitPasswordButton>Create account</SubmitPasswordButton>
-
+                <Link to={"/"} state={{ refresh: true }}>
+                    <SubmitPasswordButton>Create account</SubmitPasswordButton>
+                </Link>
             </form>
         </>
     )

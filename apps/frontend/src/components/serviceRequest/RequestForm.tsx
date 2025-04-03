@@ -1,8 +1,10 @@
 import {useState} from "react";
-import TextInput from "../TextInput.tsx";
 import {AuthenticationError} from "@auth0/auth0-react";
 import TextArea from "../TextArea.tsx";
 import SubmitButton from "../SubmitButton.tsx";
+import {InputBox} from "../signIn/InputBox.tsx";
+import {InputHeader} from "../signIn/InputHeader.tsx";
+import ResetButton from "../ResetButton.tsx";
 
 type requestFormProps = {
     title: string, 
@@ -11,116 +13,85 @@ type requestFormProps = {
 
 function RequestForm({title, item} : requestFormProps) {
     const [response, setResponse] = useState('')
-    const [formData, setFormData] = useState(
-        {
-            fullName: '',
-            email: '',
-            phoneNumber: '',
-            employeeID: '',
-            device: '',
-            roomNumber: '',
-            comments: ''
-        });
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [employeeID, setEmployeeID] = useState('');
+    const [device, setDevice] = useState('');
+    const [roomNumber, setRoomNumber] = useState('');
+    const [comments, setComments] = useState('');
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        setResponse("Name: " + formData.fullName + " Email: " + formData.email + " Phone Number: " + formData.phoneNumber + " Employee ID: " + formData.employeeID
-       + " Device: " + formData.device + " Room Number: " + formData.roomNumber + " Comments: " + formData.comments)
+        setResponse("Name: " + fullName + " Email: " + email + " Phone Number: " + phoneNumber + " Employee ID: " + employeeID
+       + " Device: " + device + " Room Number: " + roomNumber + " Comments: " + comments)
+    }
+    const handleReset = (e) => {
+        e.preventDefault();
+        setEmail('');
+        setFullName('');
+        setPhoneNumber('');
+        setEmployeeID('');
+        setDevice('');
+        setRoomNumber('');
+        setComments('');
     }
 
     return (
         <>
             <div>
-                <form className="flex justify-center mb-3 mt-3 text-sm " onSubmit={handleSubmit}>
-                    <div className="border-1 rounded-lg shadow-lg overflow-hidden w-[800px]  bg-white flex flex-col gap-7">
-                        {/* Header */}
-                        <h2 className="text-center py-5 text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
+                <form className="justify-center  text-sm" onSubmit={handleSubmit} onReset={handleReset}>
+                    <div className=" rounded-lg shadow-lg overflow-hidden w-200 bg-white flex flex-col gap-5">
+
+                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
                             {title}
                         </h2>
 
-                        {/* Employee Information */}
-                        <div className="grid grid-cols-2 w-full gap-6 px-6 ">
-                            <TextInput
-                                label="Email:"
-                                placeholder="Insert email..."
-                                value={formData.email}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, email: e.target.value })
-                                }
-                            />
-                            <TextInput
-                                label="Full Name:"
-                                placeholder="Insert full name..."
-                                value={formData.fullName}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, fullName: e.target.value })
-                                }
-                            />
-                            <TextInput
-                                label="Phone Number:"
-                                placeholder="Insert phone number..."
-                                value={formData.phoneNumber}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, phoneNumber: e.target.value })
-                                }
-                            />
-                            <TextInput
-                                label="Employee ID:"
-                                placeholder="Insert employee ID..."
-                                value={formData.employeeID}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, employeeID: e.target.value })
-                                }
-                            />
-                            <TextInput
-                                label={item + ":"}
-                                placeholder={"Enter " + item + "..."}
-                                value={formData.device}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, device: e.target.value })
-                                }
-                            />
-                            <TextInput
-                                label="Room:"
-                                placeholder="Enter Room Number..."
-                                value={formData.roomNumber}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, roomNumber: e.target.value })
-                                }
-                            />
+                        {/* Employee Information (Two-Column Grid) */}
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                            <div>
+                                <InputHeader>Email:</InputHeader>
+                                <InputBox value={email} setState={setEmail} placeholder="Enter your Email" width="w-full" />
+                            </div>
+
+                            <div>
+                                <InputHeader>Full Name:</InputHeader>
+                                <InputBox value={fullName} setState={setFullName} placeholder="Enter your Full Name" width="w-full" />
+                            </div>
+
+                            <div>
+                                <InputHeader>Phone Number:</InputHeader>
+                                <InputBox value={phoneNumber} setState={setPhoneNumber} placeholder="Enter your Phone Number" width="w-full" />
+                            </div>
+
+                            <div>
+                                <InputHeader>Employee ID:</InputHeader>
+                                <InputBox value={employeeID} setState={setEmployeeID} placeholder="Enter your Employee ID" width="w-full" />
+                            </div>
+
+                            <div>
+                                <InputHeader>Device:</InputHeader>
+                                <InputBox value={device} setState={setDevice} placeholder="Enter your Device" width="w-full" />
+                            </div>
+
+                            <div>
+                                <InputHeader>Room Number:</InputHeader>
+                                <InputBox value={roomNumber} setState={setRoomNumber} placeholder="Enter your Room Number" width="w-full" />
+                            </div>
+                        </div>
+                        <div className={"mr-5 ml-5"}>
+                        <InputHeader children={"Additional Comments:"}/>
+                            <TextArea placeholder="Additional Comments..." value={comments} setState={setComments} />
                         </div>
 
-                        <TextArea
-                            label="Additional Instructions:"
-                            placeholder="Additional Comments..."
-                            value={formData.comments}
-                            onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
-                        />
-
                         {/* Buttons */}
-                        <div className="flex justify-center mb-2 gap-10">
-                            <div className={'p-3'}>
-                                <button
-                                    type="reset"
-                                    className="bg-[#FFFFFF] text-black px-10 p-2 border-1 rounded-md hover:bg-[#C70039] hover:text-white hover:border-black focus:outline-none"
-                                    onClick={() =>
-                                        setFormData({
-                                            email: '',
-                                            fullName: '',
-                                            phoneNumber: '',
-                                            employeeID: '',
-                                            device: '',
-                                            roomNumber: '',
-                                            comments: '',
-                                        })
-                                    }
-                                >
-                                    Reset
-                                </button>
-                            </div>
-                            <SubmitButton label="Submit" type="submit" />
+                        <div className=" flex  gap-5 justify-center">
+                            <ResetButton label={"Reset"} />
+                            <SubmitButton label="Submit" />
                         </div>
                     </div>
                 </form>
+
             </div>
             <div>{response}</div>
         </>

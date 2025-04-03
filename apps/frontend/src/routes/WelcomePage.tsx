@@ -5,7 +5,7 @@ import map from "../../assets/map.jpg";
 
 export function WelcomePage() {
   return (
-    <div className="flex flex-col overflow-hidden -mt-10">
+    <div className="flex flex-col overflow-hidden -mt-10 p-10">
       <ContainerScroll
         titleComponent={
           <>

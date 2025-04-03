@@ -1,17 +1,18 @@
 import React from 'react';
 import './styles/mainStyles.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import logo from "../assets/Mass-General-Brigham-Logo.png";
-import ExamplePage from './routes/ExamplePage.tsx';
 import SignInPage from './routes/SignInPage.tsx';
 import CreateAccountPage from './routes/CreateAccountPage.tsx';
+import logo from "../assets/Mass-General-Brigham-Logo.png";
+import ExamplePage from './routes/ExamplePage.tsx';
+import WelcomePage from './routes/WelcomePage.tsx';
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
     const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
     console.log('loginTag: ' + { loginTag });
     console.log('isSignedIn: ' + isSignedIn);
-    
+
 
     function signOut(){
         localStorage.clear()
@@ -35,6 +36,9 @@ function App() {
                                 Services
                             </Link>
                         </div>
+                        <div className="flex items-center h-full px-4 text-sm text-black transition-all hover:bg-[#003a96] hover:!text-white hover:font-bold cursor-pointer">
+                            Services
+                        </div>
                     </div>
                         <Link to="/signIn">
 
@@ -46,6 +50,7 @@ function App() {
                 </nav>
 
                 <Routes>
+                    <Route path="/" element={<WelcomePage />} />
                     <Route path="/directories" element={<ExamplePage />} />
                     <Route path="/services" element={<ExamplePage />} />
                     <Route path="/signIn" element={<SignInPage />} />

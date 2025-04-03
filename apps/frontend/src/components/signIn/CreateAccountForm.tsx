@@ -17,7 +17,6 @@ export function CreateAccountForm(){
     function handleSubmit(){
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("isSignedIn", "true");
-        navigate(-2)
     }
 
     return(

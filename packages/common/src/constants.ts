@@ -1,4 +1,5 @@
 export const API_ROUTES = {
-    HEALTHCHECK: '/api/healthcheck',
-    SCORE: '/api/score',
+    SERVICEREQS: '/api/servicereqs',
+    EMPLOYEE: '/api/employee',
+    ASSIGNED: '/api/assigned'
 };

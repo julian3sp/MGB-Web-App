@@ -7,6 +7,7 @@ import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
 
 import WelcomePage from './routes/WelcomePage.tsx';
+import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -42,9 +43,6 @@ function App() {
                             </Link>
 
                         </div>
-                        <div className="flex items-center h-full px-4 text-sm text-black transition-all hover:bg-[#003a96] hover:!text-white hover:font-bold cursor-pointer">
-                            Services
-                        </div>
                     </div>
 
                         <Link to="/signIn">
@@ -61,7 +59,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
                     <Route path="/directories" element={<ExamplePage />} />
-                    <Route path="/services" element={<ExamplePage />} />
+                    <Route path="/services" element={<ServiceRequestPage />} />
 
                     <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                     <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />

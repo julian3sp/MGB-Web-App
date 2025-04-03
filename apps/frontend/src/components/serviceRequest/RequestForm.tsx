@@ -1,4 +1,3 @@
-import './serviceForm.css'
 import {useState} from "react";
 import TextInput from "../TextInput.tsx";
 import {AuthenticationError} from "@auth0/auth0-react";
@@ -11,6 +10,7 @@ type requestFormProps = {
 }
 
 function RequestForm({title, item} : requestFormProps) {
+    const [response, setResponse] = useState('')
     const [formData, setFormData] = useState(
         {
             fullName: '',
@@ -21,11 +21,16 @@ function RequestForm({title, item} : requestFormProps) {
             roomNumber: '',
             comments: ''
         });
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setResponse("Name: " + formData.fullName + " Email: " + formData.email + " Phone Number: " + formData.phoneNumber + " Employee ID: " + formData.employeeID
+       + " Device: " + formData.device + " Room Number: " + formData.roomNumber + " Comments: " + formData.comments)
+    }
 
     return (
         <>
             <div>
-                <form className="flex justify-center mb-5 text-sm ">
+                <form className="flex justify-center mb-5 text-sm " onSubmit={handleSubmit}>
                     <div className="border-1 rounded-lg shadow-lg overflow-hidden w-[800px]  bg-white flex flex-col gap-7">
                         {/* Header */}
                         <h2 className="text-center py-5 text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
@@ -117,6 +122,7 @@ function RequestForm({title, item} : requestFormProps) {
                     </div>
                 </form>
             </div>
+            <div>{response}</div>
         </>
     );
 }

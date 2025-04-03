@@ -5,7 +5,7 @@ import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
 import {Link, useNavigate} from 'react-router-dom';
 
-export function CreateAccountForm(){
+export function CreateAccountForm({rerenderBar}: {rerenderBar: () => void}){
     const [firstName, setFirst] = useState<string>("")
     const [lastName, setLast] = useState<string>("")
     const [email, setEmail] = useState<string>("")
@@ -17,6 +17,8 @@ export function CreateAccountForm(){
     function handleSubmit(){
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("isSignedIn", "true");
+        rerenderBar();
+        navigate("/")
     }
 
     return(
@@ -37,9 +39,7 @@ export function CreateAccountForm(){
                 <InputBox value={password} setState={setPassword} placeholder={"Enter your password"} width = "w-[260px]" type={viewPW ? "text" : "password"} />
                 <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
                 <br/>
-                <Link to={"/"} state={{ refresh: true }}>
                     <SubmitPasswordButton>Create account</SubmitPasswordButton>
-                </Link>
             </form>
         </>
     )

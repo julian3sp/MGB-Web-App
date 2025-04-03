@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {InputHeader} from "./InputHeader.tsx";
 import {InputBox} from "./InputBox.tsx";
 import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
 
-export function SignInForm(){
+export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
@@ -14,7 +14,9 @@ export function SignInForm(){
     function handleSubmit(){
         localStorage.setItem("firstName", "User");
         localStorage.setItem("isSignedIn", "true");
-        navigate(-1)
+        console.log(localStorage.getItem("firstName"));
+        rerenderBar();
+        navigate("/")
     }
 
     return(

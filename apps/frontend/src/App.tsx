@@ -10,8 +10,11 @@ import WelcomePage from './routes/WelcomePage.tsx';
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
     const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
-    console.log('loginTag: ' + { loginTag });
-    console.log('isSignedIn: ' + isSignedIn);
+
+    const updateNavBar = () => {
+        setLoginTag(localStorage.getItem("firstName") || "Log In");
+        setIsSignedIn(localStorage.getItem("isSignedIn") === "true");
+    };
 
 
     function signOut(){
@@ -41,7 +44,6 @@ function App() {
                         </div>
                     </div>
                         <Link to="/signIn">
-
                             <button className={isSignedIn ? 'signedIn' : 'notSignedIn'} onClick={signOut}>
                                 <span className={"defaultSign"}> {loginTag}</span>
                                 <span className="hover-text">Sign out</span>
@@ -53,8 +55,8 @@ function App() {
                     <Route path="/" element={<WelcomePage />} />
                     <Route path="/directories" element={<ExamplePage />} />
                     <Route path="/services" element={<ExamplePage />} />
-                    <Route path="/signIn" element={<SignInPage />} />
-                    <Route path="/createAcc" element={<CreateAccountPage />} />
+                    <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
+                    <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 </Routes>
             </div>
         </Router>

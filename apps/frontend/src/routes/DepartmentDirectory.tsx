@@ -6,29 +6,29 @@ import DepartmentPage from "../components/DepartmentPage.tsx";
 
 const DepartmentDirectory = () => {
     return (
-        <Router>
+
             <div className="flex flex-1">
                 <nav className="w-1/3 bg-white p-4 border"  style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}> {/*Border styling*/}
                     <h2 className="text-2xl font-bold mb-4" style={{ color: '#003A96'}}>Departments:</h2> {/*Header for list of departments on page*/}
                     <ul>
                         {/*key is used to track changes,
-                         each department name can be clicked on to display information about the department (li and NavLink),
-                         block p-2 ... used to create a rounded rectangle around the departments. entire box is clickable
-                         ` (grave key) is used to wrap the line mentioned above, not ' (single quote)
-                         the current selected department will be highlighted
-                         hovering a department will slightly change the shade of the box
-                         "to" line sets the URL to the correct department
-                         */}
+                     each department name can be clicked on to display information about the department (li and NavLink),
+                     block p-2 ... used to create a rounded rectangle around the departments. entire box is clickable
+                     ` (grave key) is used to wrap the line mentioned above, not ' (single quote)
+                     the current selected department will be highlighted
+                     hovering a department will slightly change the shade of the box
+                     "to" line sets the URL to the correct department
+                     */}
                         {DepartmentList.map((dept) => (
                             <li key={dept.id} className="mb-2">
-                            <NavLink
-                                to={`/DepartmentList/${dept.id}`}
-                                className={({ isActive }) =>
-                                    `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold" : "text-gray-700 hover:bg-gray-100"}` /* Put departments in rounded rectangle boxes*/
+                                <NavLink
+                                    to={`/DepartmentList/${dept.id}`}
+                                    className={({ isActive }) =>
+                                        `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold" : "text-gray-700 hover:bg-gray-100"}` /* Put departments in rounded rectangle boxes*/
                                     }
-                            >
-                                {dept.name}
-                            </NavLink>
+                                >
+                                    {dept.name}
+                                </NavLink>
                             </li>
                         ))}
                     </ul>
@@ -41,7 +41,8 @@ const DepartmentDirectory = () => {
                     </Routes>
                 </div>
             </div>
-        </Router>
+
+
     );
 }
 

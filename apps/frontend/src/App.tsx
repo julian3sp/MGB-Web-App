@@ -5,8 +5,8 @@ import SignInPage from './routes/SignInPage.tsx';
 import CreateAccountPage from './routes/CreateAccountPage.tsx';
 import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
-
 import WelcomePage from './routes/WelcomePage.tsx';
+import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
 
 function App() {
@@ -28,7 +28,6 @@ function App() {
     return (
         <Router>
             <div className={'navBar'}>
-
                 <nav className="flex justify-between items-center bg-white p-3 text-white border-b-1 border-gray-300">
                     <div className="flex items-center space-x-4">
                         <img src={logo} alt="Mass General Brigham Logo" className="h-6"/>
@@ -53,17 +52,12 @@ function App() {
                         </Link>
                 </nav>
 
-
-
-
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
-                    <Route path="/directories" element={<ExamplePage />} />
                     <Route path="/services" element={<ServiceRequestPage />} />
-
+                    <Route path="/directories" element={<DepartmentDirectory />} />
                     <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                     <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
-
                 </Routes>
             </div>
         </Router>

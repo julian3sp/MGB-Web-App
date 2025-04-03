@@ -8,23 +8,23 @@ import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
 //import 'src/styles/mainStyles.css';
 //import './styles/signInStyles.css';
 
+import {Link} from 'react-router-dom';
+
 export function CreateAccountForm(){
-    const navigate = useNavigate();
     const [firstName, setFirst] = useState<string>("")
     const [lastName, setLast] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
-    const { setFirstName, setSignedIn } = useAppContext();
 
     function handleSubmit(){
-        setFirstName(firstName)
-        setSignedIn(true)
-        navigate('../../../index.html')
+        localStorage.setItem("firstName", firstName);
+        localStorage.setItem("isSignedIn", "true");
     }
 
     return(
         <>
+
             <h1 className="font-[Poppins] font-[550] text-[26px] text-center">Create an account</h1>
             <form id="signInForm" onSubmit={() => {handleSubmit()}}>
                 <InputHeader className="pt-[30px]">First Name</InputHeader>
@@ -41,6 +41,7 @@ export function CreateAccountForm(){
                 <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
                 <br/>
                 <SubmitPasswordButton>Create account</SubmitPasswordButton>
+
             </form>
         </>
     )

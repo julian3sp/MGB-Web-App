@@ -34,7 +34,8 @@ out
 .yarnrc.yml
 .pnp.loader.cjs
 .pnp.loader.mjs
+.pnp.cjs
 
 **/.prettiercache
 **/.vite
-/.pnp.cjs
+backend\package.json

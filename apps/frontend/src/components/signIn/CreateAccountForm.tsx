@@ -1,4 +1,13 @@
 import React, {useState} from "react";
+import {useAppContext} from "../../Globals.tsx";
+import {useNavigate } from 'react-router-dom';
+import {InputHeader} from "./InputHeader.tsx";
+import {InputBox} from "./InputBox.tsx";
+import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
+import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
+//import 'src/styles/mainStyles.css';
+//import './styles/signInStyles.css';
+
 import {Link} from 'react-router-dom';
 
 export function CreateAccountForm(){
@@ -15,46 +24,24 @@ export function CreateAccountForm(){
 
     return(
         <>
-            <h1 className={"SignInTitle"}>Please Sign In!</h1>
-            <form className={"signInForm"} onSubmit={() => {handleSubmit()}}>
-                <input className={"fnBox"}
-                       value={firstName}
-                       onChange={(e)=>{setFirst(e.target.value)}}
-                       placeholder="First Name"
-                       required={true}
-                ></input><br/>
-                <input className={"lnBox"}
-                       value={lastName}
-                       onChange={(e)=>{setLast(e.target.value)}}
-                       placeholder="Last Name"
-                       required={true}
-                ></input><br/>
-                <input className={"emailBox"}
-                       value={email}
-                       onChange={(e)=>{setEmail(e.target.value)}}
-                       placeholder="yourEmail@email.com"
-                       required={true}
-                ></input><br/>
-                <input className={"pwBox"}
-                       value={password}
-                       onChange={(e) => { setPassword(e.target.value) }}
-                       placeholder="Password"
-                       type={viewPW ? "text" : "password"}
-                       required={true}
-                ></input>
-                <button
-                    className={"viewPWButton"}
-                    onClick={() => {
-                        setView(!viewPW);
-                    }}
-                    type="button"
-                >
-                    {viewPW ? "Hide" : "Show"} Password
-                </button>
+
+            <h1 className="font-[Poppins] font-[550] text-[26px] text-center">Create an account</h1>
+            <form id="signInForm" onSubmit={() => {handleSubmit()}}>
+                <InputHeader className="pt-[30px]">First Name</InputHeader>
+                <InputBox value={firstName} setState={setFirst} placeholder={"First Name"} />
                 <br/>
-                <Link to={"/"}>
-                    <button type={"submit"}>Submit</button>
-                </Link>
+                <InputHeader className="pt-[20px]">Last Name</InputHeader>
+                <InputBox value={lastName} setState={setLast} placeholder={"Last Name"} />
+                <br/>
+                <InputHeader className="pt-[20px]">Email</InputHeader>
+                <InputBox value={email} setState={setEmail} placeholder={"yourEmail@email.com"} />
+                <br/>
+                <InputHeader className="pt-[20px]">Password</InputHeader>
+                <InputBox value={password} setState={setPassword} placeholder={"Enter your password"} width = "w-[260px]" type={viewPW ? "text" : "password"} />
+                <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
+                <br/>
+                <SubmitPasswordButton>Create account</SubmitPasswordButton>
+
             </form>
         </>
     )

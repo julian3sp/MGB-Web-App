@@ -7,7 +7,7 @@ export function ShowPasswordButton({  setView, viewPW, children }: {
 }){
     return (
         <button
-            className="font-[Poppins] text-[15px] pl-[15px] pb-[30px]"
+            className="font-[Poppins] text-[15px] pl-[15px] pb-[35px]"
             onClick={(e) => {setView(!viewPW);}}
             type="button"
         >

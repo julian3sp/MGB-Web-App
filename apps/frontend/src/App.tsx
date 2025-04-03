@@ -7,6 +7,7 @@ import logo from "../assets/Mass-General-Brigham-Logo.png";
 import ExamplePage from './routes/ExamplePage.tsx';
 import WelcomePage from './routes/WelcomePage.tsx';
 import DepartmentDirectory from './routes/DepartmentDirectory';
+import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -39,11 +40,10 @@ function App() {
                                   className="text-sm text-black hover:bg-[#003a96] hover:text-white py-1 px-3 rounded transition-all">
                                 Services
                             </Link>
-                        </div>
-                        <div className="flex items-center h-full px-4 text-sm text-black transition-all hover:bg-[#003a96] hover:!text-white hover:font-bold cursor-pointer">
-                            Services
+
                         </div>
                     </div>
+
                         <Link to="/signIn">
                             <button className={isSignedIn ? 'signedIn' : 'notSignedIn'} onClick={signOut}>
                                 <span className={"defaultSign"}> {loginTag}</span>
@@ -51,10 +51,11 @@ function App() {
                             </button>
                         </Link>
                 </nav>
+
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
+                    <Route path="/services" element={<ServiceRequestPage />} />
                     <Route path="/directories" element={<DepartmentDirectory />} />
-                    <Route path="/services" element={<ExamplePage />} />
                     <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                     <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 </Routes>

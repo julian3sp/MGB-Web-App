@@ -18,5 +18,8 @@ async function main() {
     await insertLanguageRequest(108, 'Russian', null,prisma);
     await insertLanguageRequest(109, 'Spanish', '222222222',prisma);
     await insertLanguageRequest(110, 'Spanish', null,prisma);
-
 }
+
+main();
+
+export default main

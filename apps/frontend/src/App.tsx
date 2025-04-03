@@ -8,6 +8,11 @@ import SignInPage from './routes/SignInPage.tsx';
 function App() {
     const loginTag: string = localStorage.getItem("firstName") || "Log In"
     const isSignedIn: boolean = localStorage.getItem("isSignedIn") === "true";
+
+    function signOut(){
+        localStorage.clear()
+    }
+
     return (
         <Router>
             <div className={'navBar'}>
@@ -25,13 +30,12 @@ function App() {
                             </Link>
                         </div>
                     </div>
-
-                    <Link to="/login">
-                        <button className={isSignedIn ? 'signedIn' : 'notSignedIn'}>
-                            <span className={"defaultSign"}> {loginTag}</span>
-                            <span className="hover-text">Sign in on another account</span>
-                        </button>
-                    </Link>
+                        <Link to="/login">
+                            <button className={isSignedIn ? 'signedIn' : 'notSignedIn'} onClick={signOut}>
+                                <span className={"defaultSign"}> {loginTag}</span>
+                                <span className="hover-text">Sign out</span>
+                            </button>
+                        </Link>
                 </nav>
 
                 <Routes>

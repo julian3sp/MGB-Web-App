@@ -18,7 +18,6 @@ export function SignInForm(){
     function handleSubmit(){
         localStorage.setItem("firstName", "User");
         localStorage.setItem("isSignedIn", "true");
-        navigate('../../../index.html')
     }
 
     return(

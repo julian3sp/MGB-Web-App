@@ -30,7 +30,7 @@ function RequestForm({title, item} : requestFormProps) {
     return (
         <>
             <div>
-                <form className="flex justify-center mb-5 text-sm " onSubmit={handleSubmit}>
+                <form className="flex justify-center mb-3 mt-3 text-sm " onSubmit={handleSubmit}>
                     <div className="border-1 rounded-lg shadow-lg overflow-hidden w-[800px]  bg-white flex flex-col gap-7">
                         {/* Header */}
                         <h2 className="text-center py-5 text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">

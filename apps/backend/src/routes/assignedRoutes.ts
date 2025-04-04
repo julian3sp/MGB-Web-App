@@ -8,7 +8,7 @@ const router: Router = express.Router();
 router.get('/', async function (req: Request, res: Response) {
     // Fetch the latest score from database
     try {
-        const assignedEmployees = await PrismaClient.language_request.findMany({
+        const assignedEmployees = await PrismaClient.service_requests.findMany({
             where: {
                 employee_id: {
                     not: null,

@@ -13,6 +13,7 @@ export function WelcomePage() {
               Never get lost at<br />
               <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
                 Mass General Brigham
+                  <br/><br/>
               </span>
             </h1>
           </>

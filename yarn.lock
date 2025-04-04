@@ -1342,6 +1342,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@trpc/client@npm:^11.0.2":
+  version: 11.0.2
+  resolution: "@trpc/client@npm:11.0.2"
+  peerDependencies:
+    "@trpc/server": 11.0.2
+    typescript: ">=5.7.2"
+  checksum: 10c0/47bbb4def73b8b889c8caea0d459770942211a1f25e6795cb9eae728c3a864df543a202d2b13c3710a802b7db7c8e388f19a874a5e99b6434cf8153c67633b07
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:^11.0.2":
+  version: 11.0.2
+  resolution: "@trpc/server@npm:11.0.2"
+  peerDependencies:
+    typescript: ">=5.7.2"
+  checksum: 10c0/8f23bf01d88cde146147d396e3fedb73d4776dc94f93ea8f6689140b8b8e2852a6e2fb7392120b62d74b9baef978923930b627dc7cf9698c10af581f5ce49b6b
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.11
   resolution: "@tsconfig/node10@npm:1.0.11"
@@ -6487,6 +6506,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
+    "@trpc/client": "npm:^11.0.2"
+    "@trpc/server": "npm:^11.0.2"
     "@types/node": "npm:^22.13.13"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"

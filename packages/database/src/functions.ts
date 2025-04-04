@@ -29,17 +29,19 @@ export async function deleteEmployees(employee_ids: string[], client: PrismaClie
         console.error('error deleting users');
     }
 }
-export async function insertLanguageRequest(
+export async function insertServiceRequest(
     room: number,
     lang: string,
     assigned_employee: string | null,
+    request_type: string,
     client: PrismaClient,
 ) {
     try {
-        const newLangRequest = await client.language_request.create({
+        const newLangRequest = await client.service_requests.create({
             data: {
                 room_num: room,
                 language: lang,
+                request_type: request_type,
                 employee_id: assigned_employee,
             },
         });
@@ -53,7 +55,7 @@ export async function insertLanguageRequest(
 
 export async function deleteLangRequests(request_ids: number[], client: PrismaClient) {
     try {
-        await client.language_request.deleteMany({
+        await client.service_requests.deleteMany({
             where: {
                 request_id: {},
             },

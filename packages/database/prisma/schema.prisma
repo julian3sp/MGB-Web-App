@@ -12,8 +12,18 @@ datasource db {
 }
 
 // Example table used in the express router example
-model Score {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
+model employee {
+  id            String             @id
+  employee_name String
+  created_at    DateTime           @default(now())
+  requests      language_request[]
+}
+
+model language_request {
+  request_id        Int       @id @default(autoincrement())
+  room_num          Int
+  language          String
+  request_date      DateTime  @default(now())
+  employee_id       String?
+  assigned_employee employee? @relation(fields: [employee_id], references: [id])
 }

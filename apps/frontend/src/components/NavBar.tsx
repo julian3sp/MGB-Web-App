@@ -11,21 +11,24 @@ type Props = {
 
 
 export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
-
+    const [tab, setTab] = React.useState<string>("")
     return (
         <nav className="flex justify-between items-center bg-white  text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
-                <Link to={"/"} className={"ml-5"}>
+                <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
                     <img src={logo} alt="Mass General Brigham Logo"  className="h-6"/>
                 </Link>
                 <div className="flex">
-
-                    <Link to="/directory"
-                          className="text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all">
+                    <Link to="/directory" onClick={() => setTab("dir")}
+                          className={tab === "dir" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Directory
                     </Link>
-                    <Link to="/services"
-                          className="text-sm text-black hover:bg-[#003a96]  font-[Poppins] hover:text-white  px-5 py-5 transition-all">
+                    <Link to="/services" onClick={() => setTab("serv")}
+                          className={tab === "serv" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Services
                     </Link>
 

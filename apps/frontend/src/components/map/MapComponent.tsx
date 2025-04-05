@@ -68,10 +68,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                 input.type = 'text';
                 input.placeholder = 'Search Google Maps';
                 input.style.width = '100%';
-                input.style.padding = '12px 40px 12px 16px';
+                input.style.padding = '11px 40px 11px 16px';
                 input.style.border = 'none';
                 input.style.borderRadius = '24px';
-                input.style.fontSize = '16px';
+                input.style.fontSize = '14px';
                 input.style.outline = 'none';
                 input.style.backgroundColor = 'transparent';
 
@@ -83,53 +83,86 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                     </span>
                 `;
 
-                // Style the Google Places Autocomplete dropdown
                 const styleAutocomplete = () => {
                     const pacContainer = document.querySelector('.pac-container') as HTMLElement;
-                    if (pacContainer) {
-                        pacContainer.style.marginTop = '0';
-                        pacContainer.style.marginLeft = '10px';
-                        pacContainer.style.width = '400px';
-                        pacContainer.style.border = 'none';
-                        pacContainer.style.borderTop = '1px solid #eee';
-                        pacContainer.style.borderRadius = '0 0 16px 16px';
-                        pacContainer.style.boxShadow = 'none';
-                        pacContainer.style.backgroundColor = 'white';
-
-                        // Style individual place suggestions
-                        const items = pacContainer.querySelectorAll('.pac-item');
-                        items.forEach((item) => {
-                            const itemElement = item as HTMLElement;
-                            itemElement.style.padding = '8px 16px';
-                            itemElement.style.cursor = 'pointer';
-                            itemElement.style.border = 'none';
-                            itemElement.style.fontSize = '16px';
-                            itemElement.style.display = 'flex';
-                            itemElement.style.alignItems = 'center';
-                            
-                            // Add location icon to each suggestion
-                            const locationIcon = document.createElement('span');
-                            locationIcon.className = 'material-icons';
-                            locationIcon.textContent = 'location_on';
-                            locationIcon.style.marginRight = '12px';
-                            locationIcon.style.color = '#757575';
-                            itemElement.insertBefore(locationIcon, itemElement.firstChild);
-
-                            // Style hover state
-                            itemElement.addEventListener('mouseover', () => {
-                                itemElement.style.backgroundColor = '#f1f1f1';
-                            });
-                            itemElement.addEventListener('mouseout', () => {
-                                itemElement.style.backgroundColor = 'transparent';
-                            });
+                    if (!pacContainer) return;
+                  
+                    // Style the main container
+                    pacContainer.style.marginTop = '0';
+                    pacContainer.style.marginLeft = '10px';
+                    pacContainer.style.width = '400px';
+                    pacContainer.style.border = 'none';
+                    pacContainer.style.borderRadius = '8px'; // Less rounded corners to match Google
+                    pacContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
+                    pacContainer.style.backgroundColor = '#fff';
+                    pacContainer.style.overflow = 'hidden';
+                  
+                    // Get all autocomplete suggestion items
+                    const items = pacContainer.querySelectorAll('.pac-item');
+                    items.forEach((item, index) => {
+                        const itemElement = item as HTMLElement;
+                        itemElement.style.display = 'flex';
+                        itemElement.style.alignItems = 'center';
+                        itemElement.style.padding = '8px 16px'; // Slightly less padding to match Google
+                        itemElement.style.cursor = 'pointer';
+                        itemElement.style.fontSize = '14px';
+                        itemElement.style.color = '#3c4043';
+                        itemElement.style.borderBottom = '1px solid #e8eaed'; // Add divider between all items
+                    
+                        // Remove the default Google icon if present
+                        const defaultIcon = itemElement.querySelector('.pac-icon');
+                        if (defaultIcon) {
+                            defaultIcon.remove();
+                        }
+                    
+                        // Insert a location pin icon at the start
+                        const locationIcon = document.createElement('span');
+                        locationIcon.className = 'material-icons';
+                        locationIcon.textContent = 'place'; // Use 'place' instead of 'location_on' to match Google's icon
+                        locationIcon.style.marginRight = '12px';
+                        locationIcon.style.fontSize = '18px'; // Slightly smaller
+                        locationIcon.style.color = '#70757a'; // Gray color matching Google
+                        itemElement.insertBefore(locationIcon, itemElement.firstChild);
+                    
+                        // Style the primary text (place name)
+                        const mainText = itemElement.querySelector('.pac-item-query');
+                        if (mainText) {
+                            (mainText as HTMLElement).style.fontWeight = '400'; // Regular weight to match Google
+                            (mainText as HTMLElement).style.display = 'block';
+                            (mainText as HTMLElement).style.color = '#202124';
+                        }
+                    
+                        // Style the secondary text (address)
+                        const detailsText = itemElement.querySelector('.pac-item-details');
+                        if (detailsText) {
+                            (detailsText as HTMLElement).style.fontSize = '12px';
+                            (detailsText as HTMLElement).style.color = '#70757a';
+                        }
+                    
+                        // Hover effect
+                        itemElement.addEventListener('mouseover', () => {
+                            itemElement.style.backgroundColor = '#f1f3f4';
                         });
-                    }
-                };
+                        itemElement.addEventListener('mouseout', () => {
+                            itemElement.style.backgroundColor = '#fff';
+                        });
+                    });
+
+                    // Add "powered by Google" at bottom
+                    const footerElement = document.createElement('div');
+                    footerElement.style.padding = '6px 10px';
+                    footerElement.style.textAlign = 'right';
+                    footerElement.style.fontSize = '11px';
+                    footerElement.style.color = '#70757a';
+                    footerElement.style.borderTop = '1px solid #e8eaed';
+                    footerElement.innerHTML = 'powered by <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>';
+                    pacContainer.appendChild(footerElement);
+                };                  
 
                 // Create recent searches container
                 const recentContainer = document.createElement('div');
-                recentContainer.style.padding = '8px 0';
-                recentContainer.style.borderTop = '1px solid #eee';
+                recentContainer.style.padding = '0'; // Remove padding
+                recentContainer.style.borderTop = '1px solid #e8eaed';
                 recentContainer.style.display = 'none';
                 recentContainer.style.maxHeight = '400px';
                 recentContainer.style.overflowY = 'auto';
@@ -146,8 +179,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                             searchItem.style.cursor = 'pointer';
                             searchItem.style.display = 'flex';
                             searchItem.style.alignItems = 'center';
+                            searchItem.style.borderBottom = '1px solid #e8eaed'; // Add divider between items
                             searchItem.innerHTML = `
-                                <span class="material-icons" style="margin-right: 12px; color: #757575;">
+                                <span class="material-icons" style="margin-right: 12px; color: #70757a; font-size: 18px;">
                                     history
                                 </span>
                                 ${search.name}
@@ -167,7 +201,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                                 searchWrapper.style.borderRadius = '24px';
                             });
                             searchItem.addEventListener('mouseover', () => {
-                                searchItem.style.backgroundColor = '#f1f1f1';
+                                searchItem.style.backgroundColor = '#f1f3f4';
                             });
                             searchItem.addEventListener('mouseout', () => {
                                 searchItem.style.backgroundColor = 'transparent';
@@ -331,4 +365,4 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
     );
 };
 
-export default MapComponent; 
+export default MapComponent;

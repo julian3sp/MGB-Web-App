@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
-import './styles/mainStyles.css'
+import React, { useState } from 'react';
+import './styles/mainStyles.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import SignInPage from './routes/SignInPage';
 import CreateAccountPage from './routes/CreateAccountPage';
 import DepartmentDirectory from './routes/DepartmentDirectory';
-import ServiceRequestPage from "./routes/ServiceRequestPage";
+import ServiceRequestPage from './routes/ServiceRequestPage';
 import { WelcomePage } from './routes/WelcomePage';
-import NavBar from "./components/NavBar";
-import { QueryClient, QueryClientProvider } from 'react-query';
-import {httpBatchLink} from "@trpc/client";
-import trpc from "./lib/utils.ts";
+import NavBar from './components/NavBar';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { httpBatchLink} from '@trpc/client';
+import {trpc} from "./lib/trpc.ts";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -19,7 +19,7 @@ function App() {
         trpc.createClient({
             links: [
                 httpBatchLink({
-                    url: 'http://localhost:3000/trpc',
+                    url: 'http://localhost:3001/trpc'
                 }),
             ],
         }),

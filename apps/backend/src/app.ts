@@ -6,28 +6,34 @@ import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
+import { router } from './server/trpc.ts';
 
-const app: Express = express(); // Setup the backend
-
-
-const createContext = ({req, res}: trpcExpress.createContext) => ({});
-
+const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
-
 const t = initTRPC.context<Context>().create();
+const cors = require('cors');
 
 const appRouter = t.router({
     requestList: getRequests,
     createRequest: makeRequest,
     getEmployees: getEmployee,
-    makeEmployee: makeEmployee
-})
+    makeEmployee: makeEmployee,
+});
 
-app.use('/trpc', trpcExpress.createExpressMiddleware({
-    router: appRouter,
-    createContext,
-}),
-)
+const app: Express = express(); // Setup the backend
+app.use(cors());
+app.use('/trpc', (req, res, next) => {
+    console.log(`[TRPC] ${req.method} ${req.url}`);
+    next();
+});
+
+app.use(
+    '/trpc',
+    trpcExpress.createExpressMiddleware({
+        router: appRouter,
+        createContext,
+    })
+);
 
 // Setup generic middlewear
 app.use(
@@ -42,7 +48,6 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-
 
 /**
  * Catch all 404 errors, and forward them to the error handler

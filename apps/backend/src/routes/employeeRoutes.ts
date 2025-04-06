@@ -1,18 +1,10 @@
 import express, { Router, Request, Response } from 'express';
 import { Prisma } from 'database';
 import PrismaClient from '../bin/prisma-client';
-import { insertEmployee} from "database";
+import { insertEmployee } from 'database';
 import { publicProcedure } from '../server/trpc';
 
 const router: Router = express.Router();
-
-const appRouter = router({
-    requestList: publicProcedure
-        .query( async () => {
-            const requests = await PrismaClient.service_requests.findMany()
-            return requests;
-        })
-})
 
 // Whenever a get request is made, return all employees
 router.get('/', async function (req: Request, res: Response) {

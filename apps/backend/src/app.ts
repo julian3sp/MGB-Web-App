@@ -6,8 +6,34 @@ import employeeRoutes from './routes/employeeRoutes';
 import { API_ROUTES } from 'common/src/constants';
 import serviceReqsRouter from './routes/serviceReqsRoutes.ts';
 import assignedRoutes from './routes/assignedRoutes.ts';
+import { initTRPC } from '@trpc/server';
+import * as trpcExpress from '@trpc/server/adapters/express';
+import { router } from './trpc.ts'
+import { getRequests, makeRequest } from './procedures/requests.ts';
+import { getEmployee, makeEmployee } from './server/procedures/employee';
 
 const app: Express = express(); // Setup the backend
+
+
+const createContext = ({req, res}: trpcExpress.createContext) => ({});
+
+type Context = Awaited<ReturnType<typeof createContext>>;
+
+const t = initTRPC.context<Context>().create();
+
+const appRouter = t.router({
+    requestList: getRequests,
+    createRequest: makeRequest,
+    getEmployees: getEmployee,
+    makeEmployee: makeEmployee
+
+})
+
+app.use('/trpc', trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+}),
+)
 
 // Setup generic middlewear
 app.use(
@@ -22,6 +48,7 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
+
 
 // Setup routers. ALL ROUTERS MUST use /api as a start point, or they
 // won't be reached by the default proxy and prod setup
@@ -53,3 +80,4 @@ app.use((err: HttpError, req: Request, res: Response) => {
 
 // Export the backend, so that www.ts can start it
 export default app;
+export type appRouter = typeof appRouter;

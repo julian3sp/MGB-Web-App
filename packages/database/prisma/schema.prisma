@@ -16,10 +16,10 @@ model employee {
   id            String             @id
   employee_name String
   created_at    DateTime           @default(now())
-  requests      service_requests[]
+  requests      service_request[]
 }
 
-model service_requests {
+model service_request {
   request_id        Int       @id @default(autoincrement())
   room_num          Int
   request_type      String

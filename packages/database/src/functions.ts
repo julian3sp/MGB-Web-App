@@ -37,7 +37,7 @@ export async function insertServiceRequest(
     client: PrismaClient,
 ) {
     try {
-        const newLangRequest = await client.service_requests.create({
+        const newServiceRequest = await client.service_request.create({
             data: {
                 room_num: room,
                 language: lang,
@@ -45,7 +45,7 @@ export async function insertServiceRequest(
                 employee_id: assigned_employee,
             },
         });
-        console.log(newLangRequest);
+        console.log(newServiceRequest);
     } catch (error) {
         console.log(error);
         return;
@@ -53,9 +53,9 @@ export async function insertServiceRequest(
     }
 }
 
-export async function deleteLangRequests(request_ids: number[], client: PrismaClient) {
+export async function deleteServiceRequests(request_ids: number[], client: PrismaClient) {
     try {
-        await client.service_requests.deleteMany({
+        await client.service_request.deleteMany({
             where: {
                 request_id: {},
             },

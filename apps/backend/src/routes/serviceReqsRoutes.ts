@@ -5,7 +5,9 @@ const router: Router = express.Router();
 router.get('/', async function (req: Request, res: Response) {
     // Fetch the latest score from database
     try {
-        const result = await PrismaClient.service_requests.findMany();
+
+
+        const result = await PrismaClient.service_request.findMany();
         console.log(result);
         res.json(result);
     } catch (error) {

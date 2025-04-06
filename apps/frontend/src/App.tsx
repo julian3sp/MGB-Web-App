@@ -16,7 +16,6 @@ function App() {
         localStorage.clear()
         setLoginTag("Log In")
         setIsSignedIn(false)
-        updateNavBar()
     }
 
     const updateNavBar = () => {

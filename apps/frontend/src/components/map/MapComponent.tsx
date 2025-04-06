@@ -29,7 +29,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
         loader.load().then(() => {
             if (mapRef.current) {
                 const newMap = new google.maps.Map(mapRef.current, {
-                    center: { lat: 42.3601, lng: -71.0589 }, // Default center
+                    center: { lat: 42.3601, lng: -71.0589 },
                     zoom: 12,
                     fullscreenControl: true,
                     mapTypeControl: false,
@@ -43,7 +43,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                     suppressMarkers: false,
                 });
 
-                // Create search box container
                 const searchContainer = document.createElement('div');
                 searchContainer.style.position = 'absolute';
                 searchContainer.style.top = '10px';
@@ -53,7 +52,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                 searchContainer.style.flexDirection = 'column';
                 searchContainer.style.alignItems = 'flex-start';
 
-                // Create search wrapper for rounded effect
                 const searchWrapper = document.createElement('div');
                 searchWrapper.style.position = 'relative';
                 searchWrapper.style.width = '400px';
@@ -63,7 +61,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                 searchWrapper.style.margin = '10px';
                 searchWrapper.style.transition = 'border-radius 0.2s ease';
 
-                // Create search input
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.placeholder = 'Search Google Maps';
@@ -75,99 +72,20 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                 input.style.outline = 'none';
                 input.style.backgroundColor = 'transparent';
 
-                // Create search icon
                 const searchIcon = document.createElement('div');
                 searchIcon.innerHTML = `
-                    <span class="material-icons" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #757575;">
+                    <span class="material-icons" style="position: absolute; right: 12px; top: 10px; cursor: pointer; color: #757575;">
                         search
                     </span>
                 `;
 
-                const styleAutocomplete = () => {
-                    const pacContainer = document.querySelector('.pac-container') as HTMLElement;
-                    if (!pacContainer) return;
-                  
-                    // Style the main container
-                    pacContainer.style.marginTop = '0';
-                    pacContainer.style.marginLeft = '10px';
-                    pacContainer.style.width = '400px';
-                    pacContainer.style.border = 'none';
-                    pacContainer.style.borderRadius = '8px'; // Less rounded corners to match Google
-                    pacContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
-                    pacContainer.style.backgroundColor = '#fff';
-                    pacContainer.style.overflow = 'hidden';
-                  
-                    // Get all autocomplete suggestion items
-                    const items = pacContainer.querySelectorAll('.pac-item');
-                    items.forEach((item, index) => {
-                        const itemElement = item as HTMLElement;
-                        itemElement.style.display = 'flex';
-                        itemElement.style.alignItems = 'center';
-                        itemElement.style.padding = '8px 16px'; // Slightly less padding to match Google
-                        itemElement.style.cursor = 'pointer';
-                        itemElement.style.fontSize = '14px';
-                        itemElement.style.color = '#3c4043';
-                        itemElement.style.borderBottom = '1px solid #e8eaed'; // Add divider between all items
-                    
-                        // Remove the default Google icon if present
-                        const defaultIcon = itemElement.querySelector('.pac-icon');
-                        if (defaultIcon) {
-                            defaultIcon.remove();
-                        }
-                    
-                        // Insert a location pin icon at the start
-                        const locationIcon = document.createElement('span');
-                        locationIcon.className = 'material-icons';
-                        locationIcon.textContent = 'place'; // Use 'place' instead of 'location_on' to match Google's icon
-                        locationIcon.style.marginRight = '12px';
-                        locationIcon.style.fontSize = '18px'; // Slightly smaller
-                        locationIcon.style.color = '#70757a'; // Gray color matching Google
-                        itemElement.insertBefore(locationIcon, itemElement.firstChild);
-                    
-                        // Style the primary text (place name)
-                        const mainText = itemElement.querySelector('.pac-item-query');
-                        if (mainText) {
-                            (mainText as HTMLElement).style.fontWeight = '400'; // Regular weight to match Google
-                            (mainText as HTMLElement).style.display = 'block';
-                            (mainText as HTMLElement).style.color = '#202124';
-                        }
-                    
-                        // Style the secondary text (address)
-                        const detailsText = itemElement.querySelector('.pac-item-details');
-                        if (detailsText) {
-                            (detailsText as HTMLElement).style.fontSize = '12px';
-                            (detailsText as HTMLElement).style.color = '#70757a';
-                        }
-                    
-                        // Hover effect
-                        itemElement.addEventListener('mouseover', () => {
-                            itemElement.style.backgroundColor = '#f1f3f4';
-                        });
-                        itemElement.addEventListener('mouseout', () => {
-                            itemElement.style.backgroundColor = '#fff';
-                        });
-                    });
-
-                    // Add "powered by Google" at bottom
-                    const footerElement = document.createElement('div');
-                    footerElement.style.padding = '6px 10px';
-                    footerElement.style.textAlign = 'right';
-                    footerElement.style.fontSize = '11px';
-                    footerElement.style.color = '#70757a';
-                    footerElement.style.borderTop = '1px solid #e8eaed';
-                    footerElement.innerHTML = 'powered by <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>';
-                    pacContainer.appendChild(footerElement);
-                };                  
-
-                // Create recent searches container
                 const recentContainer = document.createElement('div');
-                recentContainer.style.padding = '0'; // Remove padding
+                recentContainer.style.padding = '0';
                 recentContainer.style.borderTop = '1px solid #e8eaed';
                 recentContainer.style.display = 'none';
                 recentContainer.style.maxHeight = '400px';
                 recentContainer.style.overflowY = 'auto';
 
-                // Show recent searches on focus
                 input.addEventListener('focus', () => {
                     const recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
                     if (recentSearches.length > 0) {
@@ -179,7 +97,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                             searchItem.style.cursor = 'pointer';
                             searchItem.style.display = 'flex';
                             searchItem.style.alignItems = 'center';
-                            searchItem.style.borderBottom = '1px solid #e8eaed'; // Add divider between items
+                            searchItem.style.borderBottom = '1px solid #e8eaed';
                             searchItem.innerHTML = `
                                 <span class="material-icons" style="margin-right: 12px; color: #70757a; font-size: 18px;">
                                     history
@@ -188,14 +106,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                             `;
                             searchItem.addEventListener('click', () => {
                                 input.value = search.name;
-                                if (search.location) {
-                                    const destination = {
-                                        lat: search.location.lat,
-                                        lng: search.location.lng,
-                                    };
-                                    if (userLocation) {
-                                        calculateAndDisplayRoute(newDirectionsService, newDirectionsRenderer, userLocation, destination);
-                                    }
+                                if (search.location && userLocation) {
+                                    calculateAndDisplayRoute(
+                                        newDirectionsService,
+                                        newDirectionsRenderer,
+                                        newMap,
+                                        userLocation,
+                                        search.location
+                                    );
                                 }
                                 recentContainer.style.display = 'none';
                                 searchWrapper.style.borderRadius = '24px';
@@ -212,7 +130,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                     }
                 });
 
-                // Hide recent searches when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!searchWrapper.contains(e.target as Node)) {
                         recentContainer.style.display = 'none';
@@ -228,7 +145,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
 
                 const searchBox = new google.maps.places.SearchBox(input);
 
-                // Add mutation observer to style autocomplete when it appears
                 const observer = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
                         if (mutation.addedNodes.length) {
@@ -251,11 +167,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                 setDirectionsRenderer(newDirectionsRenderer);
                 setSearchBox(searchBox);
 
-                if (onMapLoad) {
-                    onMapLoad(newMap);
-                }
+                if (onMapLoad) onMapLoad(newMap);
 
-                // Get user's current location
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
@@ -264,9 +177,8 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                                 lng: position.coords.longitude,
                             };
                             setUserLocation(userPos);
+                            newMap.setZoom(16);
                             newMap.setCenter(userPos);
-
-                            // Add marker for user's location
                             new google.maps.Marker({
                                 position: userPos,
                                 map: newMap,
@@ -283,9 +195,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                     );
                 }
 
-                // Listen for search box changes
                 searchBox.addListener('places_changed', () => {
                     const places = searchBox.getPlaces();
+                    if (!userLocation) {
+                        console.warn("User location not yet available.");
+                        return;
+                    }
                     if (places && places.length > 0) {
                         const place = places[0];
                         if (place.geometry && place.geometry.location) {
@@ -293,8 +208,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                                 lat: place.geometry.location.lat(),
                                 lng: place.geometry.location.lng(),
                             };
-                            
-                            // Save to recent searches
+
                             const recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
                             const newSearch = {
                                 name: place.name,
@@ -303,7 +217,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                             const updatedSearches = [newSearch, ...recentSearches.filter((s: any) => s.name !== place.name)].slice(0, 5);
                             localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
 
-                            // Add marker for the searched location
                             new google.maps.Marker({
                                 position: destination,
                                 map: newMap,
@@ -313,9 +226,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
                                 }
                             });
 
-                            if (userLocation) {
-                                calculateAndDisplayRoute(newDirectionsService, newDirectionsRenderer, userLocation, destination);
-                            }
+                            calculateAndDisplayRoute(
+                                newDirectionsService,
+                                newDirectionsRenderer,
+                                newMap,
+                                userLocation,
+                                destination
+                            );
                         }
                     }
                 });
@@ -329,9 +246,13 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
     const calculateAndDisplayRoute = (
         directionsService: google.maps.DirectionsService,
         directionsRenderer: google.maps.DirectionsRenderer,
+        map: google.maps.Map,
         start: google.maps.LatLngLiteral,
         end: google.maps.LatLngLiteral
     ) => {
+        directionsRenderer.setDirections({ routes: [] }); // Clear old route
+        directionsRenderer.setMap(map); // Ensure renderer is attached
+
         directionsService.route(
             {
                 origin: start,
@@ -341,12 +262,81 @@ const MapComponent: React.FC<MapComponentProps> = ({ onMapLoad }) => {
             (response, status) => {
                 if (status === 'OK' && response) {
                     directionsRenderer.setDirections(response);
+
+                    // Optional: zoom map to fit route
+                    const bounds = new google.maps.LatLngBounds();
+                    response.routes[0].overview_path.forEach((point) => bounds.extend(point));
+                    map.fitBounds(bounds);
                 } else {
                     console.error('Directions request failed:', status);
                     setError('Could not calculate route. Please try again.');
                 }
             }
         );
+    };
+
+    const styleAutocomplete = () => {
+        const pacContainer = document.querySelector('.pac-container') as HTMLElement;
+        if (!pacContainer) return;
+        pacContainer.style.marginTop = '0';
+        pacContainer.style.marginLeft = '10px';
+        pacContainer.style.width = '400px';
+        pacContainer.style.border = 'none';
+        pacContainer.style.borderRadius = '8px';
+        pacContainer.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
+        pacContainer.style.backgroundColor = '#fff';
+        pacContainer.style.overflow = 'hidden';
+
+        const items = pacContainer.querySelectorAll('.pac-item');
+        items.forEach((item) => {
+            const itemElement = item as HTMLElement;
+            itemElement.style.display = 'flex';
+            itemElement.style.alignItems = 'center';
+            itemElement.style.padding = '8px 16px';
+            itemElement.style.cursor = 'pointer';
+            itemElement.style.fontSize = '14px';
+            itemElement.style.color = '#3c4043';
+            itemElement.style.borderBottom = '1px solid #e8eaed';
+
+            const defaultIcon = itemElement.querySelector('.pac-icon');
+            if (defaultIcon) defaultIcon.remove();
+
+            const locationIcon = document.createElement('span');
+            locationIcon.className = 'material-icons';
+            locationIcon.textContent = 'place';
+            locationIcon.style.marginRight = '12px';
+            locationIcon.style.fontSize = '18px';
+            locationIcon.style.color = '#70757a';
+            itemElement.insertBefore(locationIcon, itemElement.firstChild);
+
+            const mainText = itemElement.querySelector('.pac-item-query');
+            if (mainText) {
+                (mainText as HTMLElement).style.fontWeight = '400';
+                (mainText as HTMLElement).style.color = '#202124';
+            }
+
+            const detailsText = itemElement.querySelector('.pac-item-details');
+            if (detailsText) {
+                (detailsText as HTMLElement).style.fontSize = '12px';
+                (detailsText as HTMLElement).style.color = '#70757a';
+            }
+
+            itemElement.addEventListener('mouseover', () => {
+                itemElement.style.backgroundColor = '#f1f3f4';
+            });
+            itemElement.addEventListener('mouseout', () => {
+                itemElement.style.backgroundColor = '#fff';
+            });
+        });
+
+        const footerElement = document.createElement('div');
+        footerElement.style.padding = '6px 10px';
+        footerElement.style.textAlign = 'right';
+        footerElement.style.fontSize = '11px';
+        footerElement.style.color = '#70757a';
+        footerElement.style.borderTop = '1px solid #e8eaed';
+        footerElement.innerHTML = 'powered by <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span>';
+        pacContainer.appendChild(footerElement);
     };
 
     if (error) {

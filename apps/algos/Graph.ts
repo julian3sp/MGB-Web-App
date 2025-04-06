@@ -1,6 +1,4 @@
-import {start} from "@popperjs/core";
-
-type Node<T> = {
+type Node = {
     // Const prop
     name: string;
 
@@ -9,24 +7,24 @@ type Node<T> = {
     y: number;
     edgeCost: number;
     totalCost: number;
-    parent?: Node<T>;
+    parent?: Node;
 }
 
-type  Edge<T> = {
-    node: Node<T>;
+type  Edge = {
+    node: Node;
     weight: number;
 }
 
-export class Graph<T> {
-    private nodes: Set<Node<T>>;
-    private adjacencyList: Map<Node<T>, Edge<T>[]>;
+export class Graph {
+    private nodes: Set<Node>;
+    private adjacencyList: Map<Node, Edge[]>;
 
     constructor() {
-        this.nodes = new Set<Node<T>>();
-        this.adjacencyList = new Map<Node<T>, Edge<T>[]>();
+        this.nodes = new Set<Node>();
+        this.adjacencyList = new Map<Node, Edge[]>();
     }
 
-    addNode(node: Node<T>): void {
+    addNode(node: Node): void {
         this.nodes.add(node);
         if (!this.adjacencyList.has(node)) {
             this.adjacencyList.set(node, []);
@@ -34,7 +32,7 @@ export class Graph<T> {
     }
 
 
-    addEdge(source: Node<T>, destination: Node<T>, weight: number = 1, bidirectional: boolean = true): void {
+    addEdge(source: Node, destination: Node, weight: number = 1, bidirectional: boolean = true): void {
         this.addNode(source);
         this.addNode(destination);
 
@@ -45,49 +43,51 @@ export class Graph<T> {
         }
     }
 
-    getNeighbors(node: Node<T>): Edge<T>[] {
+    getNeighbors(node: Node): Edge[] {
         return this.adjacencyList.get(node) || [];
     }
 
-    getNodes(): Node<T>[] {
+    getNodes(): Node[] {
         return Array.from(this.nodes);
     }
 
-    BFS(startNode: Node<T>, targetNode: Node<T>, ): Node<T>[]{
-        const visited: Node<T>[] = [];
-        const queue: Node<T>[] = [startNode];
-        const path: Node<T>[] = [];
+    BFS(startNode: Node, targetNode: Node, ): Node[]{
+        const visited: Node[] = [];
+        const queue: Node[] = [startNode];
+        const path: Node[] = [];
+
+        startNode.parent = undefined;
 
         while (queue.length > 0) {
-            let currentNode: Node<T> | undefined = queue.shift(); // Same as real pop first element
+            let currentNode: Node | undefined = queue.shift(); // Same as real pop first element
             if(currentNode === undefined) break; // TypeScript weird stuff bruh
             if (!visited.includes(currentNode)) {
                 visited.push(currentNode);
-                path.push(currentNode);
-
                 //Target is found
                 if(currentNode === targetNode) break;
 
-                let neighbors: Edge<T>[] = this.getNeighbors(currentNode) // Edges
+                let neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
                 for (let edge of neighbors) {
-                    if(!visited.includes(edge.node)) {
-                        queue.push(edge.node);
+                    let neighbor = edge.node
+                    if(!visited.includes(neighbor)) {
+                        neighbor.parent = currentNode;
+                        queue.push(neighbor);
                     }
                 }
             }
         }
 
-        return path; // Change this
+        return this.reCreatePath(targetNode);
     }
 
-    heuristicCost(startNode: Node<T>, targetNode: Node<T>): number {
+    heuristicCost(startNode: Node, targetNode: Node): number {
         /**
          * Calculate the heuristic cost for current node
          */
-        return Math.sqrt(Math.pow(targetNode.x - startNode.x, 2) + Math.pow(targetNode.y - - startNode.y, 2));
+        return Math.sqrt(Math.pow(targetNode.x - startNode.x, 2) + Math.pow(targetNode.y - startNode.y, 2));
     }
 
-    getLowestCostNode(nodes: Node<T>[]): Node<T> {
+    getLowestCostNode(nodes: Node[]): Node {
         /**
          * Returns the lowest code node from a list of nodes
          */
@@ -97,14 +97,14 @@ export class Graph<T> {
         return nodes[ costs.indexOf( Math.min(...costs) ) ];
     }
 
-    reCreatePath(node: Node<T>): Node<T>[] {
+    reCreatePath(node: Node): Node[] {
         /**
          * Recreates the path given parent nodes of current node
          */
-        const path: Node<T>[] = [];
-        let currentNode: Node<T> = node;
+        const path: Node[] = [];
+        let currentNode: Node = node;
         while(currentNode !== undefined){
-            path.push(currentNode);
+            path.unshift(currentNode);
             if(currentNode.parent === undefined){
                 break;
             }
@@ -116,16 +116,16 @@ export class Graph<T> {
     }
 
 
-    aStar(startNode: Node<T>, targetNode: Node<T>): Node<T>[] {
-        const evaluate: Node<T>[] = [startNode];
-        const finished: Node<T>[] = [];
+    aStar(startNode: Node, targetNode: Node): Node[] {
+        const evaluate: Node[] = [startNode];
+        const finished: Node[] = [];
 
         startNode.edgeCost = 0;
         startNode.totalCost = this.heuristicCost(startNode, targetNode);
         startNode.parent = undefined;
 
         while(evaluate.length > 0) {
-            let currentNode: Node<T> = this.getLowestCostNode(evaluate);
+            let currentNode: Node = this.getLowestCostNode(evaluate);
 
             if(currentNode === targetNode) return this.reCreatePath(currentNode);
 
@@ -134,16 +134,18 @@ export class Graph<T> {
             evaluate.splice(currentIndex, 1);
             finished.push(currentNode);
 
-            let neighbors: Edge<T>[] = this.getNeighbors(currentNode) // Edges
+            let neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
             for (let edge of neighbors){
-                let neighbor: Node<T> = edge.node;
-                if(finished.indexOf(edge.node) === -1) continue;
+                let neighbor: Node = edge.node;
+
+                //skip node if checked
+                if(finished.includes(edge.node)) continue;
 
                 // cost of moving to new node
                 let currentEdgeCost: number = neighbor.edgeCost + edge.weight;
 
                 // Check for new node
-                if(evaluate.indexOf(edge.node) !== -1){
+                if(!evaluate.includes(neighbor)){
                     evaluate.push(neighbor);
                 }
                 // Check if current path is better
@@ -153,15 +155,52 @@ export class Graph<T> {
 
                 neighbor.parent = currentNode;
                 neighbor.edgeCost = currentEdgeCost;
-                neighbor.totalCost = currentEdgeCost + this.heuristicCost(currentNode, targetNode);
+                neighbor.totalCost = currentEdgeCost + this.heuristicCost(neighbor, targetNode);
             }
         }
         return [];// No path found, should be impossible
     }
 
-
-    findPath(startNode: T, targetNode: T, pathType: (start: T, end:T) => T[]): T[]{
-        return pathType(startNode, targetNode);
-    }
-
 }
+
+// Test
+
+// const node0: Node = { name: "0", x: 0,  y: 0,  edgeCost: 0, totalCost: 0 };
+// const node1: Node = { name: "1", x: -1, y: 1,  edgeCost: 0, totalCost: 0 };
+// const node2: Node = { name: "2", x: 1,  y: 1,  edgeCost: 0, totalCost: 0 };
+// const node3: Node = { name: "3", x: -2, y: 2,  edgeCost: 0, totalCost: 0 };
+// const node4: Node = { name: "4", x: 2,  y: 2,  edgeCost: 0, totalCost: 0 };
+// const node5: Node = { name: "5", x: -1, y: 3, edgeCost: 0, totalCost: 0 };
+// const node6: Node = { name: "6", x: 1,  y: 3, edgeCost: 0, totalCost: 0 };
+// const node7: Node = { name: "7", x: 0,  y: 4, edgeCost: 0, totalCost: 0 };
+//
+// // Instantiate the graph
+// const graph = new Graph();
+//
+// graph.addEdge(node0, node1, 4);
+// graph.addEdge(node0, node2, 8);
+// graph.addEdge(node0, node4, 1);
+//
+// graph.addEdge(node1, node3, 7);
+// graph.addEdge(node1, node5, 1);
+// graph.addEdge(node3, node5, 1);
+//
+// graph.addEdge(node2, node6, 5);
+//
+// graph.addEdge(node4, node6, 9);
+//
+// graph.addEdge(node5, node7, 8);
+//
+//
+//
+// //BFS
+// const bfsPath = graph.BFS(node0, node7);
+// console.log("\nBFS Path:");
+// console.log(bfsPath.map(node => node.name).join(" -> "));
+//
+// //A*
+// const aStarPath = graph.aStar(node0, node7);
+// console.log("\nA* Path:");
+// console.log(aStarPath.map(node => node.name).join(" -> "));
+
+

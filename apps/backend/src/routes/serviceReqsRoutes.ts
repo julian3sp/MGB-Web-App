@@ -7,7 +7,7 @@ router.get('/', async function (req: Request, res: Response) {
     try {
 
 
-        const result = await PrismaClient.language_request.findMany();
+        const result = await PrismaClient.service_request.findMany();
         console.log(result);
         res.json(result);
     } catch (error) {

@@ -1342,6 +1342,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.71.10":
+  version: 5.71.10
+  resolution: "@tanstack/query-core@npm:5.71.10"
+  checksum: 10c0/2b6a9c6b252c434cdf1048f9f82d1de27ff06dd67c5c76408bb028778f77308e245b043a55db7b012148e5fd9317ee176d8179caffa18cf4d35c5d721cd81346
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.71.10":
+  version: 5.71.10
+  resolution: "@tanstack/react-query@npm:5.71.10"
+  dependencies:
+    "@tanstack/query-core": "npm:5.71.10"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/59275edfe5293fd0d825b4b048e4ceba890b5732a2ec5538d697296864498a647a51dc58fcebac5e36536d0ca7340deb0606870d86ffd4449933d368505b2ac4
+  languageName: node
+  linkType: hard
+
 "@trpc/client@npm:^11.0.2":
   version: 11.0.2
   resolution: "@trpc/client@npm:11.0.2"
@@ -1349,6 +1367,20 @@ __metadata:
     "@trpc/server": 11.0.2
     typescript: ">=5.7.2"
   checksum: 10c0/47bbb4def73b8b889c8caea0d459770942211a1f25e6795cb9eae728c3a864df543a202d2b13c3710a802b7db7c8e388f19a874a5e99b6434cf8153c67633b07
+  languageName: node
+  linkType: hard
+
+"@trpc/react-query@npm:^11.0.2":
+  version: 11.0.2
+  resolution: "@trpc/react-query@npm:11.0.2"
+  peerDependencies:
+    "@tanstack/react-query": ^5.67.1
+    "@trpc/client": 11.0.2
+    "@trpc/server": 11.0.2
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+    typescript: ">=5.7.2"
+  checksum: 10c0/06344665ce951707d0c7d61415dcf19eefe3afc7cb4f406f1376e16557ccf96a67c80ba8f0970ffeb86351df888214a1e6979c60e30d9791b847bbfe656efd8f
   languageName: node
   linkType: hard
 
@@ -2396,6 +2428,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bootstrap@npm:^5.3.5":
+  version: 5.3.5
+  resolution: "bootstrap@npm:5.3.5"
+  peerDependencies:
+    "@popperjs/core": ^2.11.8
+  checksum: 10c0/f0da8bd5e5f743d2d5f73ef531cec2483dec1da3e7aad1ce99d8823800eaedc2982e4c199eff9faf4630d3879261952f1f50c84bcb70ca75168dd5180cfc56ac
+  languageName: node
+  linkType: hard
+
 "boxen@npm:7.0.0":
   version: 7.0.0
   resolution: "boxen@npm:7.0.0"
@@ -2710,6 +2751,13 @@ __metadata:
   dependencies:
     mimic-response: "npm:^1.0.0"
   checksum: 10c0/06a2b611824efb128810708baee3bd169ec9a1bf5976a5258cd7eb3f7db25f00166c6eee5961f075c7e38e194f373d4fdf86b8166ad5b9c7e82bbd2e333a6087
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
   languageName: node
   linkType: hard
 
@@ -6506,13 +6554,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
+    "@popperjs/core": "npm:^2.11.8"
+    "@tanstack/react-query": "npm:^5.71.10"
     "@trpc/client": "npm:^11.0.2"
+    "@trpc/react-query": "npm:^11.0.2"
     "@trpc/server": "npm:^11.0.2"
+    "@types/bootstrap": "npm:^5"
     "@types/node": "npm:^22.13.13"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
+    bootstrap: "npm:^5.3.5"
+    clsx: "npm:^2.1.1"
     common: "workspace:*"
     dotenv: "npm:^16.4.7"
     dotenv-cli: "npm:^7.4.4"
@@ -6523,6 +6577,7 @@ __metadata:
     prettier-config-custom: "workspace:*"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
+    tailwind-merge: "npm:^3.1.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
     typescript: "npm:^5.8.2"
@@ -6700,6 +6755,13 @@ __metadata:
   dependencies:
     has-flag: "npm:^4.0.0"
   checksum: 10c0/afb4c88521b8b136b5f5f95160c98dee7243dc79d5432db7efc27efb219385bbc7d9427398e43dd6cc730a0f87d5085ce1652af7efbe391327bc0a7d0f7fc124
+  languageName: node
+  linkType: hard
+
+"tailwind-merge@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "tailwind-merge@npm:3.1.0"
+  checksum: 10c0/71d6dc5f8bae2f87950eefa2605a391ffef45a09759de22ba0e90976180ab3cd4fc48ed37063a617dc2ff0f48768c0006090a78bcd1f5ad0ae1c373aad16d2b6
   languageName: node
   linkType: hard
 

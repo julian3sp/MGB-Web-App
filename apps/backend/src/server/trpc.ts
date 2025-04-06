@@ -1,7 +1,6 @@
 import { initTRPC } from "@trpc/server";
 
 // initialize backend
-
 const trpc = initTRPC.create();
 
 // export reusable router

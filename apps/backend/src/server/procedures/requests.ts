@@ -7,10 +7,10 @@ export const getRequests = publicProcedure.query(async() => {
 })
 
 export const makeRequest = publicProcedure.input(z.object({
-    room_num: z.number,
-    language: z.string,
-    request_type: z.string,
-    employee_id: z.string
+    room_num: z.number(),
+    language: z.string(),
+    request_type: z.string(),
+    employee_id: z.string(),
 })).mutation( async (opts) => {
     const {input} = opts;
 

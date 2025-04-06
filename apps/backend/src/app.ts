@@ -2,14 +2,9 @@ import createError, { HttpError } from 'http-errors';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import employeeRoutes from './routes/employeeRoutes';
-import { API_ROUTES } from 'common/src/constants';
-import serviceReqsRouter from './routes/serviceReqsRoutes.ts';
-import assignedRoutes from './routes/assignedRoutes.ts';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { router } from './trpc.ts'
-import { getRequests, makeRequest } from './procedures/requests.ts';
+import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 
 const app: Express = express(); // Setup the backend
@@ -26,7 +21,6 @@ const appRouter = t.router({
     createRequest: makeRequest,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee
-
 })
 
 app.use('/trpc', trpcExpress.createExpressMiddleware({
@@ -48,13 +42,6 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-
-
-// Setup routers. ALL ROUTERS MUST use /api as a start point, or they
-// won't be reached by the default proxy and prod setup
-app.use(API_ROUTES.SERVICEREQS, serviceReqsRouter);
-app.use(API_ROUTES.EMPLOYEE, employeeRoutes);
-app.use(API_ROUTES.ASSIGNED, assignedRoutes);
 
 
 /**

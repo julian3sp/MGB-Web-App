@@ -18,6 +18,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@types/bootstrap": "^5",
     "@types/node": "^22.13.13",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -34,13 +35,19 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@tanstack/react-query": "^5.71.10",
     "@trpc/client": "^11.0.2",
+    "@trpc/react-query": "^11.0.2",
     "@trpc/server": "^11.0.2",
+    "bootstrap": "^5.3.5",
+    "clsx": "^2.1.1",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.1.0",
     "zod": "^3.24.2"
   },
   "resolutions": {

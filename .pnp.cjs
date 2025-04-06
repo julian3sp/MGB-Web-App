@@ -62,6 +62,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@popperjs/core", "npm:2.11.8"],\
           ["@types/node", "npm:22.13.13"],\
           ["@types/react", "npm:19.0.12"],\
           ["@types/react-dom", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:19.0.4"],\
@@ -7843,6 +7844,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["softeng-startercode-d25", "workspace:."],\
+          ["@popperjs/core", "npm:2.11.8"],\
           ["@types/node", "npm:22.13.13"],\
           ["@types/react", "npm:19.0.12"],\
           ["@types/react-dom", "virtual:3154e7e2502d6821f7eea9434c4cdb00a42b4ad928bf283b9f5a1183af99307a4f66aca3e46a37d196a6c6b81c948321e804193e2cbecf9304b80a7023c19290#npm:19.0.4"],\

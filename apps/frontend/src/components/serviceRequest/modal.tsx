@@ -10,7 +10,6 @@ export default function Modal({ isOpen, onClose, children } : ModalProps) {
     if (!isOpen) {
         return null;
     }
-
     return (
         <div
             className={`fixed inset-0 flex justify-center items-center 

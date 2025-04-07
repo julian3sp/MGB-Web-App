@@ -30,19 +30,27 @@ export async function deleteEmployees(employee_ids: string[], client: PrismaClie
     }
 }
 export async function insertServiceRequest(
+    name: string,
+    email: string,
+    phone_num: string,
     room: number,
+    request_type: string,
+    employee_id: string,
     lang: string,
     assigned_employee: string | null,
-    request_type: string,
     client: PrismaClient,
 ) {
     try {
         const newServiceRequest = await client.service_request.create({
             data: {
+                name: name,
+                email: email,
+                phone_num: phone_num,
                 room_num: room,
-                language: lang,
                 request_type: request_type,
-                employee_id: assigned_employee,
+                employee_id: employee_id,
+                language: lang,
+                assigned_employee: assigned_employee,
             },
         });
         console.log(newServiceRequest);

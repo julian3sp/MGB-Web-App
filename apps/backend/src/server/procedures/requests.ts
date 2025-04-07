@@ -13,6 +13,9 @@ export const getRequests = trpc.procedure.query(async () => {
 export const makeRequest = publicProcedure
     .input(
         z.object({
+            name: z.string(),
+            email: z.string(),
+            phone_num: z.string(),
             room_num: z.number(),
             language: z.string(),
             request_type: z.string(),

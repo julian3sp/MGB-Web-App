@@ -7,7 +7,6 @@ import {InputHeader} from "../signIn/InputHeader.tsx";
 import ResetButton from "../ResetButton.tsx";
 import {trpc} from "../../lib/trpc.ts";
 import Modal from "./modal.tsx";
-import CloseButton from '../CloseButton.tsx';
 
 type requestFormProps = {
     title: string, 
@@ -24,7 +23,6 @@ function RequestForm({title, type} : requestFormProps) {
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
     const mutation = trpc.createRequest.useMutation()
-    const closeDialog = document.getElementById("closeModal");
     const [open, setOpen] = useState<boolean>(false);
 
     const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {

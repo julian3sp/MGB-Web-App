@@ -6,6 +6,8 @@ import {InputBox} from "../signIn/InputBox.tsx";
 import {InputHeader} from "../signIn/InputHeader.tsx";
 import ResetButton from "../ResetButton.tsx";
 import {trpc} from "../../lib/trpc.ts";
+import Modal from "./modal.tsx";
+import CloseButton from '../CloseButton.tsx';
 
 type requestFormProps = {
     title: string, 
@@ -22,8 +24,10 @@ function RequestForm({title, type} : requestFormProps) {
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
     const mutation = trpc.createRequest.useMutation()
+    const closeDialog = document.getElementById("closeModal");
+    const [open, setOpen] = useState<boolean>(false);
 
-    const handleSubmit = ( e) => {
+    const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         mutation.mutate({
             name: name,
@@ -34,6 +38,7 @@ function RequestForm({title, type} : requestFormProps) {
             employee_id: employeeID,
             language: request
         })
+        handleReset(e)
     }
     const handleReset = (e) => {
         e.preventDefault();
@@ -79,7 +84,7 @@ function RequestForm({title, type} : requestFormProps) {
                             </div>
 
                             <div>
-                                <InputHeader>{type}:</InputHeader>
+                                <InputHeader children={type + ':'}></InputHeader>
                                 <InputBox value={request} setState={setRequest} placeholder={type} width="w-full" />
                             </div>
 
@@ -96,10 +101,30 @@ function RequestForm({title, type} : requestFormProps) {
                         {/* Buttons */}
                         <div className=" flex  gap-5 justify-center">
                             <ResetButton label={"Reset"} />
-                            <SubmitButton label="Submit" />
+                            <SubmitButton label={"Submit"} type={"submit"} onClick={() => setOpen(true)}/>
+
                         </div>
                     </div>
+
                 </form>
+                <Modal isOpen={open} onClose={() => setOpen(false)}>
+                    <div className="flex flex-col gap-4">
+                        <h1 className="text-2xl font-[poppins]">Success!</h1>
+                        <p className={"font-[poppins]"}>
+                            The hospital has received your request, and we will assist you as soon as possible.
+                        </p>
+                        <p className={"font-[poppins]"}>
+                            As always, thank you for coming to Mass General Brigham!
+                        </p >
+                        <hr className="border-t-solid border-1 border-grey" />
+                        <div className="flex flex-row justify-center">
+                            <ResetButton
+                                label={"Close"}
+                                onClick={() => setOpen(false)}>
+                            </ResetButton>
+                        </div>
+                    </div>
+                </Modal>
 
             </div>
         </>

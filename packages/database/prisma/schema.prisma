@@ -32,3 +32,5 @@ model service_request {
   employee          employee? @relation(fields: [assigned_employee], references: [id])
   language          String?
 }
+
+model

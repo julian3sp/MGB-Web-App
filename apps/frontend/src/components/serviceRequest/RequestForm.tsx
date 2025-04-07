@@ -5,34 +5,46 @@ import SubmitButton from "../SubmitButton.tsx";
 import {InputBox} from "../signIn/InputBox.tsx";
 import {InputHeader} from "../signIn/InputHeader.tsx";
 import ResetButton from "../ResetButton.tsx";
+import {trpc} from "../../lib/trpc.ts";
+import Modal from "./modal.tsx";
 
 type requestFormProps = {
     title: string, 
-    item: string
+    type: string
 }
 
-function RequestForm({title, item} : requestFormProps) {
+function RequestForm({title, type} : requestFormProps) {
     const [response, setResponse] = useState('')
-    const [fullName, setFullName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [employeeID, setEmployeeID] = useState('');
-    const [device, setDevice] = useState('');
+    const [request, setRequest] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
+    const mutation = trpc.createRequest.useMutation()
+    const [open, setOpen] = useState<boolean>(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setResponse("Name: " + fullName + " Email: " + email + " Phone Number: " + phoneNumber + " Employee ID: " + employeeID
-       + " Device: " + device + " Room Number: " + roomNumber + " Comments: " + comments)
+        mutation.mutate({
+            name: name,
+            email: email,
+            phone_num: phoneNumber,
+            room_num: Number(roomNumber),
+            request_type: type,
+            employee_id: employeeID,
+            language: request
+        })
+        handleReset(e)
     }
     const handleReset = (e) => {
         e.preventDefault();
         setEmail('');
-        setFullName('');
+        setName('');
         setPhoneNumber('');
         setEmployeeID('');
-        setDevice('');
+        setRequest('');
         setRoomNumber('');
         setComments('');
     }
@@ -56,7 +68,7 @@ function RequestForm({title, item} : requestFormProps) {
 
                             <div>
                                 <InputHeader>Full Name:</InputHeader>
-                                <InputBox value={fullName} setState={setFullName} placeholder="Enter your Full Name" width="w-full" />
+                                <InputBox value={name} setState={setName} placeholder="Enter your Full Name" width="w-full" />
                             </div>
 
                             <div>
@@ -70,8 +82,8 @@ function RequestForm({title, item} : requestFormProps) {
                             </div>
 
                             <div>
-                                <InputHeader>Device:</InputHeader>
-                                <InputBox value={device} setState={setDevice} placeholder="Enter your Device" width="w-full" />
+                                <InputHeader children={type + ':'}></InputHeader>
+                                <InputBox value={request} setState={setRequest} placeholder={type} width="w-full" />
                             </div>
 
                             <div>
@@ -87,13 +99,32 @@ function RequestForm({title, item} : requestFormProps) {
                         {/* Buttons */}
                         <div className=" flex  gap-5 justify-center">
                             <ResetButton label={"Reset"} />
-                            <SubmitButton label="Submit" />
+                            <SubmitButton label={"Submit"} type={"submit"} onClick={() => setOpen(true)}/>
+
                         </div>
                     </div>
+
                 </form>
+                <Modal isOpen={open} onClose={() => setOpen(false)}>
+                    <div className="flex flex-col gap-4">
+                        <h1 className="text-2xl font-[poppins]">Success!</h1>
+                        <p className={"font-[poppins]"}>
+                            The hospital has received your request, and we will assist you as soon as possible.
+                        </p>
+                        <p className={"font-[poppins]"}>
+                            As always, thank you for coming to Mass General Brigham!
+                        </p >
+                        <hr className="border-t-solid border-1 border-grey" />
+                        <div className="flex flex-row justify-center">
+                            <ResetButton
+                                label={"Close"}
+                                onClick={() => setOpen(false)}>
+                            </ResetButton>
+                        </div>
+                    </div>
+                </Modal>
 
             </div>
-            <div>{response}</div>
         </>
     );
 }

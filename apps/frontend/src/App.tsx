@@ -5,6 +5,7 @@ import SignInPage from './routes/SignInPage';
 import CreateAccountPage from './routes/CreateAccountPage';
 import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from './routes/ServiceRequestPage';
+import RequestListPage from './routes/RequestListPage'
 import { WelcomePage } from './routes/WelcomePage';
 import NavBar from './components/NavBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -44,6 +45,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/services" element={<ServiceRequestPage />} />
+                <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />

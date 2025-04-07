@@ -1,7 +1,8 @@
 import express, { Router, Request, Response } from 'express';
 import { Prisma } from 'database';
 import PrismaClient from '../bin/prisma-client';
-import { insertEmployee} from "database";
+import { insertEmployee } from 'database';
+import { publicProcedure } from '../server/trpc';
 
 const router: Router = express.Router();
 
@@ -9,7 +10,6 @@ const router: Router = express.Router();
 router.get('/', async function (req: Request, res: Response) {
     // Fetch the latest score from database
     try {
-
         const result = await PrismaClient.employee.findMany();
         console.log(result);
         res.json(result);

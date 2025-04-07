@@ -41,8 +41,8 @@ export async function insertServiceRequest(
             data: {
                 room_num: room,
                 language: lang,
-                employee_id: assigned_employee,
                 request_type: request_type,
+                employee_id: assigned_employee,
             },
         });
         console.log(newServiceRequest);

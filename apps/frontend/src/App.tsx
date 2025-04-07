@@ -1,16 +1,29 @@
-import React from 'react';
-import './styles/mainStyles.css'
+import React, { useState } from 'react';
+import './styles/mainStyles.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import SignInPage from './routes/SignInPage.tsx';
-import CreateAccountPage from './routes/CreateAccountPage.tsx';
+import SignInPage from './routes/SignInPage';
+import CreateAccountPage from './routes/CreateAccountPage';
 import DepartmentDirectory from './routes/DepartmentDirectory';
-import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
-import { WelcomePage } from './routes/WelcomePage.tsx';
-import NavBar from "./components/NavBar.tsx";
+import ServiceRequestPage from './routes/ServiceRequestPage';
+import { WelcomePage } from './routes/WelcomePage';
+import NavBar from './components/NavBar';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { httpBatchLink} from '@trpc/client';
+import {trpc} from "./lib/trpc.ts";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
     const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
+    const [queryClient] = useState(() => new QueryClient());
+    const [trpcClient] = useState(() =>
+        trpc.createClient({
+            links: [
+                httpBatchLink({
+                    url: 'http://localhost:3001/trpc'
+                }),
+            ],
+        }),
+    );
 
     function signOut(){
         localStorage.clear()
@@ -24,6 +37,8 @@ function App() {
     };
 
     return (
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+            <QueryClientProvider client={queryClient}>
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
@@ -35,6 +50,8 @@ function App() {
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
             </Routes>
         </Router>
+            </QueryClientProvider>
+        </trpc.Provider>
     );
 }
 

@@ -14,6 +14,7 @@ type ServiceRequest = {
     request_type: string
     request_date: string
     employee_id: string
+    additional_comments: string | null
     assigned_employee: string | null
     language: string | null
 };
@@ -101,7 +102,7 @@ export default function RequestListPage(){
 
                 <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Additional Comments: </h3>
                 <ul className="list-disc ml-6 mb-4">
-                        <p>NOT YET IMPLEMENTED</p>
+                        <p>{selectedRequest.additional_comments}</p>
                 </ul> {/*Additional comments, not in service_request table yet*/}
                     </div>
                     </nav>

@@ -13,10 +13,15 @@ export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
 
     function handleSubmit(e: React.FormEvent){
         e.preventDefault(); // prevent the page from refreshing
-        localStorage.setItem("firstName", "User");
-        localStorage.setItem("isSignedIn", "true");
-        rerenderBar();
-        navigate("/");
+        if (email === "admin" && password === "1234") {
+            localStorage.setItem("firstName", "Administrator");
+            localStorage.setItem("isSignedIn", "true");
+            rerenderBar();
+            navigate("/");
+        } else {
+            alert("Incorrect username or password!");
+        }
+
     }
 
     return(

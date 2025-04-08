@@ -8,10 +8,9 @@ export default function RequestListPage(){
     return(
        <div>
             {data?.map((res, index) => (
-                <ul key={index} className={"list-unstyled"}>
-                {res.request_id}, {res.room_num}, {res.language}, {res.request_type}
-                </ul>
-
+                <li key={index} className="mb-2">
+                    <strong>Request {res.request_id}:</strong> {res.request_id}, {res.room_num}, {res.language}, {res.request_type}
+       </li>
             ))}
        </div>
     )

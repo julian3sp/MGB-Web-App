@@ -38,7 +38,7 @@ export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
     return(
         <>
             <h1 className="font-[Poppins] font-[550] text-[26px] text-center">Login to your account</h1>
-            <form id="signInForm" onSubmit={() => {handleSubmit()}}>
+            <form id="signInForm" onSubmit={handleSubmit}>
                 <InputHeader className="pt-[20px]">Email</InputHeader>
                 <InputBox value={email} setState={setEmail} placeholder={"yourEmail@email.com"} />
                 <br/>
@@ -46,7 +46,7 @@ export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
                 <InputBox value={password} setState={setPassword} placeholder={"Enter your password"} width = "w-[260px]" type={viewPW ? "text" : "password"} />
                 <ShowPasswordButton setView={setView} viewPW={viewPW}>{`${viewPW ? "Hide" : "Show"} Password`}</ShowPasswordButton>
                 <br/>
-                    <SubmitPasswordButton>Login now</SubmitPasswordButton>
+                <SubmitPasswordButton>Login now</SubmitPasswordButton>
             </form>
         </>
     )

@@ -20,7 +20,7 @@ export const makeRequest = publicProcedure
             language: z.string(),
             request_type: z.string(),
             employee_id: z.string(),
-            additional_comments: z.string()
+            additional_comments: z.string(),
         })
     )
     .mutation(async ({ input }) => {

@@ -22,8 +22,9 @@ function RequestForm({title, type} : requestFormProps) {
     const [request, setRequest] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
-    const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
+    const mutation = trpc.createRequest.useMutation()
+
 
     const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

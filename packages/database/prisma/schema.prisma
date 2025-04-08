@@ -33,4 +33,9 @@ model service_request {
   language          String?
 }
 
-model
+model Directory {
+  id         Int     @id @default(autoincrement())
+  name       String
+  location   String
+  department String
+}

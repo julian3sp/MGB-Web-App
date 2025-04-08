@@ -11,7 +11,6 @@ export default function RequestListPage(){
                 <ul key={index} className={"list-unstyled"}>
                 {res.request_id}, {res.room_num}, {res.language}, {res.request_type}
                 </ul>
-
             ))}
        </div>
     )

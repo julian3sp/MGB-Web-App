@@ -9,7 +9,6 @@ function DrawingPath() {
     const allNodes: Node[] = graph.getNodes();
 
     useEffect(() => {
-        // if (!canvas || !ctx) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -29,54 +28,52 @@ function DrawingPath() {
             ctx.closePath();
         }
 
-        function drawAllNodes() {
+        function drawAllNodes(scale: number) {
             for (const node of allNodes) {
-                drawCircle(node.x, node.y, 10);
+                drawCircle(node.x/scale, node.y/scale, 5);
             }
         }
 
-        function createEdgePath(source: Node, target: Node) {
+        function createEdgePath(source: Node, target: Node, scale: number) {
             if (!canvas || !ctx) return;
             ctx.beginPath();
-            ctx.moveTo(source.x, source.y);
-            ctx.lineTo(source.x, source.y);
-            ctx.lineTo(target.x, target.y);
+            ctx.moveTo(source.x/scale, source.y/scale);
+            ctx.lineTo(source.x/scale, source.y/scale);
+            ctx.lineTo(target.x/scale, target.y/scale);
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'red';
             ctx.stroke();
         }
 
-        function drawPath(source: Node, target: Node) {
+        function drawPath(source: Node, target: Node, scale: number) {
             const path: Node[] = graph.aStar(source, target);
             for(let i = 0; i < path.length-1; i++) {
-                createEdgePath(path[i], path[i+1]);
+                createEdgePath(path[i], path[i+1], scale);
             }
             console.log("\nA* Path:");
             console.log(path.map(node => node.name).join(" -> "));
 
         }
 
-        // Set the image source using the imported image
         image.src = mapImage;
-        canvas.width = 943;
-        canvas.height = 781;
+        const imgWidth = 1208;
+        const imgHeight = 1208;
+
+        const scale = 1.2
+        canvas.width = imgWidth / scale;
+        canvas.height = imgHeight/ scale;
+
 
         image.onload = () => {
-            // Draw the image onto the canvas, resized to fit the canvas
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            drawAllNodes();
-            const node = graph.getNode("23")
-            if (!node) return(<div> not found </div>);
-            drawPath(allNodes[0], node);
+            drawAllNodes(scale);
+            const test1Node = graph.getNode("11")
+            const test2Node = graph.getNode("38")
+            if (!test1Node || !test2Node) return(<div> not found </div>);
+            drawPath(test1Node, test2Node, scale);
 
-            // // Draw additional graphics after the image has loaded
-            // ctx.beginPath();
-            // ctx.moveTo(20, 20);
-            // ctx.lineTo(20, 100);
-            // ctx.lineTo(70, 100);
-            // ctx.lineTo(70, 150);
-            // ctx.stroke();
-            // drawCircle(50, 50, 20);
         };
-    }, []); // Empty dependency array means this effect runs only once after the initial rendering
+    }, []);
 
     return (
         <div>

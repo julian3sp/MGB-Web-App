@@ -7,8 +7,6 @@ function NavigationPage() {
     return (
         <div className="w-full h-screen">
             <MapComponent />
-            {/*<DrawingPath/>*/}
-
         </div>
     );
 }

@@ -52,7 +52,7 @@ function App() {
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
-                <Route path="/navigation" element={<PathFindingPage />} />
+                <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>
             </QueryClientProvider>

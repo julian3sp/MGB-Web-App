@@ -1,4 +1,3 @@
-/// <reference types="@types/google.maps" />
 import React, { useState, useEffect } from 'react';
 import MapRenderer from './MapRenderer';
 import SearchContainer from './SearchContainer';
@@ -47,10 +46,11 @@ const MapComponent: React.FC = () => {
   // Helper function to add marker and draw the route.
   const displayRouteOnMap = (place: { name: string; location: google.maps.LatLngLiteral }) => {
     if (mapInstance && directionsService && directionsRenderer && userLocation) {
-      new google.maps.marker.AdvancedMarkerElement({
+      new google.maps.Marker({
         position: place.location,
         map: mapInstance,
         title: place.name,
+        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
       });
       calculateAndDisplayRoute(
         directionsService,

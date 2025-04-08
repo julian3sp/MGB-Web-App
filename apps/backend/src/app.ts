@@ -6,6 +6,8 @@ import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
+import { getDirectories, makeDirectories } from './server/procedures/directories';
+
 import { router } from './server/trpc.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
@@ -18,6 +20,8 @@ const appRouter = t.router({
     createRequest: makeRequest,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
+    getDirectories: getDirectories,
+    makeDirectory: makeDirectories,
 });
 
 const app: Express = express(); // Setup the backend

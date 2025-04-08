@@ -13,6 +13,16 @@ type requestFormProps = {
     type: string
 }
 
+type errorProps = {
+    name: string,
+    email: string,
+    phoneNumber: string,
+    employeeID: string,
+    request: string,
+    roomNumber: string,
+    comments: string
+}
+
 function RequestForm({title, type} : requestFormProps) {
     const [response, setResponse] = useState('')
     const [name, setName] = useState('');
@@ -24,7 +34,26 @@ function RequestForm({title, type} : requestFormProps) {
     const [comments, setComments] = useState('');
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
-    const [validation, setValidation] = useState(false);
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        employeeID: '',
+        request: '',
+        roomNumber: '',
+        comments: '',
+    });
+
+    const Validate = (): errorProps => {
+
+        if (!email) {
+            errors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            errors.email = "Email is invalid";
+        }
+
+        return errors;
+    };
 
     const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -35,6 +64,8 @@ function RequestForm({title, type} : requestFormProps) {
             return;
         }
         else{setOpen(true);}
+
+        setErrors(Validate); // loo at this
 
         mutation.mutate({
             name: name,
@@ -74,7 +105,7 @@ function RequestForm({title, type} : requestFormProps) {
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
                                 <InputHeader>Email:</InputHeader>
-                                <InputBox value={email} setState={setEmail} placeholder="Enter your Email" width="w-full" />
+                                <InputBox value={email} setState={setEmail} placeholder="Enter your Email" width="w-full" error={errors.email}/>
                             </div>
 
                             <div>
@@ -84,7 +115,7 @@ function RequestForm({title, type} : requestFormProps) {
 
                             <div>
                                 <InputHeader>Phone Number:</InputHeader>
-                                <InputBox value={phoneNumber} setState={setPhoneNumber} placeholder="Enter your Phone Number" width="w-full" />
+                                <InputBox value={phoneNumber} setState={setPhoneNumber} placeholder="Enter your Phone Number" width="w-full"/>
                             </div>
 
                             <div>

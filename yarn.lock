@@ -2674,6 +2674,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"class-variance-authority@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "class-variance-authority@npm:0.7.1"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  checksum: 10c0/0f438cea22131808b99272de0fa933c2532d5659773bfec0c583de7b3f038378996d3350683426b8e9c74a6286699382106d71fbec52f0dd5fbb191792cccb5b
+  languageName: node
+  linkType: hard
+
 "classnames@npm:^2.3.2":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
@@ -4784,6 +4793,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lucide-react@npm:^0.487.0":
+  version: 0.487.0
+  resolution: "lucide-react@npm:0.487.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/7177778c584b8e9545957bef28e95841c4be1b3bf473f9e2e64454c3e183d7ed0bc977c9f7b5446088023c7000151b7a3b27398d4f70025bf343782192f653ca
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:^0.30.17":
   version: 0.30.17
   resolution: "magic-string@npm:0.30.17"
@@ -6546,6 +6564,7 @@ __metadata:
     "@types/react-dom": "npm:^19"
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
+    class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
     common: "workspace:*"
     dotenv: "npm:^16.4.7"
@@ -6556,6 +6575,7 @@ __metadata:
     husky: "npm:^9.1.7"
     lottie-react: "npm:^2.4.1"
     lottie-web: "npm:^5.12.2"
+    lucide-react: "npm:^0.487.0"
     motion: "npm:^12.6.3"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
@@ -6564,6 +6584,7 @@ __metadata:
     tailwind-merge: "npm:^3.2.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
+    tw-animate-css: "npm:^1.2.5"
     typescript: "npm:^5.8.2"
     vitest: "npm:^3.0.9"
   languageName: unknown
@@ -7020,6 +7041,13 @@ __metadata:
   bin:
     turbo: bin/turbo
   checksum: 10c0/e6810cf33835bf9fba4d037a70054b408854073b03d10747bd9a681d2889dfc1897a4a4570113006ca2639fed8a4f91b86b052d4d8111e119895f1fb1804f233
+  languageName: node
+  linkType: hard
+
+"tw-animate-css@npm:^1.2.5":
+  version: 1.2.5
+  resolution: "tw-animate-css@npm:1.2.5"
+  checksum: 10c0/6db58d82d3547b11596b90eeb1b951e6586c93010d464a4aadc96a72b8e5e842e5517d2ac83074cd821676c811ffc4ec99db66d1afb6ca3253d3f88e6390c575
   languageName: node
   linkType: hard
 

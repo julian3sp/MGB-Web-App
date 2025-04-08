@@ -4,6 +4,8 @@ import SearchContainer from './SearchContainer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { calculateAndDisplayRoute } from './routeCalculator';
 import { TextGenerateEffectDemo } from '../GenerateText';
+import DepartmentDropdown from './DepartmentDropdown';
+import hospitalMap from '../../../assets/map.jpg';
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -14,6 +16,8 @@ const MapComponent: React.FC = () => {
   const [selectedPlace, setSelectedPlace] = useState<{ name: string; location: google.maps.LatLngLiteral } | null>(null);
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showText, setShowText] = useState(true);
+  const [selectedDepartment, setSelectedDepartment] = useState<{ name: string; floor: string[] } | null>(null);
+  const [showHospitalMap, setShowHospitalMap] = useState(false);
 
   // Auto-loop the text animation every 3 seconds
   useEffect(() => {
@@ -63,48 +67,89 @@ const MapComponent: React.FC = () => {
     setShowMap(false);
   };
 
+  const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
+    setSelectedDepartment(department);
+    setShowHospitalMap(false);
+  };
+
   // When the "Show Google Map" button is clicked, wait 1 seconds, then show the map and display the route.
   const handleViewMap = () => {
     setTimeout(() => {
       setShowMap(true);
+      setShowHospitalMap(false);
       if (selectedPlace && mapInstance && directionsService && directionsRenderer && userLocation) {
         displayRouteOnMap(selectedPlace);
       }
     }, 1000);
   };
 
+  const handleViewHospitalMap = () => {
+    setShowHospitalMap(true);
+    setShowMap(false);
+  };
+
   return (
     <div className="flex h-screen">
       {/* Left Column: Search area */}
       <div className="w-1/3 p-5 border-r border-gray-300 flex flex-col gap-4">
-        <h2 className="font-bold">Enter the hospital location</h2>
-        <div>
-          {mapInstance && userLocation && (
-            <SearchContainer onPlaceSelected={handlePlaceSelected} userLocation={userLocation} />
-          )}
-        </div>
-        {/* Only show the button if a destination is selected and the map is hidden */}
-        {selectedPlace && !showMap && (
-          <div className="w-full">
+        <h2 className="font-bold text-center">Enter the hospital location</h2>
+        
+        {/* Google Map Section */}
+        <div className="flex flex-col gap-4">
+          <div>
+            {mapInstance && userLocation && (
+              <SearchContainer onPlaceSelected={handlePlaceSelected} userLocation={userLocation} />
+            )}
+          </div>
+          {selectedPlace && (showHospitalMap || !showMap) && (
             <button
               onClick={handleViewMap}
-              className="w-full bg-blue-900 text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm"
+              className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
+                transition-all duration-300 ease-in-out
+                hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
+                active:scale-95"
             >
               Show Google Map
             </button>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Hospital Map Section */}
+        <div className="flex flex-col mt-10">
+          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
+          {selectedDepartment && (showMap || !showHospitalMap) && (
+            <button
+              onClick={handleViewHospitalMap}
+              className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
+                transition-all duration-300 ease-in-out
+                hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
+                active:scale-95 mt-4"
+            >
+              Show Inside Hospital Map
+            </button>
+          )}
+        </div>
+
         {error && <div className="text-red-500">{error}</div>}
       </div>
       
       {/* Right Column: Map area */}
       <div className="w-2/3 relative">
-        {/* MapRenderer is always rendered but its container is hidden until showMap is true */}
+        {/* Google Map */}
         <div className={`h-full ${showMap ? 'visible' : 'invisible'}`}>
           <MapRenderer onMapReady={handleMapReady} />
         </div>
-        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 ${showMap ? 'invisible' : 'visible'}`}>
-          <div className="z-10 -mt-70 text-black">
+        {/* Hospital Map */}
+        <div className={`absolute inset-0 ${showHospitalMap ? 'visible' : 'invisible'}`}>
+          <img 
+            src={hospitalMap} 
+            alt="Hospital Map" 
+            className="w-full h-full object-contain"
+          />
+        </div>
+        {/* Animation and Text */}
+        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 ${showMap || showHospitalMap ? 'invisible' : 'visible'}`}>
+          <div className="z-10 -mt-80 text-black">
             {showText && <TextGenerateEffectDemo />}
           </div>
           <div className="absolute inset-0 flex items-center justify-center">

@@ -63,7 +63,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, user
   }, [userLocation, recentSearches, onPlaceSelected]);
 
   return (
-    <div className="relative z-10 right-3 flex flex-col items-start bottom-1">
+    <div className="relative z-10 right-3 flex flex-col items-start">
       <div className={`relative w-full bg-white rounded-3xl shadow-lg m-2 transition-all duration-200 ${
         showRecent ? 'rounded-b-2xl' : 'rounded-3xl'
       }`}>

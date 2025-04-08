@@ -1,3 +1,4 @@
+/// <reference types="@types/google.maps" />
 import React, { useState, useEffect } from 'react';
 import MapRenderer from './MapRenderer';
 import SearchContainer from './SearchContainer';
@@ -6,6 +7,7 @@ import { calculateAndDisplayRoute } from './routeCalculator';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import hospitalMap from '../../../assets/map.jpg';
+import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -45,11 +47,10 @@ const MapComponent: React.FC = () => {
   // Helper function to add marker and draw the route.
   const displayRouteOnMap = (place: { name: string; location: google.maps.LatLngLiteral }) => {
     if (mapInstance && directionsService && directionsRenderer && userLocation) {
-      new google.maps.Marker({
+      new google.maps.marker.AdvancedMarkerElement({
         position: place.location,
         map: mapInstance,
         title: place.name,
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
       });
       calculateAndDisplayRoute(
         directionsService,
@@ -94,7 +95,7 @@ const MapComponent: React.FC = () => {
   return (
     <div className="flex h-screen">
       {/* Left Column: Search area */}
-      <div className="w-1/3 p-5 border-r border-gray-300 flex flex-col gap-4">
+      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
         <h2 className="font-bold text-center">Enter the hospital location</h2>
         
         {/* Google Map Section */}
@@ -137,18 +138,20 @@ const MapComponent: React.FC = () => {
       </div>
       
       {/* Right Column: Map area */}
-      <div className="w-2/3 relative">
+      <div className="w-3/4 relative">
         {/* Google Map */}
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <MapRenderer onMapReady={handleMapReady} />
         </div>
         {/* Hospital Map */}
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <img 
-            src={hospitalMap} 
-            alt="Hospital Map" 
-            className="w-full h-full object-contain"
-          />
+          
+          {/*<img */}
+          {/*  src={hospitalMap} */}
+          {/*  alt="Hospital Map" */}
+          {/*  className="w-full h-full object-contain"*/}
+          {/*/>*/}
+          <DrawingPath />
         </div>
         {/* Loading Screen */}
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>

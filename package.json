@@ -36,21 +36,12 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
-    "@lottiefiles/react-lottie-player": "^3.6.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
+    "@popperjs/core": "^2.11.8",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",
-    "framer-motion": "^12.6.3",
-    "lottie-react": "^2.4.1",
-    "lottie-web": "^5.12.2",
-    "lucide-react": "^0.487.0",
-    "motion": "^12.6.3",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "tailwind-merge": "^3.2.0",
-    "tw-animate-css": "^1.2.5"
+    "react-dom": "^19.1.0"
   },
   "resolutions": {
     "dotenv": "^16.4.7",

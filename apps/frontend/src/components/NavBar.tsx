@@ -9,6 +9,7 @@ type Props = {
     signOut: () => void
 }
 
+
 export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const [tab, setTab] = React.useState<string>("")
     const location = useLocation();
@@ -33,10 +34,23 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Services
                     </Link>
+                    <Link to="/requests" onClick={() => setTab("req")}
+                          className={tab === "req" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Requests
+                    </Link>
+                    <Link to="/navigation" onClick={() => setTab("navigation")}
+                          className={tab === "navigation" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Navigation
+                    </Link>
+
                 </div>
             </div>
 
-            <Link to="/signIn" className={"mr-5"} onClick={() => setTab("")}> 
+            <Link to="/signIn" className={"mr-5"} onClick={() => setTab("")}>
                 <button className={
                         /* show the active background color if the user is on the login page */
                         isSignedIn ?

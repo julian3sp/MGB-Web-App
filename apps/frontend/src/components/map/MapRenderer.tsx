@@ -59,13 +59,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady }) => {
                 };
                 newMap.setZoom(16);
                 newMap.setCenter(userLocation);
-                new google.maps.Marker({
+                new google.maps.marker.AdvancedMarkerElement({
                   position: userLocation,
                   map: newMap,
                   title: 'Your Location',
-                  icon: {
-                    url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                  },
                 });
                 onMapReady(newMap, directionsService, directionsRenderer, userLocation);
               },

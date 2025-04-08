@@ -2,6 +2,7 @@ import RequestButton from "./formTypeButton.tsx";
 import TextInput from "../TextInput.tsx";
 import React, { useState } from 'react';
 import SideNav from "../serviceRequest/sideNavigation.tsx"
+import accImage from './images/user.png'
 
 function ServiceFormSideBar() {
     const [searchData, setSearch] = useState('')
@@ -15,10 +16,11 @@ function ServiceFormSideBar() {
                 <h2 className="text-gray-800 text-lg mb-4">Mass General</h2>
                 <div className="flex flex-wrap items-center justify-center">
                     <img
-                        src="./images/user.png"
+                        src={accImage}
                         alt="user"
-                        width="100"
-                        height="100"
+                        width="50"
+                        height="50"
+                        className={"mr-1"}
                     />
                     <h2 className={'text-gray-700 font-bold text-2xl'}> Account</h2>
                 </div>

@@ -3,10 +3,12 @@ import mapImage from "../floorplan.jpg"
 import { graph } from './hospitalNodes';
 import { Node } from "./Graph.ts"
 
-function DrawingPath() {
+function DrawingPath({ source, destination }: props) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
     const allNodes: Node[] = graph.getNodes();
+    const sourceNode: Node | undefined = graph.getNode(source);
+    const targetNode: Node | undefined = graph.getNode(destination);
+    // console.log(destination);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -21,7 +23,7 @@ function DrawingPath() {
             if (!canvas || !ctx) return;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = '#FF5733';
+            ctx.fillStyle = "red"
             ctx.fill();
             ctx.lineWidth = 3;
             ctx.stroke();
@@ -41,7 +43,7 @@ function DrawingPath() {
             ctx.lineTo(source.x/scale, source.y/scale);
             ctx.lineTo(target.x/scale, target.y/scale);
             ctx.lineWidth = 5;
-            ctx.strokeStyle = 'red';
+            ctx.strokeStyle = 'blue';
             ctx.stroke();
         }
 
@@ -59,18 +61,22 @@ function DrawingPath() {
         const imgWidth = 1208;
         const imgHeight = 1028;
 
-        const scale = 1.69
+        const scale = 1.5
         canvas.width = imgWidth / scale;
         canvas.height = imgHeight/ scale;
 
 
         image.onload = () => {
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-            drawAllNodes(scale);
-            const test1Node = graph.getNode("11")
-            const test2Node = graph.getNode("38")
-            if (!test1Node || !test2Node) return(<div> not found </div>);
-            drawPath(test1Node, test2Node, scale);
+            // drawAllNodes(scale);
+            // const test1Node = graph.getNode("11")
+            // const test2Node = graph.getNode("38")
+            if (!sourceNode || !targetNode){
+                console.log("node not found ")
+                // ctx.clearRect(0, 0, canvas.width, canvas.height)
+                return(<div> not found </div>);
+            }
+            drawPath(sourceNode, targetNode, scale);
 
         };
     }, []);

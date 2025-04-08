@@ -1,4 +1,10 @@
-import { PrismaClient, insertLanguageRequest,insertEmployee, deleteEmployees, deleteLangRequests } from 'database';
+import {
+    PrismaClient,
+    insertServiceRequest,
+    insertEmployee,
+    deleteEmployees,
+    deleteServiceRequests,
+} from 'database';
 
 // Create the prisma client, this automatically connects to the database
 const client = new PrismaClient();

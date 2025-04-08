@@ -4,6 +4,7 @@ import {InputBox} from "./InputBox.tsx";
 import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
 import {Link, useNavigate} from 'react-router-dom';
+import {trpc} from "../../lib/trpc.ts";
 
 export function CreateAccountForm({rerenderBar}: {rerenderBar: () => void}){
     const [firstName, setFirst] = useState<string>("")
@@ -12,11 +13,17 @@ export function CreateAccountForm({rerenderBar}: {rerenderBar: () => void}){
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
     const navigate = useNavigate();
-
+    const createUser = trpc.makeUser.useMutation()
 
     function handleSubmit(){
         localStorage.setItem("firstName", firstName);
         localStorage.setItem("isSignedIn", "true");
+        createUser.mutate({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password
+        })
         rerenderBar();
         navigate("/")
     }

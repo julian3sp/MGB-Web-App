@@ -6,6 +6,7 @@ import { calculateAndDisplayRoute } from './routeCalculator';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import hospitalMap from '../../../assets/map.jpg';
+import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -141,11 +142,12 @@ const MapComponent: React.FC = () => {
         </div>
         {/* Hospital Map */}
         <div className={`absolute inset-0 ${showHospitalMap ? 'visible' : 'invisible'}`}>
-          <img 
-            src={hospitalMap} 
-            alt="Hospital Map" 
-            className="w-full h-full object-contain"
-          />
+          {/*<img */}
+          {/*  src={hospitalMap} */}
+          {/*  alt="Hospital Map" */}
+          {/*  className="w-full h-full object-contain"*/}
+          {/*/>*/}
+          <DrawingPath />
         </div>
         {/* Animation and Text */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 ${showMap || showHospitalMap ? 'invisible' : 'visible'}`}>

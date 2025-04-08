@@ -24,9 +24,18 @@ function RequestForm({title, type} : requestFormProps) {
     const [comments, setComments] = useState('');
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
+    const [validation, setValidation] = useState(false);
 
     const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const form = e.currentTarget; // This is the actual HTMLFormElement
+        const isValid = form.checkValidity(); // Now
+
+        if (!isValid) {
+            return;
+        }
+        else{setOpen(true);}
+
         mutation.mutate({
             name: name,
             email: email,
@@ -48,6 +57,8 @@ function RequestForm({title, type} : requestFormProps) {
         setRoomNumber('');
         setComments('');
     }
+
+
 
     return (
         <>
@@ -78,7 +89,7 @@ function RequestForm({title, type} : requestFormProps) {
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <InputBox value={employeeID} setState={setEmployeeID} placeholder="Enter your Employee ID" width="w-full" />
+                                <InputBox minLength = {9} maxLength = {9} value={employeeID} setState={setEmployeeID} placeholder="Enter your Employee ID" width="w-full" />
                             </div>
 
                             <div>
@@ -88,7 +99,7 @@ function RequestForm({title, type} : requestFormProps) {
 
                             <div>
                                 <InputHeader>Room Number:</InputHeader>
-                                <InputBox value={roomNumber} setState={setRoomNumber} placeholder="Enter your Room Number" width="w-full" />
+                                <InputBox minLength={1} maxLength={6} value={roomNumber} setState={setRoomNumber} placeholder="Enter your Room Number" width="w-full" />
                             </div>
                         </div>
                         <div className={"mr-5 ml-5"}>
@@ -99,8 +110,7 @@ function RequestForm({title, type} : requestFormProps) {
                         {/* Buttons */}
                         <div className=" flex  gap-5 justify-center">
                             <ResetButton label={"Reset"} />
-                            <SubmitButton label={"Submit"} type={"submit"} onClick={() => setOpen(true)}/>
-
+                            <SubmitButton label={"Submit"} type={"submit"}/>
                         </div>
                     </div>
 

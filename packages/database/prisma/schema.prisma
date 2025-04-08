@@ -20,15 +20,16 @@ model employee {
 }
 
 model service_request {
-  request_id        Int       @id @default(autoincrement())
-  name              String
-  email             String
-  phone_num         String
-  room_num          Int
-  request_type      String
-  request_date      DateTime  @default(now())
-  employee_id       String
-  assigned_employee String?
-  employee          employee? @relation(fields: [assigned_employee], references: [id])
-  language          String?
+  request_id          Int       @id @default(autoincrement())
+  name                String
+  email               String
+  phone_num           String
+  room_num            Int
+  request_type        String
+  request_date        DateTime  @default(now())
+  employee_id         String
+  additional_comments String
+  assigned_employee   String?
+  employee            employee? @relation(fields: [assigned_employee], references: [id])
+  language            String?
 }

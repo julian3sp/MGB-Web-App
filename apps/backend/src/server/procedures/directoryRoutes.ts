@@ -1,9 +1,23 @@
-import express from 'express';
-import multer from 'multer';
-import { PrismaClient } from '@prisma/client';
-import csvParser from 'csv-parser';
-import fs from 'fs';
-import path from 'path';
-import fastcsv from 'fast-csv';
+import { publicProcedure } from '../trpc';
+import client from '../../bin/prisma-client';
+import { z } from 'zod';
+import { trpc } from '../trpc.ts';
 
+export const getDirectories = publicProcedure.query(async () => {
+    return client.directory.findMany();
+});
 
+export const makeDirectories = publicProcedure
+    .input(
+        z.object({
+            name: z.string(),
+            location: z.string(),
+            department: z.string(),
+        })
+    )
+    .mutation(async ({ input }) => {
+        const directory = await client.directory.create({
+            data: input,
+        });
+        return directory;
+    });

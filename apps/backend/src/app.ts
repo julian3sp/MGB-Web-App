@@ -53,6 +53,7 @@ app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
 
+
 /**
  * Catch all 404 errors, and forward them to the error handler
  */

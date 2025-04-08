@@ -11,6 +11,10 @@ import NavBar from './components/NavBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
+import DirectoryPage from './routes/DirectoryPage';
+
+
+
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -48,6 +52,7 @@ function App() {
                 <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
+                <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
             </Routes>

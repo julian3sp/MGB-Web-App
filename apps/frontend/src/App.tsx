@@ -7,6 +7,7 @@ import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
 import { WelcomePage } from './routes/WelcomePage.tsx';
 import NavBar from "./components/NavBar.tsx";
+import NavigationPage from "./routes/NavigationPage.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
+                <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>
     );

@@ -1,4 +1,4 @@
-type Node = {
+export type Node = {
     // Const prop
     name: string;
 
@@ -32,9 +32,10 @@ export class Graph {
     }
 
 
-    addEdge(source: Node, destination: Node, weight: number = 1, bidirectional: boolean = true): void {
+    addEdge(source: Node, destination: Node, bidirectional: boolean = true): void {
         this.addNode(source);
         this.addNode(destination);
+        const weight: number = this.heuristicCost(source, destination);
 
         this.adjacencyList.get(source)?.push({ node: destination, weight});
 
@@ -45,6 +46,11 @@ export class Graph {
 
     getNeighbors(node: Node): Edge[] {
         return this.adjacencyList.get(node) || [];
+    }
+
+    getNode(name: string): Node | undefined {
+        const nodes: Node[] = this.getNodes();
+        return nodes.find((node) => node.name === name);
     }
 
     getNodes(): Node[] {
@@ -59,16 +65,16 @@ export class Graph {
         startNode.parent = undefined;
 
         while (queue.length > 0) {
-            let currentNode: Node | undefined = queue.shift(); // Same as real pop first element
+            const currentNode: Node | undefined = queue.shift(); // Same as real pop first element
             if(currentNode === undefined) break; // TypeScript weird stuff bruh
             if (!visited.includes(currentNode)) {
                 visited.push(currentNode);
                 //Target is found
                 if(currentNode === targetNode) break;
 
-                let neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
-                for (let edge of neighbors) {
-                    let neighbor = edge.node
+                const neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
+                for (const edge of neighbors) {
+                    const neighbor = edge.node
                     if(!visited.includes(neighbor)) {
                         neighbor.parent = currentNode;
                         queue.push(neighbor);
@@ -92,7 +98,7 @@ export class Graph {
          * Returns the lowest code node from a list of nodes
          */
         const costs: number[] = [];
-        for(let node of nodes) costs.push(node.totalCost);
+        for(const node of nodes) costs.push(node.totalCost);
 
         return nodes[ costs.indexOf( Math.min(...costs) ) ];
     }
@@ -125,24 +131,24 @@ export class Graph {
         startNode.parent = undefined;
 
         while(evaluate.length > 0) {
-            let currentNode: Node = this.getLowestCostNode(evaluate);
+            const currentNode: Node = this.getLowestCostNode(evaluate);
 
             if(currentNode === targetNode) return this.reCreatePath(currentNode);
 
             // Update evaluate and finished
-            let currentIndex: number = evaluate.indexOf(currentNode);
+            const currentIndex: number = evaluate.indexOf(currentNode);
             evaluate.splice(currentIndex, 1);
             finished.push(currentNode);
 
-            let neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
-            for (let edge of neighbors){
-                let neighbor: Node = edge.node;
+            const neighbors: Edge[] = this.getNeighbors(currentNode) // Edges
+            for (const edge of neighbors){
+                const neighbor: Node = edge.node;
 
                 //skip node if checked
                 if(finished.includes(edge.node)) continue;
 
                 // cost of moving to new node
-                let currentEdgeCost: number = neighbor.edgeCost + edge.weight;
+                const currentEdgeCost: number = neighbor.edgeCost + edge.weight;
 
                 // Check for new node
                 if(!evaluate.includes(neighbor)){
@@ -160,8 +166,9 @@ export class Graph {
         }
         return [];// No path found, should be impossible
     }
-
 }
+
+export default Graph;
 
 // Test
 
@@ -202,5 +209,7 @@ export class Graph {
 // const aStarPath = graph.aStar(node0, node7);
 // console.log("\nA* Path:");
 // console.log(aStarPath.map(node => node.name).join(" -> "));
+
+
 
 

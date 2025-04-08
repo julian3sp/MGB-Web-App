@@ -13,9 +13,11 @@
     },
     "dependencies": {
         "@auth0/auth0-react": "^2.1.1",
+        "@googlemaps/js-api-loader": "^1.16.8",
         "@tailwindcss/vite": "^4.0.17",
         "axios": "^1.7.4",
         "bootstrap": "^5.3.3",
+        "canvas": "^3.1.0",
         "common": "*",
         "dotenv": "*",
         "dotenv-cli": "*",

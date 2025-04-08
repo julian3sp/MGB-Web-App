@@ -40,73 +40,89 @@ export default function RequestListPage(){
 
     return(
         <nav className="flex flex-1">
-            <nav className="w-1/3 bg-white p-4 border font-[Poppins]"  style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}>
+            <nav className="w-1/3 min-h-[85vh] bg-white p-6 border font-[Poppins]"  style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}>
                 <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Service Requests:</h2> {/*Header for list of departments on page*/}
 
-                {data?.map((res) => (
-                    <ul key={res.request_id} className="mb-2">
-                        <button
-                            onClick={() => setSelectedRequest(res)}
-                            className={`w-full text-left block p-6 border rounded ${selectedRequest?.request_id == res.request_id
-                                ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put requests in rounded rectangle boxes*/
-                        }
-                        >
-                            {res.request_id}. {res.request_type} | Room #{res.room_num}
-                        </button>
-                    </ul>
-                ))} {/*ex: "1. Language Interpreter | Room #201"*/}
+                {data && data.length > 0 ? (
+                    data?.map((res) => (
+                        <ul key={res.request_id} className="mb-2">
+                            <button
+                                onClick={() => setSelectedRequest(res)}
+                                className={`w-full text-left block p-5 border rounded ${selectedRequest?.request_id == res.request_id 
+                                    ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put requests in rounded rectangle boxes*/
+                            }
+                            >
+                                {res.request_id}. {res.request_type} | Room #{res.room_num}
+                            </button>
+                        </ul>
+                    ))
+                ) : (
+                    <nav className="border p-5 rounded-lg flex items-center"  style={{ borderColor: '#005E64'}}>
+                        <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
+                    </nav>
+                )} {/*ex: "1. Language Interpreter | Room #201"*/}
             </nav>
 
-            <div className="flex-1 bg-white p-6 border" style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}> {/*Border styling*/}
+            <div className="h-auto flex-1 bg-white p-6 border" style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}> {/*Border styling*/}
+                <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Request Details:</h2>
                 {selectedRequest ? (
                     <nav className="border p-6 rounded-lg"  style={{ borderColor: '#005E64'}}>
-                    <div>
-                    <h2 className="text-2xl font-bold border-b pb-2 mb-4" style={{ color: '#003A96'}}>{selectedRequest.request_id}. {selectedRequest.request_type} ({selectedRequest.language}) - Room #{selectedRequest.room_num} ({selectedRequest.name}): </h2>
-                        {/*Will need to change once more forms are added. Currently prints the language field after the request type (Language Interpreter (English)), will likely not apply for future forms*/}
+                        <div>
+                            <h2 className="text-2xl font-bold border-b pb-2 mb-4" style={{ color: '#003A96'}}>{selectedRequest.request_id}. {selectedRequest.request_type} ({selectedRequest.language}) - Room #{selectedRequest.room_num} ({selectedRequest.name}): </h2>
+                            {/*Will need to change once more forms are added. Currently prints the language field after the request type (Language Interpreter (English)), will likely not apply for future forms*/}
 
-                    <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Name: </h3>
-            <ul className="list-disc ml-6 mb-4">
-                    <p>{selectedRequest.name} (Employee ID: {selectedRequest.employee_id})</p> {/*Name (Employee ID: #)*/}
-            </ul>
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Name: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>{selectedRequest.name} (Employee ID: {selectedRequest.employee_id})</p> {/*Name (Employee ID: #)*/}
+                            </ul>
 
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Room Number: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>#{selectedRequest.room_num}</p>
+                            </ul> {/*#RoomNumber*/}
 
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Room Number: </h3>
-                <ul className="list-disc ml-6 mb-4">
-                        <p>#{selectedRequest.room_num}</p>
-                </ul> {/*#RoomNumber*/}
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Language: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>{selectedRequest.language}</p>
+                            </ul> {/*{Language} -- Will need to change header once new forms are added, maybe to "{selectedRequest.type} details" */}
 
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Contact Information: </h3>
-                <ul className="list-disc ml-6 mb-4">
-                        <p>
-                            Phone: {formatPhoneNumber(selectedRequest.phone_num)}
-                            <br/>
-                            Email: {selectedRequest.email}
-                        </p>
-                </ul> {/*Phone: #
-                         Email: #
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Contact Information: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>
+                                    Phone: {formatPhoneNumber(selectedRequest.phone_num)}
+                                    <br/>
+                                    Email: {selectedRequest.email}
+                                </p>
+                            </ul> {/*Phone: #
+                                    Email: #
 
-                         Use formatPhoneNumber to return in (###) ###-#### format
-                         */}
+                                    Use formatPhoneNumber to return in (###) ###-#### format
+                                    */}
 
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Request Date: </h3>
-                <ul className="list-disc ml-6 mb-4">
-                        <p>{new Date(selectedRequest.request_date).toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            second: 'numeric',
-                        })} (Request ID: {selectedRequest.request_id})</p>
-                </ul> {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Request Date: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>{new Date(selectedRequest.request_date).toLocaleDateString(undefined, {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                    second: 'numeric',
+                                })} (Request ID: {selectedRequest.request_id})</p>
+                            </ul> {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
 
-                <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Additional Comments: </h3>
-                <ul className="list-disc ml-6 mb-4">
-                        <p>{selectedRequest.additional_comments}</p>
-                </ul> {/*Additional comments, not in service_request table yet*/}
-                    </div>
+                            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Additional Comments: </h3>
+                            <ul className="list-disc ml-6 mb-4">
+                                <p>{selectedRequest.additional_comments}</p>
+                            </ul> {/*Additional comments, not in service_request table yet*/}
+                        </div>
                     </nav>
-                ) : ( <p className="text-gray-600 font-[Poppins]">Select a service request.</p>
+                ) : (
+                    <div className="flex-1" style={{ borderColor: '#005E64'}}>
+                        <nav className="border p-5 rounded-lg flex items-center"  style={{ borderColor: '#005E64'}}>
+                            <p className="text-gray-700 font-[Poppins]">Select a service request to view details.</p>
+                        </nav>
+                    </div>
                 )} {/*No service selected yet*/}
             </div>
         </nav>

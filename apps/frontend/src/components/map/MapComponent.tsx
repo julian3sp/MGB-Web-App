@@ -18,6 +18,7 @@ const MapComponent: React.FC = () => {
   const [showText, setShowText] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState<{ name: string; floor: string[] } | null>(null);
   const [showHospitalMap, setShowHospitalMap] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Auto-loop the text animation every 3 seconds
   useEffect(() => {
@@ -74,13 +75,15 @@ const MapComponent: React.FC = () => {
 
   // When the "Show Google Map" button is clicked, wait 1 seconds, then show the map and display the route.
   const handleViewMap = () => {
+    setIsLoading(true);
     setTimeout(() => {
       setShowMap(true);
       setShowHospitalMap(false);
+      setIsLoading(false);
       if (selectedPlace && mapInstance && directionsService && directionsRenderer && userLocation) {
         displayRouteOnMap(selectedPlace);
       }
-    }, 1000);
+    }, 2000);
   };
 
   const handleViewHospitalMap = () => {
@@ -136,19 +139,26 @@ const MapComponent: React.FC = () => {
       {/* Right Column: Map area */}
       <div className="w-2/3 relative">
         {/* Google Map */}
-        <div className={`h-full ${showMap ? 'visible' : 'invisible'}`}>
+        <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <MapRenderer onMapReady={handleMapReady} />
         </div>
         {/* Hospital Map */}
-        <div className={`absolute inset-0 ${showHospitalMap ? 'visible' : 'invisible'}`}>
+        <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <img 
             src={hospitalMap} 
             alt="Hospital Map" 
             className="w-full h-full object-contain"
           />
         </div>
+        {/* Loading Screen */}
+        <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-[#003a96] font-medium">Loading map...</p>
+          </div>
+        </div>
         {/* Animation and Text */}
-        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 ${showMap || showHospitalMap ? 'invisible' : 'visible'}`}>
+        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 transition-all duration-500 ease-in-out ${(showMap || showHospitalMap || isLoading) ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
           <div className="z-10 -mt-80 text-black">
             {showText && <TextGenerateEffectDemo />}
           </div>

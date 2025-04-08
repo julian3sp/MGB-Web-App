@@ -70,7 +70,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady }) => {
                 onMapReady(newMap, directionsService, directionsRenderer, userLocation);
               },
               (error) => {
-                console.error('Error getting user location:', error);
+                console.log('Error getting user location:', error);
                 onMapReady(newMap, directionsService, directionsRenderer, null);
               }
             );

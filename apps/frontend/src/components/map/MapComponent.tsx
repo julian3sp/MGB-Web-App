@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapRenderer from './MapRenderer';
 import SearchContainer from './SearchContainer';
 import DisplayLottie from '../ui/DisplayLottie';
@@ -13,6 +13,16 @@ const MapComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<{ name: string; location: google.maps.LatLngLiteral } | null>(null);
   const [showMap, setShowMap] = useState<boolean>(false);
+  const [showText, setShowText] = useState(true);
+
+  // Auto-loop the text animation every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowText(false);
+      setTimeout(() => setShowText(true), 100);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Called when MapRenderer is ready.
   const handleMapReady = (
@@ -53,7 +63,7 @@ const MapComponent: React.FC = () => {
     setShowMap(false);
   };
 
-  // When the "Show Google Map" button is clicked, wait 2 seconds, then show the map and display the route.
+  // When the "Show Google Map" button is clicked, wait 1 seconds, then show the map and display the route.
   const handleViewMap = () => {
     setTimeout(() => {
       setShowMap(true);
@@ -93,12 +103,13 @@ const MapComponent: React.FC = () => {
         <div className={`h-full ${showMap ? 'visible' : 'invisible'}`}>
           <MapRenderer onMapReady={handleMapReady} />
         </div>
-        {/* Display Lottie animation when map is hidden */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 ${showMap ? 'invisible' : 'visible'}`}>
-          <div className="text-center">
-            <TextGenerateEffectDemo />
+          <div className="z-10 -mt-70 text-black">
+            {showText && <TextGenerateEffectDemo />}
           </div>
-          <DisplayLottie />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <DisplayLottie />
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom"; // Added useLocation to track the current route
 import React from "react";
 import '../styles/mainStyles.css'
 
@@ -9,9 +9,11 @@ type Props = {
     signOut: () => void
 }
 
-
 export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const [tab, setTab] = React.useState<string>("")
+    const location = useLocation();
+    const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
+
     return (
         <nav className="flex justify-between items-center bg-white  text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
@@ -41,12 +43,16 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                 </div>
             </div>
 
-            <Link to="/signIn" className={"mr-5"}>
+            <Link to="/signIn" className={"mr-5"} onClick={() => setTab("")}>
                 <button className={
+                        /* show the active background color if the user is on the login page */
                         isSignedIn ?
-                            'group text-sm text-black px-3 py-1 rounded transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white' :
-                            'text-sm text-black px-3 py-1 rounded transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white'}
-                        onClick={() => signOut()}>
+                            `group text-sm px-5 py-5 transition-all duration-150 ease-in-out ${isLoginPage ? 'bg-[#003a96] text-white' : 'text-black hover:bg-[#003a96] hover:text-white'}` :
+                            `text-sm px-5 py-5 transition-all duration-150 ease-in-out ${isLoginPage ? 'bg-[#003a96] text-white' : 'text-black hover:bg-[#003a96] hover:text-white'}`}
+                        onClick={() => {
+                            setTab("");
+                            signOut();
+                        }}>
                     <span className={"defaultSign group-hover:hidden"}> {loginTag}</span>
                     <span className="hover-text hidden group-hover:block">Sign out</span>
                 </button>

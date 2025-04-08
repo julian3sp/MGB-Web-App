@@ -6,6 +6,7 @@ import CreateAccountPage from './routes/CreateAccountPage.tsx';
 import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from "./routes/ServiceRequestPage.tsx";
 import { WelcomePage } from './routes/WelcomePage.tsx';
+import { PathFindingPage } from './routes/PathFindingPage.tsx';
 import NavBar from "./components/NavBar.tsx";
 import NavigationPage from "./routes/NavigationPage.tsx";
 
@@ -28,13 +29,13 @@ function App() {
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
-                <Route path="/" element={<WelcomePage />} />
+                <Route path="/" element={isSignedIn ? <PathFindingPage /> : <WelcomePage />} /> /* render the pathfinding page if the user is signed in */
                 <Route path="/services" element={<ServiceRequestPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
-                <Route path="/navigation" element={<NavigationPage />} />
+                <Route path="/navigation" element={<PathFindingPage />} />
             </Routes>
         </Router>
     );

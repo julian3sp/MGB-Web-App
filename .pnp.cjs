@@ -3525,6 +3525,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["clsx", [\
+      ["npm:2.1.1", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/clsx-npm-2.1.1-96125b98be-10c0.zip/node_modules/clsx/",\
+        "packageDependencies": [\
+          ["clsx", "npm:2.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["color-convert", [\
       ["npm:2.0.1", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/color-convert-npm-2.0.1-79730e935b-10c0.zip/node_modules/color-convert/",\
@@ -4876,10 +4885,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:a17756361238cc3df75ccc7a73dfbaf38b68ac652ee5078484c70900af6827d9bbb7cb27bc25ce67707c95084bc96c5e3417b0befbd99edbb65516965488564a#npm:12.6.3", {\
-        "packageLocation": "./.yarn/__virtual__/framer-motion-virtual-465d8f29cb/3/AppData/Local/Yarn/Berry/cache/framer-motion-npm-12.6.3-d82e4178e7-10c0.zip/node_modules/framer-motion/",\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:12.6.3", {\
+        "packageLocation": "./.yarn/__virtual__/framer-motion-virtual-59b97d668c/3/AppData/Local/Yarn/Berry/cache/framer-motion-npm-12.6.3-d82e4178e7-10c0.zip/node_modules/framer-motion/",\
         "packageDependencies": [\
-          ["framer-motion", "virtual:a17756361238cc3df75ccc7a73dfbaf38b68ac652ee5078484c70900af6827d9bbb7cb27bc25ce67707c95084bc96c5e3417b0befbd99edbb65516965488564a#npm:12.6.3"],\
+          ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:12.6.3"],\
           ["@emotion/is-prop-valid", null],\
           ["@types/emotion__is-prop-valid", null],\
           ["@types/react", "npm:18.3.20"],\
@@ -4929,6 +4938,7 @@ const RAW_RUNTIME_STATE =
           ["axios", "npm:1.8.4"],\
           ["bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:5.3.3"],\
           ["canvas", "npm:3.1.0"],\
+          ["clsx", "npm:2.1.1"],\
           ["common", "workspace:packages/common"],\
           ["dotenv", "npm:16.4.7"],\
           ["dotenv-cli", "npm:7.4.4"],\
@@ -4937,7 +4947,9 @@ const RAW_RUNTIME_STATE =
           ["eslint-plugin-react-compiler", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:19.0.0-beta-aeaed83-20250323"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:5.2.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.19"],\
+          ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:12.6.3"],\
           ["localforage", "npm:1.10.0"],\
+          ["lottie-web", "npm:5.12.2"],\
           ["match-sorter", "npm:6.3.4"],\
           ["motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:12.6.3"],\
           ["prettier", "npm:3.5.3"],\
@@ -4948,6 +4960,7 @@ const RAW_RUNTIME_STATE =
           ["react-router-bootstrap", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.26.3"],\
           ["react-router-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:6.30.0"],\
           ["serve", "npm:14.2.4"],\
+          ["tailwind-merge", "npm:3.2.0"],\
           ["tailwindcss", "npm:4.0.17"],\
           ["ts-config-custom", "workspace:configs/ts-config-custom"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
@@ -5888,6 +5901,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lottie-web", [\
+      ["npm:5.12.2", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/lottie-web-npm-5.12.2-942dc9e22a-10c0.zip/node_modules/lottie-web/",\
+        "packageDependencies": [\
+          ["lottie-web", "npm:5.12.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["loupe", [\
       ["npm:3.1.3", {\
         "packageLocation": "../../AppData/Local/Yarn/Berry/cache/loupe-npm-3.1.3-81625c6ef8-10c0.zip/node_modules/loupe/",\
@@ -6299,7 +6321,7 @@ const RAW_RUNTIME_STATE =
           ["@types/emotion__is-prop-valid", null],\
           ["@types/react", "npm:18.3.20"],\
           ["@types/react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.5"],\
-          ["framer-motion", "virtual:a17756361238cc3df75ccc7a73dfbaf38b68ac652ee5078484c70900af6827d9bbb7cb27bc25ce67707c95084bc96c5e3417b0befbd99edbb65516965488564a#npm:12.6.3"],\
+          ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:12.6.3"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:18.3.1"],\
           ["tslib", "npm:2.8.1"]\
@@ -8257,6 +8279,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["supports-color", "npm:7.2.0"],\
           ["has-flag", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tailwind-merge", [\
+      ["npm:3.2.0", {\
+        "packageLocation": "../../AppData/Local/Yarn/Berry/cache/tailwind-merge-npm-3.2.0-9c2d1456d4-10c0.zip/node_modules/tailwind-merge/",\
+        "packageDependencies": [\
+          ["tailwind-merge", "npm:3.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\

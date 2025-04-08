@@ -9,29 +9,29 @@ export default function DepartmentPage() {
 
     /* Error handling */
     if (!department) {
-        return <p><strong>Department not found</strong></p>
+        return <p className={"font-[Poppins]"}><strong>Department not found</strong></p>
     }
 
     return (
         <div className="border p-6 rounded-lg" style={{ borderColor: '#005E64' }}>
-            <h2 className="text-2xl font-bold border-b pb-2 mb-4" style={{ color: '#003A96'}}>{department.name}: </h2> {/*Header with department name*/}
+            <h2 className="text-2xl font-bold font-[Poppins] border-b pb-2 mb-4" style={{ color: '#003A96'}}>{department.name}: </h2> {/*Header with department name*/}
 
-            <h3 className="text-lg font-semibold" style={{ color: '#005E64'}}>Specialties and Services: </h3> {/*Header for specialties and services*/}
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Specialties and Services: </h3> {/*Header for specialties and services*/}
             <ul className="list-disc ml-6 mb-4">
                 {department.specialties.map((specialty, index) => (
-                    <li key={index} className="text-gray-700">{specialty}</li>
+                    <li key={index} className="text-gray-700 font-[Poppins]">{specialty}</li>
                 ))} {/*Parse through specialties array and make each one a bullet point in a list*/}
             </ul>
 
-            <h3 className="text-lg font-semibold" style={{ color: '#005E64'}}>Location: </h3> {/*Header for location (floor/suite)*/}
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Location: </h3> {/*Header for location (floor/suite)*/}
             <ul className="list-disc ml-6 mb-4">
                 {department.floor.map((loc, index) => (
-                    <li key={index} className="text-gray-700">{loc}</li>
+                    <li key={index} className="text-gray-700 font-[Poppins]">{loc}</li>
                 ))} {/*Parse through floor array and make each one a bullet point in a list (some departments have multiple locations)*/}
             </ul>
 
-            <h3 className="text-lg font-semibold" style={{ color: '#005E64'}}>Telephone: </h3>{/*Header for phone number */}
-            <p className="text-grey-700">{department.phone}</p>
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Telephone: </h3>{/*Header for phone number */}
+            <p className="text-grey-700 font-[Poppins]">{department.phone}</p>
         </div>
     )
 }

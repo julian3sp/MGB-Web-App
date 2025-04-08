@@ -57,9 +57,9 @@ function DrawingPath() {
 
         image.src = mapImage;
         const imgWidth = 1208;
-        const imgHeight = 1208;
+        const imgHeight = 1028;
 
-        const scale = 1.2
+        const scale = 1.5
         canvas.width = imgWidth / scale;
         canvas.height = imgHeight/ scale;
 

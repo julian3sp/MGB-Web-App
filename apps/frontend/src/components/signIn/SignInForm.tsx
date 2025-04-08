@@ -4,19 +4,35 @@ import {InputHeader} from "./InputHeader.tsx";
 import {InputBox} from "./InputBox.tsx";
 import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";
+import {trpc} from "../../lib/trpc.ts";
 
 export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [viewPW, setView] = useState<boolean>(false)
+    const input = {
+        email,
+        password
+    }
+    const { data, isLoading, error } = trpc.validUser.useQuery(input)
 
     function handleSubmit(){
         localStorage.setItem("firstName", "User");
         localStorage.setItem("isSignedIn", "true");
         console.log(localStorage.getItem("firstName"));
-        rerenderBar();
-        navigate("/")
+        if (data){
+            rerenderBar();
+            navigate("/")
+        } else if (isLoading){
+            return(
+                <p>Loading...</p>
+            )
+        } else {
+            return(
+                <p>User Not Found</p>
+            )
+        }
     }
 
     return(

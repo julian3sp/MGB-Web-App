@@ -13,6 +13,16 @@ type requestFormProps = {
     type: string;
 };
 
+type errorProps = {
+    name: string,
+    email: string,
+    phoneNumber: string,
+    employeeID: string,
+    request: string,
+    roomNumber: string,
+    comments: string
+}
+
 function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
@@ -22,11 +32,80 @@ function RequestForm({ title, type }: requestFormProps) {
     const [request, setRequest] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
+    const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
-    const mutation = trpc.createRequest.useMutation();
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        employeeID: '',
+        request: '',
+        roomNumber: '',
+        comments: '',
+    });
+
+    const Validate = (): boolean => {
+        const errors: errorProps = {
+            comments: "",
+            email: "",
+            employeeID: "",
+            name: "",
+            phoneNumber: "",
+            request: "",
+            roomNumber: ""
+        }
+
+        if (!name) {
+            errors.name = "Name is required";
+        } else if (name.length < 2) {
+            errors.name = `Name must be at least two characters`;
+        } else if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+            errors.name = "Name contains invalid characters";
+        }
+
+        if (!email) {
+            errors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            errors.email = "Email is invalid";
+        }
+
+        if (!phoneNumber) {
+            errors.phoneNumber = "Phone number is required";
+        }
+        else if (phoneNumber.length < 10) {
+            errors.phoneNumber = "Phone number is too short";
+        }
+
+        if (!employeeID) {
+            errors.employeeID = "Employee ID is required";
+        } else if (employeeID.length < 9) {
+            errors.employeeID = `Employee ID must be at least 9 characters`;
+        }
+
+        if (!roomNumber) {
+            errors.roomNumber = "Room number is required";
+        }
+
+        if (!request) {
+            errors.request = "Please select a request type";
+        }
+
+        setErrors(errors);
+        return Object.values(errors).some(value => value.length > 0);
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const form = e.currentTarget; // This is the actual HTMLFormElement
+        const isValid = form.checkValidity(); // Now
+
+        if (Validate()) {
+            return;
+        }
+        else{setOpen(true);}
+
+
+
         mutation.mutate({
             name: name,
             email: email,
@@ -50,6 +129,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setComments('');
     };
 
+
+
     return (
         <>
             <div>
@@ -59,6 +140,7 @@ function RequestForm({ title, type }: requestFormProps) {
                     onReset={handleReset}
                 >
                     <div className=" rounded-lg shadow-lg overflow-hidden w-200 bg-white flex flex-col gap-5">
+
                         <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
                             {title}
                         </h2>
@@ -72,7 +154,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     setState={setEmail}
                                     placeholder="Enter your Email"
                                     width="w-full"
-                                />
+                                error={errors.email}/>
                             </div>
 
                             <div>
@@ -82,27 +164,32 @@ function RequestForm({ title, type }: requestFormProps) {
                                     setState={setName}
                                     placeholder="Enter your Full Name"
                                     width="w-full"
-                                />
+                                error={errors.name}/>
                             </div>
 
                             <div>
                                 <InputHeader>Phone Number:</InputHeader>
                                 <InputBox
+                                    maxLength = {15}
                                     value={phoneNumber}
-                                    setState={setPhoneNumber}
-                                    placeholder="Enter your Phone Number"
-                                    width="w-full"
-                                />
+                                    setState={(value) => {
+                                        if (/^\d*$/.test(value)) {
+                                            setPhoneNumber(value);}
+                                    }}
+                                    placeholder="Enter your Phone Number" width="w-full" error={errors.phoneNumber}/>
                             </div>
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <InputBox
-                                    value={employeeID}
-                                    setState={setEmployeeID}
-                                    placeholder="Enter your Employee ID"
-                                    width="w-full"
-                                />
+                                <InputBox maxLength = {9}
+                                          value={employeeID}
+                                          setState={(value) => {
+                                              if (/^\d*$/.test(value)) {
+                                                  setEmployeeID(value);}
+                                          }}
+                                          placeholder="Enter your Employee ID"
+                                          width="w-full"
+                                          error={errors.employeeID}/>
                             </div>
 
                             <div>
@@ -112,17 +199,20 @@ function RequestForm({ title, type }: requestFormProps) {
                                     setState={setRequest}
                                     placeholder={type}
                                     width="w-full"
-                                />
+                                error={errors.request}/>
                             </div>
 
                             <div>
                                 <InputHeader>Room Number:</InputHeader>
-                                <InputBox
-                                    value={roomNumber}
-                                    setState={setRoomNumber}
-                                    placeholder="Enter your Room Number"
-                                    width="w-full"
-                                />
+                                <InputBox maxLength={6}
+                                          value={roomNumber}
+                                          setState={(value) => {
+                                              if (/^\d*$/.test(value)) {
+                                                  setRoomNumber(value);}
+                                          }}
+                                          placeholder="Enter your Room Number"
+                                          width="w-full"
+                                          error={errors.roomNumber}/>
                             </div>
                         </div>
                         <div className={'mr-5 ml-5'}>
@@ -139,11 +229,10 @@ function RequestForm({ title, type }: requestFormProps) {
                             <ResetButton label={'Reset'} />
                             <SubmitButton
                                 label={'Submit'}
-                                type={'submit'}
-                                onClick={() => setOpen(true)}
-                            />
+                                type={'submit'}/>
                         </div>
                     </div>
+
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">
@@ -164,6 +253,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         </div>
                     </div>
                 </Modal>
+
             </div>
         </>
     );

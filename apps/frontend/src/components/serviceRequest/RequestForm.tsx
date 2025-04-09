@@ -34,6 +34,7 @@ function RequestForm({ title, type }: requestFormProps) {
             room_num: Number(roomNumber),
             request_type: type,
             employee_id: employeeID,
+            additional_comments: comments,
             language: request,
         });
         handleReset(e);

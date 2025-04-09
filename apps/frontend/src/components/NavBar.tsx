@@ -1,5 +1,5 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
-import {Link, useLocation} from "react-router-dom"; // Added useLocation to track the current route
+import {Link} from "react-router-dom";
 import React from "react";
 import '../styles/mainStyles.css'
 
@@ -12,9 +12,6 @@ type Props = {
 
 export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const [tab, setTab] = React.useState<string>("")
-    const location = useLocation();
-    const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
-
     return (
         <nav className="flex justify-between items-center bg-white  text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
@@ -39,6 +36,12 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Requests
+                    </Link>
+                    <Link to="/admin/directory" onClick={() => setTab("exp")}
+                          className={tab === "exp" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Export
                     </Link>
                     <Link to="/navigation" onClick={() => setTab("navigation")}
                           className={tab === "navigation" ?

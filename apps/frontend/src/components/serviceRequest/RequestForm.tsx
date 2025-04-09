@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
-import { InputBox } from '../signIn/InputBox.tsx';
+import { ServiceComponentInputBox } from './inputFields/ServiceComponentInputBox.tsx';
 import { InputHeader } from '../signIn/InputHeader.tsx';
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
@@ -149,7 +149,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
                                 <InputHeader>Email:</InputHeader>
-                                <InputBox
+                                <ServiceComponentInputBox
                                     value={email}
                                     setState={setEmail}
                                     placeholder="Enter your Email"
@@ -159,7 +159,7 @@ function RequestForm({ title, type }: requestFormProps) {
 
                             <div>
                                 <InputHeader>Full Name:</InputHeader>
-                                <InputBox
+                                <ServiceComponentInputBox
                                     value={name}
                                     setState={setName}
                                     placeholder="Enter your Full Name"
@@ -169,7 +169,7 @@ function RequestForm({ title, type }: requestFormProps) {
 
                             <div>
                                 <InputHeader>Phone Number:</InputHeader>
-                                <InputBox
+                                <ServiceComponentInputBox
                                     maxLength = {15}
                                     value={phoneNumber}
                                     setState={(value) => {
@@ -181,20 +181,20 @@ function RequestForm({ title, type }: requestFormProps) {
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <InputBox maxLength = {9}
-                                          value={employeeID}
-                                          setState={(value) => {
+                                <ServiceComponentInputBox maxLength = {9}
+                                                          value={employeeID}
+                                                          setState={(value) => {
                                               if (/^\d*$/.test(value)) {
                                                   setEmployeeID(value);}
                                           }}
-                                          placeholder="Enter your Employee ID"
-                                          width="w-full"
-                                          error={errors.employeeID}/>
+                                                          placeholder="Enter your Employee ID"
+                                                          width="w-full"
+                                                          error={errors.employeeID}/>
                             </div>
 
                             <div>
                                 <InputHeader children={type + ':'}></InputHeader>
-                                <InputBox
+                                <ServiceComponentInputBox
                                     value={request}
                                     setState={setRequest}
                                     placeholder={type}
@@ -204,15 +204,15 @@ function RequestForm({ title, type }: requestFormProps) {
 
                             <div>
                                 <InputHeader>Room Number:</InputHeader>
-                                <InputBox maxLength={6}
-                                          value={roomNumber}
-                                          setState={(value) => {
+                                <ServiceComponentInputBox maxLength={6}
+                                                          value={roomNumber}
+                                                          setState={(value) => {
                                               if (/^\d*$/.test(value)) {
                                                   setRoomNumber(value);}
                                           }}
-                                          placeholder="Enter your Room Number"
-                                          width="w-full"
-                                          error={errors.roomNumber}/>
+                                                          placeholder="Enter your Room Number"
+                                                          width="w-full"
+                                                          error={errors.roomNumber}/>
                             </div>
                         </div>
                         <div className={'mr-5 ml-5'}>

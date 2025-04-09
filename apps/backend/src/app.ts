@@ -6,12 +6,8 @@ import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
-import { getDirectories, makeDirectories } from './server/procedures/directories';
-
-import multer from 'multer';
-const upload = multer({ dest: 'uploads/' });
-
-import { router, trpc } from './server/trpc.ts';
+import { router } from './server/trpc.ts';
+import { getUser, makeUser } from './server/procedures/login.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -23,8 +19,8 @@ const appRouter = t.router({
     createRequest: makeRequest,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
-    getDirectories: getDirectories,
-    makeDirectory: makeDirectories,
+    validUser: getUser,
+    makeUser: makeUser,
 });
 
 const app: Express = express(); // Setup the backend

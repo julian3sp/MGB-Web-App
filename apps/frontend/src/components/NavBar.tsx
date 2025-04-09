@@ -43,16 +43,26 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Export
                     </Link>
+                    <Link to="/navigation" onClick={() => setTab("navigation")}
+                          className={tab === "navigation" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Navigation
+                    </Link>
 
                 </div>
             </div>
 
-            <Link to="/signIn" className={"mr-5"}>
+            <Link to="/signIn" className={"mr-5"} onClick={() => setTab("")}>
                 <button className={
+                        /* show the active background color if the user is on the login page */
                         isSignedIn ?
-                            'group text-sm text-black px-3 py-1 rounded transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white' :
-                            'text-sm text-black px-3 py-1 rounded transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white'}
-                        onClick={() => signOut()}>
+                            `group text-sm px-5 py-5 transition-all duration-150 ease-in-out ${isLoginPage ? 'bg-[#003a96] text-white' : 'text-black hover:bg-[#003a96] hover:text-white'}` :
+                            `text-sm px-5 py-5 transition-all duration-150 ease-in-out ${isLoginPage ? 'bg-[#003a96] text-white' : 'text-black hover:bg-[#003a96] hover:text-white'}`}
+                        onClick={() => {
+                            setTab("");
+                            signOut();
+                        }}>
                     <span className={"defaultSign group-hover:hidden"}> {loginTag}</span>
                     <span className="hover-text hidden group-hover:block">Sign out</span>
                 </button>

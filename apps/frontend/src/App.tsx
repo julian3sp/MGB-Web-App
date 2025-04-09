@@ -15,6 +15,7 @@ import DirectoryPage from './routes/DirectoryPage';
 
 
 
+import NavigationPage from "./routes/NavigationPage.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
+                <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>
             </QueryClientProvider>

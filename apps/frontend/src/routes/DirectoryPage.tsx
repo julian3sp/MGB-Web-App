@@ -78,8 +78,8 @@ const DirectoryPage = () => {
                 />
                 <input
                     className="border p-2 w-full"
-                    name="telephone"
-                    placeholder="telephone"
+                    name="department"
+                    placeholder="Department"
                     value={formData.telephone}
                     onChange={handleChange}
                 />
@@ -94,8 +94,6 @@ const DirectoryPage = () => {
             {/* Import/Export CSV */}
             <div className="mb-6 bg-white p-4 shadow rounded">
                 <h2 className="text-xl font-semibold mb-2">Import / Export CSV</h2>
-                <input type="file" accept=".csv" className="mb-2" />
-                <br />
                 <button
                     onClick={downloadCSV}
                     disabled={isLoading}
@@ -139,4 +137,4 @@ const DirectoryPage = () => {
     );
 };
 
-export default DirectoryPage;
+export default DirectoryPage

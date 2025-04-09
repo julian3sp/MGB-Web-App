@@ -99,10 +99,10 @@ const node94: Node = { name: "94", x: 803,  y: 767,  edgeCost: 0, totalCost: 0 }
 const node95: Node = { name: "95", x: 763,  y: 739,  edgeCost: 0, totalCost: 0 };
 const node96: Node = { name: "96", x: 854,  y: 874,  edgeCost: 0, totalCost: 0 };
 const node97: Node = { name: "97", x: 733,  y: 739,  edgeCost: 0, totalCost: 0 };
-const node98: Node = { name: "98", x: 747,  y: 767,  edgeCost: 0, totalCost: 0 };
+const specialtyClinic: Node = { name: "Multi-Specialty Clinic", x: 747,  y: 767,  edgeCost: 0, totalCost: 0 };
 const node99: Node = { name: "99", x: 803,  y: 874,  edgeCost: 0, totalCost: 0 };
 const node100: Node = { name: "100", x: 748,  y: 874,  edgeCost: 0, totalCost: 0 };
-const specialtyClinic: Node = { name: "Specialty Clinic", x: 697,  y: 753,  edgeCost: 0, totalCost: 0 };
+const node101: Node = { name: "101", x: 697,  y: 753,  edgeCost: 0, totalCost: 0 };
 const node102: Node = { name: "102", x: 697,  y: 775,  edgeCost: 0, totalCost: 0 };
 const node103: Node = { name: "103", x: 699,  y: 874,  edgeCost: 0, totalCost: 0 };
 const node104: Node = { name: "104", x: 666,  y: 792,  edgeCost: 0, totalCost: 0 };
@@ -184,7 +184,7 @@ const node179: Node = { name: "179", x: 187,  y: 289,  edgeCost: 0, totalCost: 0
 const node180: Node = { name: "180", x: 53,  y: 206,  edgeCost: 0, totalCost: 0 };
 const node181: Node = { name: "181", x: 405,  y: 403,  edgeCost: 0, totalCost: 0 };
 const node182: Node = { name: "182", x: 98,  y: 206,  edgeCost: 0, totalCost: 0 };
-const node183: Node = { name: "183", x: 248,  y: 274,  edgeCost: 0, totalCost: 0 };
+const Radiology: Node = { name: "Radiology", x: 248,  y: 274,  edgeCost: 0, totalCost: 0 };
 const node184: Node = { name: "184", x: 265,  y: 274,  edgeCost: 0, totalCost: 0 };
 const node185: Node = { name: "185", x: 299,  y: 292,  edgeCost: 0, totalCost: 0 };
 const node186: Node = { name: "186", x: 265,  y: 252,  edgeCost: 0, totalCost: 0 };
@@ -303,9 +303,9 @@ graph.addEdge(node90, node91);
 graph.addEdge(node91, node94);
 graph.addEdge(node94, node95);
 graph.addEdge(node95, node97);
-graph.addEdge(node95, node98);
-graph.addEdge(node97, node98);
+graph.addEdge(node95, specialtyClinic);
 graph.addEdge(node97, specialtyClinic);
+graph.addEdge(node97, node101);
 graph.addEdge(node100, node103);
 graph.addEdge(node102, node104);
 graph.addEdge(node105, node106);
@@ -373,8 +373,9 @@ graph.addEdge(node172, node175);
 graph.addEdge(node175, node179);
 graph.addEdge(node177, node181);
 graph.addEdge(node178, node179);
+graph.addEdge(node179, Radiology);
 graph.addEdge(node180, node182);
-graph.addEdge(node183, node184);
+graph.addEdge(Radiology, node184);
 graph.addEdge(node184, node186);
 graph.addEdge(node185, node187);
 graph.addEdge(node186, node187);
@@ -428,18 +429,18 @@ graph.addEdge(node100, node99);
 graph.addEdge(node99, node96);
 graph.addEdge(node96, node93);
 graph.addEdge(node93, node92);
-graph.addEdge(node98, node100);
+graph.addEdge(specialtyClinic, node100);
 graph.addEdge(node94, node99);
 graph.addEdge(node90, node96);
 graph.addEdge(node87, node93);
 graph.addEdge(node83, node92);
 graph.addEdge(node95, node91);
-graph.addEdge(node98, node99);
-graph.addEdge(node102, node98);
+graph.addEdge(specialtyClinic, node99);
+graph.addEdge(node102, specialtyClinic);
 graph.addEdge(node104, node109);
 graph.addEdge(node107, node110);
 graph.addEdge(node109, node108);
-graph.addEdge(node105, specialtyClinic);
+graph.addEdge(node105, node101);
 graph.addEdge(node77, node72);
 graph.addEdge(node54, node43);
 graph.addEdge(node34, node43);
@@ -458,9 +459,6 @@ graph.addEdge(node203, node201);
 graph.addEdge(node10, node9);
 graph.addEdge(node8, node4);
 graph.addEdge(node143, node152);
-
-
-
 
 
 

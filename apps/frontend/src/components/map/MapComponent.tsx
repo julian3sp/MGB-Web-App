@@ -124,16 +124,39 @@ const MapComponent: React.FC = () => {
               {/* Hospital Map Section */}
               <div className="flex flex-col mt-10">
                   <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
-                  {selectedDepartment && (showMap || !showHospitalMap) && (
-                      <button
-                          onClick={handleViewHospitalMap}
-                          className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-                transition-all duration-300 ease-in-out
-                hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                active:scale-95 mt-4"
-                      >
-                          Show Inside Hospital Map
-                      </button>
+                  {selectedDepartment && !showHospitalMap && (
+                    <button
+                      onClick={handleViewHospitalMap}
+                      className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
+                        transition-all duration-300 ease-in-out
+                        hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
+                        active:scale-95 mt-4"
+                    >
+                      Show Inside Hospital Map
+                    </button>
+                  )}
+                  {showHospitalMap && (
+                    <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
+                      <div className="flex flex-col gap-2">
+                        <div className="text-md font-medium font-bold mb-2">Map Legend</div>
+                        <div className="flex items-center gap-2">
+                          <img
+                            src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                            alt="Your Location"
+                            className="w-6 h-6"
+                          />
+                          <span className="text-sm text-gray-600 font-bold">Your Location</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <img
+                            src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                            alt="Destination"
+                            className="w-6 h-6"
+                          />
+                          <span className="text-sm text-gray-600 font-bold">Destination</span>
+                        </div>
+                      </div>
+                    </div>
                   )}
               </div>
 

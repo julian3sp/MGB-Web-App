@@ -7,7 +7,7 @@ const DirectoryPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         location: '',
-        department: '',
+        telephone: '',
     });
 
     const utils = trpc.useUtils();
@@ -26,52 +26,6 @@ const DirectoryPage = () => {
         addDirectory.mutate(formData);
     };
 
-    // const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     e.preventDefault();
-    //
-    //     if (!file) {
-    //         setError('Please select a file first');
-    //         return;
-    //     }
-    //
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //
-    //     // Read and parse the CSV file in the browser
-    //     const reader = new FileReader();
-    //     reader.onload = async () => {
-    //         try {
-    //             const csvText = reader.result as string;
-    //
-    //             // Parse CSV data (basic split by line and comma)
-    //             const lines = csvText.split('\n');
-    //             const headers = lines[0].split(','); // assuming first line is headers
-    //             const entries = lines.slice(1).map((line) => {
-    //                 const values = line.split(',');
-    //                 let entry: { [key: string]: string } = {};
-    //                 headers.forEach((header, idx) => {
-    //                     entry[header.trim()] = values[idx]?.trim();
-    //                 });
-    //                 return entry;
-    //             });
-    //
-    //             // Call the tRPC mutation to create entries in the database
-    //             for (const entry of entries) {
-    //                 await trpc.addDirectory.mutateAsync({
-    //                     name: entry['name'] || '',
-    //                     location: entry['location'] || '',
-    //                     department: entry['department'] || '',
-    //                 });
-    //             }
-    //
-    //             alert('CSV data successfully imported');
-    //         } catch (err) {
-    //             setError('Failed to parse CSV');
-    //         }
-    //     };
-    //     reader.readAsText(file);
-    //
-    // };
 
     const handleCSVExport = () => {
         window.open('/api/directory/export', '_blank');
@@ -102,7 +56,7 @@ const DirectoryPage = () => {
                     className="border p-2 w-full"
                     name="department"
                     placeholder="Department"
-                    value={formData.department}
+                    value={formData.telephone}
                     onChange={handleChange}
                 />
                 <button
@@ -150,7 +104,7 @@ const DirectoryPage = () => {
                             <td className="border px-4 py-2">{dir.id}</td>
                             <td className="border px-4 py-2">{dir.name}</td>
                             <td className="border px-4 py-2">{dir.location}</td>
-                            <td className="border px-4 py-2">{dir.department}</td>
+                            <td className="border px-4 py-2">{dir.telephone}</td>
                         </tr>
                     ))}
                     </tbody>

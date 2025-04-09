@@ -34,6 +34,12 @@ model service_request {
   language            String?
 }
 
+model Directory {
+  id        Int    @id @default(autoincrement())
+  name      String
+  location  String
+  telephone String
+}
 model users {
   first_name String
   last_name  String

@@ -7,11 +7,14 @@ import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from './routes/ServiceRequestPage';
 import RequestListPage from './routes/RequestListPage'
 import { WelcomePage } from './routes/WelcomePage';
-import { PathFindingPage } from './routes/PathFindingPage.tsx';
 import NavBar from './components/NavBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
+import DirectoryPage from './routes/DirectoryPage';
+
+
+
 import NavigationPage from "./routes/NavigationPage.tsx";
 
 function App() {
@@ -45,11 +48,12 @@ function App() {
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
-                <Route path="/" element={isSignedIn ? <PathFindingPage /> : <WelcomePage />} /> /* render the pathfinding page if the user is signed in */
+                <Route path="/" element={<WelcomePage />} />
                 <Route path="/services" element={<ServiceRequestPage />} />
                 <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
+                <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 <Route path="/navigation" element={<NavigationPage />} />

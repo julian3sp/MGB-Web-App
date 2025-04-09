@@ -44,7 +44,24 @@ function RequestForm({title, type} : requestFormProps) {
         comments: '',
     });
 
-    const Validate = (): errorProps => {
+    const Validate = (): boolean => {
+        const errors: errorProps = {
+            comments: "",
+            email: "",
+            employeeID: "",
+            name: "",
+            phoneNumber: "",
+            request: "",
+            roomNumber: ""
+        }
+
+        if (!name) {
+            errors.name = "Name is required";
+        } else if (name.length < 2) {
+            errors.name = `Name must be at least two characters`;
+        } else if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+            errors.name = "Name contains invalid characters";
+        }
 
         if (!email) {
             errors.email = "Email is required";
@@ -52,7 +69,29 @@ function RequestForm({title, type} : requestFormProps) {
             errors.email = "Email is invalid";
         }
 
-        return errors;
+        if (!phoneNumber) {
+            errors.phoneNumber = "Phone number is required";
+        }
+        else if (phoneNumber.length < 10) {
+            errors.phoneNumber = "Phone number is too short";
+        }
+
+        if (!employeeID) {
+            errors.employeeID = "Employee ID is required";
+        } else if (employeeID.length < 9) {
+            errors.employeeID = `Employee ID must be at least 9 characters`;
+        }
+
+        if (!roomNumber) {
+            errors.roomNumber = "Room number is required";
+        }
+
+        if (!request) {
+            errors.request = "Please select a request type";
+        }
+
+        setErrors(errors);
+        return Object.values(errors).some(value => value.length > 0);
     };
 
     const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
@@ -60,12 +99,12 @@ function RequestForm({title, type} : requestFormProps) {
         const form = e.currentTarget; // This is the actual HTMLFormElement
         const isValid = form.checkValidity(); // Now
 
-        if (!isValid) {
+        if (Validate()) {
             return;
         }
         else{setOpen(true);}
 
-        setErrors(Validate); // loo at this
+
 
         mutation.mutate({
             name: name,
@@ -110,27 +149,50 @@ function RequestForm({title, type} : requestFormProps) {
 
                             <div>
                                 <InputHeader>Full Name:</InputHeader>
-                                <InputBox value={name} setState={setName} placeholder="Enter your Full Name" width="w-full" />
+                                <InputBox value={name} setState={setName} placeholder="Enter your Full Name" width="w-full" error={errors.name}/>
                             </div>
 
                             <div>
                                 <InputHeader>Phone Number:</InputHeader>
-                                <InputBox value={phoneNumber} setState={setPhoneNumber} placeholder="Enter your Phone Number" width="w-full"/>
+                                <InputBox
+                                    maxLength = {15}
+                                    value={phoneNumber}
+                                    setState={(value) => {
+                                        if (/^\d*$/.test(value)) {
+                                            setPhoneNumber(value);}
+                                    }}
+                                    placeholder="Enter your Phone Number" width="w-full" error={errors.phoneNumber}/>
                             </div>
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <InputBox minLength = {9} maxLength = {9} value={employeeID} setState={setEmployeeID} placeholder="Enter your Employee ID" width="w-full" />
+                                <InputBox maxLength = {9}
+                                          value={employeeID}
+                                          setState={(value) => {
+                                              if (/^\d*$/.test(value)) {
+                                                  setEmployeeID(value);}
+                                          }}
+                                          placeholder="Enter your Employee ID"
+                                          width="w-full"
+                                          error={errors.employeeID}/>
                             </div>
 
                             <div>
                                 <InputHeader children={type + ':'}></InputHeader>
-                                <InputBox value={request} setState={setRequest} placeholder={type} width="w-full" />
+                                <InputBox value={request} setState={setRequest} placeholder={type} width="w-full" error={errors.request}/>
                             </div>
 
                             <div>
                                 <InputHeader>Room Number:</InputHeader>
-                                <InputBox minLength={1} maxLength={6} value={roomNumber} setState={setRoomNumber} placeholder="Enter your Room Number" width="w-full" />
+                                <InputBox maxLength={6}
+                                          value={roomNumber}
+                                          setState={(value) => {
+                                              if (/^\d*$/.test(value)) {
+                                                  setRoomNumber(value);}
+                                          }}
+                                          placeholder="Enter your Room Number"
+                                          width="w-full"
+                                          error={errors.roomNumber}/>
                             </div>
                         </div>
                         <div className={"mr-5 ml-5"}>

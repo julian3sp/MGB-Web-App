@@ -23,24 +23,23 @@ export function InputBox({
         <div className="relative">
             {error && (
                 <div className="absolute bottom-full left-4 mb-2">
-                    {/* Tooltip container with position relative for absolute positioning of triangle */}
                     <div className="bg-red-100 text-red-800 font-medium px-3 py-2 rounded text-sm relative border border-red-300 shadow-md">
                         {error}
 
                         {/* Triangle container div - for positioning */}
                         <div className="absolute top-full left-0 w-full h-0 flex justify-center items-start overflow-visible">
-                            {/* Outer triangle (border color) */}
+                            {/* border - slightly bigger triangle*/}
                             <div
                                 style={{
                                     width: 0,
                                     height: 0,
                                     borderLeft: '10px solid transparent',
                                     borderRight: '10px solid transparent',
-                                    borderTop: '10px solid #fca5a5', /* border-red-300 */
+                                    borderTop: '10px solid #fca5a5', /* red-300 */
                                     position: 'absolute',
                                     top: 0,
-                                    transform: 'translateX(-50%)', /* Center horizontally */
-                                    left: '20px' /* Adjust this value to position the triangle where you want it */
+                                    transform: 'translateX(-50%)',
+                                    left: '20px'
                                 }}>
                             </div>
 
@@ -51,11 +50,11 @@ export function InputBox({
                                     height: 0,
                                     borderLeft: '8px solid transparent',
                                     borderRight: '8px solid transparent',
-                                    borderTop: '8px solid #fee2e2', /* bg-red-100 */
+                                    borderTop: '8px solid #fee2e2', /* red-100 */
                                     position: 'absolute',
                                     top: 0,
-                                    transform: 'translateX(-50%)', /* Center horizontally */
-                                    left: '20px' /* Match the position of the outer triangle */
+                                    transform: 'translateX(-50%)',
+                                    left: '20px'
                                 }}>
                             </div>
                         </div>
@@ -73,7 +72,6 @@ export function InputBox({
                     setState(e.target.value);
                 }}
                 placeholder={placeholder}
-                required
             />
         </div>
     );

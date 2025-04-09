@@ -36,8 +36,8 @@ export async function insertServiceRequest(
     room: number,
     request_type: string,
     employee_id: string,
-    additional_comments: string,
     lang: string,
+    additional_comments: string,
     assigned_employee: string | null,
     client: PrismaClient,
 ) {

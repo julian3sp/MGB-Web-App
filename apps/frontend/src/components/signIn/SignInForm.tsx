@@ -18,20 +18,24 @@ export function SignInForm({rerenderBar}: {rerenderBar: () => void}){
     const { data, isLoading, error } = trpc.validUser.useQuery(input)
 
     function handleSubmit(){
-        localStorage.setItem("firstName", "User");
-        localStorage.setItem("isSignedIn", "true");
-        console.log(localStorage.getItem("firstName"));
-        if (data){
-            rerenderBar();
-            navigate("/")
-        } else if (isLoading){
-            return(
-                <p>Loading...</p>
-            )
+        if (email === "admin" && password === "1234") {
+            localStorage.setItem("firstName", "User");
+            localStorage.setItem("isSignedIn", "true");
+            console.log(localStorage.getItem("firstName"));
+            if (data){
+                rerenderBar();
+                navigate("/")
+            } else if (isLoading){
+                return(
+                    <p>Loading...</p>
+                )
+            } else {
+                return(
+                    <p>User Not Found</p>
+                )
+            }
         } else {
-            return(
-                <p>User Not Found</p>
-            )
+            alert("Incorrect username or password!");
         }
     }
 

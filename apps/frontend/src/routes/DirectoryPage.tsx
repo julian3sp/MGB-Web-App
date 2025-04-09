@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { trpc } from '../lib/trpc';
 import axios from 'axios';
+import ImportCSV from "../components/importCSV.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -12,12 +13,7 @@ const DirectoryPage = () => {
     const utils = trpc.useUtils();
     const { data: directories, refetch } = trpc.getDirectories.useQuery();
 
-    const addDirectory = trpc.makeDirectory.useMutation({
-        onSuccess: () => {
-            refetch();
-            setFormData({ name: '', location: '', department: '' });
-        },
-    });
+    const addDirectory = trpc.makeDirectory.useMutation();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({
@@ -30,16 +26,52 @@ const DirectoryPage = () => {
         addDirectory.mutate(formData);
     };
 
-    const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        await axios.post('/api/directory/import', formData);
-        refetch();
-    };
+    // const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     e.preventDefault();
+    //
+    //     if (!file) {
+    //         setError('Please select a file first');
+    //         return;
+    //     }
+    //
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //
+    //     // Read and parse the CSV file in the browser
+    //     const reader = new FileReader();
+    //     reader.onload = async () => {
+    //         try {
+    //             const csvText = reader.result as string;
+    //
+    //             // Parse CSV data (basic split by line and comma)
+    //             const lines = csvText.split('\n');
+    //             const headers = lines[0].split(','); // assuming first line is headers
+    //             const entries = lines.slice(1).map((line) => {
+    //                 const values = line.split(',');
+    //                 let entry: { [key: string]: string } = {};
+    //                 headers.forEach((header, idx) => {
+    //                     entry[header.trim()] = values[idx]?.trim();
+    //                 });
+    //                 return entry;
+    //             });
+    //
+    //             // Call the tRPC mutation to create entries in the database
+    //             for (const entry of entries) {
+    //                 await trpc.addDirectory.mutateAsync({
+    //                     name: entry['name'] || '',
+    //                     location: entry['location'] || '',
+    //                     department: entry['department'] || '',
+    //                 });
+    //             }
+    //
+    //             alert('CSV data successfully imported');
+    //         } catch (err) {
+    //             setError('Failed to parse CSV');
+    //         }
+    //     };
+    //     reader.readAsText(file);
+    //
+    // };
 
     const handleCSVExport = () => {
         window.open('/api/directory/export', '_blank');
@@ -84,7 +116,7 @@ const DirectoryPage = () => {
             {/* Import/Export CSV */}
             <div className="mb-6 bg-white p-4 shadow rounded">
                 <h2 className="text-xl font-semibold mb-2">Import / Export CSV</h2>
-                <input type="file" accept=".csv" onChange={handleCSVImport} className="mb-2" />
+                <input type="file" accept=".csv" className="mb-2" />
                 <br />
                 <button
                     onClick={handleCSVExport}
@@ -95,12 +127,7 @@ const DirectoryPage = () => {
 
                 <br /><br />
 
-                <button
-                    onClick={handleCSVExport}
-                    className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                    Import CSV
-                </button>
+                <ImportCSV/>
             </div>
 
 

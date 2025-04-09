@@ -34,8 +34,8 @@ model service_request {
 }
 
 model Directory {
-  id         Int     @id @default(autoincrement())
-  name       String
-  location   String
-  department String
+  id        Int    @id @default(autoincrement())
+  name      String
+  location  String
+  telephone String
 }

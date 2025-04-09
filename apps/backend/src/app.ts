@@ -8,7 +8,10 @@ import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { getDirectories, makeDirectories } from './server/procedures/directories';
 
-import { router } from './server/trpc.ts';
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' });
+
+import { router, trpc } from './server/trpc.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -52,7 +55,6 @@ app.use(
 app.use(express.json()); // This processes requests as JSON
 app.use(express.urlencoded({ extended: false })); // URL parser
 app.use(cookieParser()); // Cookie parser
-
 
 /**
  * Catch all 404 errors, and forward them to the error handler

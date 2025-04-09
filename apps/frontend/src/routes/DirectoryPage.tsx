@@ -92,7 +92,18 @@ const DirectoryPage = () => {
                 >
                     Export CSV
                 </button>
+
+                <br /><br />
+
+                <button
+                    onClick={handleCSVExport}
+                    className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                    Import CSV
+                </button>
             </div>
+
+
 
             {/* Table */}
             <div className="bg-white p-4 shadow rounded">

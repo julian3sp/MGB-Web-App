@@ -8,9 +8,9 @@ function DrawingPath({ source, destination }: props) {
     const allNodes: Node[] = graph.getNodes();
     const sourceNode: Node | undefined = graph.getNode(source);
     const targetNode: Node | undefined = graph.getNode(destination);
-    // console.log(destination);
 
     useEffect(() => {
+        console.log("nothing",destination);
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -51,6 +51,7 @@ function DrawingPath({ source, destination }: props) {
             const path: Node[] = graph.aStar(source, target);
             for(let i = 0; i < path.length-1; i++) {
                 createEdgePath(path[i], path[i+1], scale);
+
             }
             console.log("\nA* Path:");
             console.log(path.map(node => node.name).join(" -> "));

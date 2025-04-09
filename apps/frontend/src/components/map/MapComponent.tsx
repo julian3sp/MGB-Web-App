@@ -153,7 +153,10 @@ const MapComponent: React.FC = () => {
                   className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
               >
                   {/*c*/}
-                  <DrawingPath source="south entrance" destination={selectedDepartment?.name ?? "south entrance"}/>
+                  <DrawingPath
+                      key={selectedDepartment?.name}
+                      source="south entrance"
+                      destination={selectedDepartment?.name ?? "south entrance"}/>
               </div>
               {/* Loading Screen */}
               <div

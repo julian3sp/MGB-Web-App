@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {trpc} from "../lib/trpc.ts";
 
 
 const UploadCSV = () => {
     const [file, setFile] = useState<File | null>(null);
     const createDirectory = trpc.makeDirectory.useMutation();
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -28,27 +29,41 @@ const UploadCSV = () => {
                 const entry = {
                     name: values[0].trim().replace(/"/g, ""),
                     location: values[1].trim().replace(/"/g, ""),
-                    department: values[2].trim().replace(/"/g, ""),
+                    telephone: values[2].trim().replace(/"/g, ""),
                 };
+
+                if (entry.name.length === 0){
+                    return;
+                }
 
                 try {
                     await createDirectory.mutateAsync(entry);
                 } catch (err) {
                     console.error('Failed to insert entry:', entry, err);
                 }
+
             }
 
+
             alert('CSV successfully uploaded.');
+
+
         };
 
         reader.readAsText(file);
+
+
     };
+
+
+
+
 
     return (
         <form onSubmit={handleSubmit}>
             <input type="file" accept=".csv" onChange={handleFileChange} />
             <br/>
-            <button type="submit" className={"bg-green-600 text-white px-4 py-2 rounded mt-2"}>Import CSV</button>
+            <button type="submit"  className={"bg-green-600 text-white px-3 py-2 rounded mt-2 hover:bg-green-800"}>Import CSV</button>
         </form>
     );
 };

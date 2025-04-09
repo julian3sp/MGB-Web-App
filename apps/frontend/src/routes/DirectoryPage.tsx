@@ -7,13 +7,39 @@ const DirectoryPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         location: '',
-        department: '',
+        telephone: '',
     });
 
+
     const utils = trpc.useUtils();
-    const { data: directories, refetch } = trpc.getDirectories.useQuery();
+    const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
     const addDirectory = trpc.makeDirectory.useMutation();
+
+
+    const downloadCSV = () => {
+        if (!directories || directories.length === 0) {
+            alert('No data available to download.');
+            return;
+        }
+
+        // Construct CSV string
+        let csv = 'id,name,location,department\n';
+        directories.forEach((dir) => {
+            csv += `${dir.id},"${dir.name}","${dir.location}","${dir.telephone}"\n`;
+        });
+
+        // Encode the CSV data as a Data URI
+        const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+        // Create a temporary link to trigger download
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'directory_export.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({
@@ -24,54 +50,9 @@ const DirectoryPage = () => {
 
     const handleSubmit = () => {
         addDirectory.mutate(formData);
+        window.location.reload();
     };
 
-    // const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     e.preventDefault();
-    //
-    //     if (!file) {
-    //         setError('Please select a file first');
-    //         return;
-    //     }
-    //
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //
-    //     // Read and parse the CSV file in the browser
-    //     const reader = new FileReader();
-    //     reader.onload = async () => {
-    //         try {
-    //             const csvText = reader.result as string;
-    //
-    //             // Parse CSV data (basic split by line and comma)
-    //             const lines = csvText.split('\n');
-    //             const headers = lines[0].split(','); // assuming first line is headers
-    //             const entries = lines.slice(1).map((line) => {
-    //                 const values = line.split(',');
-    //                 let entry: { [key: string]: string } = {};
-    //                 headers.forEach((header, idx) => {
-    //                     entry[header.trim()] = values[idx]?.trim();
-    //                 });
-    //                 return entry;
-    //             });
-    //
-    //             // Call the tRPC mutation to create entries in the database
-    //             for (const entry of entries) {
-    //                 await trpc.addDirectory.mutateAsync({
-    //                     name: entry['name'] || '',
-    //                     location: entry['location'] || '',
-    //                     department: entry['department'] || '',
-    //                 });
-    //             }
-    //
-    //             alert('CSV data successfully imported');
-    //         } catch (err) {
-    //             setError('Failed to parse CSV');
-    //         }
-    //     };
-    //     reader.readAsText(file);
-    //
-    // };
 
     const handleCSVExport = () => {
         window.open('/api/directory/export', '_blank');
@@ -100,9 +81,9 @@ const DirectoryPage = () => {
                 />
                 <input
                     className="border p-2 w-full"
-                    name="department"
-                    placeholder="Department"
-                    value={formData.department}
+                    name="telephone"
+                    placeholder="Telephone"
+                    value={formData.telephone}
                     onChange={handleChange}
                 />
                 <button
@@ -119,8 +100,10 @@ const DirectoryPage = () => {
                 <input type="file" accept=".csv" className="mb-2" />
                 <br />
                 <button
-                    onClick={handleCSVExport}
-                    className="bg-green-600 text-white px-4 py-2 rounded"
+                    onClick={downloadCSV}
+                    disabled={isLoading}
+                    className="bg-green-600 text-white px-3 py-2 rounded mt-2 hover:bg-green-800"
+
                 >
                     Export CSV
                 </button>
@@ -141,7 +124,7 @@ const DirectoryPage = () => {
                         <th className="border px-4 py-2">ID</th>
                         <th className="border px-4 py-2">Name</th>
                         <th className="border px-4 py-2">Location</th>
-                        <th className="border px-4 py-2">Department</th>
+                        <th className="border px-4 py-2">Telephone</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -150,7 +133,7 @@ const DirectoryPage = () => {
                             <td className="border px-4 py-2">{dir.id}</td>
                             <td className="border px-4 py-2">{dir.name}</td>
                             <td className="border px-4 py-2">{dir.location}</td>
-                            <td className="border px-4 py-2">{dir.department}</td>
+                            <td className="border px-4 py-2">{dir.telephone}</td>
                         </tr>
                     ))}
                     </tbody>

@@ -12,7 +12,7 @@ export const makeDirectories = publicProcedure
         z.object({
             name: z.string(),
             location: z.string(),
-            department: z.string(),
+            telephone: z.string(),
         })
     )
     .mutation(async ({ input }) => {
@@ -20,4 +20,7 @@ export const makeDirectories = publicProcedure
             data: input,
         });
         return directory;
-    });
+    })
+
+
+;

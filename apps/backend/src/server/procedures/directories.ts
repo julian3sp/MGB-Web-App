@@ -20,7 +20,4 @@ export const makeDirectories = publicProcedure
             data: input,
         });
         return directory;
-    })
-
-
-;
+    });

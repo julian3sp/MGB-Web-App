@@ -8,6 +8,7 @@ import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
+import { getDirectories, makeDirectories } from './server/procedures/directories.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -21,6 +22,8 @@ const appRouter = t.router({
     makeEmployee: makeEmployee,
     validUser: getUser,
     makeUser: makeUser,
+    getDirectories: getDirectories,
+    makeDirectory: makeDirectories,
 });
 
 const app: Express = express(); // Setup the backend

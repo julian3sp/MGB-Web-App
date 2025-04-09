@@ -48,6 +48,7 @@ const DirectoryPage = () => {
 
     const handleSubmit = () => {
         addDirectory.mutate(formData);
+        window.location.reload();
     };
 
 
@@ -78,8 +79,8 @@ const DirectoryPage = () => {
                 />
                 <input
                     className="border p-2 w-full"
-                    name="department"
-                    placeholder="Department"
+                    name="telephone"
+                    placeholder="Telephone"
                     value={formData.telephone}
                     onChange={handleChange}
                 />

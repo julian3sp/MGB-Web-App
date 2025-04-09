@@ -11,7 +11,6 @@ const UploadCSV = () => {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
         if (!file) return;
 
         const reader = new FileReader();
@@ -46,6 +45,7 @@ const UploadCSV = () => {
         };
 
         reader.readAsText(file);
+
     };
 
     return (

@@ -11,9 +11,33 @@ const DirectoryPage = () => {
     });
 
     const utils = trpc.useUtils();
-    const { data: directories, refetch } = trpc.getDirectories.useQuery();
+    const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
     const addDirectory = trpc.makeDirectory.useMutation();
+
+    const downloadCSV = () => {
+        if (!directories || directories.length === 0) {
+            alert('No data available to download.');
+            return;
+        }
+
+        // Construct CSV string
+        let csv = 'id,name,location,department\n';
+        directories.forEach((dir) => {
+            csv += `${dir.id},"${dir.name}","${dir.location}","${dir.telephone}"\n`;
+        });
+
+        // Encode the CSV data as a Data URI
+        const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+        // Create a temporary link to trigger download
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'directory_export.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({
@@ -54,8 +78,8 @@ const DirectoryPage = () => {
                 />
                 <input
                     className="border p-2 w-full"
-                    name="department"
-                    placeholder="Department"
+                    name="telephone"
+                    placeholder="telephone"
                     value={formData.telephone}
                     onChange={handleChange}
                 />
@@ -73,8 +97,9 @@ const DirectoryPage = () => {
                 <input type="file" accept=".csv" className="mb-2" />
                 <br />
                 <button
-                    onClick={handleCSVExport}
-                    className="bg-green-600 text-white px-3 py-2 rounded"
+                    onClick={downloadCSV}
+                    disabled={isLoading}
+                    className="bg-green-600 text-white px-3 py-2 rounded mt-2 hover:bg-green-800"
                 >
                     Export CSV
                 </button>
@@ -95,7 +120,7 @@ const DirectoryPage = () => {
                         <th className="border px-4 py-2">ID</th>
                         <th className="border px-4 py-2">Name</th>
                         <th className="border px-4 py-2">Location</th>
-                        <th className="border px-4 py-2">Department</th>
+                        <th className="border px-4 py-2">Telephone</th>
                     </tr>
                     </thead>
                     <tbody>

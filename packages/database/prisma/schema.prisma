@@ -40,3 +40,10 @@ model users {
   email      String @id
   password   String
 }
+
+model Directory {
+  id        Int    @id @default(autoincrement())
+  name      String
+  location  String
+  telephone String
+}

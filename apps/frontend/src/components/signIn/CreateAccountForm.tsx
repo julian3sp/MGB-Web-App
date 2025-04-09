@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {InputHeader} from "./InputHeader.tsx";
-import {ServiceComponentInputBox} from "../serviceRequest/inputFields/ServiceComponentInputBox.tsx";
 import {InputBox} from "./InputBox.tsx";
 import {ShowPasswordButton} from "./ShowPasswordButton.tsx";
 import {SubmitPasswordButton} from "./SubmitPasswordButton.tsx";

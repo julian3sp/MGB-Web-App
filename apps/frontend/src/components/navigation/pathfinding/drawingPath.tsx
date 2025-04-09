@@ -104,7 +104,7 @@ function DrawingPath({ source, destination }: DrawingPathProps) {
             new Promise(resolve => destMarkerImg.onload = resolve)
         ]).then(() => {
             ctx.drawImage(mapImg, 0, 0, canvas.width, canvas.height);
-            drawAllNodes(scale);
+            // drawAllNodes(scale);
             // const test1Node = graph.getNode("11")
             // const test2Node = graph.getNode("38")
             if (!sourceNode || !targetNode){

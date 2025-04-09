@@ -50,7 +50,7 @@ const UploadCSV = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="file" accept=".csv" onChange={handleFileChange} />
+            <input type="file" accept=".csv" onChange={handleFileChange} className={"bg-blue-100 text-black px-3 py-2 rounded mt-2 hover:bg-blue-300"}/>
             <br/>
             <button type="submit" className={"bg-green-600 text-white px-3 py-2 rounded mt-2 hover:bg-green-800"}>Import CSV</button>
         </form>

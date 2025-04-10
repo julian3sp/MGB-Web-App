@@ -121,6 +121,26 @@ const MapComponent: React.FC = () => {
     setShowMap(false);
   };
 
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            name: 'Your location',
+            location: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+          };
+          handleStartLocationSelected(location);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        }
+      );
+    }
+  };
+
   // Helper function to add marker and draw the route.
   const displayRouteOnMap = (
     start: { name: string; location: google.maps.LatLngLiteral },
@@ -204,6 +224,13 @@ const MapComponent: React.FC = () => {
           handleStartLocationSelected={handleStartLocationSelected}
           handleDestinationSelected={handleDestinationSelected}
           handleViewMap={handleViewMap}
+          onTransportChange={(mode) => {
+            setSelectedTransport(mode);
+            if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) {
+              displayRouteOnMap(startLocation, selectedPlace);
+            }
+          }}
+          handleGetCurrentLocation={handleGetCurrentLocation}
         />
 
         {/* Hospital Map Section */}

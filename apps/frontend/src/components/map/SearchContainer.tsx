@@ -3,11 +3,12 @@ import React, { useState, useRef, useEffect } from 'react';
 interface SearchContainerProps {
   onPlaceSelected: (place: { name: string; location: google.maps.LatLngLiteral }) => void;
   placeholder?: string;
+  onGetCurrentLocation: () => void;
 }
 
 const MAX_RECENT_SEARCHES = 3;
 
-const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, placeholder = "Search Google Maps" }) => {
+const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, placeholder = "Search Google Maps", onGetCurrentLocation }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [recentSearches, setRecentSearches] = useState<any[]>([]);
   const [showRecent, setShowRecent] = useState(false);
@@ -66,28 +67,6 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
     setShowRecent(false);
   };
 
-  const handleGetCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const location = {
-            name: 'Your location',
-            location: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            }
-          };
-          onPlaceSelected(location);
-          setSearchValue('Your location');
-          setShowRecent(false);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-        }
-      );
-    }
-  };
-
   return (
     <div className="flex flex-col items-start w-full">
       <div className={`relative w-[90%] ml-auto bg-white rounded-3xl shadow-lg mb-0 transition-all duration-200 ${
@@ -113,7 +92,11 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
             {/* Your location option */}
             <div
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center border-b border-gray-100"
-              onClick={handleGetCurrentLocation}
+              onClick={() => {
+                onGetCurrentLocation();
+                setSearchValue('Your location');
+                setShowRecent(false);
+              }}
             >
               <span className="material-icons text-blue-500 mr-3">my_location</span>
               <span className="text-sm text-gray-700">Your location</span>

@@ -58,10 +58,40 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
     });
   }, [recentSearches, onPlaceSelected]);
 
+  const handleRecentSearchClick = (search: any) => {
+    if (search.location) {
+      setSearchValue(search.name);
+      onPlaceSelected(search);
+    }
+    setShowRecent(false);
+  };
+
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            name: 'Your location',
+            location: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+          };
+          onPlaceSelected(location);
+          setSearchValue('Your location');
+          setShowRecent(false);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        }
+      );
+    }
+  };
+
   return (
-    <div className="relative z-10 right-3 flex flex-col items-start">
-      <div className={`relative w-full bg-white rounded-3xl shadow-lg m-2 transition-all duration-200 ${
-        showRecent ? 'rounded-b-2xl' : 'rounded-3xl'
+    <div className="flex flex-col items-start w-full">
+      <div className={`relative w-[90%] ml-auto bg-white rounded-3xl shadow-lg mb-0 transition-all duration-200 ${
+        showRecent ? 'rounded-b-none' : ''
       }`}>
         <input
           ref={inputRef}
@@ -69,36 +99,40 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
           placeholder={placeholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          className="w-full py-2.5 px-4 pl-4 pr-10 border-none rounded-3xl text-sm outline-none bg-transparent"
+          className="w-full py-2.5 px-4 border-none rounded-3xl text-sm outline-none bg-transparent"
           onFocus={() => setShowRecent(true)}
           onBlur={() => setTimeout(() => setShowRecent(false), 200)}
         />
         <div className="absolute right-3 top-2.5 cursor-pointer text-gray-500">
           <span className="material-icons">search</span>
         </div>
-        {showRecent && recentSearches.length > 0 && (
-          <div className="p-0 border-t border-gray-200 max-h-48 overflow-y-auto">
+      </div>
+      {showRecent && (
+        <div className="absolute w-[90%] right-0 mt-[42px] bg-white rounded-b-2xl shadow-lg z-50 max-h-48 overflow-y-auto">
+          <div className="py-2">
+            {/* Your location option */}
+            <div
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center border-b border-gray-100"
+              onClick={handleGetCurrentLocation}
+            >
+              <span className="material-icons text-blue-500 mr-3">my_location</span>
+              <span className="text-sm text-gray-700">Your location</span>
+            </div>
+            
+            {/* Recent searches */}
             {recentSearches.map((search, index) => (
               <div
                 key={index}
-                className="p-2 px-4 cursor-pointer flex items-center border-b border-gray-200 hover:bg-gray-100"
-                onClick={() => {
-                  if (search.location) {
-                    setSearchValue(search.name);
-                    onPlaceSelected(search);
-                  }
-                  setShowRecent(false);
-                }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                onClick={() => handleRecentSearchClick(search)}
               >
-                <span className="material-icons mr-3 text-gray-500 text-lg">
-                  history
-                </span>
-                {search.name}
+                <span className="material-icons text-gray-400 mr-3">history</span>
+                <span className="text-sm text-gray-700">{search.name}</span>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

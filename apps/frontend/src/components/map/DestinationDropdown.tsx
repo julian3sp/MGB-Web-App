@@ -35,18 +35,18 @@ const DestinationDropdown: React.FC<DestinationDropdownProps> = ({ onDestination
   };
 
   return (
-    <div className="relative right-3">
-      <div className="relative w-full bg-white rounded-3xl shadow-lg m-2 transition-all duration-200">
+    <div className="flex flex-col items-start w-full">
+      <div className="relative w-[90%] ml-auto bg-white rounded-3xl shadow-lg mt-0 transition-all duration-200">
         <button
           type="button"
-          className="relative w-full cursor-default rounded-3xl bg-white py-2 pl-3 pr-10 text-left text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6"
+          className="relative w-full cursor-default rounded-3xl bg-white py-2.5 px-4 text-left text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           onClick={() => setIsOpen(!isOpen)}
         >
           <span className="flex items-center">
-            <span className="ml-1 block truncate">
-              {selectedDestination ? selectedDestination.name : 'Select a destination'}
+            <span className="block truncate">
+              {selectedDestination ? selectedDestination.name : 'Choose destination'}
             </span>
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -67,13 +67,13 @@ const DestinationDropdown: React.FC<DestinationDropdownProps> = ({ onDestination
             {destinations.map((destination) => (
               <li
                 key={destination.name}
-                className="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-500 hover:bg-blue-50"
+                className="relative cursor-default select-none py-2 pl-4 pr-9 text-gray-500 hover:bg-blue-50"
                 id={`listbox-option-${destination.name}`}
                 role="option"
                 onClick={() => handleSelect(destination)}
               >
                 <div className="flex items-center">
-                  <span className="ml-3 block truncate font-normal">
+                  <span className="block truncate font-normal">
                     {destination.name}
                   </span>
                 </div>

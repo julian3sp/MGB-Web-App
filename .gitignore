@@ -33,6 +33,8 @@ out
 !.yarn/versions/
 .pnp.loader.cjs
 .pnp.loader.mjs
+.pnp.cjs
 
 **/.prettiercache
 **/.vite
+backend\package.json

@@ -5,6 +5,7 @@ import DisplayLottie from '../ui/DisplayLottie';
 import { calculateAndDisplayRoute } from './routeCalculator';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
+import DestinationDropdown from './DestinationDropdown';
 import hospitalMap from '../../../assets/map.jpg';
 import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 
@@ -12,7 +13,7 @@ const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService | null>(null);
   const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
-  const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
+  const [startLocation, setStartLocation] = useState<{ name: string; location: google.maps.LatLngLiteral } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<{ name: string; location: google.maps.LatLngLiteral } | null>(null);
   const [showMap, setShowMap] = useState<boolean>(false);
@@ -34,39 +35,67 @@ const MapComponent: React.FC = () => {
   const handleMapReady = (
     map: google.maps.Map,
     service: google.maps.DirectionsService,
-    renderer: google.maps.DirectionsRenderer,
-    userLoc: google.maps.LatLngLiteral | null
+    renderer: google.maps.DirectionsRenderer
   ) => {
     setMapInstance(map);
     setDirectionsService(service);
     setDirectionsRenderer(renderer);
-    setUserLocation(userLoc);
   };
 
   // Helper function to add marker and draw the route.
-  const displayRouteOnMap = (place: { name: string; location: google.maps.LatLngLiteral }) => {
-    if (mapInstance && directionsService && directionsRenderer && userLocation) {
+  const displayRouteOnMap = (start: { name: string; location: google.maps.LatLngLiteral }, end: { name: string; location: google.maps.LatLngLiteral }) => {
+    if (mapInstance && directionsService && directionsRenderer) {
+      // Add start marker
       new google.maps.Marker({
-        position: place.location,
+        position: start.location,
         map: mapInstance,
-        title: place.name,
+        title: start.name,
+        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+      });
+      // Add end marker
+      new google.maps.Marker({
+        position: end.location,
+        map: mapInstance,
+        title: end.name,
         icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
       });
       calculateAndDisplayRoute(
         directionsService,
         directionsRenderer,
         mapInstance,
-        userLocation,
-        place.location,
+        start.location,
+        end.location,
         setError
       );
     }
   };
 
-  // When the user selects a destination, store it and hide the map.
-  const handlePlaceSelected = (place: { name: string; location: google.maps.LatLngLiteral }) => {
-    setSelectedPlace(place);
-    setShowMap(false);
+  // When the user selects a starting location
+  const handleStartLocationSelected = (place: { name: string; location: google.maps.LatLngLiteral }) => {
+    setStartLocation(place);
+    // If we already have a destination and map is ready, show the map immediately
+    if (selectedPlace && mapInstance && directionsService && directionsRenderer) {
+      setShowMap(true);
+      setShowHospitalMap(false);
+      displayRouteOnMap(place, selectedPlace);
+    }
+  };
+
+  // When the user selects a destination from dropdown
+  const handleDestinationSelected = (destination: { name: string; location: { lat: number; lng: number } }) => {
+    setSelectedPlace({
+      name: destination.name,
+      location: destination.location
+    });
+    // If we already have a start location and map is ready, show the map immediately
+    if (startLocation && mapInstance && directionsService && directionsRenderer) {
+      setShowMap(true);
+      setShowHospitalMap(false);
+      displayRouteOnMap(startLocation, {
+        name: destination.name,
+        location: destination.location
+      });
+    }
   };
 
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
@@ -74,17 +103,12 @@ const MapComponent: React.FC = () => {
     setShowHospitalMap(false);
   };
 
-  // When the "Show Google Map" button is clicked, wait 1 seconds, then show the map and display the route.
+  // When the "Show Google Map" button is clicked
   const handleViewMap = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setShowMap(true);
-      setShowHospitalMap(false);
-      setIsLoading(false);
-      if (selectedPlace && mapInstance && directionsService && directionsRenderer && userLocation) {
-        displayRouteOnMap(selectedPlace);
-      }
-    }, 2000);
+    if (!startLocation || !selectedPlace) return;
+    setShowMap(true);
+    setShowHospitalMap(false);
+    displayRouteOnMap(startLocation, selectedPlace);
   };
 
   const handleViewHospitalMap = () => {
@@ -95,20 +119,25 @@ const MapComponent: React.FC = () => {
   return (
       <div className="flex h-screen">
           {/* Left Column: Search area */}
-          <div className="w-1/3 p-5 border-r border-gray-300 flex flex-col gap-4">
-              <h2 className="font-bold text-center">Enter the hospital location</h2>
+          <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
+              <h2 className="font-bold text-center">Enter your location and destination</h2>
 
               {/* Google Map Section */}
               <div className="flex flex-col gap-4">
                   <div>
-                      {mapInstance && userLocation && (
+                      <h3 className="text-sm font-semibold mb-2">Starting Location</h3>
+                      {mapInstance && (
                           <SearchContainer
-                              onPlaceSelected={handlePlaceSelected}
-                              userLocation={userLocation}
+                              onPlaceSelected={handleStartLocationSelected}
+                              placeholder="Enter your starting location"
                           />
                       )}
                   </div>
-                  {selectedPlace && (showHospitalMap || !showMap) && (
+                  <div>
+                      <h3 className="text-sm font-semibold mb-2">Destination</h3>
+                      <DestinationDropdown onDestinationSelected={handleDestinationSelected} />
+                  </div>
+                  {startLocation && selectedPlace && !showMap && (
                       <button
                           onClick={handleViewMap}
                           className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
@@ -123,6 +152,7 @@ const MapComponent: React.FC = () => {
 
               {/* Hospital Map Section */}
               <div className="flex flex-col mt-10">
+                <h2 className="text-sm font-semibold mb-2">Select a department</h2>
                   <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
                   {selectedDepartment && !showHospitalMap && (
                     <button
@@ -164,7 +194,7 @@ const MapComponent: React.FC = () => {
           </div>
 
           {/* Right Column: Map area */}
-          <div className="w-2/3 relative">
+          <div className="w-3/4 relative">
               {/* Google Map */}
               <div
                   className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
@@ -175,7 +205,6 @@ const MapComponent: React.FC = () => {
               <div
                   className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
               >
-                  {/*c*/}
                   <DrawingPath
                       key={selectedDepartment?.name}
                       source="south entrance"

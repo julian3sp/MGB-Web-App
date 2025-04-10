@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 
 interface SearchContainerProps {
   onPlaceSelected: (place: { name: string; location: google.maps.LatLngLiteral }) => void;
-  userLocation: google.maps.LatLngLiteral | null;
+  placeholder?: string;
 }
 
 const MAX_RECENT_SEARCHES = 3;
 
-const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, userLocation }) => {
+const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, placeholder = "Search Google Maps" }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [recentSearches, setRecentSearches] = useState<any[]>([]);
   const [showRecent, setShowRecent] = useState(false);
@@ -30,10 +30,6 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, user
 
     searchBox.addListener('places_changed', () => {
       const places = searchBox.getPlaces();
-      if (!userLocation) {
-        console.warn("User location not yet available.");
-        return;
-      }
       if (places && places.length > 0) {
         const place = places[0];
         if (place.geometry && place.geometry.location) {
@@ -60,7 +56,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, user
         }
       }
     });
-  }, [userLocation, recentSearches, onPlaceSelected]);
+  }, [recentSearches, onPlaceSelected]);
 
   return (
     <div className="relative z-10 right-3 flex flex-col items-start">
@@ -70,7 +66,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, user
         <input
           ref={inputRef}
           type="text"
-          placeholder="Search Google Maps"
+          placeholder={placeholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="w-full py-2.5 px-4 pl-4 pr-10 border-none rounded-3xl text-sm outline-none bg-transparent"
@@ -87,7 +83,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, user
                 key={index}
                 className="p-2 px-4 cursor-pointer flex items-center border-b border-gray-200 hover:bg-gray-100"
                 onClick={() => {
-                  if (search.location && userLocation) {
+                  if (search.location) {
                     setSearchValue(search.name);
                     onPlaceSelected(search);
                   }

@@ -26,6 +26,7 @@ import { IconCaretDownFilled } from "@tabler/icons-react";
 import wongagile from "../../../assets/wongagile.png";
 import lebron from "../../../assets/lebron-poster.jpg";
 import aboutus from "../../../assets/aboutus.png";
+import aboutusResize from "../../../assets/aboutusResize.png";
 
 export const MacbookScroll = ({
   src,
@@ -165,11 +166,11 @@ export const Lid = ({
           transformStyle: "preserve-3d",
           transformOrigin: "top",
         }}
-        className="absolute inset-0 h-96 w-full rounded-2xl bg-[#010101] p-2"
+        className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
         <img
-          src={aboutus}
+          src={aboutusResize}
           alt="aboutus"
           className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
         />

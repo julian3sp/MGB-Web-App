@@ -1227,6 +1227,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "@tabler/icons-react@npm:3.31.0"
+  dependencies:
+    "@tabler/icons": 3.31.0
+  peerDependencies:
+    react: ">= 16"
+  checksum: 712e62b2ef35461c75216c58fd70e9480adbc149415710154d6dc60d81ca16323d3b7f2f0eb8f2f101b4431dd1c15a72b9722ba3cedfcb82d54401ff1aeffc7e
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.31.0":
+  version: 3.31.0
+  resolution: "@tabler/icons@npm:3.31.0"
+  checksum: 73d31d3737d9d684acd4a524796d42e6d82d312699851c1f0f5f09d948f5d3864391e6a5537fa677703976f830a7289bf10ec181d60a8c31ad202acb66d9220f
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/node@npm:4.0.17":
   version: 4.0.17
   resolution: "@tailwindcss/node@npm:4.0.17"
@@ -1695,12 +1713,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19":
-  version: 19.0.4
-  resolution: "@types/react-dom@npm:19.0.4"
+"@types/react-dom@npm:latest":
+  version: 19.1.2
+  resolution: "@types/react-dom@npm:19.1.2"
   peerDependencies:
     "@types/react": ^19.0.0
-  checksum: 2d0c74769ddcb4a9f404a62b3241d3e550ca962ff80c8c5b624f6626cd39f8b18aadee8e447424b52cffdd9165b1f02eb51020fc486584c8395236d97d4abedf
+  checksum: 62a5c398e87b5a42f34497152c67367db70d5e348a05fc4bd78c119fc8d4367c02833c022b2f5dba4df33ae65b7ff76409847722ce6b8f9ea5d31983832688da
   languageName: node
   linkType: hard
 
@@ -1743,7 +1761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^19":
+"@types/react@npm:*":
   version: 19.0.12
   resolution: "@types/react@npm:19.0.12"
   dependencies:
@@ -1752,7 +1770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:>=16.9.11":
+"@types/react@npm:>=16.9.11, @types/react@npm:latest":
   version: 19.1.0
   resolution: "@types/react@npm:19.1.0"
   dependencies:
@@ -6395,7 +6413,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.1.0":
+"react-dom@npm:latest":
   version: 19.1.0
   resolution: "react-dom@npm:19.1.0"
   dependencies:
@@ -6498,7 +6516,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.0":
+"react@npm:latest":
   version: 19.1.0
   resolution: "react@npm:19.1.0"
   checksum: c0905f8cfb878b0543a5522727e5ed79c67c8111dc16ceee135b7fe19dce77b2c1c19293513061a8934e721292bfc1517e0487e262d1906f306bdf95fa54d02f
@@ -7057,22 +7075,26 @@ __metadata:
   dependencies:
     "@googlemaps/js-api-loader": ^1.16.8
     "@popperjs/core": ^2.11.8
+    "@tabler/icons-react": ^3.31.0
     "@types/google.maps": ^3.58.1
     "@types/node": ^22.13.13
-    "@types/react": ^19
-    "@types/react-dom": ^19
+    "@types/react": latest
+    "@types/react-dom": latest
     "@vitest/ui": ^3.0.9
     "@yarnpkg/pnpify": ^4.1.4
+    clsx: ^2.1.1
     common: "workspace:*"
     dotenv: ^16.4.7
     dotenv-cli: ^7.4.4
     eslint: ^9.23.0
     eslint-config-custom: "workspace:*"
     husky: ^9.1.7
+    motion: ^12.6.3
     prettier: ^3.5.3
     prettier-config-custom: "workspace:*"
-    react: ^19.1.0
-    react-dom: ^19.1.0
+    react: latest
+    react-dom: latest
+    tailwind-merge: ^3.2.0
     ts-config-custom: "workspace:*"
     turbo: "*"
     typescript: ^5.8.2

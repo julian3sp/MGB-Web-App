@@ -51,8 +51,12 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Export
                     </Link>
-
-
+                    <Link to="/aboutus" onClick={() => setTab("abu")}
+                          className={tab === "abu" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        About Us
+                    </Link>
                 </div>
             </div>
 

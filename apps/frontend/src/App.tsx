@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
 import DirectoryPage from './routes/DirectoryPage';
-
+import { AboutUs } from './routes/AboutUs.tsx';
 
 
 import NavigationPage from "./routes/NavigationPage.tsx";
@@ -57,6 +57,7 @@ function App() {
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 <Route path="/navigation" element={<NavigationPage />} />
+                <Route path="/aboutus" element={<AboutUs />} />
             </Routes>
         </Router>
             </QueryClientProvider>

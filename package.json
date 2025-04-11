@@ -20,8 +20,8 @@
   "devDependencies": {
     "@types/google.maps": "^3.58.1",
     "@types/node": "^22.13.13",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
     "@vitest/ui": "^3.0.9",
     "@yarnpkg/pnpify": "^4.1.4",
     "eslint": "^9.23.0",
@@ -37,11 +37,15 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
+    "@tabler/icons-react": "^3.31.0",
+    "clsx": "^2.1.1",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "motion": "^12.6.3",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwind-merge": "^3.2.0"
   },
   "resolutions": {
     "dotenv": "^16.4.7",

@@ -49,7 +49,7 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                           className={tab === "editor" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                        Navigation
+                        Map Editor
                     </Link>
                     <Link to="/admin/directory" onClick={() => setTab("exp")}
                           className={tab === "exp" ?

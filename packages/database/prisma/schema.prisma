@@ -35,16 +35,15 @@ model service_request {
 }
 
 model sanitation_service_request {
-  request_id           Int     @id @default(autoincrement())
-  name                 String
-  priority             String
-  location             String
-  department           String
-  status               String
-  general_disinfection Boolean
-  special_cleaning     Boolean
-  ppe                  Boolean
-  janitorial           Boolean
+  request_id   Int    @id @default(autoincrement())
+  name         String
+  priority     String
+  location     String
+  department   String
+  status       String
+  employeeID   String
+  cleaningType String
+  Email        String
 }
 
 model Directory {

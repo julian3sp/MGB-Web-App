@@ -19,10 +19,9 @@ export const makeSanitationRequest = publicProcedure
             location: z.string(),
             department: z.string(),
             status: z.string(),
-            general_disinfection: z.boolean(),
-            special_cleaning: z.boolean(),
-            ppe: z.boolean(),
-            janitorial: z.boolean(),
+            employeeID: z.string(),
+            cleaningType: z.string(),
+            email: z.string(),
         })
     )
     .mutation(async ({ input }) => {

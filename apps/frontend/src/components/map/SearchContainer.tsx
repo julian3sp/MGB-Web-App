@@ -20,7 +20,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
     if (stored) {
       const parsed = JSON.parse(stored);
       // Ensure we only keep the most recent 3 searches
-      setRecentSearches(parsed.slice(0, MAX_RECENT_SEARCHES));
+       setRecentSearches(parsed.slice(0, MAX_RECENT_SEARCHES));
     }
   }, []);
 

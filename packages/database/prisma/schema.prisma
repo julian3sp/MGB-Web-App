@@ -34,6 +34,19 @@ model service_request {
   language            String?
 }
 
+model sanitation_service_request {
+  request_id           Int     @id @default(autoincrement())
+  name                 String
+  priority             String
+  location             String
+  department           String
+  status               String
+  general_disinfection Boolean
+  special_cleaning     Boolean
+  ppe                  Boolean
+  janitorial           Boolean
+}
+
 model Directory {
   id        Int    @id @default(autoincrement())
   name      String

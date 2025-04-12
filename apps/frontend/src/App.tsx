@@ -48,15 +48,15 @@ function App() {
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
+                <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
+                <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
+                <Route path="/navigation" element={<NavigationPage />} />
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/services" element={<ServiceRequestPage />} />
                 <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/admin/directory" element={<DirectoryPage />} />
-                <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
-                <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
-                <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>
             </QueryClientProvider>

@@ -29,6 +29,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "prettier-config-custom": "workspace:*",
+    "prisma": "^6.6.0",
     "ts-config-custom": "workspace:*",
     "turbo": "*",
     "typescript": "^5.8.2",
@@ -37,6 +38,7 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
+    "@prisma/client": "^6.6.0",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",

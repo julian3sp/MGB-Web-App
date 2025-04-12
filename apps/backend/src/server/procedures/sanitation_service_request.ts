@@ -4,6 +4,13 @@ import { z } from 'zod';
 import { trpc } from '../trpc.ts';
 
 
+export const getSanitationRequests = trpc.procedure.query(async () => {
+    console.log('getSanitationRequests called');
+    const sanitationRequests = await client.sanitation_service_request.findMany();
+    console.log('getSanitationRequests returned');
+    return sanitationRequests;
+});
+
 export const makeSanitationRequest = publicProcedure
     .input(
         z.object({
@@ -19,9 +26,9 @@ export const makeSanitationRequest = publicProcedure
         })
     )
     .mutation(async ({ input }) => {
-        const request = await client.service_request.create({
+        const sanitationRequest = await client.sanitation_service_request.create({
             data: input,
         });
 
-        return request;
+        return sanitationRequest;
     });

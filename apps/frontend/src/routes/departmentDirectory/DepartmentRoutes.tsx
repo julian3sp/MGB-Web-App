@@ -1,4 +1,4 @@
-import DepartmentPage from "../components/DepartmentPage.tsx";
+import DepartmentPage from "../../components/DepartmentPage.tsx";
 import {Routes, Route} from "react-router-dom";
 
 function DepartmentRoutes() {

@@ -12,8 +12,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
 import DirectoryPage from './routes/DirectoryPage';
-import { AboutUs } from './routes/AboutUs.tsx';
-
+import AboutUs from './routes/AboutUs.tsx';
 
 import NavigationPage from "./routes/NavigationPage.tsx";
 

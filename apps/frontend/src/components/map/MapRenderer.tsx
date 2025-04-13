@@ -45,10 +45,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady }) => {
           const directionsService = new google.maps.DirectionsService();
           const directionsRenderer = new google.maps.DirectionsRenderer({
             map: newMap,
-            suppressMarkers: true, // We'll handle markers ourselves
+            suppressMarkers: true, 
             preserveViewport: false,
             polylineOptions: {
-              strokeColor: '#1A73E8', // Google Maps blue
+              strokeColor: '#1A73E8',
               strokeWeight: 4
             }
           });

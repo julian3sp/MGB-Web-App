@@ -11,8 +11,8 @@ interface DestinationDropdownProps {
 
 const destinations = [
   {
-    name: "Chestnut Hill",
-    location: { lat: 42.3314, lng: -71.1687 }
+    name: "MGB (Chestnut Hill)",
+    location: { lat: 42.32610671664074, lng: -71.14958629820883 }
   },
   {
     name: "20 Patriot Place",
@@ -20,7 +20,7 @@ const destinations = [
   },
   {
     name: "22 Patriot Place",
-    location: { lat: 42.0905, lng: -71.2642 }
+    location: { lat: 42.09265105806092, lng: -71.26676051809467 }
   }
 ];
 

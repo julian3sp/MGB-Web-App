@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
-import { ServiceComponentInputBox } from './inputFields/ServiceComponentInputBox.tsx';
+import { ErrorPopUp } from './inputFields/ErrorPopUp.tsx';
 import { InputHeader } from '../signIn/InputHeader.tsx';
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
@@ -43,6 +43,10 @@ function RequestForm({ title, type }: requestFormProps) {
         roomNumber: '',
         comments: '',
     });
+
+    const clearError = (field: string) => {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+    };
 
     const Validate = (): boolean => {
         const errors: errorProps = {
@@ -149,70 +153,79 @@ function RequestForm({ title, type }: requestFormProps) {
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
                                 <InputHeader>Email:</InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     value={email}
                                     setState={setEmail}
                                     placeholder="Enter your Email"
                                     width="w-full"
-                                error={errors.email}/>
+                                    error={errors.email}
+                                    clearError={() => clearError('email')}/>
+
                             </div>
 
                             <div>
                                 <InputHeader>Full Name:</InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     value={name}
                                     setState={setName}
                                     placeholder="Enter your Full Name"
                                     width="w-full"
-                                error={errors.name}/>
+                                    error={errors.name}
+                                    clearError={() => clearError('name')}/>
                             </div>
 
                             <div>
                                 <InputHeader>Phone Number:</InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     maxLength = {15}
                                     value={phoneNumber}
                                     setState={(value) => {
                                         if (/^\d*$/.test(value)) {
                                             setPhoneNumber(value);}
                                     }}
-                                    placeholder="Enter your Phone Number" width="w-full" error={errors.phoneNumber}/>
+                                    placeholder="Enter your Phone Number"
+                                    width="w-full"
+                                    error={errors.phoneNumber}
+                                    clearError={() => clearError('phoneNumber')}/>
                             </div>
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <ServiceComponentInputBox maxLength = {9}
-                                                          value={employeeID}
-                                                          setState={(value) => {
+                                <ErrorPopUp maxLength = {9}
+                                            value={employeeID}
+                                            setState={(value) => {
                                               if (/^\d*$/.test(value)) {
                                                   setEmployeeID(value);}
                                           }}
-                                                          placeholder="Enter your Employee ID"
-                                                          width="w-full"
-                                                          error={errors.employeeID}/>
+                                            placeholder="Enter your Employee ID"
+                                            width="w-full"
+                                            error={errors.employeeID}
+                                            clearError={() => clearError('employeeID')}/>
                             </div>
 
                             <div>
                                 <InputHeader children={type + ':'}></InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     value={request}
                                     setState={setRequest}
                                     placeholder={type}
                                     width="w-full"
-                                error={errors.request}/>
+                                    error={errors.request}
+                                    clearError={() => clearError('request')}/>
                             </div>
 
                             <div>
                                 <InputHeader>Room Number:</InputHeader>
-                                <ServiceComponentInputBox maxLength={6}
-                                                          value={roomNumber}
-                                                          setState={(value) => {
+                                <ErrorPopUp maxLength={6}
+                                            value={roomNumber}
+                                            setState={(value) => {
                                               if (/^\d*$/.test(value)) {
                                                   setRoomNumber(value);}
                                           }}
-                                                          placeholder="Enter your Room Number"
-                                                          width="w-full"
-                                                          error={errors.roomNumber}/>
+                                            placeholder="Enter your Room Number"
+                                            width="w-full"
+                                            error={errors.roomNumber}
+                                            clearError={() => clearError('roomNumber')}/>
                             </div>
                         </div>
                         <div className={'mr-5 ml-5'}>
@@ -253,7 +266,6 @@ function RequestForm({ title, type }: requestFormProps) {
                         </div>
                     </div>
                 </Modal>
-
             </div>
         </>
     );

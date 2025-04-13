@@ -16,6 +16,7 @@ import DirectoryPage from './routes/DirectoryPage';
 
 
 import NavigationPage from "./routes/NavigationPage.tsx";
+import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 <Route path="/navigation" element={<NavigationPage />} />
+                <Route path="/editor" element={<MapEditor />}/>
             </Routes>
         </Router>
             </QueryClientProvider>

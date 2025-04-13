@@ -280,7 +280,7 @@ const MapComponent: React.FC = () => {
       <div className="w-3/4 relative">
         {/* Google Map */}
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <MapRenderer onMapReady={handleMapReady} />
+          <MapRenderer onMapReady={handleMapReady} selectedDestination={selectedPlace} />
         </div>
         {/* Hospital Map */}
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>

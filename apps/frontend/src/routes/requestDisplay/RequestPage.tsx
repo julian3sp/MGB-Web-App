@@ -1,34 +1,47 @@
-import { NavLink , Outlet} from 'react-router-dom';
+import { NavLink, Outlet, redirect, useNavigate } from 'react-router-dom';
 import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from "./RequestListPage.tsx";
+import RequestListPage from './RequestListPage.tsx';
+import { useState } from 'react';
+import { Switch } from '../../components/ui/switch.tsx';
 
 export default function RequestPage() {
-    return (
-        <div className="bg-white p-0.4 border font-[Poppins] py-4"  style={{ borderColor: '#005E64', borderWidth: '4px', borderStyle: 'solid' }}>
-            <h1 className="text-3xl font-bold mb-4 font-[Poppins] w-full text-center" style={{ color: '#003A96' }}>
-                Service Requests:
-            </h1>
+    const [isActive, setActive] = useState(true);
+    const toggleActive = () => setActive(!isActive);
+    const navigate = useNavigate();
 
-            <div className="flex gap-4 justify-center">
-                <NavLink
-                    to="table"
-                    className={({ isActive }) =>
-                        `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}`
-                    }>
-                    Table View
-                </NavLink>
-                <NavLink
-                    to="list"
-                    className={({ isActive }) =>
-                        `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}`
-                    }>
-                    List View
-                </NavLink>
+    return (
+        <div
+            className="border min-h-[85vh] bg-white mr-25 ml-25 font-[Poppins] py-4"
+            style={{ borderColor: '#005E64', borderWidth: '4px', borderStyle: 'solid' }}
+        >
+            <div className="flex gap-4 justify-end p-4 items-center">
+                <h1
+                    className="text-3xl font-bold font-[Poppins] w-full text-left"
+                    style={{ color: '#003A96' }}
+                >
+                    Service Requests:
+                </h1>
+                <div className="flex flex-col items-end">
+                <Switch
+                    defaultChecked={!isActive}
+                    onCheckedChange={() => {
+                        toggleActive();
+                        if (!isActive) {
+                            navigate('table');
+                        } else {
+                            navigate('list');
+                        }
+                    }}
+                    className="mx-auto"
+                    style={{backgroundColor: isActive? '' : '#003A96'}}
+                />
+                <div>
+                    <p className="whitespace-nowrap text-sm font-[Poppins] py-1">Switch view</p>                </div>
+                </div>
             </div>
             <div className="py-1">
                 <Outlet />
             </div>
-
         </div>
     );
 }

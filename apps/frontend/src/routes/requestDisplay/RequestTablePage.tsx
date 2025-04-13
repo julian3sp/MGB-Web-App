@@ -52,39 +52,39 @@ export default function RequestTablePage() {
                     <thead className="bg-gray-200">
                         <tr>
                             <th className="p-4 border-b border-gray-300">
-                                    <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                    <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                         Request ID
                                     </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Request Type
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Request Date
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
                                 <p className="block font-bold font-[Poppins] text-sm text-blue-gray-900">
-                                    <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                    <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                         Name (Employee ID)
                                     </h3>
                                 </p>
                             </th>
                             <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Language
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Contact Info
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Additional Comments
                                 </h3>
                             </th>
@@ -154,3 +154,4 @@ export default function RequestTablePage() {
         </nav>
     );
 }
+/*email phone#*/

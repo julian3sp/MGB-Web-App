@@ -43,7 +43,7 @@ model sanitation_service_request {
   status       String
   employeeID   String
   cleaningType String
-  Email        String
+  email        String
 }
 
 model Directory {

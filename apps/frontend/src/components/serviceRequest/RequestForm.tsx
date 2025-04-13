@@ -104,8 +104,6 @@ function RequestForm({ title, type }: requestFormProps) {
         }
         else{setOpen(true);}
 
-
-
         mutation.mutate({
             name: name,
             email: email,
@@ -116,6 +114,7 @@ function RequestForm({ title, type }: requestFormProps) {
             additional_comments: comments,
             language: request,
         });
+
         handleReset(e);
     };
     const handleReset = (e) => {

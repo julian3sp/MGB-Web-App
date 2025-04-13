@@ -28,7 +28,7 @@ export function SanitationRequestForm() {
     const [employeeID, setEmployeeID] = useState<string>("");
     const [cleaningType, setCleaningType] = useState<string>("");
     const [email, setEmail] = useState<string>("");
-    const mutation = trpc.createRequest.useMutation()
+    const mutation = trpc.createSanitationRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         name: "",

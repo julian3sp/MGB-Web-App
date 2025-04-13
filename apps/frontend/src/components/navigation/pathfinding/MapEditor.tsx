@@ -1,5 +1,9 @@
 import DraggableNode from "./DraggableNode.tsx";
 import React, {useState, useRef, useEffect} from 'react';
+import ImportCSV from "../../ImportDept.tsx";
+import ImportDept from "../../ImportDept.tsx";
+import ImportNodes from "../../ImportNodes.tsx";
+import ImportEdges from "../../ImportEdges.tsx";
 
 
 export default function MapEditor(){
@@ -44,8 +48,20 @@ export default function MapEditor(){
     }, [])
 
     return (
+        <>
         <div ref={containerRef} className = "relative outline-2 outline-gray-500 bg-sky-100 w-5/6 h-80 truncate m-10">
+            <div>
                 <DraggableNode ref={nodeRef}/>
+            </div>
         </div>
+    <div>
+        <h2>Import Nodes:</h2>
+        <ImportNodes/>
+    </div>
+            <div>
+                <h2>Import Edges:</h2>
+                <ImportEdges/>
+            </div>
+        </>
     )
 }

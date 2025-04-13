@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import {trpc} from "../lib/trpc.ts";
+import client from "../../../backend/src/bin/prisma-client.ts";
 
 
-const UploadCSV = () => {
+
+const ImportNodes = () => {
     const [file, setFile] = useState<File | null>(null);
-    const createDirectory = trpc.makeDirectory.useMutation();
+    const makeNode = trpc.makeNode.useMutation();
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -13,6 +16,7 @@ const UploadCSV = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) return;
+        client.nodes.deleteMany();
 
         const reader = new FileReader();
         reader.onload = async () => {
@@ -26,17 +30,18 @@ const UploadCSV = () => {
 
                 //insert each entry in line into our entry struct
                 const entry = {
-                    name: values[0].trim().replace(/"/g, ""),
-                    location: values[1].trim().replace(/"/g, ""),
-                    telephone: values[2].trim().replace(/"/g, ""),
+                    building: values[0].trim().replace(/"/g, ""),
+                    floor: Number(values[1].trim().replace(/"/g, "")),
+                    x: Number(values[2].trim().replace(/"/g, "")),
+                    y: Number(values[3].trim().replace(/"/g, "")),
                 };
 
-                if (entry.name.length === 0){
+                if (!entry.x){
                     return;
                 }
 
                 try {
-                    await createDirectory.mutateAsync(entry);
+                    await makeNode.mutateAsync(entry);
                 } catch (err) {
                     console.error('Failed to insert entry:', entry, err);
                 }
@@ -57,4 +62,4 @@ const UploadCSV = () => {
     );
 };
 
-export default UploadCSV;
+export default ImportNodes;

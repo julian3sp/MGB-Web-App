@@ -5,8 +5,7 @@ interface MapRendererProps {
   onMapReady: (
     map: google.maps.Map,
     directionsService: google.maps.DirectionsService,
-    directionsRenderer: google.maps.DirectionsRenderer,
-    userLocation: google.maps.LatLngLiteral | null
+    directionsRenderer: google.maps.DirectionsRenderer
   ) => void;
 }
 
@@ -34,7 +33,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady }) => {
       .then(() => {
         if (mapRef.current) {
           const newMap = new google.maps.Map(mapRef.current, {
-            center: { lat: 42.3601, lng: -71.0589 },
+            center: { lat: 42.3601, lng: -71.0589 }, // Boston center
             zoom: 12,
             fullscreenControl: true,
             mapTypeControl: false,
@@ -46,37 +45,16 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady }) => {
           const directionsService = new google.maps.DirectionsService();
           const directionsRenderer = new google.maps.DirectionsRenderer({
             map: newMap,
-            suppressMarkers: false,
+            suppressMarkers: true, // We'll handle markers ourselves
+            preserveViewport: false,
+            polylineOptions: {
+              strokeColor: '#1A73E8', // Google Maps blue
+              strokeWeight: 4
+            }
           });
-
-          let userLocation: google.maps.LatLngLiteral | null = null;
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                userLocation = {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude,
-                };
-                newMap.setZoom(16);
-                newMap.setCenter(userLocation);
-                new google.maps.Marker({
-                  position: userLocation,
-                  map: newMap,
-                  title: 'Your Location',
-                  icon: {
-                    url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                  },
-                });
-                onMapReady(newMap, directionsService, directionsRenderer, userLocation);
-              },
-              (error) => {
-                console.log('Error getting user location:', error);
-                onMapReady(newMap, directionsService, directionsRenderer, null);
-              }
-            );
-          } else {
-            onMapReady(newMap, directionsService, directionsRenderer, null);
-          }
+          
+          directionsRenderer.setMap(newMap);
+          onMapReady(newMap, directionsService, directionsRenderer);
         }
       })
       .catch((error) => {

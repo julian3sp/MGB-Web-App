@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MapRenderer from './MapRenderer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
@@ -20,6 +20,7 @@ const MapComponent: React.FC = () => {
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
+  const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
   const [travelTimes, setTravelTimes] = useState<TravelTimes>({
     driving: null,
     transit: null,
@@ -146,8 +147,6 @@ const MapComponent: React.FC = () => {
     start: { name: string; location: google.maps.LatLngLiteral },
     end: { name: string; location: google.maps.LatLngLiteral }
   ) => {
-    console.log('Attempting to display route:', { start, end });
-
     if (!mapInstance || !directionsService || !directionsRenderer) {
       console.warn('Map components not ready');
       return;
@@ -181,12 +180,18 @@ const MapComponent: React.FC = () => {
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
         });
 
-        new google.maps.Marker({
+        // remove any previous destination marker
+        if (destinationMarkerRef.current) {
+          destinationMarkerRef.current.setMap(null);
+        }
+
+        const destMarker = new google.maps.Marker({
           position: end.location,
           map: mapInstance,
           title: end.name,
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
         });
+        destinationMarkerRef.current = destMarker
 
         // Set the directions.
         directionsRenderer.setDirections(result);
@@ -201,6 +206,16 @@ const MapComponent: React.FC = () => {
       }
     });
   };
+
+  const handleZoomChange = (zoom: number) => {
+    if (destinationMarkerRef.current) {
+      if (zoom >= 19) {
+        destinationMarkerRef.current.setVisible(false);
+      } else {
+        destinationMarkerRef.current.setVisible(true);
+      }
+    }
+  }
 
   // Update route when transport mode or locations change.
   useEffect(() => {
@@ -280,7 +295,7 @@ const MapComponent: React.FC = () => {
       <div className="w-3/4 relative">
         {/* Google Map */}
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <MapRenderer onMapReady={handleMapReady} selectedDestination={selectedPlace} />
+          <MapRenderer onMapReady={handleMapReady} selectedDestination={selectedPlace} onZoomChange={handleZoomChange}/>
         </div>
         {/* Hospital Map */}
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>

@@ -15,9 +15,10 @@ interface MapRendererProps {
   ) => void;
   // Allow selectedDestination to be an object or null.
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
+  onZoomChange?: (zoom: number) => void;
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination }) => {
+const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   // For overlays (only for MGB in this example)
@@ -87,6 +88,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       floorOverlay.setMap(null);
       setFloorOverlay(null);
     }
+    
 
     if (selectedDestination) {
       if (selectedDestination.name === "MGB (Chestnut Hill)") {
@@ -133,6 +135,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
 
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
+      // trigger the parent's callback 
+      if (onZoomChange) onZoomChange(zoom || 0);
       if (zoom && zoom >= 20) {
         animateOverlayOpacity(parkingOverlay, parkingOpacityRef, 0, 300);
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 1, 300);
@@ -143,7 +147,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
     });
 
     return () => google.maps.event.removeListener(zoomListener);
-  }, [map, parkingOverlay, floorOverlay]);
+  }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 
   return <div ref={mapRef} style={{ width: '100%', height: '100vh', position: 'relative' }} />;
 };

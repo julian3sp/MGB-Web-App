@@ -48,7 +48,7 @@ export function ServiceComponentDropdown({
                     setState(e.target.value);
                 }}
             >
-                <option value ="" disabled selected hidden>{placeholder}</option>
+                <option value ="" disabled hidden>{placeholder}</option>
 
                 {options.map((option) => (
                     <option value={option}>{option}</option>

@@ -51,7 +51,6 @@ export async function insertServiceRequest(
                 request_type: request_type,
                 employee_id: employee_id,
                 additional_comments: additional_comments,
-                language: lang,
                 assigned_employee: assigned_employee,
             },
         });

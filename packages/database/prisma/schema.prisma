@@ -22,28 +22,44 @@ model employee {
 model service_request {
   request_id          Int       @id @default(autoincrement())
   name                String
-  email               String
-  phone_num           String
-  room_num            Int
+  priority            String
+  location            String
+  department          String
+  status              String
   request_type        String
   request_date        DateTime  @default(now())
-  employee_id         String
+  employee_id         String?
   additional_comments String?
   assigned_employee   String?
   employee            employee? @relation(fields: [assigned_employee], references: [id])
-  language            String?
+  email               String?
+  phone_num           String?
+  room_num            Int?
+
+  sanitation  Sanitation?
+  language    Language?
+  audioVisual AudioVisual?
 }
 
-model sanitation_service_request {
-  request_id   Int    @id @default(autoincrement())
-  name         String
-  priority     String
-  location     String
-  department   String
-  status       String
-  employeeID   String
-  cleaningType String
-  email        String
+model Sanitation {
+  request_id      Int             @id @default(autoincrement())
+  cleaningType    String
+  sanitationId    Int             @unique
+  service_request service_request @relation(fields: [sanitationId], references: [request_id])
+}
+
+model Language {
+  request_id      Int             @id @default(autoincrement())
+  language        String
+  languageId      Int             @unique
+  service_request service_request @relation(fields: [languageId], references: [request_id])
+}
+
+model AudioVisual {
+  request_id      Int             @id @default(autoincrement())
+  accommodations  String
+  audioVisualId   Int             @unique
+  service_request service_request @relation(fields: [audioVisualId], references: [request_id])
 }
 
 model Directory {

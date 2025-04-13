@@ -9,7 +9,6 @@ import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
 import { getDirectories, makeDirectories } from './server/procedures/directories.ts';
-import {getSanitationRequests, makeSanitationRequest} from "./server/procedures/sanitation_service_request.ts";
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -25,15 +24,13 @@ const appRouter = t.router({
     makeUser: makeUser,
     getDirectories: getDirectories,
     makeDirectory: makeDirectories,
-    createSanitationRequest: makeSanitationRequest,
-    sanitationRequestList: getSanitationRequests,
 });
 
 const app: Express = express(); // Set up the backend
-app.use(cors());
-app.use('/trpc', (req, res, next) => {
-    console.log(`[TRPC] ${req.method} ${req.url}`);
-    next();
+    app.use(cors());
+    app.use('/trpc', (req, res, next) => {
+        console.log(`[TRPC] ${req.method} ${req.url}`);
+        next();
 });
 
 app.use(

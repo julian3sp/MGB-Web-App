@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
+import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
 import { ServiceComponentInputBox } from './inputFields/ServiceComponentInputBox.tsx';
@@ -11,6 +12,7 @@ import Modal from './modal.tsx';
 type requestFormProps = {
     title: string;
     type: string;
+    uniqueObject: string;
 };
 
 type errorProps = {
@@ -20,10 +22,16 @@ type errorProps = {
     employeeID: string,
     request: string,
     roomNumber: string,
-    comments: string
+    comments: string,
+    department: string,
+    priority: string,
+    location: string,
+    status: string,
+    cleaningType: string,
+    language: string,
 }
 
-function RequestForm({ title, type }: requestFormProps) {
+function RequestForm({ title, type, uniqueObject }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -32,27 +40,45 @@ function RequestForm({ title, type }: requestFormProps) {
     const [request, setRequest] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
+    const [priority, setPriority] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
+    const [department, setDepartment] = useState<string>("");
+    const [cleaningType, setCleaningType] = useState<string>("");
+    const [language, setLanguage] = useState<string>("");
+    const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         name: '',
         email: '',
+        priority: '',
+        location: '',
+        department: '',
+        status: '',
         phoneNumber: '',
         employeeID: '',
         request: '',
         roomNumber: '',
         comments: '',
+        cleaningType: '',
+        language: '',
     });
 
     const Validate = (): boolean => {
         const errors: errorProps = {
-            comments: "",
-            email: "",
-            employeeID: "",
-            name: "",
-            phoneNumber: "",
-            request: "",
-            roomNumber: ""
+            name: '',
+            email: '',
+            priority: '',
+            location: '',
+            department: '',
+            status: '',
+            phoneNumber: '',
+            employeeID: '',
+            request: '',
+            roomNumber: '',
+            comments: '',
+            cleaningType: '',
+            language: '',
         }
 
         if (!name) {
@@ -90,6 +116,30 @@ function RequestForm({ title, type }: requestFormProps) {
             errors.request = "Please select a request type";
         }
 
+        if (!language) {
+            errors.language = "Please select a language";
+        }
+
+        if (!department) {
+            errors.department = 'Please set a department';
+        }
+
+        if (!location) {
+            errors.location = 'Please set a location';
+        }
+
+        if (!status) {
+            errors.status = 'Please set a status';
+        }
+
+        if (!priority) {
+            errors.priority = 'Please set a priority';
+        }
+
+        if (!cleaningType) {
+            errors.priority = 'Please set a cleaning type';
+        }
+
         setErrors(errors);
         return Object.values(errors).some(value => value.length > 0);
     };
@@ -106,18 +156,26 @@ function RequestForm({ title, type }: requestFormProps) {
 
         mutation.mutate({
             name: name,
-            email: email,
-            phone_num: phoneNumber,
-            room_num: Number(roomNumber),
+            priority: priority,
+            location: location,
+            department: department,
+            status: status,
             request_type: type,
-            employee_id: employeeID,
-            additional_comments: comments,
-            language: request,
+            ...(type === 'language' && {
+                language: {
+                    language: language,
+                },
+            }),
+            ...(type === 'sanitation' && {
+                sanitation: {
+                    cleaningType: cleaningType,
+                },
+            }),
         });
 
         handleReset(e);
     };
-    const handleReset = (e) => {
+    const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setEmail('');
         setName('');
@@ -147,71 +205,84 @@ function RequestForm({ title, type }: requestFormProps) {
                         {/* Employee Information (Two-Column Grid) */}
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
-                                <InputHeader>Email:</InputHeader>
-                                <ServiceComponentInputBox
-                                    value={email}
-                                    setState={setEmail}
-                                    placeholder="Enter your Email"
-                                    width="w-full"
-                                error={errors.email}/>
-                            </div>
-
-                            <div>
-                                <InputHeader>Full Name:</InputHeader>
+                                <InputHeader>Name:</InputHeader>
                                 <ServiceComponentInputBox
                                     value={name}
                                     setState={setName}
-                                    placeholder="Enter your Full Name"
+                                    placeholder="Name"
                                     width="w-full"
-                                error={errors.name}/>
+                                    error={errors.email}/>
                             </div>
 
                             <div>
-                                <InputHeader>Phone Number:</InputHeader>
-                                <ServiceComponentInputBox
-                                    maxLength = {15}
-                                    value={phoneNumber}
-                                    setState={(value) => {
-                                        if (/^\d*$/.test(value)) {
-                                            setPhoneNumber(value);}
-                                    }}
-                                    placeholder="Enter your Phone Number" width="w-full" error={errors.phoneNumber}/>
+                                <InputHeader>Location</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={location}
+                                    setState={setLocation}
+                                    placeholder={"Select Location"}
+                                    width={"w-full"}
+                                    error={errors.location}
+                                    options={["Brigham & Women's Hospital Main Campus",
+                                        "Chestnut Hill",
+                                        "Faulkner Hospital",
+                                        "Patriot Place"]}
+                                />
                             </div>
 
                             <div>
-                                <InputHeader>Employee ID:</InputHeader>
-                                <ServiceComponentInputBox maxLength = {9}
-                                                          value={employeeID}
-                                                          setState={(value) => {
-                                              if (/^\d*$/.test(value)) {
-                                                  setEmployeeID(value);}
-                                          }}
-                                                          placeholder="Enter your Employee ID"
-                                                          width="w-full"
-                                                          error={errors.employeeID}/>
+                                <InputHeader>Department</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={department}
+                                    setState={setDepartment}
+                                    placeholder={"Select Department"}
+                                    width={"w-full"}
+                                    error={errors.department}
+                                    options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
+                                />
                             </div>
 
                             <div>
-                                <InputHeader children={type + ':'}></InputHeader>
-                                <ServiceComponentInputBox
-                                    value={request}
-                                    setState={setRequest}
-                                    placeholder={type}
+                                <InputHeader>Priority</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={priority}
+                                    setState={setPriority}
+                                    width={"w-full"}
+                                    options={["Low", "Medium", "High", "Emergency"]}
+                                    placeholder={"Select Priority"}
+                                    error={errors.priority}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Status</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={status}
+                                    setState={setStatus}
+                                    placeholder={"Select Status"}
+                                    width={"w-full"}
+                                    error={errors.status}
+                                    options={["Unassigned", "Assigned", "Working", "Done"]}
+                                />
+                            </div>
+
+
+                            <div>
+                                <InputHeader>{uniqueObject}</InputHeader>
+
+                                {type === "language" ? <ServiceComponentInputBox
+                                    value={language}
+                                    setState={setLanguage}
+                                    placeholder={"Language"}
                                     width="w-full"
-                                error={errors.request}/>
-                            </div>
+                                    error={errors.language}/> : null}
 
-                            <div>
-                                <InputHeader>Room Number:</InputHeader>
-                                <ServiceComponentInputBox maxLength={6}
-                                                          value={roomNumber}
-                                                          setState={(value) => {
-                                              if (/^\d*$/.test(value)) {
-                                                  setRoomNumber(value);}
-                                          }}
-                                                          placeholder="Enter your Room Number"
-                                                          width="w-full"
-                                                          error={errors.roomNumber}/>
+                                {type === "sanitation" ? <ServiceComponentDropdown
+                                    value={cleaningType}
+                                    setState={setCleaningType}
+                                    placeholder={"Select Cleaning"}
+                                    width={"w-full"}
+                                    error={errors.cleaningType}
+                                    options={["General Disinfecting", "Special Cleaning", "PPE", "Janitorial Services"]}/> : null}
                             </div>
                         </div>
                         <div className={'mr-5 ml-5'}>

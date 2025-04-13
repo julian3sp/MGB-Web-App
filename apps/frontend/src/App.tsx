@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './styles/mainStyles.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import SignInPage from './routes/SignInPage';
-import CreateAccountPage from './routes/CreateAccountPage';
 import DepartmentDirectory from './routes/DepartmentDirectory';
 import ServiceRequestPage from './routes/ServiceRequestPage';
 import RequestListPage from './routes/RequestListPage'
@@ -54,8 +52,6 @@ function App() {
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/admin/directory" element={<DirectoryPage />} />
-                <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
-                <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>

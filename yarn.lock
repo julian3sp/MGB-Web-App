@@ -24,7 +24,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-react@npm:^2.1.1":
+"@auth0/auth0-react@npm:^2.1.1, @auth0/auth0-react@npm:^2.3.0":
   version: 2.3.0
   resolution: "@auth0/auth0-react@npm:2.3.0"
   dependencies:
@@ -7055,6 +7055,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
+    "@auth0/auth0-react": "npm:^2.3.0"
     "@googlemaps/js-api-loader": "npm:^1.16.8"
     "@popperjs/core": "npm:^2.11.8"
     "@types/google.maps": "npm:^3.58.1"
@@ -7064,7 +7065,7 @@ __metadata:
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
     common: "workspace:*"
-    dotenv: "npm:^16.4.7"
+    dotenv: "npm:^16.5.0"
     dotenv-cli: "npm:^7.4.4"
     eslint: "npm:^9.23.0"
     eslint-config-custom: "workspace:*"

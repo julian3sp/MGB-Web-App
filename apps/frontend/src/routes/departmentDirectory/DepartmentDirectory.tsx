@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
-import DepartmentList from "../components/DepartmentList.ts";
+import DepartmentList from "../../components/DepartmentList.ts";
 import DepartmentRoutes from "./DepartmentRoutes.tsx";
 
 

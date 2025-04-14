@@ -7,6 +7,7 @@ import client from "../../../backend/src/bin/prisma-client.ts";
 const ImportNodes = () => {
     const [file, setFile] = useState<File | null>(null);
     const makeEdge = trpc.makeEdge.useMutation();
+    const deleteEdges = trpc.deleteAllEdges.useMutation()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -16,7 +17,7 @@ const ImportNodes = () => {
         e.preventDefault();
 
         if (!file) return;
-        client.edges.deleteMany();
+        await deleteEdges.mutateAsync()
 
         const reader = new FileReader();
         reader.onload = async () => {
@@ -60,5 +61,6 @@ const ImportNodes = () => {
         </form>
     );
 };
+
 
 export default ImportNodes;

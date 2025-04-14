@@ -36,3 +36,8 @@ export const getAllEdges = publicProcedure
         });
         return edges;
     });
+
+export const deleteAllEdges = publicProcedure.mutation(async () => {
+    await client.edges.deleteMany();
+    await client.$executeRaw`ALTER SEQUENCE "edges_id_seq" RESTART WITH 1`;
+});

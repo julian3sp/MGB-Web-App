@@ -54,3 +54,8 @@ export const getNode = publicProcedure
         });
         return node;
     });
+
+export const deleteAllNodes = publicProcedure.mutation(async () => {
+    await client.nodes.deleteMany();
+    await client.$executeRaw`ALTER SEQUENCE "nodes_id_seq" RESTART WITH 1`;
+});

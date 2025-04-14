@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import {trpc} from "../lib/trpc.ts";
 import client from "../../../backend/src/bin/prisma-client.ts";
+import {deleteAllDirectories} from "../../../backend/src/server/procedures/directories.ts";
 
 
 
 const ImportDept = () => {
     const [file, setFile] = useState<File | null>(null);
     const createDirectory = trpc.makeDirectory.useMutation();
+    const deleteDirectories = trpc.deleteAllDirectories.useMutation()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -15,9 +17,9 @@ const ImportDept = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) return;
-        client.directory.deleteMany();
-
+        await deleteDirectories.mutateAsync()
         const reader = new FileReader();
+
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);

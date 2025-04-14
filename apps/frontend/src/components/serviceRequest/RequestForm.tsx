@@ -179,6 +179,10 @@ function RequestForm({ title, type }: requestFormProps) {
                             {title}
                         </h2>
 
+                        {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
+                        {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
+                        {type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}
+
                         {/* Employee Information (Two-Column Grid) */}
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>

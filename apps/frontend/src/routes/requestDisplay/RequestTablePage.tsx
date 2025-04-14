@@ -7,29 +7,31 @@ import { useState } from 'react';
 type ServiceRequest = {
     request_id: number;
     name: string;
-    email: string;
-    phone_num: string;
-    room_num: number;
     request_type: string;
     request_date: string;
-    employee_id: string;
+    status: string;
+    location: string;
+    priority: string;
+    department: string;
+    employee_id: string | null;
     additional_comments: string | null;
     assigned_employee: string | null;
     language: string | null;
+    cleaningType: string | null;
 };
 
-function formatPhoneNumber(phone: string): string {
-    // Get rid of all non numbers
-    const digits = phone.replace(/\D/g, '');
-
-    if (digits.length !== 10) return phone; // if not 10 numbers just return original string
-
-    const start = digits.slice(0, 3);
-    const middle = digits.slice(3, 6);
-    const end = digits.slice(6, 10);
-
-    return `(${start}) ${middle}-${end}`;
-}
+// function formatPhoneNumber(phone: string): string {
+//     // Get rid of all non numbers
+//     const digits = phone.replace(/\D/g, '');
+//
+//     if (digits.length !== 10) return phone; // if not 10 numbers just return original string
+//
+//     const start = digits.slice(0, 3);
+//     const middle = digits.slice(3, 6);
+//     const end = digits.slice(6, 10);
+//
+//     return `(${start}) ${middle}-${end}`;
+// }
 
 export default function RequestTablePage() {
     const { data, isLoading, error } = trpc.requestList.useQuery();
@@ -75,12 +77,27 @@ export default function RequestTablePage() {
                             </th>
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Language
+                                    Location
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Contact Info
+                                    Department
+                                </h3>
+                            </th>
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Priority
+                                </h3>
+                            </th>
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Status
+                                </h3>
+                            </th>
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Info
                                 </h3>
                             </th>
                             <th className="p-4 border-b border-gray-300">
@@ -122,14 +139,29 @@ export default function RequestTablePage() {
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.language}
+                                        {res.location}
                                     </p>
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.email}
+                                        {res.department}
+                                    </p>
+                                </td>
+                                <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {res.priority}
+                                    </p>
+                                </td>
+                                <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {res.status}
+                                    </p>
+                                </td>
+                                <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {res.sanitation?.cleaningType || res.language?.targetLanguage}
                                         <br />
-                                        {formatPhoneNumber(res.phone_num)}
+                                        {res.sanitation?.contaminant || res.language?.sourceLanguage}
                                     </p>
                                 </td>
                                 <td className="p-4">

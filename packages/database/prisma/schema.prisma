@@ -22,13 +22,13 @@ model employee {
 model service_request {
   request_id          Int       @id @default(autoincrement())
   name                String
+  employee_id         String
   priority            String
   location            String
   department          String
   status              String
   request_type        String
   request_date        DateTime  @default(now())
-  employee_id         String?
   additional_comments String?
   assigned_employee   String?
   employee            employee? @relation(fields: [assigned_employee], references: [id])
@@ -41,13 +41,15 @@ model service_request {
 model Sanitation {
   request_id      Int             @id @default(autoincrement())
   cleaningType    String
+  contaminant     String?
   sanitationId    Int             @unique
   service_request service_request @relation(fields: [sanitationId], references: [request_id])
 }
 
 model Language {
   request_id      Int             @id @default(autoincrement())
-  language        String
+  sourceLanguage  String
+  targetLanguage  String
   languageId      Int             @unique
   service_request service_request @relation(fields: [languageId], references: [request_id])
 }

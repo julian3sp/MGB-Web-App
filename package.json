@@ -39,6 +39,7 @@
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
     "@prisma/client": "^6.6.0",
+    "@radix-ui/react-switch": "^1.1.4",
     "common": "workspace:*",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^7.4.4",

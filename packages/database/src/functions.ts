@@ -31,20 +31,24 @@ export async function deleteEmployees(employee_ids: string[], client: PrismaClie
 }
 export async function insertServiceRequest(
     name: string,
+    employeeID: string,
     priority: string,
     location: string,
     department: string,
     request_type: string,
     status: string,
     client: PrismaClient,
-    language: string,
+    sourceLanguage: string,
+    targetLanguage: string,
     cleaningType: string,
+    contaminant?: string,
     additional_comments?: string,
 ) {
     try {
         const newServiceRequest = await client.service_request.create({
             data: {
                 name: name,
+                employee_id: employeeID,
                 priority: priority,
                 location: location,
                 department: department,
@@ -54,7 +58,8 @@ export async function insertServiceRequest(
                 ...(request_type === 'language' && {
                     language: {
                         create: {
-                            language: language,
+                            sourceLanguage: sourceLanguage,
+                            targetLanguage: targetLanguage,
                         }
                     },
                 }),
@@ -62,6 +67,7 @@ export async function insertServiceRequest(
                     sanitation: {
                         create: {
                             cleaningType: cleaningType,
+                            contaminant: contaminant,
                         }
                     },
                 }),

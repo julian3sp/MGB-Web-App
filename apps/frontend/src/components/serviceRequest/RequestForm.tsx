@@ -17,48 +17,60 @@ type requestFormProps = {
 type errorProps =
     {
     name: string,
+    employeeID: string,
     comments: string,
     department: string,
     priority: string,
     location: string,
     status: string,
     cleaningType: string,
-    language: string,
+    contaminant: string,
+    sourceLanguage: string,
+    targetLanguage: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
     const [comments, setComments] = useState('');
+    const [employeeID, setEmployeeID] = useState('');
     const [priority, setPriority] = useState<string>("");
     const [location, setLocation] = useState<string>("");
     const [department, setDepartment] = useState<string>("");
     const [cleaningType, setCleaningType] = useState<string>("");
-    const [language, setLanguage] = useState<string>("");
+    const [contaminant, setContaminant] = useState<string>("");
+    const [sourceLanguage, setSourceLanguage] = useState<string>("");
+    const [targetLanguage, setTargetLanguage] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         name: '',
+        employeeID: '',
         priority: '',
         location: '',
         department: '',
         status: '',
         comments: '',
         cleaningType: '',
-        language: '',
+        contaminant: '',
+        sourceLanguage: '',
+        targetLanguage: '',
     });
 
     const Validate = (): boolean => {
         const errors: errorProps = {
             name: '',
+            employeeID: '',
             priority: '',
             location: '',
             department: '',
             status: '',
             comments: '',
             cleaningType: '',
-            language: '',
+            contaminant: '',
+            sourceLanguage: '',
+            targetLanguage: '',
         }
 
         if (!name) {
@@ -74,9 +86,20 @@ function RequestForm({ title, type }: requestFormProps) {
 
         }
 
-        if (!language && type === 'language') {
-            errors.language = "Please select a language";
-            console.log('language error');
+        if (!sourceLanguage && type === 'Language') {
+            errors.sourceLanguage = "Please select a source language";
+            console.log('sourceLanguage error');
+        }
+
+        if (!targetLanguage && type === 'Language') {
+            errors.targetLanguage = "Please select a target language";
+            console.log('targetLanguage error');
+        }
+
+        if (!employeeID) {
+            errors.employeeID = "Employee ID is required";
+        } else if (employeeID.length < 9) {
+            errors.employeeID = `Employee ID must be at least 9 characters`;
         }
 
         if (!department) {
@@ -99,8 +122,8 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('priority error');
         }
 
-        if (!cleaningType && type ==='sanitation') {
-            errors.priority = 'Please set a cleaning type';
+        if (!cleaningType && type ==='Sanitation') {
+            errors.cleaningType = 'Please set a cleaning type';
             console.log('cleaningType error');
         }
 
@@ -121,19 +144,23 @@ function RequestForm({ title, type }: requestFormProps) {
 
         mutation.mutate({
             name: name,
+            employee_id: employeeID,
             priority: priority,
             location: location,
             department: department,
             status: status,
             request_type: type,
+            additional_comments: comments,
             ...(type === 'Language' && {
                 language: {
-                    language: language,
+                    sourceLanguage: sourceLanguage,
+                    targetLanguage: targetLanguage,
                 },
             }),
             ...(type === 'Sanitation' && {
                 sanitation: {
                     cleaningType: cleaningType,
+                    contaminant: contaminant,
                 },
             }),
         });
@@ -143,23 +170,28 @@ function RequestForm({ title, type }: requestFormProps) {
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setName('');
+        setEmployeeID('');
         setComments('');
         setLocation('');
         setDepartment('');
         setStatus('');
         setPriority('');
-        setLanguage('');
+        setSourceLanguage('');
+        setTargetLanguage('');
         setCleaningType('');
 
         setErrors({
             name: '',
+            employeeID: '',
             priority: '',
             location: '',
             department: '',
             status: '',
             comments: '',
             cleaningType: '',
-            language: '',
+            contaminant: '',
+            sourceLanguage: '',
+            targetLanguage: '',
         });
     };
 
@@ -193,6 +225,20 @@ function RequestForm({ title, type }: requestFormProps) {
                                     placeholder="Name"
                                     width="w-full"
                                     error={errors.name}/>
+                            </div>
+
+                            <div>
+                                <InputHeader>Employee ID:</InputHeader>
+                                <ServiceComponentInputBox
+                                    value={employeeID}
+                                    setState={(value) => {
+                                        if (/^\d*$/.test(value)) {
+                                            setEmployeeID(value);}
+                                    }}
+                                    maxLength={9}
+                                    placeholder="Employee ID"
+                                    width="w-full"
+                                    error={errors.employeeID}/>
                             </div>
 
                             <div>
@@ -247,33 +293,55 @@ function RequestForm({ title, type }: requestFormProps) {
                             </div>
 
 
-                            <div>
 
-                                {type === "Language" ?
-                                    <>
-                                        <InputHeader>Language</InputHeader>
+
+                            {type === "Language" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Source Language</InputHeader>
                                         <ServiceComponentInputBox
-                                        value={language}
-                                        setState={setLanguage}
-                                        placeholder={"Language"}
+                                        value={sourceLanguage}
+                                        setState={setSourceLanguage}
+                                        placeholder={"Source Language"}
                                         width="w-full"
-                                        error={errors.language}/>
-                                    </>
-                                    : null}
+                                        error={errors.sourceLanguage}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Target Language</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={targetLanguage}
+                                            setState={setTargetLanguage}
+                                            placeholder={"Target Language"}
+                                            width="w-full"
+                                            error={errors.targetLanguage}/>
+                                    </div>
+                                </>
+                                : null}
 
-                                {type === "Sanitation" ?
-                                    <>
+                            {type === "Sanitation" ?
+                                <>
+                                    <div>
                                         <InputHeader>Cleaning Needed</InputHeader>
                                         <ServiceComponentDropdown
                                         value={cleaningType}
                                         setState={setCleaningType}
-                                        placeholder={"Select Cleaning"}
+                                        placeholder={"Select Cleaning Needed"}
                                         width={"w-full"}
                                         error={errors.cleaningType}
-                                        options={["General Disinfecting", "Special Cleaning", "PPE", "Janitorial Services"]}/>
-                                    </>
-                                    : null}
-                            </div>
+                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Contaminant (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={contaminant}
+                                            setState={setContaminant}
+                                            placeholder={"Contaminant"}
+                                            width="w-full"
+                                            error={errors.contaminant}/>
+                                    </div>
+                                </>
+                                : null}
+
                         </div>
                         <div className={'mr-5 ml-5'}>
                             <InputHeader children={'Additional Comments:'} />

@@ -5,7 +5,12 @@ import { trpc } from '../trpc.ts';
 
 export const getRequests = trpc.procedure.query(async () => {
     console.log('getRequests called');
-    const requests = await client.service_request.findMany();
+    const requests = await client.service_request.findMany(
+        {include: {
+            sanitation: true,
+            language: true,
+        },}
+    );
     console.log('getRequests returned');
     return requests;
 });
@@ -14,6 +19,7 @@ export const makeRequest = publicProcedure
     .input(
         z.object({
             name: z.string(),
+            employee_id: z.string(),
             priority: z.string(),
             department: z.string(),
             location: z.string(),
@@ -21,10 +27,16 @@ export const makeRequest = publicProcedure
             request_type: z.string(),
             additional_comments: z.optional(z.string()),
             sanitation: z.optional(z.object(
-                { cleaningType: z.string(), }
+                {
+                    cleaningType: z.string(),
+                    contaminant: z.string(),
+                }
             )),
             language: z.optional(z.object(
-                { language: z.string() }
+                {
+                    sourceLanguage: z.string(),
+                    targetLanguage: z.string(),
+                }
             )),
             audioVisual: z.optional(z.object(
                 { accommodations: z.string() }

@@ -5,18 +5,17 @@ import { trpc } from '../trpc.ts';
 
 export const makeNode = publicProcedure
     .input(
-        z.object({
-            building: z.string(),
-            floor: z.number(),
-            x: z.number(),
-            y: z.number(),
-        })
+        z.array(
+            z.object({
+                building: z.string(),
+                floor: z.number(),
+                x: z.number(),
+                y: z.number(),
+            })
+        )
     )
     .mutation(async ({ input }) => {
-        const node = await client.nodes.create({
-            data: input,
-        });
-        return node;
+        return client.nodes.createMany({ data: input });
     });
 
 export const getAllNodes = publicProcedure

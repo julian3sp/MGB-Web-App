@@ -17,18 +17,28 @@ const ImportNodes = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) return;
-        await deleteNodes.mutateAsync()
+
+        // Delete existing nodes first
+        await deleteNodes.mutateAsync();
+
         const reader = new FileReader();
+
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);
-            const headers = lines[0].split(',');
+            const inputs: {
+                building: string;
+                floor: number;
+                x: number;
+                y: number;
+            }[] = [];
 
-            for (let i = 1; i < lines.length; i++) { //skip first line
-                // for each line, split on commas
+            for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',');
 
-                //insert each entry in line into our entry struct
+                // Skip invalid or malformed lines
+                if (values.length < 4) {continue};
+
                 const entry = {
                     building: values[0].trim().replace(/"/g, ""),
                     floor: Number(values[1].trim().replace(/"/g, "")),
@@ -36,22 +46,20 @@ const ImportNodes = () => {
                     y: Number(values[3].trim().replace(/"/g, "")),
                 };
 
-                if (!entry.x){
-                    return;
-                }
-
-                try {
-                    await makeNode.mutateAsync(entry);
-                } catch (err) {
-                    console.error('Failed to insert entry:', entry, err);
-                }
+                inputs.push(entry);
             }
 
-            alert('CSV successfully uploaded.');
+            try {
+                await makeNode.mutateAsync(inputs);
+                alert('CSV successfully uploaded.');
+            } catch (err) {
+                console.error('Failed to insert nodes:', err);
+            }
         };
 
         reader.readAsText(file);
     };
+
 
     return (
         <form onSubmit={handleSubmit}>

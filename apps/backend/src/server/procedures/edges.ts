@@ -5,17 +5,23 @@ import { trpc } from '../trpc.ts';
 
 export const makeEdge = publicProcedure
     .input(
-        z.object({
-            sourceId: z.number(),
-            targetId: z.number(),
-            weight: z.number(),
-        })
+        z.array(
+            z.object({
+                sourceId: z.number(),
+                targetId: z.number(),
+                weight: z.number(),
+            })
+        )
     )
     .mutation(async ({ input }) => {
-        const edge = await client.edges.create({
-            data: input,
-        });
-        return edge;
+        try {
+            await client.edges.createMany({
+                data: input,
+            });
+        } catch (error) {
+            console.error('CreateMany error:', error);
+            console.log('Edges attempted to insert:', input);
+        }
     });
 
 export const getAllEdges = publicProcedure

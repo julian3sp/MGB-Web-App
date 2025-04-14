@@ -60,10 +60,10 @@ model nodes {
 }
 
 model edges {
-  id       Int @id @default(autoincrement())
+  id       Int   @id @default(autoincrement())
   sourceId Int
   targetId Int
-  weight   Int
+  weight   Float
 
   sourceNode nodes @relation("SourceEdges", fields: [sourceId], references: [id])
   targetNode nodes @relation("TargetEdges", fields: [targetId], references: [id])

@@ -4,7 +4,7 @@ import client from "../../../backend/src/bin/prisma-client.ts";
 
 
 
-const ImportNodes = () => {
+const ImportEdges = () => {
     const [file, setFile] = useState<File | null>(null);
     const makeEdge = trpc.makeEdge.useMutation();
     const deleteEdges = trpc.deleteAllEdges.useMutation()
@@ -15,39 +15,44 @@ const ImportNodes = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!file) return;
-        await deleteEdges.mutateAsync()
+
+        // Delete existing edges first
+        await deleteEdges.mutateAsync();
 
         const reader = new FileReader();
+
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);
-            const headers = lines[0].split(',');
+            const inputs: {
+                sourceId: number;
+                targetId: number;
+                weight: number;
+            }[] = [];
 
-            for (let i = 1; i < lines.length; i++) { //skip first line
-                // for each line, split on commas
+            for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',');
 
-                //insert each entry in line into our entry struct
+                // Skip invalid or malformed lines
+                if (values.length < 3) {continue};
+
                 const entry = {
                     sourceId: Number(values[0].trim().replace(/"/g, "")),
                     targetId: Number(values[1].trim().replace(/"/g, "")),
                     weight: Number(values[2].trim().replace(/"/g, "")),
                 };
 
-                if (!entry.sourceId){
-                    return;
-                }
-
-                try {
-                    await makeEdge.mutateAsync(entry);
-                } catch (err) {
-                    console.error('Failed to insert entry:', entry, err);
-                }
+                inputs.push(entry);
             }
+            console.log(inputs)
 
-            alert('CSV successfully uploaded.');
+            try {
+                await makeEdge.mutateAsync(inputs);
+                alert('CSV successfully uploaded.');
+            } catch (err) {
+                console.error('Failed to insert nodes:', err);
+            }
         };
 
         reader.readAsText(file);
@@ -63,4 +68,4 @@ const ImportNodes = () => {
 };
 
 
-export default ImportNodes;
+export default ImportEdges;

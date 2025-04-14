@@ -32,9 +32,6 @@ model service_request {
   additional_comments String?
   assigned_employee   String?
   employee            employee? @relation(fields: [assigned_employee], references: [id])
-  email               String?
-  phone_num           String?
-  room_num            Int?
 
   sanitation  Sanitation?
   language    Language?

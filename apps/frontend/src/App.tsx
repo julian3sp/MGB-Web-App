@@ -12,7 +12,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
 import DirectoryPage from './routes/DirectoryPage';
-import { SanitationRequestPage } from './routes/SanitationRequestPage';
 
 
 
@@ -54,7 +53,6 @@ function App() {
                 <Route path="/navigation" element={<NavigationPage />} />
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/services" element={<ServiceRequestPage />} />
-                <Route path="/sanitationRequest" element={<SanitationRequestPage />} />
                 <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />

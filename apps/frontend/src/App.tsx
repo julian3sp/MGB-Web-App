@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './styles/mainStyles.css';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import SignInPage from './routes/SignInPage';
-import CreateAccountPage from './routes/CreateAccountPage';
 import DepartmentDirectory from './routes/departmentDirectory/DepartmentDirectory.tsx';
 import ServiceRequestPage from './routes/ServiceRequestPage';
 import RequestListPage from './routes/requestDisplay/RequestListPage.tsx'
@@ -50,8 +48,6 @@ function App() {
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
-                <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
-                <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
                 <Route path="/navigation" element={<NavigationPage />} />
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/services" element={<ServiceRequestPage />} />
@@ -62,6 +58,7 @@ function App() {
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/admin/directory" element={<DirectoryPage />} />
+                <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>
             </QueryClientProvider>

@@ -36,12 +36,13 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.3.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
     "@prisma/client": "^6.6.0",
     "@radix-ui/react-switch": "^1.1.4",
     "common": "workspace:*",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "dotenv-cli": "^7.4.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

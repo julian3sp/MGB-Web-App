@@ -1,6 +1,6 @@
-import {trpc} from "../lib/trpc.ts";
-import DepartmentRoutes from "./DepartmentRoutes.tsx";
-import DepartmentList from "../components/DepartmentList.ts";
+import {trpc} from "../../lib/trpc.ts";
+import DepartmentRoutes from "../departmentDirectory/DepartmentRoutes.tsx";
+import DepartmentList from "../../components/DepartmentList.ts";
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
 
@@ -41,8 +41,13 @@ export default function RequestListPage(){
 
     return(
         <nav className="flex flex-1">
-            <nav className="w-1/3 min-h-[85vh] bg-white p-6 border font-[Poppins]"  style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}>
-                <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Service Requests:</h2> {/*Header for list of departments on page*/}
+            <nav className="w-1/3 min-h-[85vh] bg-white p-6 font-[Poppins] overflow-hidden"  style={{
+                borderTop: '2px solid #d9d9d9',
+                borderBottom: '2px solid #005E64',
+                borderRight: '2px solid #d9d9d9',
+                borderLeft: 'none',
+            }}>
+                <h3 className="text-xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Select a Request:</h3> {/*Header for list of departments on page*/}
 
                 {data && data.length > 0 ? (
                     data?.map((res) => (
@@ -52,6 +57,7 @@ export default function RequestListPage(){
                                 className={`w-full text-left block p-5 border rounded ${selectedRequest?.request_id == res.request_id 
                                     ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put requests in rounded rectangle boxes*/
                             }
+                                style={{ borderColor: '#005E64', borderWidth: '1 px', borderStyle: 'solid' }}
                             >
                                 {res.request_id}. {res.request_type} | {res.location}
                             </button>
@@ -64,8 +70,13 @@ export default function RequestListPage(){
                 )} {/*ex: "1. Language Interpreter | Room #201"*/}
             </nav>
 
-            <div className="h-auto flex-1 bg-white p-6 border" style={{ borderColor: '#005E64', borderWidth: '2px', borderStyle: 'solid' }}> {/*Border styling*/}
-                <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Request Details:</h2>
+            <div className="h-auto flex-1 bg-white p-6" style={{
+                borderTop: '2px solid #d9d9d9',
+                borderBottom: '2px solid #005E64',
+                borderRight: 'none',
+                borderLeft: '2px solid #d9d9d9',
+            }}> {/*Border styling*/}
+                <h3 className="text-xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Request Details:</h3>
                 {selectedRequest ? (
                     <nav className="border p-6 rounded-lg"  style={{ borderColor: '#005E64'}}>
                         <div>

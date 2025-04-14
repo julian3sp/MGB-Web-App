@@ -31,35 +31,46 @@ export async function deleteEmployees(employee_ids: string[], client: PrismaClie
 }
 export async function insertServiceRequest(
     name: string,
-    email: string,
-    phone_num: string,
-    room: number,
+    priority: string,
+    location: string,
+    department: string,
     request_type: string,
-    employee_id: string,
-    lang: string,
-    additional_comments: string,
-    assigned_employee: string | null,
+    status: string,
     client: PrismaClient,
+    language: string,
+    cleaningType: string,
+    additional_comments?: string,
 ) {
     try {
         const newServiceRequest = await client.service_request.create({
             data: {
                 name: name,
-                email: email,
-                phone_num: phone_num,
-                room_num: room,
+                priority: priority,
+                location: location,
+                department: department,
+                status: status,
                 request_type: request_type,
-                employee_id: employee_id,
                 additional_comments: additional_comments,
-                language: lang,
-                assigned_employee: assigned_employee,
+                ...(request_type === 'language' && {
+                    language: {
+                        create: {
+                            language: language,
+                        }
+                    },
+                }),
+                ...(request_type === 'sanitation' && {
+                    sanitation: {
+                        create: {
+                            cleaningType: cleaningType,
+                        }
+                    },
+                }),
             },
         });
         console.log(newServiceRequest);
     } catch (error) {
-        console.log(error);
+        console.error('error creating service request', name, request_type);
         return;
-        console.error('error creating employee', room, lang, assigned_employee);
     }
 }
 

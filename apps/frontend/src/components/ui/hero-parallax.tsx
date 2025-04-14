@@ -7,6 +7,8 @@ import {
   useSpring,
   MotionValue,
 } from "motion/react";
+import {Link, useLocation} from "react-router-dom";
+import logo from "../../../assets/Mass-General-Brigham-Logo.png";
 
 export const HeroParallax = ({
   products,
@@ -162,3 +164,7 @@ export const ProductCard = ({
     </motion.div>
   );
 };
+
+
+
+

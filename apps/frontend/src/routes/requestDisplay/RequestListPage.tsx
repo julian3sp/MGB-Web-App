@@ -8,15 +8,16 @@ import {useState} from "react";
 type ServiceRequest = {
     request_id: number
     name: string
-    email: string
-    phone_num: string
-    room_num: number
+    priority: string
+    location: string
+    department: string
+    status: string
     request_type: string
     request_date: string
-    employee_id: string
+    employee_id: string | null
     additional_comments: string | null
     assigned_employee: string | null
-    language: string | null
+    language: string
 };
 
 function formatPhoneNumber(phone: string): string {
@@ -58,7 +59,7 @@ export default function RequestListPage(){
                             }
                                 style={{ borderColor: '#005E64', borderWidth: '1 px', borderStyle: 'solid' }}
                             >
-                                {res.request_id}. {res.request_type} | Room #{res.room_num}
+                                {res.request_id}. {res.request_type} | {res.location}
                             </button>
                         </ul>
                     ))
@@ -79,7 +80,7 @@ export default function RequestListPage(){
                 {selectedRequest ? (
                     <nav className="border p-6 rounded-lg"  style={{ borderColor: '#005E64'}}>
                         <div>
-                            <h2 className="text-2xl font-bold border-b pb-2 mb-4" style={{ color: '#003A96'}}>{selectedRequest.request_id}. {selectedRequest.request_type} ({selectedRequest.language}) - Room #{selectedRequest.room_num} ({selectedRequest.name}): </h2>
+                            <h2 className="text-2xl font-bold border-b pb-2 mb-4" style={{ color: '#003A96'}}>{selectedRequest.request_id}. {selectedRequest.request_type} ({selectedRequest.language}) - Room #{selectedRequest.location} ({selectedRequest.name}): </h2>
                             {/*Will need to change once more forms are added. Currently prints the language field after the request type (Language Interpreter (English)), will likely not apply for future forms*/}
 
                             <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Name: </h3>
@@ -89,7 +90,7 @@ export default function RequestListPage(){
 
                             <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Room Number: </h3>
                             <ul className="list-disc ml-6 mb-4">
-                                <p>#{selectedRequest.room_num}</p>
+                                <p>#{selectedRequest.location}</p>
                             </ul> {/*#RoomNumber*/}
 
                             <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Language: </h3>
@@ -100,9 +101,9 @@ export default function RequestListPage(){
                             <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64'}}>Contact Information: </h3>
                             <ul className="list-disc ml-6 mb-4">
                                 <p>
-                                    Phone: {formatPhoneNumber(selectedRequest.phone_num)}
+                                    Phone: {formatPhoneNumber(selectedRequest.location)}
                                     <br/>
-                                    Email: {selectedRequest.email}
+                                    Email: {selectedRequest.location}
                                 </p>
                             </ul> {/*Phone: #
                                     Email: #

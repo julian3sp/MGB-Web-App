@@ -73,7 +73,7 @@ export function SanitationRequestForm() {
             errors.status = 'Please set a status';
         }
 
-        if (!cleaningType) {
+        if (!cleaningType && type === 'sanitation') {
             errors.cleaningType = 'Please set a cleaning type';
         }
 

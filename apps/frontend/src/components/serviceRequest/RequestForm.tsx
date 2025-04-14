@@ -12,16 +12,11 @@ import Modal from './modal.tsx';
 type requestFormProps = {
     title: string;
     type: string;
-    uniqueObject: string;
 };
 
-type errorProps = {
+type errorProps =
+    {
     name: string,
-    email: string,
-    phoneNumber: string,
-    employeeID: string,
-    request: string,
-    roomNumber: string,
     comments: string,
     department: string,
     priority: string,
@@ -31,14 +26,9 @@ type errorProps = {
     language: string,
 }
 
-function RequestForm({ title, type, uniqueObject }: requestFormProps) {
+function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [employeeID, setEmployeeID] = useState('');
-    const [request, setRequest] = useState('');
-    const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
     const [priority, setPriority] = useState<string>("");
     const [location, setLocation] = useState<string>("");
@@ -50,15 +40,10 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         name: '',
-        email: '',
         priority: '',
         location: '',
         department: '',
         status: '',
-        phoneNumber: '',
-        employeeID: '',
-        request: '',
-        roomNumber: '',
         comments: '',
         cleaningType: '',
         language: '',
@@ -67,15 +52,10 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
     const Validate = (): boolean => {
         const errors: errorProps = {
             name: '',
-            email: '',
             priority: '',
             location: '',
             department: '',
             status: '',
-            phoneNumber: '',
-            employeeID: '',
-            request: '',
-            roomNumber: '',
             comments: '',
             cleaningType: '',
             language: '',
@@ -83,61 +63,45 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
 
         if (!name) {
             errors.name = "Name is required";
+            console.log('name-r');
         } else if (name.length < 2) {
             errors.name = `Name must be at least two characters`;
+            console.log('name-l');
+
         } else if (!/^[a-zA-Z\s'-]+$/.test(name)) {
             errors.name = "Name contains invalid characters";
+            console.log('name-t');
+
         }
 
-        if (!email) {
-            errors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            errors.email = "Email is invalid";
-        }
-
-        if (!phoneNumber) {
-            errors.phoneNumber = "Phone number is required";
-        }
-        else if (phoneNumber.length < 10) {
-            errors.phoneNumber = "Phone number is too short";
-        }
-
-        if (!employeeID) {
-            errors.employeeID = "Employee ID is required";
-        } else if (employeeID.length < 9) {
-            errors.employeeID = `Employee ID must be at least 9 characters`;
-        }
-
-        if (!roomNumber) {
-            errors.roomNumber = "Room number is required";
-        }
-
-        if (!request) {
-            errors.request = "Please select a request type";
-        }
-
-        if (!language) {
+        if (!language && type === 'language') {
             errors.language = "Please select a language";
+            console.log('language error');
         }
 
         if (!department) {
             errors.department = 'Please set a department';
+            console.log('department error');
         }
 
         if (!location) {
             errors.location = 'Please set a location';
+            console.log('location error');
         }
 
         if (!status) {
             errors.status = 'Please set a status';
+            console.log('status error');
         }
 
         if (!priority) {
             errors.priority = 'Please set a priority';
+            console.log('priority error');
         }
 
-        if (!cleaningType) {
+        if (!cleaningType && type ==='sanitation') {
             errors.priority = 'Please set a cleaning type';
+            console.log('cleaningType error');
         }
 
         setErrors(errors);
@@ -150,6 +114,7 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
         const isValid = form.checkValidity(); // Now
 
         if (Validate()) {
+            console.log('submission error')
             return;
         }
         else{setOpen(true);}
@@ -161,12 +126,12 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
             department: department,
             status: status,
             request_type: type,
-            ...(type === 'language' && {
+            ...(type === 'Language' && {
                 language: {
                     language: language,
                 },
             }),
-            ...(type === 'sanitation' && {
+            ...(type === 'Sanitation' && {
                 sanitation: {
                     cleaningType: cleaningType,
                 },
@@ -177,13 +142,25 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
     };
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setEmail('');
         setName('');
-        setPhoneNumber('');
-        setEmployeeID('');
-        setRequest('');
-        setRoomNumber('');
         setComments('');
+        setLocation('');
+        setDepartment('');
+        setStatus('');
+        setPriority('');
+        setLanguage('');
+        setCleaningType('');
+
+        setErrors({
+            name: '',
+            priority: '',
+            location: '',
+            department: '',
+            status: '',
+            comments: '',
+            cleaningType: '',
+            language: '',
+        });
     };
 
 
@@ -211,7 +188,7 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
                                     setState={setName}
                                     placeholder="Name"
                                     width="w-full"
-                                    error={errors.email}/>
+                                    error={errors.name}/>
                             </div>
 
                             <div>
@@ -267,22 +244,31 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
 
 
                             <div>
-                                <InputHeader>{uniqueObject}</InputHeader>
 
-                                {type === "language" ? <ServiceComponentInputBox
-                                    value={language}
-                                    setState={setLanguage}
-                                    placeholder={"Language"}
-                                    width="w-full"
-                                    error={errors.language}/> : null}
+                                {type === "Language" ?
+                                    <>
+                                        <InputHeader>Language</InputHeader>
+                                        <ServiceComponentInputBox
+                                        value={language}
+                                        setState={setLanguage}
+                                        placeholder={"Language"}
+                                        width="w-full"
+                                        error={errors.language}/>
+                                    </>
+                                    : null}
 
-                                {type === "sanitation" ? <ServiceComponentDropdown
-                                    value={cleaningType}
-                                    setState={setCleaningType}
-                                    placeholder={"Select Cleaning"}
-                                    width={"w-full"}
-                                    error={errors.cleaningType}
-                                    options={["General Disinfecting", "Special Cleaning", "PPE", "Janitorial Services"]}/> : null}
+                                {type === "Sanitation" ?
+                                    <>
+                                        <InputHeader>Cleaning Needed</InputHeader>
+                                        <ServiceComponentDropdown
+                                        value={cleaningType}
+                                        setState={setCleaningType}
+                                        placeholder={"Select Cleaning"}
+                                        width={"w-full"}
+                                        error={errors.cleaningType}
+                                        options={["General Disinfecting", "Special Cleaning", "PPE", "Janitorial Services"]}/>
+                                    </>
+                                    : null}
                             </div>
                         </div>
                         <div className={'mr-5 ml-5'}>
@@ -296,7 +282,7 @@ function RequestForm({ title, type, uniqueObject }: requestFormProps) {
 
                         {/* Buttons */}
                         <div className=" flex  gap-5 justify-center">
-                            <ResetButton label={'Reset'} />
+                            <ResetButton label={'Reset'} type={"reset"}/>
                             <SubmitButton
                                 label={'Submit'}
                                 type={'submit'}/>

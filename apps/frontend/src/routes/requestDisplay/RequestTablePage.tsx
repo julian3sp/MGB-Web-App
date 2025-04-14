@@ -58,16 +58,43 @@ export default function RequestTablePage() {
                                         Request ID
                                     </h3>
                             </th>
+
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Request Type
                                 </h3>
                             </th>
+
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Request Date
+                                    Priority
                                 </h3>
                             </th>
+
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Request Details
+                                </h3>
+                            </th>
+
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Location
+                                </h3>
+                            </th>
+
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Department
+                                </h3>
+                            </th>
+
+                            <th className="p-4 border-b border-gray-300">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Status
+                                </h3>
+                            </th>
+
                             <th className="p-4 border-b border-gray-300">
                                 <p className="block font-bold font-[Poppins] text-sm text-blue-gray-900">
                                     <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
@@ -75,36 +102,19 @@ export default function RequestTablePage() {
                                     </h3>
                                 </p>
                             </th>
+
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Location
+                                    Request Date
                                 </h3>
                             </th>
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Department
-                                </h3>
-                            </th>
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Priority
-                                </h3>
-                            </th>
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Status
-                                </h3>
-                            </th>
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Info
-                                </h3>
-                            </th>
+
                             <th className="p-4 border-b border-gray-300">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Additional Comments
                                 </h3>
                             </th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -121,20 +131,40 @@ export default function RequestTablePage() {
                                     </p>
                                 </td>
                                 <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {new Date(res.request_date).toLocaleDateString(undefined, {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: 'numeric',
-                                            minute: 'numeric',
-                                            second: 'numeric',
-                                        })}
-                                    </p>
+                                    <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
+                                        {res.sanitation?.cleaningType && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Cleaning Type:</span>
+                                                <span>{res.sanitation.cleaningType}</span>
+                                            </div>
+                                        )}
+                                        {res.language?.targetLanguage && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Target Language:</span>
+                                                <span>{res.language.targetLanguage}</span>
+                                            </div>
+                                        )}
+                                        {res.sanitation?.contaminant && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Contaminant:</span>
+                                                <span>{res.sanitation.contaminant}</span>
+                                            </div>
+                                        )}
+                                        {res.language?.sourceLanguage && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Source Language:</span>
+                                                <span>{res.language.sourceLanguage}</span>
+                                            </div>
+                                        )}
+                                    </div> {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.name} (Employee ID: {res.employee_id})
+                                        {res.sanitation?.cleaningType ? `Cleaning Type: ${res.sanitation?.cleaningType}` : ""}
+                                        {res.language?.targetLanguage ? `Target Language: ${res.language?.targetLanguage}` : ""}
+                                        <br/>
+                                        {res.sanitation?.contaminant ? `Contaminant: ${res.sanitation?.contaminant}` : ""}
+                                        {res.language?.sourceLanguage ? `Source Language: ${res.language?.sourceLanguage}` : ""}
                                     </p>
                                 </td>
                                 <td className="p-4">
@@ -149,19 +179,24 @@ export default function RequestTablePage() {
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.priority}
-                                    </p>
-                                </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.status}
                                     </p>
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.sanitation?.cleaningType || res.language?.targetLanguage}
-                                        <br />
-                                        {res.sanitation?.contaminant || res.language?.sourceLanguage}
+                                        {res.name} ({res.employee_id})
+                                    </p>
+                                </td>
+                                <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {new Date(res.request_date).toLocaleDateString(undefined, {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            second: 'numeric',
+                                        })}
                                     </p>
                                 </td>
                                 <td className="p-4">

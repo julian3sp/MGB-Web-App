@@ -60,6 +60,20 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                                 title: "Security Request Form",
                             })}
                         />
+                        <RequestButton
+                            label={'Transportation Request Form'}
+                            onClick={() => handleFormRequest({
+                                type: "Transportation",
+                                title: "Transportation Request Form",
+                            })}
+                        />
+                        <RequestButton
+                            label={'Audio/Visual Request Form'}
+                            onClick={() => handleFormRequest({
+                                type: "AudioVisual",
+                                title: "Audio/Visual Request Form",
+                            })}
+                        />
                     </div>
 
                 </div>

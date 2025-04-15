@@ -262,7 +262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.8, @babel/runtime@npm:^7.24.7, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.23.8, @babel/runtime@npm:^7.24.7, @babel/runtime@npm:^7.24.8, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.7":
   version: 7.27.0
   resolution: "@babel/runtime@npm:7.27.0"
   dependencies:
@@ -4302,6 +4302,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^7.5.0"
+    react-social-icons: "npm:^6.24.0"
     serve: "npm:^14.2.0"
     tailwind-merge: "npm:^3.2.0"
     tailwindcss: "npm:^4.0.17"
@@ -6632,6 +6633,18 @@ __metadata:
     react-dom:
       optional: true
   checksum: 10/ff1c889a1eb78dbff034bffa9efc29c72031c20b6358d557312ae7aaff58bb8c1596b8dcc8b8c259a30ed9f15806763e5534904a1b44fd33179ed12be9a9aebe
+  languageName: node
+  linkType: hard
+
+"react-social-icons@npm:^6.24.0":
+  version: 6.24.0
+  resolution: "react-social-icons@npm:6.24.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.24.8"
+  peerDependencies:
+    react: 16.x.x || 17.x.x || 18.x.x || 19.x.x
+    react-dom: 16.x.x || 17.x.x || 18.x.x || 19.x.x
+  checksum: 10/0630ce924cb43cae06ba88ac1ee0185e909fce7ddd7b0414b34bec23c6077a996eeef510a37f31899d16cd18bfb7c177c3884c9fad89dcad6cecc0aa52d4a910
   languageName: node
   linkType: hard
 

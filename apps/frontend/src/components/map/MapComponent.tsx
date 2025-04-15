@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+// MapComponent.tsx
+
+import React, { useState, useEffect, useRef } from 'react';
 import MapRenderer from './MapRenderer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
@@ -6,6 +8,8 @@ import DepartmentDropdown from './DepartmentDropdown';
 import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import icon from '../../../assets/icon.png';
+import FloorSelector from './FloorSelector';
+import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -20,6 +24,8 @@ const MapComponent: React.FC = () => {
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
+  const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
+  const [selectedFloor, setSelectedFloor] = useState<3 | 4>(3);
   const [travelTimes, setTravelTimes] = useState<TravelTimes>({
     driving: null,
     transit: null,
@@ -54,6 +60,18 @@ const MapComponent: React.FC = () => {
     setMapInstance(map);
     setDirectionsService(service);
     setDirectionsRenderer(renderer);
+  };
+
+  const handleFloorSelect = (floor: 3 | 4) => {
+    setSelectedFloor(floor);
+  };
+
+  // Zoom-to-Destination button handler
+  const handleZoomToDestination = () => {
+    if (mapInstance && selectedPlace) {
+      mapInstance.setCenter(selectedPlace.location);
+      mapInstance.setZoom(19);
+    }
   };
 
   // When the user selects a starting location.
@@ -129,8 +147,8 @@ const MapComponent: React.FC = () => {
             name: 'Your location',
             location: {
               lat: position.coords.latitude,
-              lng: position.coords.longitude
-            }
+              lng: position.coords.longitude,
+            },
           };
           handleStartLocationSelected(location);
         },
@@ -146,51 +164,56 @@ const MapComponent: React.FC = () => {
     start: { name: string; location: google.maps.LatLngLiteral },
     end: { name: string; location: google.maps.LatLngLiteral }
   ) => {
-    console.log('Attempting to display route:', { start, end });
-
     if (!mapInstance || !directionsService || !directionsRenderer) {
       console.warn('Map components not ready');
       return;
     }
-
+  
     // Clear existing routes and markers.
     directionsRenderer.setMap(null);
     directionsRenderer.setMap(mapInstance);
-
+  
     const request: google.maps.DirectionsRequest = {
       origin: start.location,
       destination: end.location,
-      travelMode: google.maps.TravelMode[
-        selectedTransport.toUpperCase() as keyof typeof google.maps.TravelMode
+      travelMode: google.maps.DirectionsTravelMode[
+        selectedTransport.toUpperCase() as keyof typeof google.maps.DirectionsTravelMode
       ],
     };
-
+  
     console.log('Calculating route with request:', request);
-
+  
     directionsService.route(request, (result, status) => {
       console.log('Route calculation result:', { status, result });
-
+  
       if (status === google.maps.DirectionsStatus.OK && result) {
         mapInstance.setOptions({ draggableCursor: 'default' });
-
-        // Add markers.
+  
+        // Add the start marker.
         new google.maps.Marker({
           position: start.location,
           map: mapInstance,
           title: start.name,
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
         });
-
-        new google.maps.Marker({
+  
+        // Remove any previous destination marker.
+        if (destinationMarkerRef.current) {
+          destinationMarkerRef.current.setMap(null);
+        }
+  
+        // Create the destination marker (red) and store its reference.
+        const destMarker = new google.maps.Marker({
           position: end.location,
           map: mapInstance,
           title: end.name,
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
         });
-
+        destinationMarkerRef.current = destMarker;
+  
         // Set the directions.
         directionsRenderer.setDirections(result);
-
+  
         // Fit bounds to the route.
         if (result.routes[0] && result.routes[0].bounds) {
           mapInstance.fitBounds(result.routes[0].bounds);
@@ -200,6 +223,16 @@ const MapComponent: React.FC = () => {
         setError('Could not calculate route');
       }
     });
+  };
+
+  const handleZoomChange = (zoom: number) => {
+    if (destinationMarkerRef.current) {
+      if (zoom >= 19) {
+        destinationMarkerRef.current.setVisible(false);
+      } else {
+        destinationMarkerRef.current.setVisible(true);
+      }
+    }
   };
 
   // Update route when transport mode or locations change.
@@ -232,6 +265,18 @@ const MapComponent: React.FC = () => {
           }}
           handleGetCurrentLocation={handleGetCurrentLocation}
         />
+
+        {selectedPlace && (
+          <button
+            onClick={handleZoomToDestination}
+            className="w-[90%] bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
+                         transition-all duration-300 ease-in-out
+                         hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
+                         active:scale-95 mx-auto"
+          >
+            Zoom to Destination
+          </button>
+        )}
 
         {/* Hospital Map Section */}
         <div className="flex flex-col mt-10">
@@ -278,11 +323,17 @@ const MapComponent: React.FC = () => {
 
       {/* Right Column: Map area */}
       <div className="w-3/4 relative">
-        {/* Google Map */}
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <MapRenderer onMapReady={handleMapReady} />
+          <MapRenderer 
+            onMapReady={handleMapReady} 
+            selectedDestination={selectedPlace} 
+            onZoomChange={handleZoomChange}
+            selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
+          />
+          {selectedPlace?.name === "22 Patriot Place" && (
+            <FloorSelector selectedFloor={selectedFloor} onSelect={handleFloorSelect} />
+          )}
         </div>
-        {/* Hospital Map */}
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <DrawingPath
             key={selectedDepartment?.name}
@@ -290,14 +341,12 @@ const MapComponent: React.FC = () => {
             destination={selectedDepartment?.name ?? "south entrance"}
           />
         </div>
-        {/* Loading Screen */}
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
             <p className="text-[#003a96] font-medium">Loading map...</p>
           </div>
         </div>
-        {/* Animation and Text */}
         <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 transition-all duration-500 ease-in-out ${showMap || showHospitalMap || isLoading ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
           <div className="z-10 -mt-80 text-black">
             {showText && <TextGenerateEffectDemo />}

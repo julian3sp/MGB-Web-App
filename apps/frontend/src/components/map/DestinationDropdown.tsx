@@ -16,7 +16,7 @@ const destinations = [
   },
   {
     name: "20 Patriot Place",
-    location: { lat: 42.0909, lng: -71.2644 }
+    location: { lat: 42.09236331125932, lng:  -71.26640880069897 }
   },
   {
     name: "22 Patriot Place",

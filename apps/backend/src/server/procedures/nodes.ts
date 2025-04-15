@@ -9,6 +9,7 @@ export const makeNode = publicProcedure
             z.object({
                 building: z.string(),
                 floor: z.number(),
+                name: z.string(),
                 x: z.number(),
                 y: z.number(),
             })

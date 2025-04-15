@@ -53,49 +53,43 @@ export default function RequestTablePage() {
                 <table className="w-full text-left table-auto min-w-max w-fit">
                     <thead className="bg-gray-200">
                         <tr>
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
                                     <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                         Request ID
                                     </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Request Type
-                                </h3>
-                            </th>
-
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Priority
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Request Type
+                                </h3>
+                            </th>
+
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[150px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Request Details
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Location
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Department
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
-                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Status
-                                </h3>
-                            </th>
-
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[150px]">
                                 <p className="block font-bold font-[Poppins] text-sm text-blue-gray-900">
                                     <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                         Name (Employee ID)
@@ -103,15 +97,21 @@ export default function RequestTablePage() {
                                 </p>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Request Date
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                                     Additional Comments
+                                </h3>
+                            </th>
+
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]">
+                                <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
+                                    Status
                                 </h3>
                             </th>
 
@@ -120,106 +120,119 @@ export default function RequestTablePage() {
                     <tbody>
                         {data?.map((res) => (
                             <tr key={res.request_id} className="even:bg-gray-100">
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[75px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.request_id}
                                     </p>
                                 </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.request_type}
-                                    </p>
-                                </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[75px]">
+                                    <p className={`block font-[Poppins] text-med font-semibold ${
+                                        res.priority === "Low"
+                                            ? "text-green-600"
+                                            : res.priority === "Medium"
+                                                ? "text-yellow-500"
+                                                : res.priority === "High"
+                                                    ? "text-red-500"
+                                                    : res.priority === "Emergency"
+                                                        ? "text-red-700 underline"
+                                                        : "text-blue-gray-900"
+                                    }`}>
                                         {res.priority}
                                     </p>
                                 </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[100px]">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
+                                        {res.request_type}
+                                    </p>
+                                </td>
+
+                                <td className="p-4 whitespace=normal break-words max-w-[150px]">
                                     <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                         {res.sanitation?.cleaningType && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Cleaning Type:</span>
-                                                <span>{res.sanitation.cleaningType}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Cleaning Type:</ul></span>
+                                                <p className="pl-4 py-2">{res.sanitation.cleaningType}</p>
                                             </div>
                                         )}
                                         {res.language?.targetLanguage && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Target Language:</span>
-                                                <span>{res.language.targetLanguage}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Target Language:</ul></span>
+                                                <p className="pl-4 py-2">{res.language.targetLanguage}</p>
                                             </div>
                                         )}
                                         {res.audioVisual?.accommodationType && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Accommodation Type:</span>
-                                                <span>{res.audioVisual.accommodationType}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Accommodation Type:</ul></span>
+                                                <p className="pl-4 py-2">{res.audioVisual.accommodationType}</p>
                                             </div>
                                         )}
                                         {res.transportation?.transportationType && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Transportation Type:</span>
-                                                <span>{res.transportation.transportationType}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Transportation Type:</ul></span>
+                                                <p className="pl-4 py-2">{res.transportation.transportationType}</p>
                                             </div>
                                         )}
                                         {res.security?.accessZones && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Access Zones:</span>
-                                                <span>{res.security.accessZones}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Access Zones:</ul></span>
+                                                <p className="pl-4 py-2">{res.security.accessZones}</p>
                                             </div>
                                         )}
                                         {res.request_type === "Sanitation" && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Contaminant:</span>
-                                                <span>{res.sanitation?.contaminant?.trim() ? res.sanitation.contaminant : "N/A"}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Contaminant:</ul></span>
+                                                <p className="pl-4 py-2">{res.sanitation?.contaminant?.trim() ? res.sanitation.contaminant : "N/A"}</p>
                                             </div>
                                         )}
                                         {res.language?.sourceLanguage && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Source Language:</span>
-                                                <span>{res.language.sourceLanguage}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Source Language:</ul></span>
+                                                <p className="pl-4 py-2">{res.language.sourceLanguage}</p>
                                             </div>
                                         )}
                                         {res.request_type === "AudioVisual" && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Accommodation Details:</span>
-                                                <span>{res.audioVisual?.accommodationDetails?.trim() ? res.audioVisual.accommodationDetails : "N/A"}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Accommodation Details:</ul></span>
+                                                <p className="pl-4 py-2">{res.audioVisual?.accommodationDetails?.trim() ? res.audioVisual.accommodationDetails : "N/A"}</p>
                                             </div>
                                         )}
                                         {res.transportation?.transportationDestination && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Transportation Destination:</span>
-                                                <span>{res.transportation.transportationDestination}</span>
+                                            <div className="pl-4">
+                                                <span className="underline w-45 pl-4"><ul>Transportation Destination:</ul></span>
+                                                <p className="pl-4 py-2">{res.transportation.transportationDestination}</p>
                                             </div>
                                         )}
                                         {res.security?.securityIssue && (
-                                            <div className="flex">
-                                                <span className="font-semibold w-40">Security Issue:</span>
-                                                <span>{res.security.securityIssue}</span>
+                                            <div className="pl-4">
+                                                <span className="underline pl-4"><ul>Security Issue:</ul></span>
+                                                <p className="pl-4 py-2">{res.security.securityIssue}</p>
                                             </div>
                                         )}
                                     </div> {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
                                 </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[150px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.location}
                                     </p>
                                 </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[100px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.department}
                                     </p>
                                 </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.status}
-                                    </p>
-                                </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[50px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.name} ({res.employee_id})
                                     </p>
                                 </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[50px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {new Date(res.request_date).toLocaleDateString(undefined, {
                                             year: 'numeric',
@@ -231,11 +244,29 @@ export default function RequestTablePage() {
                                         })}
                                     </p>
                                 </td>
-                                <td className="p-4">
+
+                                <td className="p-4 whitespace=normal break-words max-w-[125px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.additional_comments}
+                                        <i>{res.additional_comments}</i>
                                     </p>
                                 </td>
+
+                                <td className="p-4 whitespace=normal break-words max-w-[75px]">
+                                    <p className={`block font-[Poppins] text-med ${
+                                        res.status === "Unassigned"
+                                            ? "text-gray-500"
+                                            : res.status === "Assigned"
+                                                ? "text-blue-600"
+                                                : res.status === "Working"
+                                                    ? "text-amber-600"
+                                                    : res.status === "Done"
+                                                        ? "text-green-600"
+                                                        : "text-blue-gray-900"
+                                    }`}>
+                                        {res.status}
+                                    </p>
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>

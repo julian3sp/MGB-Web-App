@@ -61,7 +61,7 @@ export default function RequestPage() {
                         <div className="relative">
                             <button
                                 onClick={() => setShowFilterPanel((prev) => !prev)}
-                                className="px-4 py-2 border rounded text-white bg-blue-600 hover:bg-blue-700"
+                                className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96]"
                             >
                                 Filters
                             </button>
@@ -242,7 +242,7 @@ export default function RequestPage() {
                                     department: [],
                                 })
                             }
-                            className="px-4 py-2 border rounded text-white bg-red-700 hover:bg-red-900"
+                            className="px-4 py-2 border rounded text-white bg-red-600 hover:bg-red-900"
                         >
                             Reset Filters
                         </button>

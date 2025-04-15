@@ -41,8 +41,8 @@ export default function RequestTablePage() {
     const sortedData = (filteredData ? [...filteredData] : []).sort((a, b) => {
         if (!sortKey) return 0;
 
-        const aVal = a[sortKey as keyof typeof a];
-        const bVal = b[sortKey as keyof typeof b];
+        const aVal = a[sortKey];
+        const bVal = b[sortKey];
 
         if (sortKey === 'priority') {
             return (
@@ -93,7 +93,7 @@ export default function RequestTablePage() {
                             <thead className="bg-gray-200">
                                 <tr>
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[45px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[60px]"
                                         onClick={() => {
                                             if (sortKey === 'request_id') setAscending(!ascending);
                                             else {
@@ -111,7 +111,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[85px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[90px]"
                                         onClick={() => {
                                             if (sortKey === 'request_type')
                                                 setAscending(!ascending);
@@ -131,7 +131,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[65px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100p]"
                                         onClick={() => {
                                             if (sortKey === 'priority') setAscending(!ascending);
                                             else {
@@ -190,7 +190,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[125px]"
+                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[120px]"
                                     onClick={() => {
                                         if(sortKey === 'name') setAscending(!ascending);
                                         else {
@@ -203,7 +203,7 @@ export default function RequestTablePage() {
                                                 className="block text-lg font-semibold font-[Poppins]"
                                                 style={{ color: '#003A96' }}
                                             >
-                                                Name (Employee ID) {sortKey === 'name' && (ascending ? '↑' : '↓')}
+                                                Name (ID) {sortKey === 'name' && (ascending ? '↑' : '↓')}
                                             </h3>
                                         </p>
                                     </th>
@@ -233,7 +233,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
+                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[55px]"
                                     onClick={() => {
                                         if(sortKey === 'status') setAscending(!ascending);
                                         else {
@@ -252,20 +252,20 @@ export default function RequestTablePage() {
                             </thead>
                             <tbody>
                                 {sortedData.map((res) => (
-                                    <tr key={res.request_id} className="even:bg-gray-100">
-                                        <td className="p-4 whitespace=normal break-words max-w-[25px]">
+                                    <tr key={res.request_id} className="even:bg-gray-100 pt-0 pb-0">
+                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[85px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
                                                 <i>{res.request_type}</i>
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[65px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[110px] pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med font-semibold ${
                                                     res.priority === 'Low'
@@ -283,7 +283,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[140px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[160px] pt-0 pb-2">
                                             <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
@@ -397,25 +397,25 @@ export default function RequestTablePage() {
                                             {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[150px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[150px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.location}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[100px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[130px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.department}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.name} ({res.employee_id})
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {new Date(res.request_date).toLocaleDateString(
                                                     undefined,
@@ -431,7 +431,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[100px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
                                                     <i>{res.additional_comments}</i>
@@ -441,7 +441,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[65px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[115px] pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
                                                     res.status === 'Unassigned'

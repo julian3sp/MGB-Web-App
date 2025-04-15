@@ -7,15 +7,16 @@ export interface Patriot22Overlays {
   floor4Overlay: google.maps.GroundOverlay;
 }
 
+
 export const createPatriot22Overlays = (map: google.maps.Map) => {
-  const lats = [42.09422235,  42.09268377,  42.09224102,  42.09278327];
-  const lngs = [-71.26637901, -71.26648763, -71.26704756, -71.26834947];
+
+  const coordinates: number[] = [42.09324331299805 , 42.092057037968154 , -71.26613936182538 , -71.26758041972694]
 
   const bounds = {
-    north: Math.max(...lats),
-    south: Math.min(...lats),
-    east: Math.max(...lngs),
-    west: Math.min(...lngs),
+    north: coordinates[0],
+    south: coordinates[1],
+    east: coordinates[2],
+    west: coordinates[3],
   };
 
   const floor3Overlay = new google.maps.GroundOverlay(

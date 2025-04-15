@@ -24,6 +24,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
+  const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot22Overlays | null>(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // Refs to track current opacity (for fade animation)

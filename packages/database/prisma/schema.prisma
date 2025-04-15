@@ -37,6 +37,7 @@ model service_request {
 model directory {
   id        Int    @id @default(autoincrement())
   name      String
+  services  String
   location  String
   telephone String
 }

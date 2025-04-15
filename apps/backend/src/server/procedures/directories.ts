@@ -12,6 +12,7 @@ export const makeDirectories = publicProcedure
     .input(
         z.object({
             name: z.string(),
+            services: z.string(),
             location: z.string(),
             telephone: z.string(),
         })

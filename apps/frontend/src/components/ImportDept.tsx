@@ -29,11 +29,17 @@ const ImportDept = () => {
                 // for each line, split on commas
                 const values = lines[i].split(',');
 
+                //const servicesArray = values[1].split(',').map(s => s.trim().replace(/"/g, ""));
+                console.log(values[1]);
+                console.log(values[2]);
+
+
                 //insert each entry in line into our entry struct
                 const entry = {
                     name: values[0].trim().replace(/"/g, ""),
-                    location: values[1].trim().replace(/"/g, ""),
-                    telephone: values[2].trim().replace(/"/g, ""),
+                    services: values[1].trim().replace(/"/g, "").replace(/#/g,','),
+                    location: values[2].trim().replace(/"/g, ""),
+                    telephone: values[3].trim().replace(/"/g, ""),
                 };
 
                 if (entry.name.length === 0){

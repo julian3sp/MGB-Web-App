@@ -10,8 +10,8 @@ export interface Patriot22Overlays {
 
 export const createPatriot22Overlays = (map: google.maps.Map) => {
 
-  const coordinates_3: number[] = [42.09322172680363 , 42.09201369047704 , -71.26622819612582 , -71.2677076155335]
-  const coordinates_4: number[] = [42.09314767792817 , 42.09214288457211 , -71.26627145841628 , -71.26757512703385]
+  const coordinates_3: number[] = [42.09319426546392 , 42.09195597432981 , -71.26619891316744 , -71.26765735462097]
+  const coordinates_4: number[] = [42.09317400927991 , 42.092096082400786 , -71.26633478170012 , -71.26760748755561]
 
   const bounds = {
     north: coordinates_3[0],

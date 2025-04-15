@@ -1,11 +1,8 @@
-// MapRenderer.tsx
-
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-// (These imports are now only needed for MGB overlays – you can remove direct references from here.)
 import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
-import { createPatriot22Overlays } from './overlays/22PatriotOverlay';
+import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 
 interface MapRendererProps {
   onMapReady: (
@@ -16,14 +13,17 @@ interface MapRendererProps {
   // Allow selectedDestination to be an object or null.
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
+
+  selectedFloor?: 3 | 4; // For 22 Patriot Place
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange }) => {
+const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange, selectedFloor }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   // For overlays (only for MGB in this example)
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
+  const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // Refs to track current opacity (for fade animation)
@@ -89,6 +89,12 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       setFloorOverlay(null);
     }
     
+    if (patriot22Overlays){
+      // remove previoyus overlays
+      patriot22Overlays.floor3Overlay.setMap(null);
+      patriot22Overlays.floor4Overlay.setMap(null);
+      setPatriot22Overlays(null);
+    }
 
     if (selectedDestination) {
       if (selectedDestination.name === "MGB (Chestnut Hill)") {
@@ -99,11 +105,17 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         createPatriot20Overlays(map);
         // Implement when available.
       } else if (selectedDestination.name === "22 Patriot Place") {
-        createPatriot22Overlays(map);
-        // Implement when available.
+        const overlays = createPatriot22Overlays(map);
+        setPatriot22Overlays(overlays);
       }
     }
   }, [selectedDestination, map]);
+
+  // when the selected floor for 22 Patriot Place changes, update its overlay
+  useEffect(() => {
+    if (!map || !patriot22Overlays) return;
+    updatePatriotPlace22(patriot22Overlays, selectedFloor || 3);
+  }, [selectedFloor, map, patriot22Overlays]);
 
   // Listen to zoom events and animate opacity changes for MGB overlays.
   useEffect(() => {

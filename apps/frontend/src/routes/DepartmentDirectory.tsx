@@ -2,13 +2,17 @@ import React from 'react'
 import { NavLink } from "react-router-dom";
 import DepartmentList from "../components/DepartmentList.ts";
 import DepartmentRoutes from "./DepartmentRoutes.tsx";
+import {trpc} from "../lib/trpc.ts";
 
 
 const DepartmentDirectory = () => {
+    const Directories = trpc.getDirectories.useQuery()
     return (
             <div className="flex flex-1">
                 <nav className="w-1/3 bg-white p-6 border"  style={{ borderColor: '#005E64', borderWidth: '1px', borderStyle: 'solid' }}> {/*Border styling*/}
                     <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Departments:</h2> {/*Header for list of departments on page*/}
+                    {Directories.isLoading && <p>Loading...</p>}
+                    {Directories.error && <p>Error loading directories.</p>}
                     <ul>
                         {/*key is used to track changes,
                      each department name can be clicked on to display information about the department (li and NavLink),
@@ -18,7 +22,7 @@ const DepartmentDirectory = () => {
                      hovering a department will slightly change the shade of the box
                      "to" line sets the URL to the correct department
                      */}
-                        {DepartmentList.map((dept) => (
+                        {Directories.data?.map((dept) => (
                             <li key={dept.id} className="mb-2">
                                 <NavLink
                                     to={`/directory/${dept.id}`}

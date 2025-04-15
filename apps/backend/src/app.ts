@@ -11,6 +11,7 @@ import { getUser, makeUser } from './server/procedures/login.ts';
 import {
     deleteAllDirectories,
     getDirectories,
+    getUniqueDirectories,
     makeDirectories,
 } from './server/procedures/directories.ts';
 import { deleteAllNodes, getAllNodes, getNode, makeNode } from './server/procedures/nodes.ts';
@@ -30,6 +31,7 @@ const appRouter = t.router({
     makeUser: makeUser,
     makeDirectory: makeDirectories,
     getDirectories: getDirectories,
+    getUniqueDirectory: getUniqueDirectories,
     deleteAllDirectories: deleteAllDirectories,
     makeNode: makeNode,
     getNode: getNode,

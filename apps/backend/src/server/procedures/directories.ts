@@ -8,6 +8,23 @@ export const getDirectories = publicProcedure.query(async () => {
     return client.directory.findMany();
 });
 
+export const getUniqueDirectories = publicProcedure
+    .input(
+        z.object({
+            id: z.number(),
+        })
+    )
+    .query(async (opts) => {
+        const { input } = opts;
+
+        const directory = await client.directory.findUnique({
+            where: {
+                id: input.id,
+            },
+        });
+        return directory;
+    });
+
 export const makeDirectories = publicProcedure
     .input(
         z.object({

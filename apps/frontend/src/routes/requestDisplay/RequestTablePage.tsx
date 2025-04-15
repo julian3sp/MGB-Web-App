@@ -131,6 +131,11 @@ export default function RequestTablePage() {
                                     </p>
                                 </td>
                                 <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {res.priority}
+                                    </p>
+                                </td>
+                                <td className="p-4">
                                     <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                         {res.sanitation?.cleaningType && (
                                             <div className="flex">
@@ -142,6 +147,12 @@ export default function RequestTablePage() {
                                             <div className="flex">
                                                 <span className="font-semibold w-35">Target Language:</span>
                                                 <span>{res.language.targetLanguage}</span>
+                                            </div>
+                                        )}
+                                        {res.audioVisual?.accommodationType && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Accommodation Type:</span>
+                                                <span>{res.audioVisual.accommodationType}</span>
                                             </div>
                                         )}
                                         {res.sanitation?.contaminant && (
@@ -156,16 +167,13 @@ export default function RequestTablePage() {
                                                 <span>{res.language.sourceLanguage}</span>
                                             </div>
                                         )}
+                                        {res.audioVisual?.accommodationDetails && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-35">Accommodation Details:</span>
+                                                <span>{res.audioVisual.accommodationDetails}</span>
+                                            </div>
+                                        )}
                                     </div> {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
-                                </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.sanitation?.cleaningType ? `Cleaning Type: ${res.sanitation?.cleaningType}` : ""}
-                                        {res.language?.targetLanguage ? `Target Language: ${res.language?.targetLanguage}` : ""}
-                                        <br/>
-                                        {res.sanitation?.contaminant ? `Contaminant: ${res.sanitation?.contaminant}` : ""}
-                                        {res.language?.sourceLanguage ? `Source Language: ${res.language?.sourceLanguage}` : ""}
-                                    </p>
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">

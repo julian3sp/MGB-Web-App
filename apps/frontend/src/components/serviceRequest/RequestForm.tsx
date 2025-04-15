@@ -41,6 +41,8 @@ function RequestForm({ title, type }: requestFormProps) {
     const [contaminant, setContaminant] = useState<string>("");
     const [sourceLanguage, setSourceLanguage] = useState<string>("");
     const [targetLanguage, setTargetLanguage] = useState<string>("");
+    const [accommodationType, setAccommodationType] = useState<string>("");
+    const [accommodationDetails, setAccommodationDetails] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -56,6 +58,8 @@ function RequestForm({ title, type }: requestFormProps) {
         contaminant: '',
         sourceLanguage: '',
         targetLanguage: '',
+        accommodationType: '',
+        accommodationDetails: ''
     });
 
     const Validate = (): boolean => {
@@ -71,6 +75,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
         }
 
         if (!name) {
@@ -94,6 +100,11 @@ function RequestForm({ title, type }: requestFormProps) {
         if (!targetLanguage && type === 'Language') {
             errors.targetLanguage = "Please select a target language";
             console.log('targetLanguage error');
+        }
+
+        if(!accommodationType && type === 'AudioVisual') {
+            errors.accommodationType = "Please select an accommodation type";
+            console.log('accommodationType error');
         }
 
         if (!employeeID) {
@@ -163,6 +174,12 @@ function RequestForm({ title, type }: requestFormProps) {
                     contaminant: contaminant,
                 },
             }),
+            ...(type === 'AudioVisual' && {
+                audioVisual: {
+                    accommodationType: accommodationType,
+                    accommodationDetails: accommodationDetails,
+                },
+            }),
         });
 
         handleReset(e);
@@ -179,6 +196,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setSourceLanguage('');
         setTargetLanguage('');
         setCleaningType('');
+        setAccommodationType('');
+        setAccommodationDetails('');
 
         setErrors({
             name: '',
@@ -192,6 +211,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
         });
     };
 
@@ -338,6 +359,30 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Contaminant"}
                                             width="w-full"
                                             error={errors.contaminant}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "AudioVisual" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Accommodation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accommodationType}
+                                            setState={setAccommodationType}
+                                            placeholder={"Select Accommodation Type"}
+                                            width={"w-full"}
+                                            error={errors.accommodationType}
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Accommodation Details (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={accommodationDetails}
+                                            setState={setAccommodationDetails}
+                                            placeholder={"Enter Accommodation Details"}
+                                            width="w-full"
+                                            error={errors.accommodationDetails}/>
                                     </div>
                                 </>
                                 : null}

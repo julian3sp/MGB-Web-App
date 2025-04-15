@@ -16,7 +16,7 @@ function ServiceRequestPage() {
                 {/*<h1 className="text-2xl font-bold mb-6 font-[Poppins]">Service Request Forms</h1>*/}
                 <ServiceFormSideBar />
                 <div>
-                    <RequestForm title={'Language Interpreter Request Form'} type={'Sanitation'} />
+                    <RequestForm title={'Audio/Visual Request Form'} type={'AudioVisual'} />
                 </div>
             </div>
         </>

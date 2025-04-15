@@ -129,6 +129,11 @@ export default function RequestListPage(){
                                             <span className="font-semibold">Target Language:</span> {selectedRequest.language.targetLanguage}{" "}
                                         </>
                                     )}
+                                    {selectedRequest.audioVisual?.accommodationType && (
+                                        <>
+                                            <span className="font-semibold">Accommodation Type:</span> {selectedRequest.audioVisual.accommodationType}{" "}
+                                        </>
+                                    )}
                                     <br />
                                     {selectedRequest.sanitation?.contaminant && (
                                         <>
@@ -138,6 +143,11 @@ export default function RequestListPage(){
                                     {selectedRequest.language?.sourceLanguage && (
                                         <>
                                             <span className="font-semibold">Source Language:</span> {selectedRequest.language.sourceLanguage}
+                                        </>
+                                    )}
+                                    {selectedRequest.audioVisual?.accommodationDetails && (
+                                        <>
+                                            <span className="font-semibold">Accommodation Details:</span> {selectedRequest.audioVisual.accommodationDetails}{" "}
                                         </>
                                     )}
                                 </p>

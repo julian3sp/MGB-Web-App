@@ -27,10 +27,10 @@ const appRouter = t.router({
 });
 
 const app: Express = express(); // Set up the backend
-    app.use(cors());
-    app.use('/trpc', (req, res, next) => {
-        console.log(`[TRPC] ${req.method} ${req.url}`);
-        next();
+app.use(cors());
+app.use('/trpc', (req, res, next) => {
+    console.log(`[TRPC] ${req.method} ${req.url}`);
+    next();
 });
 
 app.use(

@@ -11,6 +11,7 @@ export const getRequests = trpc.procedure.query(async () => {
             language: true,
             security: true,
             audioVisual: true,
+            transportation: true,
         },
     });
     console.log('getRequests returned');
@@ -46,6 +47,12 @@ export const makeRequest = publicProcedure
                     securityIssue: z.string(),
                 })
             ),
+            transportation: z.optional(
+                z.object({
+                    transportationType: z.string(),
+                    transportationDestination: z.string(),
+                })
+            ),
             audioVisual: z.optional(z.object({ accommodations: z.string() })),
         })
     )
@@ -64,6 +71,9 @@ export const makeRequest = publicProcedure
                 },
                 security: {
                     create: input.security,
+                },
+                transportation: {
+                    create: input.transportation,
                 },
             },
         });

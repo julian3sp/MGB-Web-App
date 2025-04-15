@@ -3,11 +3,13 @@ import TextInput from "../TextInput.tsx";
 import React, { useState } from 'react';
 import SideNav from "../serviceRequest/sideNavigation.tsx"
 import accImage from './images/user.png'
+import {serviceRequest} from "@/routes/ServiceRequestPage.tsx";
 
-function ServiceFormSideBar() {
+function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceRequest, setActiveTab: (form: serviceRequest)=>void}) {
     const [searchData, setSearch] = useState('')
-    const handleFormRequest = (form: string) => {
+    const handleFormRequest = (form: serviceRequest) => {
         console.log(form + "requested");
+        setActiveTab(form)
     };
 
     return (
@@ -41,15 +43,22 @@ function ServiceFormSideBar() {
 
                         <RequestButton
                             label={'Language Interpreter Service Form'}
-                            onClick={() => handleFormRequest('Language Interpreter Service Form')}
+                            onClick={() => handleFormRequest({
+                                type:"Language",
+                                title: "Language Interpreter Service Form"})}
                         />
                         <RequestButton
-                            label={'Medical Device Form'}
-                            onClick={() => handleFormRequest('Medical Device Form')}
+                            label={'Sanitation Services Form'}
+                            onClick={() => handleFormRequest({
+                                type: "Sanitation",
+                                title: 'Sanitation Service Form'})}
                         />
                         <RequestButton
                             label={'Service Request Form'}
-                            onClick={() => handleFormRequest('Service Request Form')}
+                            onClick={() => handleFormRequest({
+                                type: "Security",
+                                title: "Security Request Form",
+                            })}
                         />
                     </div>
 

@@ -7,16 +7,23 @@ import ServiceFormSideBar from '../components/serviceRequest/serviceFormSideBar.
 import { trpc } from '../lib/trpc.ts';
 import { getRequests } from '../../../backend/src/server/procedures/requests.ts';
 
+export type serviceRequest = {
+    type: "Security"| "Language" | "Sanitation" | "Type4" | "Type5" | "Type6"
+    title: string;
+}
 function ServiceRequestPage() {
-
+    const [activeTab, setActiveTab] = useState<serviceRequest>({
+        type: "Security",
+        title: "Security Request Form",
+    });
 
     return (
         <>
             <div className="bg-gray-200 min-h-screen flex flex-col items-center justify-center">
                 {/*<h1 className="text-2xl font-bold mb-6 font-[Poppins]">Service Request Forms</h1>*/}
-                <ServiceFormSideBar />
+                <ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />
                 <div>
-                    <RequestForm title={'Language Interpreter Request Form'} type={'Security'} />
+                    <RequestForm title={activeTab.title} type={activeTab.type} />
                 </div>
             </div>
         </>

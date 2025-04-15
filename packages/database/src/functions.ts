@@ -2,7 +2,6 @@ import { PrismaClient } from 'database';
 
 // Create the prisma client, this automatically connects to the database
 
-
 export async function insertEmployee(id: string, name: string, client: PrismaClient) {
     try {
         const newEmployee = await client.employee.create({
@@ -41,8 +40,12 @@ export async function insertServiceRequest(
     sourceLanguage: string,
     targetLanguage: string,
     cleaningType: string,
+    accommodationType: string,
     accessZones: string,
     securityIssue: string,
+    transportationType: string,
+    transportationDestination: string,
+    accommodationDetails?: string,
     contaminant?: string,
     additional_comments?: string,
 ) {
@@ -78,6 +81,22 @@ export async function insertServiceRequest(
                         create: {
                             accessZones: accessZones,
                             securityIssue: securityIssue,
+                        }
+                    },
+                }),
+                ...(request_type === 'transportation' && {
+                    transportation: {
+                        create: {
+                            transportationType: transportationType,
+                            transportationDestination: transportationDestination,
+                        }
+                    },
+                }),
+                ...(request_type === 'audioVisual' && {
+                    audioVisual: {
+                        create: {
+                            accommodationType: accommodationType,
+                            accommodationDetails: accommodationDetails,
                         }
                     },
                 }),

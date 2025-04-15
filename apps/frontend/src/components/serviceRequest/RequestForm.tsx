@@ -25,10 +25,14 @@ type errorProps =
     status: string,
     cleaningType: string,
     contaminant: string,
+    accommodationType: string,
+    accommodationDetails: string,
     sourceLanguage: string,
     targetLanguage: string,
     accessZones: string,
     securityIssue: string,
+    transportationType: string,
+    transportationDestination: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
@@ -43,8 +47,12 @@ function RequestForm({ title, type }: requestFormProps) {
     const [contaminant, setContaminant] = useState<string>("");
     const [sourceLanguage, setSourceLanguage] = useState<string>("");
     const [targetLanguage, setTargetLanguage] = useState<string>("");
+    const [accommodationType, setAccommodationType] = useState<string>("");
+    const [accommodationDetails, setAccommodationDetails] = useState<string>("");
     const [accessZones, setAccessZones] = useState<string>("");
     const [securityIssue, setSecurityIssue] = useState<string>("");
+    const [transportationType, setTransportationType] = useState<string>("");
+    const [transportationDestination, setTransportationDestination] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -60,8 +68,12 @@ function RequestForm({ title, type }: requestFormProps) {
         contaminant: '',
         sourceLanguage: '',
         targetLanguage: '',
+        accommodationType: '',
+        accommodationDetails: '',
         accessZones: '',
         securityIssue: '',
+        transportationType: '',
+        transportationDestination: '',
     });
 
     const Validate = (): boolean => {
@@ -77,8 +89,12 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
         }
 
         if (!name) {
@@ -102,6 +118,11 @@ function RequestForm({ title, type }: requestFormProps) {
         if (!targetLanguage && type === 'Language') {
             errors.targetLanguage = "Please select a target language";
             console.log('targetLanguage error');
+        }
+
+        if(!accommodationType && type === 'AudioVisual') {
+            errors.accommodationType = "Please select an accommodation type";
+            console.log('accommodationType error');
         }
 
         if (!employeeID) {
@@ -130,7 +151,6 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('priority error');
         }
 
-
         if (!cleaningType && type ==='Sanitation') {
             errors.cleaningType = 'Please set a cleaning type';
             console.log('cleaningType error');
@@ -144,6 +164,16 @@ function RequestForm({ title, type }: requestFormProps) {
         if (!securityIssue && type ==='Security') {
             errors.securityIssue = 'Please set a security issue';
             console.log('accessZone error');
+        }
+
+        if (!transportationType && type==='Transportation') {
+            errors.transportationType = 'Please set a transportation type';
+            console.log('transportationType error');
+        }
+
+        if (!transportationDestination && type==='Transportation') {
+            errors.transportationDestination = 'Please set a transportation destination';
+            console.log('transportationDestination error');
         }
 
         setErrors(errors);
@@ -188,6 +218,18 @@ function RequestForm({ title, type }: requestFormProps) {
                     securityIssue: securityIssue,
                 },
             }),
+            ...(type === 'Transportation' && {
+                transportation: {
+                    transportationType: transportationType,
+                    transportationDestination: transportationDestination,
+                },
+            }),
+            ...(type === 'AudioVisual' && {
+                audioVisual: {
+                    accommodationType: accommodationType,
+                    accommodationDetails: accommodationDetails,
+                },
+            }),
         });
 
         handleReset(e);
@@ -206,6 +248,10 @@ function RequestForm({ title, type }: requestFormProps) {
         setCleaningType('');
         setAccessZones('');
         setSecurityIssue('');
+        setTransportationType('');
+        setTransportationDestination('');
+        setAccommodationType('');
+        setAccommodationDetails('');
 
         setErrors({
             name: '',
@@ -219,8 +265,12 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
         });
     };
 
@@ -405,6 +455,58 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Security Issue"}
                                             width="w-full"
                                             error={errors.securityIssue}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Transportation" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Transportation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationType}
+                                            setState={setTransportationType}
+                                            placeholder={"Select Transportation Type"}
+                                            width={"w-full"}
+                                            error={errors.transportationType}
+                                            options={["Ambulance", "Helicopter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Destination</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationDestination}
+                                            setState={setTransportationDestination}
+                                            placeholder={"Select Destination"}
+                                            width={"w-full"}
+                                            error={errors.transportationDestination}
+                                            options={["Brigham & Women's Hospital Main Campus",
+                                                "Chestnut Hill",
+                                                "Faulkner Hospital",
+                                                "Patriot Place"]}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "AudioVisual" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Accommodation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accommodationType}
+                                            setState={setAccommodationType}
+                                            placeholder={"Select Accommodation Type"}
+                                            width={"w-full"}
+                                            error={errors.accommodationType}
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Accommodation Details (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={accommodationDetails}
+                                            setState={setAccommodationDetails}
+                                            placeholder={"Enter Accommodation Details"}
+                                            width="w-full"
+                                            error={errors.accommodationDetails}/>
                                     </div>
                                 </>
                                 : null}

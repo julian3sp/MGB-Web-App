@@ -11,6 +11,7 @@ export const getRequests = trpc.procedure.query(async () => {
             language: true,
             security: true,
             audioVisual: true,
+            transportation: true,
         },
     });
     console.log('getRequests returned');
@@ -31,7 +32,7 @@ export const makeRequest = publicProcedure
             sanitation: z.optional(
                 z.object({
                     cleaningType: z.string(),
-                    contaminant: z.string(),
+                    contaminant: z.optional(z.string()),
                 })
             ),
             language: z.optional(
@@ -40,13 +41,24 @@ export const makeRequest = publicProcedure
                     targetLanguage: z.string(),
                 })
             ),
+            audioVisual: z.optional(
+                z.object({
+                    accommodationType: z.string(),
+                    accommodationDetails: z.optional(z.string()),
+                })
+            ),
             security: z.optional(
                 z.object({
                     accessZones: z.string(),
                     securityIssue: z.string(),
                 })
             ),
-            audioVisual: z.optional(z.object({ accommodations: z.string() })),
+            transportation: z.optional(
+                z.object({
+                    transportationType: z.string(),
+                    transportationDestination: z.string(),
+                })
+            ),
         })
     )
     .mutation(async ({ input }) => {
@@ -64,6 +76,9 @@ export const makeRequest = publicProcedure
                 },
                 security: {
                     create: input.security,
+                },
+                transportation: {
+                    create: input.transportation,
                 },
             },
         });

@@ -50,9 +50,10 @@ model users {
 }
 
 model nodes {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   building String
   floor    Int
+  name     String?
   x        Int
   y        Int
 
@@ -66,6 +67,6 @@ model edges {
   targetId Int
   weight   Float
 
-  sourceNode nodes @relation("SourceEdges", fields: [sourceId], references: [id])
-  targetNode nodes @relation("TargetEdges", fields: [targetId], references: [id])
+  sourceNode nodes @relation("SourceEdges", fields: [sourceId], references: [id], onDelete: Cascade)
+  targetNode nodes @relation("TargetEdges", fields: [targetId], references: [id], onDelete: Cascade)
 }

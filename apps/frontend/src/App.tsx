@@ -53,6 +53,7 @@ function App() {
                 <Route path="/requests" element={<RequestListPage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
+                <Route path="/editor" element={<MapEditor />} />
                 <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />

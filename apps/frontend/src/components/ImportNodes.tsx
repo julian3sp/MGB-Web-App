@@ -29,6 +29,7 @@ const ImportNodes = () => {
             const inputs: {
                 building: string;
                 floor: number;
+                name: string;
                 x: number;
                 y: number;
             }[] = [];
@@ -42,6 +43,7 @@ const ImportNodes = () => {
                 const entry = {
                     building: values[0].trim().replace(/"/g, ""),
                     floor: Number(values[1].trim().replace(/"/g, "")),
+                    name: values[2].trim().replace(/"/g, ""),
                     x: Number(values[2].trim().replace(/"/g, "")),
                     y: Number(values[3].trim().replace(/"/g, "")),
                 };

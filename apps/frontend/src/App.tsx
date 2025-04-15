@@ -56,6 +56,7 @@ function App() {
                 <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/signIn" element={<SignInPage rerenderBar={updateNavBar} />} />
                 <Route path="/createAcc" element={<CreateAccountPage rerenderBar={updateNavBar} />} />
+                <Route path="/aboutus" element={<AboutUs />} />
                 <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
         </Router>

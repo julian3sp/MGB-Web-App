@@ -115,7 +115,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   useEffect(() => {
     if (!map || !patriot22Overlays) return;
     updatePatriotPlace22(patriot22Overlays, selectedFloor || 3);
-  }, [selectedFloor, map, patriot22Overlays]);
+
+    const patriotZoomListener = map.addListener('zoom_changed', () => {
+      const zoom = map.getZoom();
+      if (onZoomChange) onZoomChange(zoom || 0);
+    });
+
+    return () => google.maps.event.removeListener(patriotZoomListener);
+
+  }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
 
   // Listen to zoom events and animate opacity changes for MGB overlays.
   useEffect(() => {

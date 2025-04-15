@@ -168,11 +168,11 @@ const MapComponent: React.FC = () => {
       console.warn('Map components not ready');
       return;
     }
-
+  
     // Clear existing routes and markers.
     directionsRenderer.setMap(null);
     directionsRenderer.setMap(mapInstance);
-
+  
     const request: google.maps.DirectionsRequest = {
       origin: start.location,
       destination: end.location,
@@ -180,28 +180,29 @@ const MapComponent: React.FC = () => {
         selectedTransport.toUpperCase() as keyof typeof google.maps.DirectionsTravelMode
       ],
     };
-
+  
     console.log('Calculating route with request:', request);
-
+  
     directionsService.route(request, (result, status) => {
       console.log('Route calculation result:', { status, result });
-
+  
       if (status === google.maps.DirectionsStatus.OK && result) {
         mapInstance.setOptions({ draggableCursor: 'default' });
-
-        // Add markers.
+  
+        // Add the start marker.
         new google.maps.Marker({
           position: start.location,
           map: mapInstance,
           title: start.name,
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
         });
-
+  
         // Remove any previous destination marker.
         if (destinationMarkerRef.current) {
           destinationMarkerRef.current.setMap(null);
         }
-
+  
+        // Create the destination marker (red) and store its reference.
         const destMarker = new google.maps.Marker({
           position: end.location,
           map: mapInstance,
@@ -209,10 +210,10 @@ const MapComponent: React.FC = () => {
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
         });
         destinationMarkerRef.current = destMarker;
-
+  
         // Set the directions.
         directionsRenderer.setDirections(result);
-
+  
         // Fit bounds to the route.
         if (result.routes[0] && result.routes[0].bounds) {
           mapInstance.fitBounds(result.routes[0].bounds);
@@ -268,10 +269,10 @@ const MapComponent: React.FC = () => {
         {selectedPlace && (
           <button
             onClick={handleZoomToDestination}
-            className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
+            className="w-[90%] bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
                          transition-all duration-300 ease-in-out
                          hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                         active:scale-95"
+                         active:scale-95 mx-auto"
           >
             Zoom to Destination
           </button>

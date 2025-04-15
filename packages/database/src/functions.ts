@@ -2,7 +2,6 @@ import { PrismaClient } from 'database';
 
 // Create the prisma client, this automatically connects to the database
 
-
 export async function insertEmployee(id: string, name: string, client: PrismaClient) {
     try {
         const newEmployee = await client.employee.create({

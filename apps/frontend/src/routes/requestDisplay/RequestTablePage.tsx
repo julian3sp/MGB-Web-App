@@ -163,7 +163,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[150px]">
+                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[125px]">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -205,7 +205,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[150px]"
+                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[125px]"
                                     onClick={() => {
                                         if(sortKey === 'name') setAscending(!ascending);
                                         else {
@@ -298,7 +298,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[150px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[140px]">
                                             <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
@@ -446,17 +446,17 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[125px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[100px]">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
-                                                    <i>res.additional_comments</i>
+                                                    <i>{res.additional_comments}</i>
                                                 ) : (
                                                     'N/A'
                                                 )}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[75px]">
+                                        <td className="p-4 whitespace=normal break-words max-w-[65px]">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
                                                     res.status === 'Unassigned'

@@ -33,10 +33,11 @@ model service_request {
   assigned_employee   String?
   employee            employee? @relation(fields: [assigned_employee], references: [id])
 
-  sanitation  Sanitation?
-  language    Language?
-  audioVisual AudioVisual?
-  security    Security?
+  sanitation     Sanitation?
+  language       Language?
+  audioVisual    AudioVisual?
+  security       Security?
+  transportation Transportation?
 }
 
 model Sanitation {
@@ -53,6 +54,14 @@ model Language {
   targetLanguage  String
   languageId      Int             @unique
   service_request service_request @relation(fields: [languageId], references: [request_id])
+}
+
+model Transportation {
+  request_id                Int             @id @default(autoincrement())
+  transportationType        String
+  transportationDestination String
+  transportationId          Int             @unique
+  service_request           service_request @relation(fields: [transportationId], references: [request_id])
 }
 
 model AudioVisual {

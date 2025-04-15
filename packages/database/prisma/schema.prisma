@@ -36,6 +36,7 @@ model service_request {
   sanitation  Sanitation?
   language    Language?
   audioVisual AudioVisual?
+  security    Security?
 }
 
 model Sanitation {
@@ -59,6 +60,14 @@ model AudioVisual {
   accommodations  String
   audioVisualId   Int             @unique
   service_request service_request @relation(fields: [audioVisualId], references: [request_id])
+}
+
+model Security {
+  request_id      Int             @id @default(autoincrement())
+  accessZones     String
+  securityIssue   String
+  securityId      Int             @unique
+  service_request service_request @relation(fields: [securityId], references: [request_id])
 }
 
 model Directory {

@@ -27,6 +27,8 @@ type errorProps =
     contaminant: string,
     sourceLanguage: string,
     targetLanguage: string,
+    accessZones: string,
+    securityIssue: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
@@ -41,6 +43,8 @@ function RequestForm({ title, type }: requestFormProps) {
     const [contaminant, setContaminant] = useState<string>("");
     const [sourceLanguage, setSourceLanguage] = useState<string>("");
     const [targetLanguage, setTargetLanguage] = useState<string>("");
+    const [accessZones, setAccessZones] = useState<string>("");
+    const [securityIssue, setSecurityIssue] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -56,6 +60,8 @@ function RequestForm({ title, type }: requestFormProps) {
         contaminant: '',
         sourceLanguage: '',
         targetLanguage: '',
+        accessZones: '',
+        securityIssue: '',
     });
 
     const Validate = (): boolean => {
@@ -71,6 +77,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accessZones: '',
+            securityIssue: '',
         }
 
         if (!name) {
@@ -122,9 +130,20 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('priority error');
         }
 
+
         if (!cleaningType && type ==='Sanitation') {
             errors.cleaningType = 'Please set a cleaning type';
             console.log('cleaningType error');
+        }
+
+        if (!accessZones && type ==='Security') {
+            errors.accessZones = 'Please set a access zone';
+            console.log('accessZone error');
+        }
+
+        if (!securityIssue && type ==='Security') {
+            errors.securityIssue = 'Please set a security issue';
+            console.log('accessZone error');
         }
 
         setErrors(errors);
@@ -163,6 +182,12 @@ function RequestForm({ title, type }: requestFormProps) {
                     contaminant: contaminant,
                 },
             }),
+            ...(type === 'Security' && {
+                security: {
+                    accessZones: accessZones,
+                    securityIssue: securityIssue,
+                },
+            }),
         });
 
         handleReset(e);
@@ -179,6 +204,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setSourceLanguage('');
         setTargetLanguage('');
         setCleaningType('');
+        setAccessZones('');
+        setSecurityIssue('');
 
         setErrors({
             name: '',
@@ -192,6 +219,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accessZones: '',
+            securityIssue: '',
         });
     };
 
@@ -338,6 +367,44 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Contaminant"}
                                             width="w-full"
                                             error={errors.contaminant}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Security" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Security Needed</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accessZones}
+                                            setState={setAccessZones}
+                                            placeholder={"Select Access Zones Needed"}
+                                            width={"w-full"}
+                                            error={errors.accessZones}
+                                            options={[
+                                                "",
+                                                "ICU",
+                                                "Operating Room",
+                                                "Pharmacy",
+                                                "Medical Records",
+                                                "Pediatric Ward",
+                                                "Emergency Department",
+                                                "Laboratory",
+                                                "Server Room (IT)",
+                                                "Supply Closet",
+                                                "Radiology",
+                                                "Morgue"
+                                            ]}
+                                        />
+                                    </div>
+                                    <div>
+                                        <InputHeader>Security Issue</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={securityIssue}
+                                            setState={setSecurityIssue}
+                                            placeholder={"Security Issue"}
+                                            width="w-full"
+                                            error={errors.securityIssue}/>
                                     </div>
                                 </>
                                 : null}

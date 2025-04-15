@@ -53,21 +53,21 @@ export default function RequestTablePage() {
                 <table className="w-full text-left table-auto min-w-max w-fit">
                     <thead className="bg-gray-200">
                         <tr>
-                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[25px]">
                                     <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                        Request ID
+                                        ID
                                     </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[85px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Priority
+                                    Request Type
                                 </h3>
                             </th>
 
-                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[75px]">
+                            <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[65px]">
                                 <h3 className="block text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
-                                    Request Type
+                                    Priority
                                 </h3>
                             </th>
 
@@ -121,13 +121,19 @@ export default function RequestTablePage() {
                         {data?.map((res) => (
                             <tr key={res.request_id} className="even:bg-gray-100">
 
-                                <td className="p-4 whitespace=normal break-words max-w-[75px]">
+                                <td className="p-4 whitespace=normal break-words max-w-[25px    ]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
                                         {res.request_id}
                                     </p>
                                 </td>
 
-                                <td className="p-4 whitespace=normal break-words max-w-[75px]">
+                                <td className="p-4 whitespace=normal break-words max-w-[85px]">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
+                                        <i>{res.request_type}</i>
+                                    </p>
+                                </td>
+
+                                <td className="p-4 whitespace=normal break-words max-w-[65px]">
                                     <p className={`block font-[Poppins] text-med font-semibold ${
                                         res.priority === "Low"
                                             ? "text-green-600"
@@ -140,12 +146,6 @@ export default function RequestTablePage() {
                                                         : "text-blue-gray-900"
                                     }`}>
                                         {res.priority}
-                                    </p>
-                                </td>
-
-                                <td className="p-4 whitespace=normal break-words max-w-[100px]">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
-                                        {res.request_type}
                                     </p>
                                 </td>
 
@@ -247,7 +247,7 @@ export default function RequestTablePage() {
 
                                 <td className="p-4 whitespace=normal break-words max-w-[125px]">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        <i>{res.additional_comments}</i>
+                                        {res.additional_comments?.trim() ? <i>res.additional_comments</i> : "N/A"}
                                     </p>
                                 </td>
 

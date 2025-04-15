@@ -42,6 +42,10 @@ export async function insertServiceRequest(
     targetLanguage: string,
     cleaningType: string,
     accommodationType: string,
+    accessZones: string,
+    securityIssue: string,
+    transportationType: string,
+    transportationDestination: string,
     accommodationDetails?: string,
     contaminant?: string,
     additional_comments?: string,
@@ -70,6 +74,22 @@ export async function insertServiceRequest(
                         create: {
                             cleaningType: cleaningType,
                             contaminant: contaminant,
+                        }
+                    },
+                }),
+                ...(request_type === 'security' && {
+                    security: {
+                        create: {
+                            accessZones: accessZones,
+                            securityIssue: securityIssue,
+                        }
+                    },
+                }),
+                ...(request_type === 'transportation' && {
+                    transportation: {
+                        create: {
+                            transportationType: transportationType,
+                            transportationDestination: transportationDestination,
                         }
                     },
                 }),

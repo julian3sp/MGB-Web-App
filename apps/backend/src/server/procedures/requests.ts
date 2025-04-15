@@ -9,7 +9,9 @@ export const getRequests = trpc.procedure.query(async () => {
         include: {
             sanitation: true,
             language: true,
+            security: true,
             audioVisual: true,
+            transportation: true,
         },
     });
     console.log('getRequests returned');
@@ -45,6 +47,18 @@ export const makeRequest = publicProcedure
                     accommodationDetails: z.string(),
                 })
             ),
+            security: z.optional(
+                z.object({
+                    accessZones: z.string(),
+                    securityIssue: z.string(),
+                })
+            ),
+            transportation: z.optional(
+                z.object({
+                    transportationType: z.string(),
+                    transportationDestination: z.string(),
+                })
+            ),
         })
     )
     .mutation(async ({ input }) => {
@@ -59,6 +73,12 @@ export const makeRequest = publicProcedure
                 },
                 audioVisual: {
                     create: input.audioVisual,
+                },
+                security: {
+                    create: input.security,
+                },
+                transportation: {
+                    create: input.transportation,
                 },
             },
         });

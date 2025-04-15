@@ -25,8 +25,14 @@ type errorProps =
     status: string,
     cleaningType: string,
     contaminant: string,
+    accommodationType: string,
+    accommodationDetails: string,
     sourceLanguage: string,
     targetLanguage: string,
+    accessZones: string,
+    securityIssue: string,
+    transportationType: string,
+    transportationDestination: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
@@ -43,6 +49,10 @@ function RequestForm({ title, type }: requestFormProps) {
     const [targetLanguage, setTargetLanguage] = useState<string>("");
     const [accommodationType, setAccommodationType] = useState<string>("");
     const [accommodationDetails, setAccommodationDetails] = useState<string>("");
+    const [accessZones, setAccessZones] = useState<string>("");
+    const [securityIssue, setSecurityIssue] = useState<string>("");
+    const [transportationType, setTransportationType] = useState<string>("");
+    const [transportationDestination, setTransportationDestination] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -59,7 +69,11 @@ function RequestForm({ title, type }: requestFormProps) {
         sourceLanguage: '',
         targetLanguage: '',
         accommodationType: '',
-        accommodationDetails: ''
+        accommodationDetails: '',
+        accessZones: '',
+        securityIssue: '',
+        transportationType: '',
+        transportationDestination: '',
     });
 
     const Validate = (): boolean => {
@@ -77,6 +91,10 @@ function RequestForm({ title, type }: requestFormProps) {
             targetLanguage: '',
             accommodationType: '',
             accommodationDetails: '',
+            accessZones: '',
+            securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
         }
 
         if (!name) {
@@ -138,6 +156,26 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('cleaningType error');
         }
 
+        if (!accessZones && type ==='Security') {
+            errors.accessZones = 'Please set a access zone';
+            console.log('accessZone error');
+        }
+
+        if (!securityIssue && type ==='Security') {
+            errors.securityIssue = 'Please set a security issue';
+            console.log('accessZone error');
+        }
+
+        if (!transportationType && type==='Transportation') {
+            errors.transportationType = 'Please set a transportation type';
+            console.log('transportationType error');
+        }
+
+        if (!transportationDestination && type==='Transportation') {
+            errors.transportationDestination = 'Please set a transportation destination';
+            console.log('transportationDestination error');
+        }
+
         setErrors(errors);
         return Object.values(errors).some(value => value.length > 0);
     };
@@ -174,6 +212,18 @@ function RequestForm({ title, type }: requestFormProps) {
                     contaminant: contaminant,
                 },
             }),
+            ...(type === 'Security' && {
+                security: {
+                    accessZones: accessZones,
+                    securityIssue: securityIssue,
+                },
+            }),
+            ...(type === 'Transportation' && {
+                transportation: {
+                    transportationType: transportationType,
+                    transportationDestination: transportationDestination,
+                },
+            }),
             ...(type === 'AudioVisual' && {
                 audioVisual: {
                     accommodationType: accommodationType,
@@ -196,6 +246,10 @@ function RequestForm({ title, type }: requestFormProps) {
         setSourceLanguage('');
         setTargetLanguage('');
         setCleaningType('');
+        setAccessZones('');
+        setSecurityIssue('');
+        setTransportationType('');
+        setTransportationDestination('');
         setAccommodationType('');
         setAccommodationDetails('');
 
@@ -213,6 +267,10 @@ function RequestForm({ title, type }: requestFormProps) {
             targetLanguage: '',
             accommodationType: '',
             accommodationDetails: '',
+            accessZones: '',
+            securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
         });
     };
 
@@ -359,6 +417,72 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Contaminant"}
                                             width="w-full"
                                             error={errors.contaminant}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Security" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Security Needed</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accessZones}
+                                            setState={setAccessZones}
+                                            placeholder={"Select Access Zones Needed"}
+                                            width={"w-full"}
+                                            error={errors.accessZones}
+                                            options={[
+                                                "",
+                                                "ICU",
+                                                "Operating Room",
+                                                "Pharmacy",
+                                                "Medical Records",
+                                                "Pediatric Ward",
+                                                "Emergency Department",
+                                                "Laboratory",
+                                                "Server Room (IT)",
+                                                "Supply Closet",
+                                                "Radiology",
+                                                "Morgue"
+                                            ]}
+                                        />
+                                    </div>
+                                    <div>
+                                        <InputHeader>Security Issue</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={securityIssue}
+                                            setState={setSecurityIssue}
+                                            placeholder={"Security Issue"}
+                                            width="w-full"
+                                            error={errors.securityIssue}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Transportation" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Transportation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationType}
+                                            setState={setTransportationType}
+                                            placeholder={"Select Transportation Type"}
+                                            width={"w-full"}
+                                            error={errors.transportationType}
+                                            options={["Ambulance", "Helicopter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Destination</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationDestination}
+                                            setState={setTransportationDestination}
+                                            placeholder={"Select Destination"}
+                                            width={"w-full"}
+                                            error={errors.transportationDestination}
+                                            options={["Brigham & Women's Hospital Main Campus",
+                                                "Chestnut Hill",
+                                                "Faulkner Hospital",
+                                                "Patriot Place"]}/>
                                     </div>
                                 </>
                                 : null}

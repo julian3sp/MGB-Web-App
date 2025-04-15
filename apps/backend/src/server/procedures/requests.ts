@@ -32,7 +32,7 @@ export const makeRequest = publicProcedure
             sanitation: z.optional(
                 z.object({
                     cleaningType: z.string(),
-                    contaminant: z.string(),
+                    contaminant: z.optional(z.string()),
                 })
             ),
             language: z.optional(
@@ -44,7 +44,7 @@ export const makeRequest = publicProcedure
             audioVisual: z.optional(
                 z.object({
                     accommodationType: z.string(),
-                    accommodationDetails: z.string(),
+                    accommodationDetails: z.optional(z.string()),
                 })
             ),
             security: z.optional(

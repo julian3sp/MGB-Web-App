@@ -9,9 +9,9 @@ import NavBar from './components/NavBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink} from '@trpc/client';
 import {trpc} from "./lib/trpc.ts";
+import FooterBar from './components/FooterBar';
 import DirectoryPage from './routes/departmentDirectory/DirectoryPage.tsx';
 import RequestTablePage from './routes/requestDisplay/RequestTablePage.tsx'
-
 
 
 import NavigationPage from "./routes/NavigationPage.tsx";
@@ -60,6 +60,7 @@ function App() {
                 <Route path="/admin/directory" element={<DirectoryPage />} />
                 <Route path="/navigation" element={<NavigationPage />} />
             </Routes>
+            <FooterBar/>
         </Router>
             </QueryClientProvider>
         </trpc.Provider>

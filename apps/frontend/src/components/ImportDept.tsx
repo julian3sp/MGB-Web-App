@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import {trpc} from "../lib/trpc.ts";
+import client from "../../../backend/src/bin/prisma-client.ts";
+import {deleteAllDirectories} from "../../../backend/src/server/procedures/directories.ts";
 
 
-const UploadCSV = () => {
+
+const ImportDept = () => {
     const [file, setFile] = useState<File | null>(null);
     const createDirectory = trpc.makeDirectory.useMutation();
+    const deleteDirectories = trpc.deleteAllDirectories.useMutation()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -13,8 +17,9 @@ const UploadCSV = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) return;
-
+        await deleteDirectories.mutateAsync()
         const reader = new FileReader();
+
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);
@@ -24,11 +29,17 @@ const UploadCSV = () => {
                 // for each line, split on commas
                 const values = lines[i].split(',');
 
+                //const servicesArray = values[1].split(',').map(s => s.trim().replace(/"/g, ""));
+                console.log(values[1]);
+                console.log(values[2]);
+
+
                 //insert each entry in line into our entry struct
                 const entry = {
                     name: values[0].trim().replace(/"/g, ""),
-                    location: values[1].trim().replace(/"/g, ""),
-                    telephone: values[2].trim().replace(/"/g, ""),
+                    services: values[1].trim().replace(/"/g, "").replace(/#/g,','),
+                    location: values[2].trim().replace(/"/g, ""),
+                    telephone: values[3].trim().replace(/"/g, ""),
                 };
 
                 if (entry.name.length === 0){
@@ -57,4 +68,4 @@ const UploadCSV = () => {
     );
 };
 
-export default UploadCSV;
+export default ImportDept;

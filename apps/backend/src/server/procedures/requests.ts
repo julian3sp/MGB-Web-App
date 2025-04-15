@@ -5,7 +5,12 @@ import { trpc } from '../trpc.ts';
 
 export const getRequests = trpc.procedure.query(async () => {
     console.log('getRequests called');
-    const requests = await client.service_request.findMany();
+    const requests = await client.service_request.findMany(
+        {include: {
+            sanitation: true,
+            language: true,
+        },}
+    );
     console.log('getRequests returned');
     return requests;
 });
@@ -14,18 +19,44 @@ export const makeRequest = publicProcedure
     .input(
         z.object({
             name: z.string(),
-            email: z.string(),
-            phone_num: z.string(),
-            room_num: z.number(),
-            language: z.string(),
-            request_type: z.string(),
             employee_id: z.string(),
-            additional_comments: z.string(),
+            priority: z.string(),
+            department: z.string(),
+            location: z.string(),
+            status: z.string(),
+            request_type: z.string(),
+            additional_comments: z.optional(z.string()),
+            sanitation: z.optional(z.object(
+                {
+                    cleaningType: z.string(),
+                    contaminant: z.string(),
+                }
+            )),
+            language: z.optional(z.object(
+                {
+                    sourceLanguage: z.string(),
+                    targetLanguage: z.string(),
+                }
+            )),
+            audioVisual: z.optional(z.object(
+                { accommodations: z.string() }
+            )),
         })
     )
     .mutation(async ({ input }) => {
         const request = await client.service_request.create({
-            data: input,
+            data: {
+                ...input,
+                sanitation: {
+                    create: input.sanitation
+                },
+                language: {
+                    create: input.language
+                },
+                audioVisual: {
+                    create: input.audioVisual
+                },
+            },
         });
 
         return request;

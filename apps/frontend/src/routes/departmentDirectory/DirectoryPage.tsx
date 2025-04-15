@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { trpc } from '../lib/trpc';
+import { trpc } from '../../lib/trpc.ts';
 import axios from 'axios';
-import ImportCSV from "../components/importCSV.tsx";
+import ImportCSV from "../../components/importCSV.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({

@@ -3,24 +3,8 @@ import DepartmentRoutes from "../departmentDirectory/DepartmentRoutes.tsx";
 import DepartmentList from "../../components/DepartmentList.ts";
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-
-
-
-type ServiceRequest = {
-    request_id: number;
-    name: string;
-    request_type: string;
-    request_date: string;
-    status: string;
-    location: string;
-    priority: string;
-    department: string;
-    employee_id: string | null;
-    additional_comments: string | null;
-    assigned_employee: string | null;
-    language: string | null;
-    cleaningType: string | null;
-};
+import type { ServiceRequest } from "@/types.tsx";
+import {useRequestData} from "@/routes/requestDisplay/RequestDataContext.tsx";
 
 {/*
 function formatPhoneNumber(phone: string): string {
@@ -38,7 +22,7 @@ function formatPhoneNumber(phone: string): string {
 */}
 
 export default function RequestListPage(){
-    const { data, isLoading, error } = trpc.requestList.useQuery();
+    const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -53,8 +37,8 @@ export default function RequestListPage(){
             }}>
                 <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Select a Request:</h3> {/*Header for list of departments on page*/}
 
-                {data && data.length > 0 ? (
-                    data?.map((res) => (
+                {filteredData && filteredData.length > 0 ? (
+                    filteredData?.map((res) => (
                         <ul key={res.request_id} className="mb-2">
                             <button
                                 onClick={() => setSelectedRequest(res)}

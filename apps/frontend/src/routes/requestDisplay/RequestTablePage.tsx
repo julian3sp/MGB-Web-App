@@ -3,23 +3,8 @@ import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
 import DepartmentList from '../../components/DepartmentList.ts';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import True = Prisma.True;
-
-type ServiceRequest = {
-    request_id: number;
-    name: string;
-    request_type: string;
-    request_date: string;
-    status: string;
-    location: string;
-    priority: string;
-    department: string;
-    employee_id: string | null;
-    additional_comments: string | null;
-    assigned_employee: string | null;
-    language: string | null;
-    cleaningType: string | null;
-};
+import { useRequestData } from './RequestDataContext.tsx';
+import type { ServiceRequest } from "@/types.tsx";
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -35,8 +20,8 @@ type ServiceRequest = {
 // }
 
 export default function RequestTablePage() {
-    const { data, isLoading, error } = trpc.requestList.useQuery();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
+    const { filteredData, isLoading, error } = useRequestData();
 
     const [sortKey, setSortKey] = useState<
         | 'request_id'
@@ -53,7 +38,7 @@ export default function RequestTablePage() {
     const priorityOrder = ['Emergency', 'High', 'Medium', 'Low'];
     const statusOrder = ['Unassigned', 'Assigned', 'Working', 'Done'];
 
-    const sortedData = (data ? [...data] : []).sort((a, b) => {
+    const sortedData = (filteredData ? [...filteredData] : []).sort((a, b) => {
         if (!sortKey) return 0;
 
         const aVal = a[sortKey as keyof typeof a];
@@ -102,7 +87,7 @@ export default function RequestTablePage() {
                     borderLeft: 'none',
                 }}
             >
-                {data && data.length > 0 ? (
+                {filteredData && filteredData.length > 0 ? (
                     <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden  border border-gray-300">
                         <table className="w-full text-left table-auto min-w-max w-fit">
                             <thead className="bg-gray-200">

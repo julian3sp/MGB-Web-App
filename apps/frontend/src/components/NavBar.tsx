@@ -29,32 +29,34 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Directory
                     </Link>
-                    <Link to="/services" onClick={() => setTab("serv")}
+                    <div className="flex">
+                        {isSignedIn ? <Link to="/services" onClick={() => setTab("serv")}
                           className={tab === "serv" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Services
-                    </Link>
-                    <Link to="/requests" onClick={() => setTab("reqP")}
+                        </Link> : null}
+                        {isSignedIn ? <Link to="/requests" onClick={() => setTab("reqP")}
                           className={tab === "reqP" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         View Requests
-                    </Link>
+                    </Link> : null}
+                    </div>
                     <Link to="/navigation" onClick={() => setTab("navigation")}
                           className={tab === "navigation" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Navigation
                     </Link>
-                    <Link to="/admin/directory" onClick={() => setTab("exp")}
+                    <div className="flex">
+                        {isSignedIn ? <Link to="/admin/directory" onClick={() => setTab("exp")}
                           className={tab === "exp" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Export
-                    </Link>
-
-
+                    </Link> : null }
+                    </div>
                 </div>
             </div>
             <LogInButton/>

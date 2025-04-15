@@ -41,10 +41,12 @@ export async function insertServiceRequest(
     sourceLanguage: string,
     targetLanguage: string,
     cleaningType: string,
+    accommodationType: string,
     accessZones: string,
     securityIssue: string,
     transportationType: string,
     transportationDestination: string,
+    accommodationDetails?: string,
     contaminant?: string,
     additional_comments?: string,
 ) {
@@ -88,6 +90,14 @@ export async function insertServiceRequest(
                         create: {
                             transportationType: transportationType,
                             transportationDestination: transportationDestination,
+                        }
+                    },
+                }),
+                ...(request_type === 'audioVisual' && {
+                    audioVisual: {
+                        create: {
+                            accommodationType: accommodationType,
+                            accommodationDetails: accommodationDetails,
                         }
                     },
                 }),

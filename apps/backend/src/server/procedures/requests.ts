@@ -41,6 +41,12 @@ export const makeRequest = publicProcedure
                     targetLanguage: z.string(),
                 })
             ),
+            audioVisual: z.optional(
+                z.object({
+                    accommodationType: z.string(),
+                    accommodationDetails: z.string(),
+                })
+            ),
             security: z.optional(
                 z.object({
                     accessZones: z.string(),
@@ -53,7 +59,6 @@ export const makeRequest = publicProcedure
                     transportationDestination: z.string(),
                 })
             ),
-            audioVisual: z.optional(z.object({ accommodations: z.string() })),
         })
     )
     .mutation(async ({ input }) => {

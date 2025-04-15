@@ -129,10 +129,28 @@ export default function RequestListPage(){
                                             <span className="font-semibold">Target Language:</span> {selectedRequest.language.targetLanguage}{" "}
                                         </>
                                     )}
-                                    <br />
-                                    {selectedRequest.sanitation?.contaminant && (
+                                    {selectedRequest.audioVisual?.accommodationType && (
                                         <>
-                                            <span className="font-semibold">Contaminant:</span> {selectedRequest.sanitation.contaminant}{" "}
+                                            <span className="font-semibold">Accommodation Type:</span> {selectedRequest.audioVisual.accommodationType}{" "}
+                                        </>
+                                    )}
+                                    {selectedRequest.transportation?.transportationType && (
+                                        <>
+                                            <span className="font-semibold">Transportation Type:</span> {selectedRequest.transportation.transportationType}{" "}
+                                        </>
+                                    )}
+                                    {selectedRequest.security?.accessZones && (
+                                        <>
+                                            <span className="font-semibold">Access Zones:</span> {selectedRequest.security.accessZones}{" "}
+                                        </>
+                                    )}
+                                    <br />
+                                    {selectedRequest.request_type === "Sanitation" && (
+                                        <>
+                                            <span className="font-semibold">Contaminant:</span>{" "}
+                                            {selectedRequest.sanitation?.contaminant?.trim()
+                                                ? selectedRequest.sanitation.contaminant
+                                                : "N/A"}
                                         </>
                                     )}
                                     {selectedRequest.language?.sourceLanguage && (
@@ -140,6 +158,25 @@ export default function RequestListPage(){
                                             <span className="font-semibold">Source Language:</span> {selectedRequest.language.sourceLanguage}
                                         </>
                                     )}
+                                    {selectedRequest.request_type === "AudioVisual" && (
+                                        <>
+                                            <span className="font-semibold">Accommodation Details:</span>{" "}
+                                            {selectedRequest.audioVisual?.accommodationDetails?.trim()
+                                                ? selectedRequest.audioVisual.accommodationDetails
+                                                : "N/A"}
+                                        </>
+                                    )}
+                                    {selectedRequest.transportation?.transportationDestination && (
+                                        <>
+                                            <span className="font-semibold">Transportation Destination:</span> {selectedRequest.transportation.transportationDestination}{" "}
+                                        </>
+                                    )}
+                                    {selectedRequest.security?.securityIssue && (
+                                        <>
+                                            <span className="font-semibold">Security Issue:</span> {selectedRequest.security.securityIssue}{" "}
+                                        </>
+                                    )}
+
                                 </p>
                             </ul> {/*Request Details*/}
 

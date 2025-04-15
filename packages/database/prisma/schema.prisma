@@ -65,10 +65,11 @@ model Transportation {
 }
 
 model AudioVisual {
-  request_id      Int             @id @default(autoincrement())
-  accommodations  String
-  audioVisualId   Int             @unique
-  service_request service_request @relation(fields: [audioVisualId], references: [request_id])
+  request_id           Int             @id @default(autoincrement())
+  accommodationType    String
+  accommodationDetails String?
+  audioVisualId        Int             @unique
+  service_request      service_request @relation(fields: [audioVisualId], references: [request_id])
 }
 
 model Security {

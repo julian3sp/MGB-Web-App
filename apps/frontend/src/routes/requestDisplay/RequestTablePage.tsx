@@ -131,41 +131,73 @@ export default function RequestTablePage() {
                                     </p>
                                 </td>
                                 <td className="p-4">
+                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                        {res.priority}
+                                    </p>
+                                </td>
+                                <td className="p-4">
                                     <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                         {res.sanitation?.cleaningType && (
                                             <div className="flex">
-                                                <span className="font-semibold w-35">Cleaning Type:</span>
+                                                <span className="font-semibold w-40">Cleaning Type:</span>
                                                 <span>{res.sanitation.cleaningType}</span>
                                             </div>
                                         )}
                                         {res.language?.targetLanguage && (
                                             <div className="flex">
-                                                <span className="font-semibold w-35">Target Language:</span>
+                                                <span className="font-semibold w-40">Target Language:</span>
                                                 <span>{res.language.targetLanguage}</span>
                                             </div>
                                         )}
-                                        {res.sanitation?.contaminant && (
+                                        {res.audioVisual?.accommodationType && (
                                             <div className="flex">
-                                                <span className="font-semibold w-35">Contaminant:</span>
-                                                <span>{res.sanitation.contaminant}</span>
+                                                <span className="font-semibold w-40">Accommodation Type:</span>
+                                                <span>{res.audioVisual.accommodationType}</span>
+                                            </div>
+                                        )}
+                                        {res.transportation?.transportationType && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Transportation Type:</span>
+                                                <span>{res.transportation.transportationType}</span>
+                                            </div>
+                                        )}
+                                        {res.security?.accessZones && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Access Zones:</span>
+                                                <span>{res.security.accessZones}</span>
+                                            </div>
+                                        )}
+                                        {res.request_type === "Sanitation" && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Contaminant:</span>
+                                                <span>{res.sanitation?.contaminant?.trim() ? res.sanitation.contaminant : "N/A"}</span>
                                             </div>
                                         )}
                                         {res.language?.sourceLanguage && (
                                             <div className="flex">
-                                                <span className="font-semibold w-35">Source Language:</span>
+                                                <span className="font-semibold w-40">Source Language:</span>
                                                 <span>{res.language.sourceLanguage}</span>
                                             </div>
                                         )}
+                                        {res.request_type === "AudioVisual" && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Accommodation Details:</span>
+                                                <span>{res.audioVisual?.accommodationDetails?.trim() ? res.audioVisual.accommodationDetails : "N/A"}</span>
+                                            </div>
+                                        )}
+                                        {res.transportation?.transportationDestination && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Transportation Destination:</span>
+                                                <span>{res.transportation.transportationDestination}</span>
+                                            </div>
+                                        )}
+                                        {res.security?.securityIssue && (
+                                            <div className="flex">
+                                                <span className="font-semibold w-40">Security Issue:</span>
+                                                <span>{res.security.securityIssue}</span>
+                                            </div>
+                                        )}
                                     </div> {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
-                                </td>
-                                <td className="p-4">
-                                    <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                        {res.sanitation?.cleaningType ? `Cleaning Type: ${res.sanitation?.cleaningType}` : ""}
-                                        {res.language?.targetLanguage ? `Target Language: ${res.language?.targetLanguage}` : ""}
-                                        <br/>
-                                        {res.sanitation?.contaminant ? `Contaminant: ${res.sanitation?.contaminant}` : ""}
-                                        {res.language?.sourceLanguage ? `Source Language: ${res.language?.sourceLanguage}` : ""}
-                                    </p>
                                 </td>
                                 <td className="p-4">
                                     <p className="block font-[Poppins] text-med text-blue-gray-900">

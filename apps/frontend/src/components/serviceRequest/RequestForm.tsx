@@ -25,6 +25,8 @@ type errorProps =
     status: string,
     cleaningType: string,
     contaminant: string,
+    accommodationType: string,
+    accommodationDetails: string,
     sourceLanguage: string,
     targetLanguage: string,
     accessZones: string,
@@ -45,6 +47,8 @@ function RequestForm({ title, type }: requestFormProps) {
     const [contaminant, setContaminant] = useState<string>("");
     const [sourceLanguage, setSourceLanguage] = useState<string>("");
     const [targetLanguage, setTargetLanguage] = useState<string>("");
+    const [accommodationType, setAccommodationType] = useState<string>("");
+    const [accommodationDetails, setAccommodationDetails] = useState<string>("");
     const [accessZones, setAccessZones] = useState<string>("");
     const [securityIssue, setSecurityIssue] = useState<string>("");
     const [transportationType, setTransportationType] = useState<string>("");
@@ -64,6 +68,8 @@ function RequestForm({ title, type }: requestFormProps) {
         contaminant: '',
         sourceLanguage: '',
         targetLanguage: '',
+        accommodationType: '',
+        accommodationDetails: '',
         accessZones: '',
         securityIssue: '',
         transportationType: '',
@@ -83,6 +89,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
             transportationType: '',
@@ -112,6 +120,11 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('targetLanguage error');
         }
 
+        if(!accommodationType && type === 'AudioVisual') {
+            errors.accommodationType = "Please select an accommodation type";
+            console.log('accommodationType error');
+        }
+
         if (!employeeID) {
             errors.employeeID = "Employee ID is required";
         } else if (employeeID.length < 9) {
@@ -137,7 +150,6 @@ function RequestForm({ title, type }: requestFormProps) {
             errors.priority = 'Please set a priority';
             console.log('priority error');
         }
-
 
         if (!cleaningType && type ==='Sanitation') {
             errors.cleaningType = 'Please set a cleaning type';
@@ -212,6 +224,12 @@ function RequestForm({ title, type }: requestFormProps) {
                     transportationDestination: transportationDestination,
                 },
             }),
+            ...(type === 'AudioVisual' && {
+                audioVisual: {
+                    accommodationType: accommodationType,
+                    accommodationDetails: accommodationDetails,
+                },
+            }),
         });
 
         handleReset(e);
@@ -232,6 +250,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setSecurityIssue('');
         setTransportationType('');
         setTransportationDestination('');
+        setAccommodationType('');
+        setAccommodationDetails('');
 
         setErrors({
             name: '',
@@ -245,6 +265,8 @@ function RequestForm({ title, type }: requestFormProps) {
             contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
             transportationType: '',
@@ -461,6 +483,30 @@ function RequestForm({ title, type }: requestFormProps) {
                                                 "Chestnut Hill",
                                                 "Faulkner Hospital",
                                                 "Patriot Place"]}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "AudioVisual" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Accommodation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accommodationType}
+                                            setState={setAccommodationType}
+                                            placeholder={"Select Accommodation Type"}
+                                            width={"w-full"}
+                                            error={errors.accommodationType}
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Accommodation Details (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={accommodationDetails}
+                                            setState={setAccommodationDetails}
+                                            placeholder={"Enter Accommodation Details"}
+                                            width="w-full"
+                                            error={errors.accommodationDetails}/>
                                     </div>
                                 </>
                                 : null}

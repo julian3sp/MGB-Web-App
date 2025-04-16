@@ -1,3 +1,5 @@
+import {trpc} from "@/lib/trpc.ts";
+
 export type Node = {
     name: string | null
     id: number
@@ -16,6 +18,7 @@ export type  Edge = {
     weight: number;
 }
 
+
 export class Graph {
     private nodes: Set<Node>;
     private adjacencyList: Map<Node, Edge[]>;
@@ -23,6 +26,29 @@ export class Graph {
     constructor() {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
+    }
+
+    populate(){
+        const nodesQuery = trpc.getAllNodes.useQuery();
+        const edgesQuery = trpc.getAllEdges.useQuery();
+
+        const allNodes: Node[] = (nodesQuery.data ?? []).map((n) => ({
+            ...n,
+            name: `node-${n.id}`,
+            edgeCost: 0,     // or any default value
+            totalCost: 0,
+            parent: undefined
+        }));
+
+        const allEdges: Edge[] = (edgesQuery.data ?? []).map((n) => ({
+            ...n,
+            source: allNodes[n.sourceId - 1],
+            target: allNodes[n.targetId - 1],
+        }));
+
+        for (const edge of allEdges) {
+            this.addEdge(edge.source, edge.target, edge.weight)
+        }
     }
 
     addNode(node: Node): void {

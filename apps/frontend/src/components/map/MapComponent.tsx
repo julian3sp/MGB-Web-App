@@ -9,7 +9,7 @@ import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import icon from '../../../assets/icon.png';
 import FloorSelector from './FloorSelector';
-import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
+import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -31,6 +31,8 @@ const MapComponent: React.FC = () => {
     transit: null,
     walking: null,
   });
+
+  const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
 
   // Calculate travel times when start or end location changes.
   useEffect(() => {
@@ -60,6 +62,9 @@ const MapComponent: React.FC = () => {
     setMapInstance(map);
     setDirectionsService(service);
     setDirectionsRenderer(renderer);
+
+    const overlays = createMGBOverlays(map);
+    setMgbOverlays(overlays);
   };
 
   const handleFloorSelect = (floor: 3 | 4) => {
@@ -124,6 +129,19 @@ const MapComponent: React.FC = () => {
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
     setSelectedDepartment(department);
     setShowHospitalMap(false);
+
+    const departmentMapping: Record<string, google.maps.LatLngLiteral> = {
+      'Laboratory': { lat: 42.32575227638497, lng: -71.15003975413042 },
+      'Radiology': {lat: 42.325991023027356, lng: -71.14925534772229}
+
+      // Add additional mappings as needed.
+    };
+
+    const destCoord = departmentMapping[department.name];
+    if (destCoord && mapInstance && mgbOverlays) {
+      // Update (or create) the path polyline inside the building.
+      updateDepartmentPath(mgbOverlays, mapInstance, destCoord);
+    }
   };
 
   // When the "Show Google Map" button is clicked.
@@ -226,14 +244,35 @@ const MapComponent: React.FC = () => {
   };
 
   const handleZoomChange = (zoom: number) => {
+    // Update the routing destination marker (if using it elsewhere)
     if (destinationMarkerRef.current) {
+      // Example: hide the general destination marker when zoomed in.
       if (zoom >= 19) {
         destinationMarkerRef.current.setVisible(false);
       } else {
         destinationMarkerRef.current.setVisible(true);
       }
     }
+  
+    // Also hide/show the department path polyline and its markers (from MGB overlays).
+    // (Make sure mgbOverlays is defined.)
+    if (mgbOverlays) {
+      if (zoom < 20) {
+        // When zoomed out, hide the department overlay markers and polyline.
+        mgbOverlays.navigationPolyline?.setVisible(false);
+        if (mgbOverlays.markers) {
+          mgbOverlays.markers.forEach(marker => marker.setVisible(false));
+        }
+      } else {
+        // When zoomed in, show the department overlay.
+        mgbOverlays.navigationPolyline?.setVisible(true);
+        if (mgbOverlays.markers) {
+          mgbOverlays.markers.forEach(marker => marker.setVisible(true));
+        }
+      }
+    }
   };
+  
 
   // Update route when transport mode or locations change.
   useEffect(() => {
@@ -325,7 +364,7 @@ const MapComponent: React.FC = () => {
       <div className="w-3/4 relative">
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <MapRenderer 
-            onMapReady={handleMapReady} 
+          M  onMapReady={handleapReady} 
             selectedDestination={selectedPlace} 
             onZoomChange={handleZoomChange}
             selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
@@ -335,11 +374,11 @@ const MapComponent: React.FC = () => {
           )}
         </div>
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <DrawingPath
+          {/* <DrawingPath
             key={selectedDepartment?.name}
             source="south entrance"
             destination={selectedDepartment?.name ?? "south entrance"}
-          />
+          /> */}
         </div>
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className="flex flex-col items-center gap-4">

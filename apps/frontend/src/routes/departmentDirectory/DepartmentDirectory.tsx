@@ -1,22 +1,11 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
-import DepartmentList from "../components/DepartmentList.ts";
 import DepartmentRoutes from "./DepartmentRoutes.tsx";
-import {trpc} from "../lib/trpc.ts";
-import {useLocation} from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+import {trpc} from "../../lib/trpc.ts";
 
 
 const DepartmentDirectory = () => {
     const Directories = trpc.getDirectories.useQuery()
-    const navigate = useNavigate();
-    const Handlelocation = () =>{
-        window.location.href = "http://localhost:3000/navigation"
-        const prevdepartment = useLocation()
-        const department_name = prevdepartment.state?.Directories ? prevdepartment.state?.Directories[0].name : null;
-        console.log(department_name);
-        return department_name;
-    }
     return (
             <div className="flex flex-1">
                 <nav className="w-1/3 bg-white p-6 border"  style={{ borderColor: '#005E64', borderWidth: '1px', borderStyle: 'solid' }}> {/*Border styling*/}
@@ -43,7 +32,6 @@ const DepartmentDirectory = () => {
                                     {dept.name}
                                 </NavLink>
                             </li>
-
                         ))}
                     </ul>
                 </nav>

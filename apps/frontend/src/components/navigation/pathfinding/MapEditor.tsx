@@ -4,6 +4,7 @@ import ImportCSV from '../../ImportDept.tsx';
 import ImportDept from '../../ImportDept.tsx';
 import ImportNodes from '../../ImportNodes.tsx';
 import ImportEdges from '../../ImportEdges.tsx';
+import {Pathfinding} from "../../map/Pathfinding.tsx";
 
 export default function MapEditor() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,7 @@ export default function MapEditor() {
         const onMouseDown = (e: MouseEvent) => {
             console.log('onMouseDown');
             isClicked.current = true;
+            console.log(graph)
         };
 
         const onMouseUp = (e: MouseEvent) => {

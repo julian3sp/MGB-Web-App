@@ -50,12 +50,14 @@ model users {
 }
 
 model nodes {
-  id       Int     @id @default(autoincrement())
-  building String
-  floor    Int
-  name     String?
-  x        Int
-  y        Int
+  id        Int     @id @default(autoincrement())
+  building  String
+  floor     Int
+  name      String?
+  x         Int
+  y         Int
+  edgeCost  Int     @default(0)
+  totalCost Int     @default(0)
 
   outgoingEdges edges[] @relation("SourceEdges")
   incomingEdges edges[] @relation("TargetEdges")

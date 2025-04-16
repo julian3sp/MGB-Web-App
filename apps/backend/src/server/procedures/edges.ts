@@ -24,24 +24,16 @@ export const makeEdge = publicProcedure
         }
     });
 
-export const getAllEdges = publicProcedure
-    .input(
-        z.object({
-            building: z.string(),
-            floor: z.number(),
-        })
-    )
-    .query(async (opts) => {
-        const { input } = opts;
-        // Retrieve the user with the given ID
-        const edges = await client.edges.findMany({
-            include: {
-                sourceNode: true,
-                targetNode: true,
-            },
-        });
-        return edges;
+export const getAllEdges = publicProcedure.query(async (opts) => {
+    // Retrieve the user with the given ID
+    const edges = await client.edges.findMany({
+        include: {
+            sourceNode: true,
+            targetNode: true,
+        },
     });
+    return edges;
+});
 
 export const deleteAllEdges = publicProcedure.mutation(async () => {
     await client.edges.deleteMany();

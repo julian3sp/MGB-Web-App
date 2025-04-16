@@ -8,7 +8,14 @@ import { getRequests, makeRequest } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
-import { getDirectories, makeDirectories } from './server/procedures/directories.ts';
+import {
+    deleteAllDirectories,
+    getDirectories,
+    getUniqueDirectories,
+    makeDirectories,
+} from './server/procedures/directories.ts';
+import { deleteAllNodes, getAllNodes, getNode, makeNode } from './server/procedures/nodes.ts';
+import { deleteAllEdges, getAllEdges, makeEdge } from './server/procedures/edges.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -22,8 +29,17 @@ const appRouter = t.router({
     makeEmployee: makeEmployee,
     validUser: getUser,
     makeUser: makeUser,
-    getDirectories: getDirectories,
     makeDirectory: makeDirectories,
+    getDirectories: getDirectories,
+    getUniqueDirectory: getUniqueDirectories,
+    deleteAllDirectories: deleteAllDirectories,
+    makeNode: makeNode,
+    getNode: getNode,
+    getAllNodes: getAllNodes,
+    deleteAllNodes: deleteAllNodes,
+    makeEdge: makeEdge,
+    getAllEdges: getAllEdges,
+    deleteAllEdges: deleteAllEdges,
 });
 
 const app: Express = express(); // Set up the backend

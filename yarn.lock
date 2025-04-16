@@ -24,7 +24,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-react@npm:^2.1.1, @auth0/auth0-react@npm:^2.3.0":
+"@auth0/auth0-react@npm:^2.1.1":
   version: 2.3.0
   resolution: "@auth0/auth0-react@npm:2.3.0"
   dependencies:
@@ -577,10 +577,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@googlemaps/js-api-loader@npm:^1.16.8":
+"@googlemaps/js-api-loader@npm:1.16.8, @googlemaps/js-api-loader@npm:^1.16.8":
   version: 1.16.8
   resolution: "@googlemaps/js-api-loader@npm:1.16.8"
   checksum: 10/63771c753630c7c86c48e7e0978e0f2d84ca2ca20d5e0a3c2f9e539bd3adca22316953893e1b90f9fd411a172e73b2742aec1ce27897f108aae5a6245c990c9d
+  languageName: node
+  linkType: hard
+
+"@googlemaps/markerclusterer@npm:2.5.3":
+  version: 2.5.3
+  resolution: "@googlemaps/markerclusterer@npm:2.5.3"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    supercluster: "npm:^8.0.1"
+  checksum: 10/68590483e660ae6fa4755b18f7f5fb7336506eb5399a82a593efb6e2040c62a1aa714fc9a12af6cebb8564b9d133c9d1965f428158a1fdb1e4d9a5d9e5bcb64b
   languageName: node
   linkType: hard
 
@@ -1010,6 +1020,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-google-maps/api@npm:^2.20.6":
+  version: 2.20.6
+  resolution: "@react-google-maps/api@npm:2.20.6"
+  dependencies:
+    "@googlemaps/js-api-loader": "npm:1.16.8"
+    "@googlemaps/markerclusterer": "npm:2.5.3"
+    "@react-google-maps/infobox": "npm:2.20.0"
+    "@react-google-maps/marker-clusterer": "npm:2.20.0"
+    "@types/google.maps": "npm:3.58.1"
+    invariant: "npm:2.2.4"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18 || ^19
+    react-dom: ^16.8 || ^17 || ^18 || ^19
+  checksum: 10/173fe6cd02e8c04816fb7c0f7677a4d3887f6d30fdf7e9508285ccc81b4e03a607ce4c0f5ff34360e16b9b22bfa6959e07d8d90b8f3410003311190427673260
+  languageName: node
+  linkType: hard
+
+"@react-google-maps/infobox@npm:2.20.0":
+  version: 2.20.0
+  resolution: "@react-google-maps/infobox@npm:2.20.0"
+  checksum: 10/ad8dcf905c483e0ecfc0d4f6caf7a4136b0e0de83daa5093048545f6de3bf520d58f789aa1e028f8371977346991875bf2fec41354657ac84696b6acdd6527ff
+  languageName: node
+  linkType: hard
+
+"@react-google-maps/marker-clusterer@npm:2.20.0":
+  version: 2.20.0
+  resolution: "@react-google-maps/marker-clusterer@npm:2.20.0"
+  checksum: 10/28da905ea194758b046b3c92d8a890f42d6c9b845b6c43a10fe1e33ed29bfe3079030a4b9675f08d8a7888d1c06e915e1d19dd679ba3d03ebc3a616172e42ffa
+  languageName: node
+  linkType: hard
+
 "@restart/hooks@npm:^0.4.9":
   version: 0.4.16
   resolution: "@restart/hooks@npm:0.4.16"
@@ -1366,6 +1407,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.31.0":
+  version: 3.31.0
+  resolution: "@tabler/icons-react@npm:3.31.0"
+  dependencies:
+    "@tabler/icons": "npm:3.31.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10/edc80c6398a4df8a5dea78beb8f9a9ae3af2238860c7a5fe683fb7e5dfb36a2ad12732300cfeaebea3c6c55b28525c6a28eca82e1c35d66da2bc7be31c839fbb
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.31.0":
+  version: 3.31.0
+  resolution: "@tabler/icons@npm:3.31.0"
+  checksum: 10/400b6e250069074075243154354bdd5282c584c528fc42ef6bd903a4f5173256f3a984d14ab6d35dfe7d22c0313e5128cb30db70607b3f555cf18c468d118fcb
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/node@npm:4.0.17":
   version: 4.0.17
   resolution: "@tailwindcss/node@npm:4.0.17"
@@ -1715,7 +1774,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/google.maps@npm:^3.58.1":
+"@types/google.maps@npm:3.58.1, @types/google.maps@npm:^3.58.1":
   version: 3.58.1
   resolution: "@types/google.maps@npm:3.58.1"
   checksum: 10/3d5aaa901c0b5dcce45dc9f667912c04b99be0b4a8b541b5120b677697d17116684fddb457bea4955142755c9089993ea4b48b30705283c16935473b1818ecd1
@@ -1841,12 +1900,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19":
-  version: 19.0.4
-  resolution: "@types/react-dom@npm:19.0.4"
+"@types/react-dom@npm:latest":
+  version: 19.1.2
+  resolution: "@types/react-dom@npm:19.1.2"
   peerDependencies:
     "@types/react": ^19.0.0
-  checksum: 10/f15d470242f0b7cca57dd7e991a2852525ac93b2cb92f7e6c104d7bd6a978c3b1d0ba9b8698f23bc19c16b5cd98a6d160007be52c61196952f57cf019f204254
+  checksum: 10/bcadf2a1f4d23db8c1aaa0d13e30866d7bcda076801bbc66df14512932e0802ddac526bf15f4cce9777cd6e0bd3803aba47a1d726977f5193b4bc173348508d0
   languageName: node
   linkType: hard
 
@@ -1889,7 +1948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^19":
+"@types/react@npm:*":
   version: 19.0.12
   resolution: "@types/react@npm:19.0.12"
   dependencies:
@@ -1914,6 +1973,15 @@ __metadata:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10/020c51e63b60862e6d772f0cdea0b9441182eedab6289dabd8add0708ded62003834c4e7c6f23a1ccd3ca9486b46296057c3f881c34261a0483765351f8d0bc3
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:latest":
+  version: 19.1.2
+  resolution: "@types/react@npm:19.1.2"
+  dependencies:
+    csstype: "npm:^3.0.2"
+  checksum: 10/17803797227d2fc07a2cd6c17d57b1ea9b01eb16eca6318be60852c8d7467b4b58e675742f53d77ff4a37621a5814f16847dede73999181cb7f9449c1784fab6
   languageName: node
   linkType: hard
 
@@ -2531,6 +2599,15 @@ __metadata:
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
   checksum: 10/3ce727cbc78f69d6a4722517a58ee926c8c21083633b1d3fdf66fd688f6c127a53a592141bd4866f9b63240a86e9d8e974b13919450bd17fa33c2d22c4558ad8
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.19.2":
+  version: 0.19.2
+  resolution: "axios@npm:0.19.2"
+  dependencies:
+    follow-redirects: "npm:1.5.10"
+  checksum: 10/364f5e698ec47c66fbba9db98ac4af4ed91aab802ab095a7905781ee5bcc7fafb9cf05be8d05167f615bda3af3eb6b403556ab23fdfda3adaabd61a3295076be
   languageName: node
   linkType: hard
 
@@ -3315,6 +3392,15 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10/1847944c2e3c2c732514b93d11886575625686056cd765336212dc15de2d2b29612b6cd80e1afba767bb8e1803b778caf9973e98169ef1a24a7a7009e1820367
+  languageName: node
+  linkType: hard
+
+"debug@npm:=3.1.0":
+  version: 3.1.0
+  resolution: "debug@npm:3.1.0"
+  dependencies:
+    ms: "npm:2.0.0"
+  checksum: 10/f5fd4b1390dd3b03a78aa30133a4b4db62acc3e6cd86af49f114bf7f7bd57c41a5c5c2eced2ad2c8190d70c60309f2dd5782feeaa0704dbaa5697890e3c5ad07
   languageName: node
   linkType: hard
 
@@ -4178,6 +4264,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:1.5.10":
+  version: 1.5.10
+  resolution: "follow-redirects@npm:1.5.10"
+  dependencies:
+    debug: "npm:=3.1.0"
+  checksum: 10/7cf3bb10dbffabce317d1de3e3f85ea8c47fea388c4bc3da1052fd6bbb7b036772f48eed2f154d63ac39c49ab5fe4df0dda94b8e0c54eda8ca2edb001b2550b7
+  languageName: node
+  linkType: hard
+
 "follow-redirects@npm:^1.15.6":
   version: 1.15.9
   resolution: "follow-redirects@npm:1.15.9"
@@ -4306,6 +4401,7 @@ __metadata:
     serve: "npm:^14.2.0"
     tailwind-merge: "npm:^3.2.0"
     tailwindcss: "npm:^4.0.17"
+    trpc: "npm:^0.11.3"
     ts-config-custom: "workspace:*"
     typescript: "npm:*"
     vite: "npm:^6.2.3"
@@ -4785,7 +4881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:^2.2.4":
+"invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -5039,6 +5135,13 @@ __metadata:
   bin:
     json5: lib/cli.js
   checksum: 10/1db67b853ff0de3534085d630691d3247de53a2ed1390ba0ddff681ea43e9b3e30ecbdb65c5e9aab49435e44059c23dbd6fee8ee619419ba37465bb0dd7135da
+  languageName: node
+  linkType: hard
+
+"kdbush@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "kdbush@npm:4.0.2"
+  checksum: 10/ca1f7a106c129056044ab19851909efcc33680d568066872de996d3bc4d41f81d2a6423e577f20436d1a8b96a6f3c514af8cb94cc54a4d784d9df976b43066f8
   languageName: node
   linkType: hard
 
@@ -6551,7 +6654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.1.0":
+"react-dom@npm:latest":
   version: 19.1.0
   resolution: "react-dom@npm:19.1.0"
   dependencies:
@@ -6672,7 +6775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.0":
+"react@npm:latest":
   version: 19.1.0
   resolution: "react@npm:19.1.0"
   checksum: 10/d0180689826fd9de87e839c365f6f361c561daea397d61d724687cae88f432a307d1c0f53a0ee95ddbe3352c10dac41d7ff1ad85530fb24951b27a39e5398db4
@@ -7236,33 +7339,33 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
-    "@auth0/auth0-react": "npm:^2.3.0"
     "@googlemaps/js-api-loader": "npm:^1.16.8"
     "@popperjs/core": "npm:^2.11.8"
-    "@prisma/client": "npm:^6.6.0"
-    "@radix-ui/react-switch": "npm:^1.1.4"
+    "@react-google-maps/api": "npm:^2.20.6"
+    "@tabler/icons-react": "npm:^3.31.0"
     "@types/google.maps": "npm:^3.58.1"
     "@types/node": "npm:^22.13.13"
-    "@types/react": "npm:^19"
-    "@types/react-dom": "npm:^19"
+    "@types/react": "npm:latest"
+    "@types/react-dom": "npm:latest"
     "@vitest/ui": "npm:^3.0.9"
     "@yarnpkg/pnpify": "npm:^4.1.4"
+    clsx: "npm:^2.1.1"
     common: "workspace:*"
-    dotenv: "npm:^16.5.0"
+    dotenv: "npm:^16.4.7"
     dotenv-cli: "npm:^7.4.4"
     eslint: "npm:^9.23.0"
     eslint-config-custom: "workspace:*"
     husky: "npm:^9.1.7"
+    motion: "npm:^12.6.3"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
-    prisma: "npm:^6.6.0"
-    react: "npm:^19.1.0"
-    react-dom: "npm:^19.1.0"
+    react: "npm:latest"
+    react-dom: "npm:latest"
+    tailwind-merge: "npm:^3.2.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
     typescript: "npm:^5.8.2"
     vitest: "npm:^3.0.9"
-    zod: "npm:^3.24.2"
   languageName: unknown
   linkType: soft
 
@@ -7432,6 +7535,15 @@ __metadata:
     qs: "npm:^6.11.0"
     semver: "npm:^7.3.8"
   checksum: 10/33d0072e051baf91c7d68131c70682a0650dd1bd0b8dfb6f88e5bdfcb02e18cc2b42a66e44b32fd405ac6bcf5fd57c6e267bf80e2a8ce57a18166a9d3a78f57d
+  languageName: node
+  linkType: hard
+
+"supercluster@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "supercluster@npm:8.0.1"
+  dependencies:
+    kdbush: "npm:^4.0.2"
+  checksum: 10/3e517e54087fe24efa274013a5c116b0083d140d3cd855c5004fef61b64dde83510d2a65cd6565349b693751936aede2305f76d84778e6107ae1b3ffa18a5bae
   languageName: node
   linkType: hard
 
@@ -7625,6 +7737,15 @@ __metadata:
   version: 1.1.0
   resolution: "treeify@npm:1.1.0"
   checksum: 10/5241976a751168fb9894a12d031299f1f6337b7f2cbd3eff22ee86e6777620352a69a1cab0d4709251317ff307eeda0dc45918850974fc44f4c7fc50e623b990
+  languageName: node
+  linkType: hard
+
+"trpc@npm:^0.11.3":
+  version: 0.11.3
+  resolution: "trpc@npm:0.11.3"
+  dependencies:
+    axios: "npm:^0.19.2"
+  checksum: 10/c0d3b22290bd7175c9e5fb2fc1084d1b49941133168648af8d641979d8fc23986d08436281b20d326f4b955dbd48c0a28167aa7ad9182d4d065ab8b72a3de9d0
   languageName: node
   linkType: hard
 

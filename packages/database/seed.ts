@@ -18,7 +18,7 @@ async function main() {
     await insertServiceRequest('Julian Espinal', 'something@gmail.com', '4014425005', 107, 'language','000000000', '', 'Spanish',null,prisma);
     await insertServiceRequest('Julian Espinal', 'something@gmail.com', '4014425005', 108, 'language','000000000', '', 'Spanish',null,prisma);
     await insertServiceRequest('Julian Espinal', 'something@gmail.com', '4014425005', 109, 'language','000000000', '', 'Spanish',null,prisma);
-
+    
 }
 
 main();

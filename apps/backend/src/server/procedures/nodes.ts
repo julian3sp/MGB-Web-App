@@ -1,0 +1,47 @@
+import client from '../../bin/prisma-client';
+import { publicProcedure } from '../trpc';
+import { z } from 'zod';
+import { trpc } from '../trpc.ts';
+
+export const makeNode = publicProcedure
+    .input(
+        z.array(
+            z.object({
+                building: z.string(),
+                floor: z.number(),
+                name: z.string(),
+                x: z.number(),
+                y: z.number(),
+            })
+        )
+    )
+    .mutation(async ({ input }) => {
+        return client.nodes.createMany({ data: input });
+    });
+
+export const getAllNodes = publicProcedure.query(async () => {
+    const nodes = await client.nodes.findMany();
+    return nodes;
+});
+
+export const getNode = publicProcedure
+    .input(
+        z.object({
+            id: z.number(),
+        })
+    )
+    .query(async (opts) => {
+        const { input } = opts;
+
+        const node = await client.nodes.findUnique({
+            where: {
+                id: input.id,
+            },
+        });
+        return node;
+    });
+
+export const deleteAllNodes = publicProcedure.mutation(async () => {
+    await client.nodes.deleteMany();
+    await client.$executeRaw`ALTER SEQUENCE "nodes_id_seq" RESTART WITH 1`;
+});

@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { trpc } from '../../lib/trpc.ts';
-import axios from 'axios';
-import ImportCSV from "../../components/importCSV.tsx";
+import React, { useState } from 'react';
+import {trpc} from "@/lib/trpc.ts";
+import ImportCSV from "../../components/ImportDept.tsx";
+
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
         name: '',
+        services: '',
         location: '',
         telephone: '',
     });
 
-    const utils = trpc.useUtils();
+    //const utils = trpc.useUtils();
     const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
     const addDirectory = trpc.makeDirectory.useMutation();
@@ -22,9 +23,9 @@ const DirectoryPage = () => {
         }
 
         // Construct CSV string
-        let csv = 'id,name,location,department\n';
+        let csv = 'id;name;services;location;telephone\n';
         directories.forEach((dir) => {
-            csv += `${dir.id},"${dir.name}","${dir.location}","${dir.telephone}"\n`;
+            csv += `${dir.id}';'${dir.name}";"${dir.services.replace(/,/g,"#")}";"${dir.location}";"${dir.telephone}"\n`;
         });
 
         // Encode the CSV data as a Data URI
@@ -52,9 +53,9 @@ const DirectoryPage = () => {
     };
 
 
-    const handleCSVExport = () => {
-        window.open('/api/directory/export', '_blank');
-    };
+    //const handleCSVExport = () => {
+        //window.open('/api/directory/export', '_blank');
+    //};
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
@@ -72,11 +73,19 @@ const DirectoryPage = () => {
                 />
                 <input
                     className="border p-2 w-full"
+                    name="services"
+                    placeholder="Services"
+                    value={formData.services}
+                    onChange={handleChange}
+                />
+                <input
+                    className="border p-2 w-full"
                     name="location"
                     placeholder="Location"
                     value={formData.location}
                     onChange={handleChange}
                 />
+
                 <input
                     className="border p-2 w-full"
                     name="telephone"
@@ -118,6 +127,8 @@ const DirectoryPage = () => {
                     <tr className="bg-gray-200">
                         <th className="border px-4 py-2">ID</th>
                         <th className="border px-4 py-2">Name</th>
+                        <th className="border px-4 py-2">Services</th>
+
                         <th className="border px-4 py-2">Location</th>
                         <th className="border px-4 py-2">Telephone</th>
                     </tr>
@@ -127,6 +138,7 @@ const DirectoryPage = () => {
                         <tr key={dir.id}>
                             <td className="border px-4 py-2">{dir.id}</td>
                             <td className="border px-4 py-2">{dir.name}</td>
+                            <td className="border px-4 py-2">{dir.services}</td>
                             <td className="border px-4 py-2">{dir.location}</td>
                             <td className="border px-4 py-2">{dir.telephone}</td>
                         </tr>

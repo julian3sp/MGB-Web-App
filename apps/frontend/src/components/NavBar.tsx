@@ -62,8 +62,8 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                     </div>
                 </div>
             </div>
-            <LogInButton/>
-            <LogOutButton/>
+            <LogInButton className="text-sm"/>
+            <LogOutButton className="text-sm"/>
         </nav>
     )
 }

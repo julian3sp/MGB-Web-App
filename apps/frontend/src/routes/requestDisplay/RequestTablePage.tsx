@@ -82,7 +82,7 @@ export default function RequestTablePage() {
                 className="w-full min-h-[85vh] bg-white p-6 font-[Poppins]"
                 style={{
                     borderTop: '2px solid #d9d9d9',
-                    borderBottom: '2px solid #005E64',
+                    borderBottom: 'none',
                     borderRight: 'none',
                     borderLeft: 'none',
                 }}

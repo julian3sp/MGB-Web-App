@@ -31,7 +31,7 @@ export default function RequestListPage(){
         <nav className="flex flex-1 font-[Poppins]">
             <nav className="w-1/3 min-h-[85vh] bg-white p-6 overflow-hidden"  style={{
                 borderTop: '2px solid #d9d9d9',
-                borderBottom: '2px solid #005E64',
+                borderBottom: 'none',
                 borderRight: '2px solid #d9d9d9',
                 borderLeft: 'none',
             }}>
@@ -60,7 +60,7 @@ export default function RequestListPage(){
 
             <div className="h-auto flex-1 bg-white p-6" style={{
                 borderTop: '2px solid #d9d9d9',
-                borderBottom: '2px solid #005E64',
+                borderBottom: 'none',
                 borderRight: 'none',
                 borderLeft: '2px solid #d9d9d9',
             }}> {/*Border styling*/}

@@ -1,4 +1,3 @@
-import React from "react";
 import { MacbookScroll } from "../components/ui/macbook-scroll";
 import { BackgroundLines } from "../components/ui/background-lines";
 import { ContainerTextFlip } from "../components/ui/container-text-flip";

@@ -29,6 +29,7 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
             title: '',
             icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
         });
+        markers.push(marker);
     }
 
     return markers

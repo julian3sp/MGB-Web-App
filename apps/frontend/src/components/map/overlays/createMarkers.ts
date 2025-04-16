@@ -14,11 +14,25 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
         const marker = new google.maps.Marker({
             position: coord,
             map: map,
-            title: '',
+            title: node.id.toString(),
             icon: {
                 url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
                 scaledSize: new google.maps.Size(8, 8) // width, height in pixels
             }        });
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
+            pixelOffset: new google.maps.Size(0, -8),
+        });
+
+        marker.addListener('mouseover', () => {
+            infoWindow.open({ map, anchor: marker });
+        });
+
+        marker.addListener('mouseout', () => {
+            infoWindow.close();
+        });
+
         markers.push(marker);
     }
 

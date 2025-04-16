@@ -1,8 +1,13 @@
-import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+  import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
+import { createMarkers } from './overlays/createMarkers'; // optional helper if implemented
+import Graph, { Node } from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
+
+// Example TRPC hooks (adjust to your own TRPC query hooks)
+import { trpc } from "@/lib/trpc";
 
 interface MapRendererProps {
   onMapReady: (
@@ -10,10 +15,8 @@ interface MapRendererProps {
     directionsService: google.maps.DirectionsService,
     directionsRenderer: google.maps.DirectionsRenderer
   ) => void;
-  // Allow selectedDestination to be an object or null.
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-
   selectedFloor?: 3 | 4; // For 22 Patriot Place
 }
 
@@ -25,9 +28,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
   const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot22Overlays | null>(null);
+  // Optionally, hold onto created markers (for future clearing, etc.)
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
-  // Refs to track current opacity (for fade animation)
+  // Refs for overlay animations
   const parkingOpacityRef = useRef(1);
   const floorOpacityRef = useRef(0);
 
@@ -35,16 +40,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
     return <div className="text-red-500 p-4">Error: Google Maps API key is missing</div>;
   }
 
-  // Initialize the map (only once)
+  // Initialize Google Map (only once)
   useEffect(() => {
     if (map) return;
-
     const loader = new Loader({
       apiKey,
       version: 'weekly',
       libraries: ['places'],
     });
-
     loader
       .load()
       .then(() => {
@@ -58,7 +61,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
             zoomControl: true,
           });
           setMap(newMap);
-
           const directionsService = new google.maps.DirectionsService();
           const directionsRenderer = new google.maps.DirectionsRenderer({
             map: newMap,
@@ -76,10 +78,33 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       .catch((error) => console.error('Error loading Google Maps:', error));
   }, [onMapReady, apiKey, map]);
 
-  // Effect to create overlays based on the selected destination.
+  // Fetch graph data via TRPC
+  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+
+  console.log("nodesdata: ",nodesData);
+
+  useEffect(() => {
+    // Make sure map is loaded and data is available
+    if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+  
+    // Instantiate and populate the graph with data from TRPC
+    const graph = new Graph();
+    graph.populate(nodesData, edgesData);
+    console.log('Graph:', graph);
+  
+    // Extract nodes from the graph
+    const allNodes: Node[] = graph.getNodes();
+    console.log('All Nodes:', allNodes);
+  
+    // Using the createMarkers helper
+    createMarkers(map, allNodes);
+  }, [map, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
+  
+
+  // Existing overlay logic for selectedDestination
   useEffect(() => {
     if (!map) return;
-
     // Clear previous overlays, if any.
     if (parkingOverlay) {
       parkingOverlay.setMap(null);
@@ -89,14 +114,12 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       floorOverlay.setMap(null);
       setFloorOverlay(null);
     }
-    
-    if (patriot22Overlays){
-      // remove previoyus overlays
+    if (patriot22Overlays) {
       patriot22Overlays.floor3Overlay.setMap(null);
       patriot22Overlays.floor4Overlay.setMap(null);
       setPatriot22Overlays(null);
     }
-
+    
     if (selectedDestination) {
       if (selectedDestination.name === "MGB (Chestnut Hill)") {
         const overlays: MGBOverlays = createMGBOverlays(map);
@@ -104,39 +127,36 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         setFloorOverlay(overlays.floorOverlay);
       } else if (selectedDestination.name === "20 Patriot Place") {
         createPatriot20Overlays(map);
-        // Implement when available.
       } else if (selectedDestination.name === "22 Patriot Place") {
         const overlays = createPatriot22Overlays(map);
         setPatriot22Overlays(overlays);
       }
     }
+    // Only run this effect when selectedDestination or map changes.
   }, [selectedDestination, map]);
+  
 
-  // when the selected floor for 22 Patriot Place changes, update its overlay
+  // 22 Patriot Place overlays update on floor change
   useEffect(() => {
     if (!map || !patriot22Overlays) return;
     updatePatriotPlace22(patriot22Overlays, selectedFloor || 3);
-
     const patriotZoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
       if (onZoomChange) onZoomChange(zoom || 0);
     });
-
     return () => google.maps.event.removeListener(patriotZoomListener);
-
   }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
 
-  // Listen to zoom events and animate opacity changes for MGB overlays.
+  // Zoom event handling for MGB overlays opacity animation
   useEffect(() => {
     if (!map || !parkingOverlay || !floorOverlay) return;
-
     const animateOverlayOpacity = (
       overlay: google.maps.GroundOverlay,
       opacityRef: MutableRefObject<number>,
       target: number,
       duration = 300
     ) => {
-      const stepTime = 50; // update every 50ms
+      const stepTime = 50;
       const steps = duration / stepTime;
       const current = opacityRef.current;
       const delta = (target - current) / steps;
@@ -153,10 +173,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         }
       }, stepTime);
     };
-
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
-      // trigger the parent's callback
       if (onZoomChange) onZoomChange(zoom || 0);
       if (zoom && zoom >= 20) {
         animateOverlayOpacity(parkingOverlay, parkingOpacityRef, 0, 300);
@@ -166,7 +184,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 0, 300);
       }
     });
-
     return () => google.maps.event.removeListener(zoomListener);
   }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 

@@ -28,26 +28,24 @@ export class Graph {
         this.adjacencyList = new Map<Node, Edge[]>();
     }
 
-    populate(){
-        const nodesQuery = trpc.getAllNodes.useQuery();
-        const edgesQuery = trpc.getAllEdges.useQuery();
-
-        const allNodes: Node[] = (nodesQuery.data ?? []).map((n) => ({
-            ...n,
-            name: `node-${n.id}`,
-            edgeCost: 0,     // or any default value
-            totalCost: 0,
-            parent: undefined
+    populate(nodesData: Node[], edgesData: { sourceId: number, targetId: number, weight: number }[]) {
+        // Create nodes from nodesData.
+        console.log("data: ", nodesData);
+        const allNodes: Node[] = nodesData.map((n) => ({
+          ...n,
+          name: `node-${n.id}`,
+          edgeCost: 0,
+          totalCost: 0,
+          parent: undefined
         }));
 
-        const allEdges: Edge[] = (edgesQuery.data ?? []).map((n) => ({
-            ...n,
-            source: allNodes[n.sourceId - 1],
-            target: allNodes[n.targetId - 1],
-        }));
+        console.log("edge data: ", edgesData);
 
-        for (const edge of allEdges) {
-            this.addEdge(edge.source, edge.target, edge.weight)
+        // Create edges from edgesData.
+        for (const { sourceId, targetId, weight } of edgesData) {
+          const sourceNode = allNodes[sourceId - 1];
+          const targetNode = allNodes[targetId - 1];
+          this.addEdge(sourceNode, targetNode, weight);
         }
     }
 

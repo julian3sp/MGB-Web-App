@@ -100,8 +100,8 @@ model nodes {
   building  String
   floor     Int
   name      String?
-  x         Int
-  y         Int
+  x         Float
+  y         Float
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 

@@ -7,7 +7,7 @@ export function LogInButton(){
     return (
         !isAuthenticated && (
             <button
-                className="group text-sm px-5 py-5 transition-all duration-150 ease-in-out bg-[#003a96] text-white"
+                className="group text-black text-sm px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] font-[Poppins] hover:text-white"
                 onClick={() => loginWithRedirect()}>Log In
             </button>
         )

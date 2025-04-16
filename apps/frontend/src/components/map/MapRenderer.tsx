@@ -1,44 +1,37 @@
-import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+  import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
+import {addDraggableMarker, createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import { createMarkers } from './overlays/createMarkers'; // helper to create markers given map and nodes
-import Graph, { Node } from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
+import {createMarkers, drawAllEdges} from './overlays/createMarkers'; // optional helper if implemented
+import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
 
-// TRPC hooks – adjust these as needed.
+// Example TRPC hooks (adjust to your own TRPC query hooks)
 import { trpc } from "@/lib/trpc";
 
 interface MapRendererProps {
   onMapReady: (
-      map: google.maps.Map,
-      directionsService: google.maps.DirectionsService,
-      directionsRenderer: google.maps.DirectionsRenderer
+    map: google.maps.Map,
+    directionsService: google.maps.DirectionsService,
+    directionsRenderer: google.maps.DirectionsRenderer
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
   selectedFloor?: 3 | 4; // For 22 Patriot Place
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({
-                                                   onMapReady,
-                                                   selectedDestination,
-                                                   onZoomChange,
-                                                   selectedFloor
-                                                 }) => {
+const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange, selectedFloor }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  // Overlays for various buildings
+  // For overlays (only for MGB in this example)
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
   const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot22Overlays | null>(null);
-
-  // Hold onto created node markers.
+  // Optionally, hold onto created markers (for future clearing, etc.)
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
-
+  
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
   // Refs for overlay animations
   const parkingOpacityRef = useRef(1);
   const floorOpacityRef = useRef(0);
@@ -56,78 +49,65 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       libraries: ['places'],
     });
     loader
-        .load()
-        .then(() => {
-          if (mapRef.current) {
-            const newMap = new google.maps.Map(mapRef.current, {
-              center: { lat: 42.3601, lng: -71.0589 },
-              zoom: 12,
-              fullscreenControl: true,
-              mapTypeControl: false,
-              streetViewControl: true,
-              zoomControl: true,
-            });
-            setMap(newMap);
-            const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer({
-              map: newMap,
-              suppressMarkers: true,
-              preserveViewport: false,
-              polylineOptions: {
-                strokeColor: '#1A73E8',
-                strokeWeight: 4,
-              },
-            });
-            directionsRenderer.setMap(newMap);
-            onMapReady(newMap, directionsService, directionsRenderer);
-          }
-        })
-        .catch((error) => console.error('Error loading Google Maps:', error));
+      .load()
+      .then(() => {
+        if (mapRef.current) {
+          const newMap = new google.maps.Map(mapRef.current, {
+            center: { lat: 42.3601, lng: -71.0589 },
+            zoom: 12,
+            fullscreenControl: true,
+            mapTypeControl: false,
+            streetViewControl: true,
+            zoomControl: true,
+          });
+          setMap(newMap);
+          const directionsService = new google.maps.DirectionsService();
+          const directionsRenderer = new google.maps.DirectionsRenderer({
+            map: newMap,
+            suppressMarkers: true,
+            preserveViewport: false,
+            polylineOptions: {
+              strokeColor: '#1A73E8',
+              strokeWeight: 4,
+            },
+          });
+          directionsRenderer.setMap(newMap);
+          onMapReady(newMap, directionsService, directionsRenderer);
+        }
+      })
+      .catch((error) => console.error('Error loading Google Maps:', error));
   }, [onMapReady, apiKey, map]);
 
-  // TRPC queries to fetch all nodes (and optionally edges, if needed for routing).
+  // Fetch graph data via TRPC
   const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-  // const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery(); // if needed
+  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
-  // Helper: determine building from selected destination name.
-  const getBuildingFromDestination = (destName: string): string | null => {
-    if (destName.includes("20 Patriot Place")) return "pat20";
-    if (destName.includes("22 Patriot Place")) return "pat22";
-    if (destName.includes("MGB")) return "chestnut";
-    return null;
-  };
+  // console.log("nodesdata: ",nodesData);
 
-  // When selectedDestination changes, filter nodes by building and render their markers.
   useEffect(() => {
-    if (!map || !nodesData || !selectedDestination) return;
+    // Make sure map is loaded and data is available
+    if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+  
+    // Instantiate and populate the graph with data from TRPC
+    const graph = new Graph();
+    graph.populate(nodesData, edgesData);
+    console.log('Graph:', graph);
+  
+    // Extract nodes from the graph
+    const allNodes: Node[] = graph.getNodes();
+    const allEdges: Edge[] = graph.getEdges();
+    // console.log('All Nodes:', allNodes);
+  
+    // Using the createMarkers helper
+    createMarkers(map, allNodes);
+    drawAllEdges(map, allEdges);
+  }, [map, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
+  
 
-    // Determine building based on the destination’s name.
-    const building = getBuildingFromDestination(selectedDestination.name);
-    if (!building) return;
-
-    // Filter the nodes belonging to the selected building.
-    const filteredNodes = nodesData.filter((node: Node) => node.building === building);
-    console.log('Filtered nodes for building', building, filteredNodes);
-
-    // Clear previous markers (if any).
-    markers.forEach(marker => marker.setMap(null));
-
-    // Create markers for the filtered nodes.
-    const newMarkers = createMarkers(map, filteredNodes);
-    setMarkers(newMarkers);
-
-    // Optionally adjust map bounds so nodes are in view:
-    if (newMarkers.length > 0) {
-      const bounds = new google.maps.LatLngBounds();
-      newMarkers.forEach(marker => bounds.extend(marker.getPosition()!));
-      map.fitBounds(bounds);
-    }
-  }, [map, nodesData, selectedDestination]);
-
-  // Existing overlay logic for selectedDestination (for building-specific overlays)
+  // Existing overlay logic for selectedDestination
   useEffect(() => {
     if (!map) return;
-    // Clear previous overlays if any.
+    // Clear previous overlays, if any.
     if (parkingOverlay) {
       parkingOverlay.setMap(null);
       setParkingOverlay(null);
@@ -141,20 +121,31 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       patriot22Overlays.floor4Overlay.setMap(null);
       setPatriot22Overlays(null);
     }
-
+    
     if (selectedDestination) {
       if (selectedDestination.name === "MGB (Chestnut Hill)") {
         const overlays: MGBOverlays = createMGBOverlays(map);
         setParkingOverlay(overlays.parkingOverlay);
         setFloorOverlay(overlays.floorOverlay);
+        addDraggableMarker(map, {
+          lat: 42.32574519161382,
+          lng: -71.14923688279762,
+        });
       } else if (selectedDestination.name === "20 Patriot Place") {
         createPatriot20Overlays(map);
+        addDraggableMarker(map, {
+          lat: 42.09268500610588,
+          lng: -71.26550646809393,
+        });
       } else if (selectedDestination.name === "22 Patriot Place") {
         const overlays = createPatriot22Overlays(map);
         setPatriot22Overlays(overlays);
       }
     }
+
+    // Only run this effect when selectedDestination or map changes.
   }, [selectedDestination, map]);
+  
 
   // 22 Patriot Place overlays update on floor change
   useEffect(() => {
@@ -171,10 +162,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   useEffect(() => {
     if (!map || !parkingOverlay || !floorOverlay) return;
     const animateOverlayOpacity = (
-        overlay: google.maps.GroundOverlay,
-        opacityRef: MutableRefObject<number>,
-        target: number,
-        duration = 300
+      overlay: google.maps.GroundOverlay,
+      opacityRef: MutableRefObject<number>,
+      target: number,
+      duration = 300
     ) => {
       const stepTime = 50;
       const steps = duration / stepTime;

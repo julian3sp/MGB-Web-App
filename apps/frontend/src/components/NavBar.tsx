@@ -20,7 +20,7 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const { loginWithRedirect, isAuthenticated } = useAuth0();
     const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
     return (
-        <nav className="flex justify-between items-center bg-white  text-white border-b-1 border-gray-300">
+        <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
                 <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
                     <img src={logo} alt="Mass General Brigham Logo"  className="h-6"/>

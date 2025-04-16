@@ -54,7 +54,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                                 title: 'Sanitation Service Form'})}
                         />
                         <RequestButton
-                            label={'Service Request Form'}
+                            label={'Security Request Form'}
                             onClick={() => handleFormRequest({
                                 type: "Security",
                                 title: "Security Request Form",

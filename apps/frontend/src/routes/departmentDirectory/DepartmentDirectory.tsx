@@ -27,7 +27,7 @@ const DepartmentDirectory = () => {
                                 <NavLink
                                     to={`/directory/${dept.id}`}
                                     className={({ isActive }) =>
-                                        `block p-2 border rounded ${isActive ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put departments in rounded rectangle boxes*/
+                                        `block p-2 border rounded ${isActive ? "bg-[#D9D9D9] text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put departments in rounded rectangle boxes*/
                                     }
                                 >
                                     {dept.name}

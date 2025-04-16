@@ -12,8 +12,8 @@ export function WelcomePage() {
         titleComponent={
           <>
             <h1 className="text-4xl font-semibold text-[#003a96]">
-              Never get lost at<br />
-
+              Never get lost at
+              <br />
               <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
                 Mass General Brigham
               </span>

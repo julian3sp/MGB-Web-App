@@ -3,11 +3,11 @@ import {Link} from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function LogInButton({className}: {className?: string}) {
-    const { loginWithRedirect, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     return (
-        !isAuthenticated && (
+        isLoading || !isAuthenticated && (
             <button
-                className={`group text-black px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white font-[Poppins] ${className ?? ''}`}
+                className={`group px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white font-[Poppins] ${className ?? ''}`}
                 onClick={() => loginWithRedirect()}>Log In
             </button>
         )

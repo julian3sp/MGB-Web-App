@@ -18,7 +18,7 @@ function FooterBar() {
                         </Link>
                     </div>
                     <div className="flex">
-                        <Link to="/about" onClick={() => setTab("")}>
+                        <Link to="/aboutus" onClick={() => setTab("")}>
                             About
                         </Link>
                     </div>
@@ -38,8 +38,8 @@ function FooterBar() {
                         </Link>
                     </div>
                     <div className="flex space-x-20">
-                        <LogInButton className="text-xl"/>
-                        <LogOutButton className="text-xl"/>
+                        <LogInButton className="text-xl text-white"/>
+                        <LogOutButton className="text-xl text-white"/>
                     </div>
                 </div>
                 <div>

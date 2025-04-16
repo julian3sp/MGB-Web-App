@@ -17,7 +17,7 @@ type Props = {
 export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const [tab, setTab] = React.useState<string>("")
     const location = useLocation();
-    const { loginWithRedirect, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
     return (
         <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
@@ -32,26 +32,6 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Directory
                     </Link>
-                    <div className="flex">
-                        {isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
-                          className={tab === "serv" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                        Services
-                        </Link> : null}
-                        {isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
-                          className={tab === "reqP" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                        View Requests
-                    </Link> : null}
-                    <Link to="/editor" onClick={() => setTab("editor")}
-                          className={tab === "editor" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                        Map Editor
-                    </Link>
-                    </div>
                     <Link to="/navigation" onClick={() => setTab("navigation")}
                           className={tab === "navigation" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
@@ -59,7 +39,27 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                         Navigation
                     </Link>
                     <div className="flex">
-                        {isAuthenticated ? <Link to="/admin/directory" onClick={() => setTab("exp")}
+                        {isLoading ||isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
+                          className={tab === "serv" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Services
+                        </Link> : null}
+                        {isLoading || isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
+                          className={tab === "reqP" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        View Requests
+                        </Link> : null}
+                        {isLoading || isAuthenticated ? <Link to="/editor" onClick={() => setTab("editor")}
+                          className={tab === "editor" ?
+                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        Map Editor
+                        </Link> : null}
+                    </div>
+                    <div className="flex">
+                        {isLoading || isAuthenticated ? <Link to="/admin/directory" onClick={() => setTab("exp")}
                           className={tab === "exp" ?
                               "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                               "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
@@ -68,8 +68,8 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                     </div>
                 </div>
             </div>
-            <LogInButton className="text-sm"/>
-            <LogOutButton className="text-sm"/>
+            <LogInButton className="text-sm text-black"/>
+            <LogOutButton className="text-sm text-black"/>
         </nav>
     )
 }

@@ -1,9 +1,9 @@
 import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
 import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
+import { ServiceComponentInputBox } from "./inputFields/ServiceComponentInputBox.tsx";
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
-import { ErrorPopUp } from './inputFields/ErrorPopUp.tsx';
 import { InputHeader } from '../signIn/InputHeader.tsx';
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';

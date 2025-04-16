@@ -122,27 +122,6 @@ export const removeMGBOverlays = (overlays: MGBOverlays) => {
   }
 };
 
-// export const addDraggableMarker = (
-//     map: google.maps.Map,
-//     initialPosition: google.maps.LatLngLiteral
-// ): google.maps.Marker => {
-//   const marker = new google.maps.Marker({
-//     position: initialPosition,
-//     map,
-//     draggable: true,
-//     title: "Dragable!",
-//     icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-//   });
-
-//   marker.addListener("dragend", (event: google.maps.MapMouseEvent) => {
-//     const lat = event.latLng?.lat();
-//     const lng = event.latLng?.lng();
-//     console.log("New position:", { lat, lng });
-//   });
-
-//   return marker;
-// };
-
 export const setDepartmentOverlaysVisibility = (
   overlays: MGBOverlays,
   visible: boolean

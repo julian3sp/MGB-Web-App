@@ -1,4 +1,4 @@
-  import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
@@ -211,23 +211,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         const overlays: MGBOverlays = createMGBOverlays(map);
         setParkingOverlay(overlays.parkingOverlay);
         setFloorOverlay(overlays.floorOverlay);
-        // addDraggableMarker(map, {
-        //   lat: 42.32574519161382,
-        //   lng: -71.14923688279762,
-        // });
       } else if (selectedDestination.name === "20 Patriot Place") {
         createPatriot20Overlays(map);
-        // addDraggableMarker(map, {
-        //   lat: 42.09268500610588,
-        //   lng: -71.26550646809393,
-        // });
       } else if (selectedDestination.name === "22 Patriot Place") {
         const overlays = createPatriot22Overlays(map);
         setPatriot22Overlays(overlays);
       }
     }
 
-    // Only run this effect when selectedDestination or map changes.
   }, [selectedDestination, map]);
   
 

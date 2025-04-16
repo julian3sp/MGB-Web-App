@@ -1,12 +1,9 @@
-// MapComponent.tsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import MapRenderer from './MapRenderer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
-import icon from '../../../assets/icon.png';
 import FloorSelector from './FloorSelector';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 import Graph, {Node} from "@/components/navigation/pathfinding/Graph.ts";
@@ -132,14 +129,12 @@ const MapComponent: React.FC = () => {
 
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);
-      // setShowHospitalMap(false);
 
       const departmentMapping: Record<string, number> = {
         'Multi-Specialty Clinic': 912,
         'Radiology': 80,
         'Radiology, MRI/CT Scan': 66
 
-        // Add additional mappings as needed.
       };
 
       const deptNum = departmentMapping[department.name];
@@ -155,11 +150,6 @@ const MapComponent: React.FC = () => {
     setShowMap(true);
     setShowHospitalMap(false);
     displayRouteOnMap(startLocation, selectedPlace);
-  };
-
-  const handleViewHospitalMap = () => {
-    setShowHospitalMap(true);
-    setShowMap(false);
   };
 
   const handleGetCurrentLocation = () => {

@@ -22,10 +22,12 @@ export type  Edge = {
 export class Graph {
     private nodes: Set<Node>;
     private adjacencyList: Map<Node, Edge[]>;
+    private edges: Edge[];
 
     constructor() {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
+        this.edges = []
     }
 
     populate(nodesData: Node[], edgesData: { sourceId: number, targetId: number, weight: number }[]) {
@@ -38,11 +40,16 @@ export class Graph {
           parent: undefined
         }));
 
-        // Create edges from edgesData.
-        for (const { sourceId, targetId, weight } of edgesData) {
-          const sourceNode = allNodes[sourceId - 1];
-          const targetNode = allNodes[targetId - 1];
-          this.addEdge(sourceNode, targetNode, weight);
+        const allEdges: Edge[] = (edgesData).map((n) => ({
+            ...n,
+            source: allNodes[n.sourceId - 1],
+            target: allNodes[n.targetId - 1],
+        }));
+
+        this.edges = allEdges
+
+        for (const edge of allEdges) {
+            this.addEdge(edge.source, edge.target, edge.weight)
         }
     }
 
@@ -75,6 +82,10 @@ export class Graph {
 
     getNodes(): Node[] {
         return Array.from(this.nodes);
+    }
+
+    getEdges(): Edge[] {
+        return this.edges;
     }
 
     BFS(startNode: Node, targetNode: Node): Node[] {

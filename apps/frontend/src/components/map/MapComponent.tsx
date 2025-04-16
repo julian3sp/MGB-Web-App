@@ -9,6 +9,8 @@ import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } f
 import icon from '../../../assets/icon.png';
 import FloorSelector from './FloorSelector';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
+import Graph, {Node} from "@/components/navigation/pathfinding/Graph.ts";
+import {trpc} from "../../lib/trpc"
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -33,6 +35,8 @@ const MapComponent: React.FC = () => {
   });
 
   const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
+  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
   // Calculate travel times when start or end location changes.
   useEffect(() => {
@@ -126,7 +130,7 @@ const MapComponent: React.FC = () => {
     }
   };
 
-    const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
+  const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);
       // setShowHospitalMap(false);
 
@@ -145,7 +149,6 @@ const MapComponent: React.FC = () => {
         console.error(`No mapping found for department: ${department.name}`);
       }
     };
-
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {
     if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;

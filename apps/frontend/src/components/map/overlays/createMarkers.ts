@@ -15,8 +15,10 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
             position: coord,
             map: map,
             title: '',
-            icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
-        });
+            icon: {
+                url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
+                scaledSize: new google.maps.Size(8, 8) // width, height in pixels
+            }        });
         markers.push(marker);
     }
 

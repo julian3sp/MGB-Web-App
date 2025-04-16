@@ -1,7 +1,6 @@
-// src/overlays/MGBOverlay.ts
-
 import chestnutHillOverlayImg from '../../../../assets/ChestnutHillParkingLots.png';
 import chestnutFloorPlanOverlay from '../../../../assets/chestnut_rotated.png';
+import {Node} from "../../navigation/pathfinding/Graph"
 
 export interface MGBOverlays {
   parkingOverlay: google.maps.GroundOverlay;
@@ -51,17 +50,12 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
 };
 
 // Helper function to update the department path (draw a polyline from the top entrance to the destination)
+// In your overlays/MGBOverlay.tsx file
 export const updateDepartmentPath = (
-  overlays: MGBOverlays,
-  map: google.maps.Map,
-  destinationCoord: google.maps.LatLngLiteral
+    overlays: MGBOverlays,
+    map: google.maps.Map,
+    pathNodes: Node[]
 ) => {
-  // Fixed top entrance coordinate:
-  const frontEntrance: google.maps.LatLngLiteral = {
-    lat: 42.326240100768885,
-    lng: -71.14954354546266,
-  };
-
   // Remove any existing department path polyline.
   if (overlays.navigationPolyline) {
     overlays.navigationPolyline.setMap(null);
@@ -71,11 +65,19 @@ export const updateDepartmentPath = (
     overlays.markers.forEach(marker => marker.setMap(null));
   }
 
-  // Create a new polyline connecting the top entrance with the destination.
+  // Correct coordinate mapping: x is latitude, y is longitude.
+  const pathCoordinates = pathNodes.map((node) => ({
+    lat: node.x,
+    lng: node.y,
+  }));
+
+  console.log('Path coordinates:', pathCoordinates);
+
+  // Create a new polyline connecting the computed path nodes.
   const navigationPolyline = new google.maps.Polyline({
-    path: [frontEntrance, destinationCoord],
+    path: pathCoordinates,
     geodesic: true,
-    strokeColor: '#FF000',
+    strokeColor: '#FF0000', // Corrected to six-digit hex code for red.
     strokeOpacity: 1,
     strokeWeight: 3,
   });
@@ -84,22 +86,30 @@ export const updateDepartmentPath = (
   // Update the overlays object.
   overlays.navigationPolyline = navigationPolyline;
 
-  const frontMarker = new google.maps.Marker({
-    position: frontEntrance,
-    map: map,
-    title: 'Front Entrance',
-    icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-  });
+  if (pathCoordinates.length > 0) {
+    const startMarker = new google.maps.Marker({
+      position: pathCoordinates[0],
+      map: map,
+      title: 'Start',
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+    });
+    const endMarker = new google.maps.Marker({
+      position: pathCoordinates[pathCoordinates.length - 1],
+      map: map,
+      title: 'Destination',
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
+    });
 
-  const deptMarker = new google.maps.Marker({
-    position: destinationCoord,
-    map: map,
-    title: 'Department',
-    icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
-  });
-
-  overlays.markers = [frontMarker, deptMarker];
+    overlays.markers = [startMarker, endMarker];
+  }
+  if (pathCoordinates.length > 0) {
+    const bounds = new google.maps.LatLngBounds();
+    pathCoordinates.forEach(coord => bounds.extend(coord));
+    map.fitBounds(bounds);
+  }
 };
+
+
 
 export const removeMGBOverlays = (overlays: MGBOverlays) => {
   overlays.parkingOverlay.setMap(null);

@@ -9,6 +9,8 @@ import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } f
 import icon from '../../../assets/icon.png';
 import FloorSelector from './FloorSelector';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
+import Graph, {Node} from "@/components/navigation/pathfinding/Graph.ts";
+import {trpc} from "../../lib/trpc"
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -32,6 +34,8 @@ const MapComponent: React.FC = () => {
   });
 
   const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
+  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
   // Calculate travel times when start or end location changes.
   useEffect(() => {
@@ -125,23 +129,54 @@ const MapComponent: React.FC = () => {
     }
   };
 
+  // In your MapComponent.tsx
+
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
     setSelectedDepartment(department);
     setShowHospitalMap(false);
 
-    const departmentMapping: Record<string, google.maps.LatLngLiteral> = {
-      'Laboratory': { lat: 42.32575227638497, lng: -71.15003975413042 },
-      'Radiology': {lat: 42.325991023027356, lng: -71.14925534772229}
-
+    // Map department names to specific node IDs in your graph.
+    const departmentNodeMapping: Record<string, number> = {
+      'Laboratory': 5,
+      'Radiology': 7,
       // Add additional mappings as needed.
     };
 
-    const destCoord = departmentMapping[department.name];
-    if (destCoord && mapInstance && mgbOverlays) {
-      // Update (or create) the path polyline inside the building.
-      updateDepartmentPath(mgbOverlays, mapInstance, destCoord);
+    if (!nodesData || !edgesData || !mapInstance || !mgbOverlays) return;
+
+    // Instantiate and populate the graph using the TRPC data.
+    const graph = new Graph();
+    graph.populate(nodesData, edgesData);
+
+    // Log out data so you can verify the populated graph.
+    console.log('Graph nodes:', graph.getNodes());
+
+    // Fetch the entrance node (assuming node with id 1 is your fixed entrance).
+    const entranceNode = graph.getNode(1);
+    // Fetch the destination node using the mapping.
+    const destNodeId = departmentNodeMapping[department.name];
+    const destinationNode = graph.getNode(destNodeId);
+
+    // Log the nodes for debugging.
+    console.log('Entrance node:', entranceNode);
+    console.log('Destination node:', destinationNode);
+
+    if (entranceNode && destinationNode) {
+      // Use A* search to compute the indoor path from the entrance to the destination.
+      const path = graph.aStar(entranceNode, destinationNode);
+      console.log('Computed indoor path:', path);
+
+      if (path.length > 0) {
+        // Pass the computed path to updateDepartmentPath.
+        updateDepartmentPath(mgbOverlays, mapInstance, path);
+      } else {
+        console.error('Computed path is empty. Check your graph or A* implementation.');
+      }
+    } else {
+      console.error('Could not find entrance or destination node in the graph.');
     }
   };
+
 
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {

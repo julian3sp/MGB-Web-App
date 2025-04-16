@@ -1,7 +1,3 @@
-import {Edges, Nodes} from "./hospitalNodes.ts";
-import {node} from "prop-types";
-import {getAllNodes} from "../../../../../backend/src/server/procedures/nodes.ts";
-
 export type Node = {
     name: string | null
     id: number
@@ -15,7 +11,8 @@ export type Node = {
 }
 
 export type  Edge = {
-    node: Node;
+    source: Node
+    target: Node;
     weight: number;
 }
 
@@ -26,7 +23,6 @@ export class Graph {
     constructor() {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
-        this.populateGraph();
     }
 
     addNode(node: Node): void {
@@ -35,29 +31,15 @@ export class Graph {
             this.adjacencyList.set(node, []);
         }
     }
-    populateGraph() {
-        if (!Nodes.data || !Edges.data) {
-            return;
-        }
-
-        const allNodes = Nodes.data;
-
-        Edges.data.forEach((edge) => {
-            const sourceNode = allNodes[edge.sourceId - 1];
-            const targetNode = allNodes[edge.targetId - 1];
-
-            this.addEdge(sourceNode, targetNode, edge.weight);
-        });
-    }
 
     addEdge(source: Node, destination: Node, weight: number, bidirectional: boolean = true): void {
         this.addNode(source);
         this.addNode(destination);
 
-        this.adjacencyList.get(source)?.push({ node: destination, weight });
+        this.adjacencyList.get(source)?.push({source: source, target: destination, weight });
 
         if (bidirectional) {
-            this.adjacencyList.get(destination)?.push({ node: source, weight });
+            this.adjacencyList.get(destination)?.push({source: source, target: source, weight });
         }
     }
 
@@ -91,7 +73,7 @@ export class Graph {
 
                 const neighbors: Edge[] = this.getNeighbors(currentNode); // Edges
                 for (const edge of neighbors) {
-                    const neighbor = edge.node;
+                    const neighbor = edge.target;
                     if (!visited.includes(neighbor)) {
                         neighbor.parent = currentNode;
                         queue.push(neighbor);
@@ -159,9 +141,9 @@ export class Graph {
 
             const neighbors: Edge[] = this.getNeighbors(currentNode); // Edges
             for (const edge of neighbors) {
-                const neighbor: Node = edge.node;
+                const neighbor: Node = edge.target;
                 //skip node if checked
-                if (finished.includes(edge.node)) continue;
+                if (finished.includes(edge.target)) continue;
 
                 // cost of moving to new node
                 const currentEdgeCost: number = neighbor.edgeCost + edge.weight;

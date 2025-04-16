@@ -12,8 +12,6 @@
         "@prisma/client": "^6.5.0",
         "@swc/core": "^1.3.60",
         "@swc/helpers": "^0.5.1",
-        "@trpc/client": "^11.0.2",
-        "@trpc/react-query": "^11.0.2",
         "@trpc/server": "^11.0.2",
         "common": "*",
         "cookie-parser": "~1.4.4",
@@ -31,7 +29,6 @@
         "morgan": "^1.9.9",
         "multer": "^1.4.5-lts.2",
         "pg": "^8.11.1",
-        "react-query": "^3.39.3",
         "ts-node": "^10.9.2",
         "typescript": "*",
         "zod": "^3.24.2"

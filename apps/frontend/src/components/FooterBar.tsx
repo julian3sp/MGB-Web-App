@@ -18,7 +18,7 @@ function FooterBar() {
                         </Link>
                     </div>
                     <div className="flex">
-                        <Link to="/about" onClick={() => setTab("")}>
+                        <Link to="/aboutus" onClick={() => setTab("")}>
                             About
                         </Link>
                     </div>

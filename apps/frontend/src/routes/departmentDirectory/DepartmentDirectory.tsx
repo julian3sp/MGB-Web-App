@@ -8,7 +8,7 @@ import {trpc} from "../../lib/trpc.ts";
 const DepartmentDirectory = () => {
     const Directories = trpc.getDirectories.useQuery()
     return (
-            <div className="flex flex-1">
+            <div className="flex flex-1 min-h-screen">
                 <nav className="w-1/3 bg-white p-6 border"  style={{ borderColor: '#005E64', borderWidth: '1px', borderStyle: 'solid' }}> {/*Border styling*/}
                     <h2 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96'}}>Departments:</h2> {/*Header for list of departments on page*/}
                     {Directories.isLoading && <p>Loading...</p>}

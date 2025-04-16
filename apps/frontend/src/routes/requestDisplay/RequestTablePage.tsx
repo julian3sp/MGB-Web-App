@@ -88,7 +88,7 @@ export default function RequestTablePage() {
                 }}
             >
                 {filteredData && filteredData.length > 0 ? (
-                    <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden border border-gray-300 max-h-2/5 overflow-y-auto">
+                    <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden border border-gray-300 max-h-2/3 overflow-y-auto">
                         <table className="w-full text-left table-auto min-w-max w-fit">
                             <thead className="bg-gray-200 sticky top-0 z-10">
                                 <tr>

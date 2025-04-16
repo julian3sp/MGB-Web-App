@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {trpc} from "../lib/trpc.ts";
-import client from "../../../backend/src/bin/prisma-client.ts";
-import {deleteAllDirectories} from "../../../backend/src/server/procedures/directories.ts";
+
 
 
 
@@ -23,16 +22,11 @@ const ImportDept = () => {
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);
-            const headers = lines[0].split(',');
+            //const headers = lines[0].split(',');
 
             for (let i = 1; i < lines.length; i++) { //skip first line
                 // for each line, split on commas
                 const values = lines[i].split(',');
-
-                //const servicesArray = values[1].split(',').map(s => s.trim().replace(/"/g, ""));
-                console.log(values[1]);
-                console.log(values[2]);
-
 
                 //insert each entry in line into our entry struct
                 const entry = {
@@ -53,7 +47,8 @@ const ImportDept = () => {
                 }
             }
 
-            alert('CSV successfully uploaded.');
+            window.location.reload();
+
         };
 
         reader.readAsText(file);

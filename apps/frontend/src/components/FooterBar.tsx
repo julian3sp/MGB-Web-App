@@ -37,10 +37,6 @@ function FooterBar() {
                             Navigation
                         </Link>
                     </div>
-                    <div className="flex space-x-20">
-                        <LogInButton className="text-xl text-white"/>
-                        <LogOutButton className="text-xl text-white"/>
-                    </div>
                 </div>
                 <div>
                     <SocialIcon url="https://www.facebook.com/MassGeneralBrigham" bgColor="#003a96"/>

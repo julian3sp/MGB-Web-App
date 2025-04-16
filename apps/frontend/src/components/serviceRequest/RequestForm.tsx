@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
+import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
 import { ErrorPopUp } from './inputFields/ErrorPopUp.tsx';
@@ -13,71 +14,115 @@ type requestFormProps = {
     type: string;
 };
 
-type errorProps = {
+type errorProps =
+    {
     name: string,
-    email: string,
-    phoneNumber: string,
     employeeID: string,
-    request: string,
-    roomNumber: string,
-    comments: string
+    comments: string,
+    department: string,
+    priority: string,
+    location: string,
+    status: string,
+    cleaningType: string,
+    contaminant: string,
+    accommodationType: string,
+    accommodationDetails: string,
+    sourceLanguage: string,
+    targetLanguage: string,
+    accessZones: string,
+    securityIssue: string,
+    transportationType: string,
+    transportationDestination: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [employeeID, setEmployeeID] = useState('');
-    const [request, setRequest] = useState('');
-    const [roomNumber, setRoomNumber] = useState('');
     const [comments, setComments] = useState('');
+    const [employeeID, setEmployeeID] = useState('');
+    const [priority, setPriority] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
+    const [department, setDepartment] = useState<string>("");
+    const [cleaningType, setCleaningType] = useState<string>("");
+    const [contaminant, setContaminant] = useState<string>("");
+    const [sourceLanguage, setSourceLanguage] = useState<string>("");
+    const [targetLanguage, setTargetLanguage] = useState<string>("");
+    const [accommodationType, setAccommodationType] = useState<string>("");
+    const [accommodationDetails, setAccommodationDetails] = useState<string>("");
+    const [accessZones, setAccessZones] = useState<string>("");
+    const [securityIssue, setSecurityIssue] = useState<string>("");
+    const [transportationType, setTransportationType] = useState<string>("");
+    const [transportationDestination, setTransportationDestination] = useState<string>("");
+    const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         name: '',
-        email: '',
-        phoneNumber: '',
         employeeID: '',
-        request: '',
-        roomNumber: '',
+        priority: '',
+        location: '',
+        department: '',
+        status: '',
         comments: '',
+        cleaningType: '',
+        contaminant: '',
+        sourceLanguage: '',
+        targetLanguage: '',
+        accommodationType: '',
+        accommodationDetails: '',
+        accessZones: '',
+        securityIssue: '',
+        transportationType: '',
+        transportationDestination: '',
     });
-
-    const clearError = (field: string) => {
-        setErrors(prev => ({ ...prev, [field]: undefined }));
-    };
 
     const Validate = (): boolean => {
         const errors: errorProps = {
-            comments: "",
-            email: "",
-            employeeID: "",
-            name: "",
-            phoneNumber: "",
-            request: "",
-            roomNumber: ""
+            name: '',
+            employeeID: '',
+            priority: '',
+            location: '',
+            department: '',
+            status: '',
+            comments: '',
+            cleaningType: '',
+            contaminant: '',
+            sourceLanguage: '',
+            targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
+            accessZones: '',
+            securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
         }
 
         if (!name) {
             errors.name = "Name is required";
+            console.log('name-r');
         } else if (name.length < 2) {
             errors.name = `Name must be at least two characters`;
+            console.log('name-l');
+
         } else if (!/^[a-zA-Z\s'-]+$/.test(name)) {
             errors.name = "Name contains invalid characters";
+            console.log('name-t');
+
         }
 
-        if (!email) {
-            errors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            errors.email = "Email is invalid";
+        if (!sourceLanguage && type === 'Language') {
+            errors.sourceLanguage = "Please select a source language";
+            console.log('sourceLanguage error');
         }
 
-        if (!phoneNumber) {
-            errors.phoneNumber = "Phone number is required";
+        if (!targetLanguage && type === 'Language') {
+            errors.targetLanguage = "Please select a target language";
+            console.log('targetLanguage error');
         }
-        else if (phoneNumber.length < 10) {
-            errors.phoneNumber = "Phone number is too short";
+
+        if(!accommodationType && type === 'AudioVisual') {
+            errors.accommodationType = "Please select an accommodation type";
+            console.log('accommodationType error');
         }
 
         if (!employeeID) {
@@ -86,12 +131,49 @@ function RequestForm({ title, type }: requestFormProps) {
             errors.employeeID = `Employee ID must be at least 9 characters`;
         }
 
-        if (!roomNumber) {
-            errors.roomNumber = "Room number is required";
+        if (!department) {
+            errors.department = 'Please set a department';
+            console.log('department error');
         }
 
-        if (!request) {
-            errors.request = "Please select a request type";
+        if (!location) {
+            errors.location = 'Please set a location';
+            console.log('location error');
+        }
+
+        if (!status) {
+            errors.status = 'Please set a status';
+            console.log('status error');
+        }
+
+        if (!priority) {
+            errors.priority = 'Please set a priority';
+            console.log('priority error');
+        }
+
+        if (!cleaningType && type ==='Sanitation') {
+            errors.cleaningType = 'Please set a cleaning type';
+            console.log('cleaningType error');
+        }
+
+        if (!accessZones && type ==='Security') {
+            errors.accessZones = 'Please set a access zone';
+            console.log('accessZone error');
+        }
+
+        if (!securityIssue && type ==='Security') {
+            errors.securityIssue = 'Please set a security issue';
+            console.log('accessZone error');
+        }
+
+        if (!transportationType && type==='Transportation') {
+            errors.transportationType = 'Please set a transportation type';
+            console.log('transportationType error');
+        }
+
+        if (!transportationDestination && type==='Transportation') {
+            errors.transportationDestination = 'Please set a transportation destination';
+            console.log('transportationDestination error');
         }
 
         setErrors(errors);
@@ -104,33 +186,92 @@ function RequestForm({ title, type }: requestFormProps) {
         const isValid = form.checkValidity(); // Now
 
         if (Validate()) {
+            console.log('submission error')
             return;
         }
         else{setOpen(true);}
 
-
-
         mutation.mutate({
             name: name,
-            email: email,
-            phone_num: phoneNumber,
-            room_num: Number(roomNumber),
-            request_type: type,
             employee_id: employeeID,
+            priority: priority,
+            location: location,
+            department: department,
+            status: status,
+            request_type: type,
             additional_comments: comments,
-            language: request,
+            ...(type === 'Language' && {
+                language: {
+                    sourceLanguage: sourceLanguage,
+                    targetLanguage: targetLanguage,
+                },
+            }),
+            ...(type === 'Sanitation' && {
+                sanitation: {
+                    cleaningType: cleaningType,
+                    contaminant: contaminant,
+                },
+            }),
+            ...(type === 'Security' && {
+                security: {
+                    accessZones: accessZones,
+                    securityIssue: securityIssue,
+                },
+            }),
+            ...(type === 'Transportation' && {
+                transportation: {
+                    transportationType: transportationType,
+                    transportationDestination: transportationDestination,
+                },
+            }),
+            ...(type === 'AudioVisual' && {
+                audioVisual: {
+                    accommodationType: accommodationType,
+                    accommodationDetails: accommodationDetails,
+                },
+            }),
         });
+
         handleReset(e);
     };
-    const handleReset = (e) => {
+    const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setEmail('');
         setName('');
-        setPhoneNumber('');
         setEmployeeID('');
-        setRequest('');
-        setRoomNumber('');
         setComments('');
+        setLocation('');
+        setDepartment('');
+        setStatus('');
+        setPriority('');
+        setSourceLanguage('');
+        setTargetLanguage('');
+        setCleaningType('');
+        setAccessZones('');
+        setSecurityIssue('');
+        setTransportationType('');
+        setTransportationDestination('');
+        setAccommodationType('');
+        setAccommodationDetails('');
+
+        setErrors({
+            name: '',
+            employeeID: '',
+            priority: '',
+            location: '',
+            department: '',
+            status: '',
+            comments: '',
+            cleaningType: '',
+            contaminant: '',
+            sourceLanguage: '',
+            targetLanguage: '',
+            accommodationType: '',
+            accommodationDetails: '',
+            accessZones: '',
+            securityIssue: '',
+            transportationType: '',
+            transportationDestination: '',
+        });
     };
 
 
@@ -149,84 +290,227 @@ function RequestForm({ title, type }: requestFormProps) {
                             {title}
                         </h2>
 
+                        {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
+                        {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
+                        {type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}
+
                         {/* Employee Information (Two-Column Grid) */}
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
-                                <InputHeader>Email:</InputHeader>
-                                <ErrorPopUp
-                                    value={email}
-                                    setState={setEmail}
-                                    placeholder="Enter your Email"
-                                    width="w-full"
-                                    error={errors.email}
-                                    clearError={() => clearError('email')}/>
-
-                            </div>
-
-                            <div>
-                                <InputHeader>Full Name:</InputHeader>
-                                <ErrorPopUp
+                                <InputHeader>Name:</InputHeader>
+                                <ServiceComponentInputBox
                                     value={name}
                                     setState={setName}
-                                    placeholder="Enter your Full Name"
+                                    placeholder="Name"
                                     width="w-full"
-                                    error={errors.name}
-                                    clearError={() => clearError('name')}/>
-                            </div>
-
-                            <div>
-                                <InputHeader>Phone Number:</InputHeader>
-                                <ErrorPopUp
-                                    maxLength = {15}
-                                    value={phoneNumber}
-                                    setState={(value) => {
-                                        if (/^\d*$/.test(value)) {
-                                            setPhoneNumber(value);}
-                                    }}
-                                    placeholder="Enter your Phone Number"
-                                    width="w-full"
-                                    error={errors.phoneNumber}
-                                    clearError={() => clearError('phoneNumber')}/>
+                                    error={errors.name}/>
                             </div>
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <ErrorPopUp maxLength = {9}
-                                            value={employeeID}
-                                            setState={(value) => {
-                                              if (/^\d*$/.test(value)) {
-                                                  setEmployeeID(value);}
-                                          }}
-                                            placeholder="Enter your Employee ID"
-                                            width="w-full"
-                                            error={errors.employeeID}
-                                            clearError={() => clearError('employeeID')}/>
-                            </div>
-
-                            <div>
-                                <InputHeader children={type + ':'}></InputHeader>
-                                <ErrorPopUp
-                                    value={request}
-                                    setState={setRequest}
-                                    placeholder={type}
+                                <ServiceComponentInputBox
+                                    value={employeeID}
+                                    setState={(value) => {
+                                        if (/^\d*$/.test(value)) {
+                                            setEmployeeID(value);}
+                                    }}
+                                    maxLength={9}
+                                    placeholder="Employee ID"
                                     width="w-full"
-                                    error={errors.request}
-                                    clearError={() => clearError('request')}/>
+                                    error={errors.employeeID}/>
                             </div>
 
                             <div>
-                                <InputHeader>Room Number:</InputHeader>
-                                <ErrorPopUp maxLength={6}
-                                            value={roomNumber}
-                                            setState={(value) => {
-                                              if (/^\d*$/.test(value)) {
-                                                  setRoomNumber(value);}
-                                          }}
-                                            placeholder="Enter your Room Number"
-                                            width="w-full"
-                                            error={errors.roomNumber}
-                                            clearError={() => clearError('roomNumber')}/>
+                                <InputHeader>Location</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={location}
+                                    setState={setLocation}
+                                    placeholder={"Select Location"}
+                                    width={"w-full"}
+                                    error={errors.location}
+                                    options={["Brigham & Women's Hospital Main Campus",
+                                        "Chestnut Hill",
+                                        "Faulkner Hospital",
+                                        "Patriot Place"]}
+                                />
                             </div>
+
+                            <div>
+                                <InputHeader>Department</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={department}
+                                    setState={setDepartment}
+                                    placeholder={"Select Department"}
+                                    width={"w-full"}
+                                    error={errors.department}
+                                    options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Priority</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={priority}
+                                    setState={setPriority}
+                                    width={"w-full"}
+                                    options={["Low", "Medium", "High", "Emergency"]}
+                                    placeholder={"Select Priority"}
+                                    error={errors.priority}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Status</InputHeader>
+                                <ServiceComponentDropdown
+                                    value={status}
+                                    setState={setStatus}
+                                    placeholder={"Select Status"}
+                                    width={"w-full"}
+                                    error={errors.status}
+                                    options={["Unassigned", "Assigned", "Working", "Done"]}
+                                />
+                            </div>
+
+
+
+
+                            {type === "Language" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Source Language</InputHeader>
+                                        <ServiceComponentInputBox
+                                        value={sourceLanguage}
+                                        setState={setSourceLanguage}
+                                        placeholder={"Source Language"}
+                                        width="w-full"
+                                        error={errors.sourceLanguage}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Target Language</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={targetLanguage}
+                                            setState={setTargetLanguage}
+                                            placeholder={"Target Language"}
+                                            width="w-full"
+                                            error={errors.targetLanguage}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Sanitation" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Cleaning Needed</InputHeader>
+                                        <ServiceComponentDropdown
+                                        value={cleaningType}
+                                        setState={setCleaningType}
+                                        placeholder={"Select Cleaning Needed"}
+                                        width={"w-full"}
+                                        error={errors.cleaningType}
+                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Contaminant (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={contaminant}
+                                            setState={setContaminant}
+                                            placeholder={"Contaminant"}
+                                            width="w-full"
+                                            error={errors.contaminant}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Security" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Security Needed</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accessZones}
+                                            setState={setAccessZones}
+                                            placeholder={"Select Access Zones Needed"}
+                                            width={"w-full"}
+                                            error={errors.accessZones}
+                                            options={[
+                                                "",
+                                                "ICU",
+                                                "Operating Room",
+                                                "Pharmacy",
+                                                "Medical Records",
+                                                "Pediatric Ward",
+                                                "Emergency Department",
+                                                "Laboratory",
+                                                "Server Room (IT)",
+                                                "Supply Closet",
+                                                "Radiology",
+                                                "Morgue"
+                                            ]}
+                                        />
+                                    </div>
+                                    <div>
+                                        <InputHeader>Security Issue</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={securityIssue}
+                                            setState={setSecurityIssue}
+                                            placeholder={"Security Issue"}
+                                            width="w-full"
+                                            error={errors.securityIssue}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "Transportation" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Transportation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationType}
+                                            setState={setTransportationType}
+                                            placeholder={"Select Transportation Type"}
+                                            width={"w-full"}
+                                            error={errors.transportationType}
+                                            options={["Ambulance", "Helicopter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Destination</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={transportationDestination}
+                                            setState={setTransportationDestination}
+                                            placeholder={"Select Destination"}
+                                            width={"w-full"}
+                                            error={errors.transportationDestination}
+                                            options={["Brigham & Women's Hospital Main Campus",
+                                                "Chestnut Hill",
+                                                "Faulkner Hospital",
+                                                "Patriot Place"]}/>
+                                    </div>
+                                </>
+                                : null}
+
+                            {type === "AudioVisual" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Accommodation Type</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={accommodationType}
+                                            setState={setAccommodationType}
+                                            placeholder={"Select Accommodation Type"}
+                                            width={"w-full"}
+                                            error={errors.accommodationType}
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Accommodation Details (Optional)</InputHeader>
+                                        <ServiceComponentInputBox
+                                            value={accommodationDetails}
+                                            setState={setAccommodationDetails}
+                                            placeholder={"Enter Accommodation Details"}
+                                            width="w-full"
+                                            error={errors.accommodationDetails}/>
+                                    </div>
+                                </>
+                                : null}
+
                         </div>
                         <div className={'mr-5 ml-5'}>
                             <InputHeader children={'Additional Comments:'} />
@@ -239,7 +523,7 @@ function RequestForm({ title, type }: requestFormProps) {
 
                         {/* Buttons */}
                         <div className=" flex  gap-5 justify-center">
-                            <ResetButton label={'Reset'} />
+                            <ResetButton label={'Reset'} type={"reset"}/>
                             <SubmitButton
                                 label={'Submit'}
                                 type={'submit'}/>
@@ -266,6 +550,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         </div>
                     </div>
                 </Modal>
+
             </div>
         </>
     );

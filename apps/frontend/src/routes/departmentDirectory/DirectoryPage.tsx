@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { trpc } from '../lib/trpc';
-import ImportCSV from "../components/ImportDept.tsx";
+import {trpc} from "@/lib/trpc.ts";
+import ImportCSV from "../../components/ImportDept.tsx";
 
 
 const DirectoryPage = () => {

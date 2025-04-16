@@ -42,7 +42,7 @@ const appRouter = t.router({
     deleteAllEdges: deleteAllEdges,
 });
 
-const app: Express = express(); // Setup the backend
+const app: Express = express(); // Set up the backend
 app.use(cors());
 app.use('/trpc', (req, res, next) => {
     console.log(`[TRPC] ${req.method} ${req.url}`);
@@ -57,7 +57,7 @@ app.use(
     })
 );
 
-// Setup generic middlewear
+// Setup generic middleware
 app.use(
     logger('dev', {
         stream: {

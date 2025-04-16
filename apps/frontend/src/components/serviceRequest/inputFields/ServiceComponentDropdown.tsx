@@ -8,14 +8,16 @@ export function ServiceComponentDropdown({
                                              numOptions = 0,
                                              options = [],
                                              error,
+                                              placeholder,
                                          }: {
     value: string;
     setState: (value: string) => void;
     width?: string;
     type?: string;
-    numOptions: number;
+    numOptions?: number;
     options: string[];
     error?: string;
+    placeholder: string;
 }) {
     return (
         <div className="relative">
@@ -27,35 +29,11 @@ export function ServiceComponentDropdown({
                         {/* Triangle container div - for positioning */}
                         <div className="absolute top-full left-0 w-full h-0 flex justify-center items-start overflow-visible">
                             {/* border - slightly bigger triangle*/}
-                            <div className ="w-0 h-0 border-x-[10px] border-x-transparent border-t-[10px] border-t-red-300 absolute top-0 left-[20px] -translate-x-1/2 transform"
-                                // style={{
-                                //     width: 0,
-                                //     height: 0,
-                                //     borderLeft: '10px solid transparent',
-                                //     borderRight: '10px solid transparent',
-                                //     borderTop: '10px solid #fca5a5', /* red-300 */
-                                //     position: 'absolute',
-                                //     top: 0,
-                                //     transform: 'translateX(-50%)',
-                                //     left: '20px'
-                                // }}>
-                            >
+                            <div className ="w-0 h-0 border-x-[10px] border-x-transparent border-t-[10px] border-t-red-300 absolute top-0 left-[20px] -translate-x-1/2 transform">
                             </div>
 
                             {/* Inner triangle (background color) */}
-                            <div className = "w-0 h-0 border-x-[8px] border-x-transparent border-t-[8px] border-t-red-100 absolute top-0 left-[20px] -translate-x-1/2 transform"
-                                // style={{
-                                //     width: 0,
-                                //     height: 0,
-                                //     borderLeft: '8px solid transparent',
-                                //     borderRight: '8px solid transparent',
-                                //     borderTop: '8px solid #fee2e2', /* red-100 */
-                                //     position: 'absolute',
-                                //     top: 0,
-                                //     transform: 'translateX(-50%)',
-                                //     left: '20px'
-                                // }}>
-                            >
+                            <div className = "w-0 h-0 border-x-[8px] border-x-transparent border-t-[8px] border-t-red-100 absolute top-0 left-[20px] -translate-x-1/2 transform">
                             </div>
                         </div>
                     </div>
@@ -70,8 +48,10 @@ export function ServiceComponentDropdown({
                     setState(e.target.value);
                 }}
             >
-                {options.map((option, index) => (
-                    <option key={index} value={option}>{option}</option>
+                <option value ="" disabled hidden className="text-gray-500">{placeholder}</option>
+
+                {options.map((option) => (
+                    <option value={option}>{option}</option>
                 ))}
             </select>
         </div>

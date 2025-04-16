@@ -22,6 +22,7 @@ const MapComponent: React.FC = () => {
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showText, setShowText] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState<{ name: string; floor: string[] } | null>(null);
+  const [deptNumber, setDeptNumber] = useState<number | null>(null);
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
@@ -129,55 +130,25 @@ const MapComponent: React.FC = () => {
     }
   };
 
-  // In your MapComponent.tsx
-
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
-    setSelectedDepartment(department);
-    setShowHospitalMap(false);
+      setSelectedDepartment(department);
+      // setShowHospitalMap(false);
 
-    // Map department names to specific node IDs in your graph.
-    const departmentNodeMapping: Record<string, number> = {
-      'Laboratory': 5,
-      'Radiology': 7,
-      // Add additional mappings as needed.
-    };
+      const departmentMapping: Record<string, number> = {
+        'Multi-Specialty Clinic': 912,
+        'Radiology': 80,
+        'Radiology, MRI/CT Scan': 66
 
-    if (!nodesData || !edgesData || !mapInstance || !mgbOverlays) return;
+        // Add additional mappings as needed.
+      };
 
-    // Instantiate and populate the graph using the TRPC data.
-    const graph = new Graph();
-    graph.populate(nodesData, edgesData);
-
-    // Log out data so you can verify the populated graph.
-    console.log('Graph nodes:', graph.getNodes());
-
-    // Fetch the entrance node (assuming node with id 1 is your fixed entrance).
-    const entranceNode = graph.getNode(1);
-    // Fetch the destination node using the mapping.
-    const destNodeId = departmentNodeMapping[department.name];
-    const destinationNode = graph.getNode(destNodeId);
-
-    // Log the nodes for debugging.
-    console.log('Entrance node:', entranceNode);
-    console.log('Destination node:', destinationNode);
-
-    if (entranceNode && destinationNode) {
-      // Use A* search to compute the indoor path from the entrance to the destination.
-      const path = graph.aStar(entranceNode, destinationNode);
-      console.log('Computed indoor path:', path);
-
-      if (path.length > 0) {
-        // Pass the computed path to updateDepartmentPath.
-        updateDepartmentPath(mgbOverlays, mapInstance, path);
+      const deptNum = departmentMapping[department.name];
+      if (deptNum) {
+        setDeptNumber(deptNum);
       } else {
-        console.error('Computed path is empty. Check your graph or A* implementation.');
+        console.error(`No mapping found for department: ${department.name}`);
       }
-    } else {
-      console.error('Could not find entrance or destination node in the graph.');
-    }
-  };
-
-
+    };
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {
     if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;
@@ -354,17 +325,6 @@ const MapComponent: React.FC = () => {
         <div className="flex flex-col mt-10">
           <h2 className="text-sm font-semibold mb-2">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
-          {selectedDepartment && !showHospitalMap && (
-            <button
-              onClick={handleViewHospitalMap}
-              className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-                         transition-all duration-300 ease-in-out
-                         hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                         active:scale-95 mt-4"
-            >
-              Show Inside Hospital Map
-            </button>
-          )}
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
               <div className="flex flex-col gap-2">
@@ -401,6 +361,7 @@ const MapComponent: React.FC = () => {
             selectedDestination={selectedPlace} 
             onZoomChange={handleZoomChange}
             selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
+            departmentNumber={deptNumber}
           />
           {selectedPlace?.name === "22 Patriot Place" && (
             <FloorSelector selectedFloor={selectedFloor} onSelect={handleFloorSelect} />

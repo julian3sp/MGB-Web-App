@@ -1,9 +1,9 @@
   import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import {addDraggableMarker, createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
+import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges} from './overlays/createMarkers'; // optional helper if implemented
+import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; // optional helper if implemented
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
 
 // Example TRPC hooks (adjust to your own TRPC query hooks)
@@ -17,10 +17,11 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: 3 | 4; // For 22 Patriot Place
+  selectedFloor?: 3 | 4; 
+  departmentNumber?: number | null;
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange, selectedFloor }) => {
+const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange, selectedFloor, departmentNumber }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   // For overlays (only for MGB in this example)
@@ -30,6 +31,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot22Overlays | null>(null);
   // Optionally, hold onto created markers (for future clearing, etc.)
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [showNodes, setShowNodes] = useState(false);
+  const [showEdges, setShowEdges] = useState(false);
+  const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
+  const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
+
+  const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
+  const startMarkerRef = useRef<google.maps.Marker | null>(null);
+  const targetMarkerRef = useRef<google.maps.Marker | null>(null);
   
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   // Refs for overlay animations
@@ -84,26 +93,101 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
 
   // console.log("nodesdata: ",nodesData);
 
-  useEffect(() => {
-    // Make sure map is loaded and data is available
+  const toggleNodesHandler = () => {
     if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+    if (showNodes) {
+      // If they are currently visible, remove them
+      nodeMarkers.forEach(marker => marker.setMap(null));
+      setNodeMarkers([]);
+      setShowNodes(false);
+    } else {
+      // Otherwise, build and store the markers
+      const graph = new Graph();
+      graph.populate(nodesData, edgesData);
+      const allNodes: Node[] = graph.getNodes();
+      const markersCreated: google.maps.Marker[] = createMarkers(map, allNodes); // make sure createMarkers returns markers
+      setNodeMarkers(markersCreated);
+      setShowNodes(true);
+    }
+  };
   
-    // Instantiate and populate the graph with data from TRPC
+  const toggleEdgesHandler = () => {
+    if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+    if (showEdges) {
+      // Remove the edge polylines if visible
+      edgePolylines.forEach(polyline => polyline.setMap(null));
+      setEdgePolylines([]);
+      setShowEdges(false);
+    } else {
+      // Build and store the polylines
+      const graph = new Graph();
+      graph.populate(nodesData, edgesData);
+      const allEdges: Edge[] = graph.getEdges();
+      const polylinesCreated: google.maps.Polyline[] = drawAllEdges(map, allEdges); 
+      setEdgePolylines(polylinesCreated);
+      setShowEdges(true);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      !map ||
+      !departmentNumber ||
+      isNodesLoading ||
+      isEdgesLoading ||
+      !nodesData ||
+      !edgesData
+    )
+      return;
+
+    // Build the graph from TRPC data.
     const graph = new Graph();
     graph.populate(nodesData, edgesData);
-    console.log('Graph:', graph);
-  
-    // Extract nodes from the graph
-    const allNodes: Node[] = graph.getNodes();
-    const allEdges: Edge[] = graph.getEdges();
-    // console.log('All Nodes:', allNodes);
-  
-    // Using the createMarkers helper
-    createMarkers(map, allNodes);
-    drawAllEdges(map, allEdges);
-  }, [map, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
-  
 
+    // Fixed entrance node (for example, node 941).
+    const entrance = graph.getNode(941);
+    const target = graph.getNode(departmentNumber);
+    if (!entrance || !target) {
+      console.error('Either the entrance or department node is missing');
+      return;
+    }
+
+    // Compute the path with A* search.
+    const pathNodes: Node[] = graph.aStar(entrance, target);
+
+    // Clear previously drawn path if exists.
+    if (pathPolylineRef.current) {
+      pathPolylineRef.current.setMap(null);
+      pathPolylineRef.current = null;
+    }
+    // Draw the new path.
+    const newPolyline = drawPath(map, pathNodes);
+    pathPolylineRef.current = newPolyline;
+
+    // Clear existing markers.
+    if (startMarkerRef.current) {
+      startMarkerRef.current.setMap(null);
+      startMarkerRef.current = null;
+    }
+    if (targetMarkerRef.current) {
+      targetMarkerRef.current.setMap(null);
+      targetMarkerRef.current = null;
+    }
+    // Add new markers for the start and department location.
+    startMarkerRef.current = new google.maps.Marker({
+      position: { lat: entrance.x, lng: entrance.y },
+      map: map,
+      title: 'Start (Entrance)',
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+    });
+    targetMarkerRef.current = new google.maps.Marker({
+      position: { lat: target.x, lng: target.y },
+      map: map,
+      title: 'Department',
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+    });
+  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
+  
   // Existing overlay logic for selectedDestination
   useEffect(() => {
     if (!map) return;
@@ -127,16 +211,16 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         const overlays: MGBOverlays = createMGBOverlays(map);
         setParkingOverlay(overlays.parkingOverlay);
         setFloorOverlay(overlays.floorOverlay);
-        addDraggableMarker(map, {
-          lat: 42.32574519161382,
-          lng: -71.14923688279762,
-        });
+        // addDraggableMarker(map, {
+        //   lat: 42.32574519161382,
+        //   lng: -71.14923688279762,
+        // });
       } else if (selectedDestination.name === "20 Patriot Place") {
         createPatriot20Overlays(map);
-        addDraggableMarker(map, {
-          lat: 42.09268500610588,
-          lng: -71.26550646809393,
-        });
+        // addDraggableMarker(map, {
+        //   lat: 42.09268500610588,
+        //   lng: -71.26550646809393,
+        // });
       } else if (selectedDestination.name === "22 Patriot Place") {
         const overlays = createPatriot22Overlays(map);
         setPatriot22Overlays(overlays);
@@ -198,7 +282,52 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
     return () => google.maps.event.removeListener(zoomListener);
   }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 
-  return <div ref={mapRef} style={{ width: '100%', height: '100vh', position: 'relative' }} />;
+  useEffect(() => {
+    if (!map) return;
+  
+    const zoomListener = map.addListener('zoom_changed', () => {
+      const zoom = map.getZoom();
+      // If the zoom level is below 20, hide the drawn path and markers;
+      // if zoomed in (>=20), show them.
+      if (pathPolylineRef.current) {
+        if (zoom < 20) {
+          pathPolylineRef.current.setVisible(false);
+          if (startMarkerRef.current) startMarkerRef.current.setVisible(false);
+          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(false);
+        } else {
+          pathPolylineRef.current.setVisible(true);
+          if (startMarkerRef.current) startMarkerRef.current.setVisible(true);
+          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(true);
+        }
+      }
+    });
+    
+    return () => {
+      google.maps.event.removeListener(zoomListener);
+    };
+  }, [map]);
+  
+
+  return (
+    <div ref={mapRef} style={{ width: '100%', height: '100vh', position: 'relative' }}>
+      {map && (
+        <div className="absolute top-30 right-1 flex flex-col  z-50">
+          <button
+            onClick={toggleNodesHandler}
+            className="bg-[#003a96] text-white px-3 py-2 shadow hover:bg-blue-600 focus:outline-none"
+          >
+            {showNodes ? 'Hide Nodes' : 'Show Nodes'}
+          </button>
+          <button
+            onClick={toggleEdgesHandler}
+            className="bg-[#003a96] text-white px-3 py-2 shadow hover:bg-blue-600 focus:outline-none"
+          >
+            {showEdges ? 'Hide Edges' : 'Show Edges'}
+          </button>
+        </div>
+      )}
+    </div>
+  )
 };
 
 export default MapRenderer;

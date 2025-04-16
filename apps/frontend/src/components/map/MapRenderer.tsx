@@ -282,6 +282,32 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
     return () => google.maps.event.removeListener(zoomListener);
   }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 
+  useEffect(() => {
+    if (!map) return;
+  
+    const zoomListener = map.addListener('zoom_changed', () => {
+      const zoom = map.getZoom();
+      // If the zoom level is below 20, hide the drawn path and markers;
+      // if zoomed in (>=20), show them.
+      if (pathPolylineRef.current) {
+        if (zoom < 20) {
+          pathPolylineRef.current.setVisible(false);
+          if (startMarkerRef.current) startMarkerRef.current.setVisible(false);
+          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(false);
+        } else {
+          pathPolylineRef.current.setVisible(true);
+          if (startMarkerRef.current) startMarkerRef.current.setVisible(true);
+          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(true);
+        }
+      }
+    });
+    
+    return () => {
+      google.maps.event.removeListener(zoomListener);
+    };
+  }, [map]);
+  
+
   return (
     <div ref={mapRef} style={{ width: '100%', height: '100vh', position: 'relative' }}>
       {map && (

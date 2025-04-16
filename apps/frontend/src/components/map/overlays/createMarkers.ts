@@ -1,5 +1,8 @@
-import {hospitalGraph} from "@/components/navigation/pathfinding/cache.ts";
-import {Node} from "@/components/navigation/pathfinding/Graph.ts";
+import {Node, Graph} from "@/components/navigation/pathfinding/Graph.ts";
+
+const hospitalGraph: Graph = new Graph();
+hospitalGraph.populate();
+
 
 const source: Node | undefined | null = hospitalGraph.getNode(1)
 const target: Node | undefined | null = hospitalGraph.getNode(2)

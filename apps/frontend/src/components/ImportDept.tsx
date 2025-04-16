@@ -22,23 +22,26 @@ const ImportDept = () => {
         reader.onload = async () => {
             const text = reader.result as string;
             const lines = text.split('\n').filter(Boolean);
-            //const headers = lines[0].split(',');
+            //const headers = lines[0].split(';');
 
             for (let i = 1; i < lines.length; i++) { //skip first line
                 // for each line, split on commas
-                const values = lines[i].split(',');
+                const values = lines[i].split(';');
+
 
                 //insert each entry in line into our entry struct
                 const entry = {
-                    name: values[0].trim().replace(/"/g, ""),
-                    services: values[1].trim().replace(/"/g, "").replace(/#/g,','),
-                    location: values[2].trim().replace(/"/g, ""),
-                    telephone: values[3].trim().replace(/"/g, ""),
+                    id: values[0],
+                    name: values[1].replace(/"/g, "").replace(/'/g,""),
+                    services: values[2].replace(/"/g, "").replace(/#/g,','),
+                    location: values[3].replace(/"/g, ""),
+                    telephone: values[4].replace(/"/g, ""),
                 };
 
                 if (entry.name.length === 0){
                     return;
                 }
+
 
                 try {
                     await createDirectory.mutateAsync(entry);

@@ -30,7 +30,6 @@ export class Graph {
 
     populate(nodesData: Node[], edgesData: { sourceId: number, targetId: number, weight: number }[]) {
         // Create nodes from nodesData.
-        console.log("data: ", nodesData);
         const allNodes: Node[] = nodesData.map((n) => ({
           ...n,
           name: `node-${n.id}`,
@@ -38,8 +37,6 @@ export class Graph {
           totalCost: 0,
           parent: undefined
         }));
-
-        console.log("edge data: ", edgesData);
 
         // Create edges from edgesData.
         for (const { sourceId, targetId, weight } of edgesData) {

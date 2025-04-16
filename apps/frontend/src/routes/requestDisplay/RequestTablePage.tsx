@@ -81,16 +81,16 @@ export default function RequestTablePage() {
             <nav
                 className="w-full min-h-[85vh] bg-white p-6 font-[Poppins]"
                 style={{
-                    borderTop: '2px solid #d9d9d9',
+                    borderTop: 'none',
                     borderBottom: 'none',
                     borderRight: 'none',
                     borderLeft: 'none',
                 }}
             >
                 {filteredData && filteredData.length > 0 ? (
-                    <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden  border border-gray-300">
+                    <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden border border-gray-300 max-h-2/5 overflow-y-auto">
                         <table className="w-full text-left table-auto min-w-max w-fit">
-                            <thead className="bg-gray-200">
+                            <thead className="bg-gray-200 sticky top-0 z-10">
                                 <tr>
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[60px]"

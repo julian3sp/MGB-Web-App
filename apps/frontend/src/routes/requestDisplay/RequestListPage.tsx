@@ -43,9 +43,9 @@ export default function RequestListPage(){
                             <button
                                 onClick={() => setSelectedRequest(res)}
                                 className={`w-full text-left block p-5 border rounded ${selectedRequest?.request_id == res.request_id 
-                                    ? "bg-teal-400 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put requests in rounded rectangle boxes*/
+                                    ? "border-4 text-blue-900 font-bold font-[Poppins]" : "text-gray-700 hover:bg-gray-100 font-[Poppins]"}` /* Put requests in rounded rectangle boxes*/
                             }
-                                style={{ borderColor: '#005E64', borderWidth: '1 px', borderStyle: 'solid' }}
+                                style={{ borderColor: selectedRequest?.request_id == res.request_id ? '#009CA6' : '#005E64', borderWidth: '1 px', borderStyle: 'solid' }}
                             >
                                 {res.request_id}. {res.request_type} ({res.priority} Priority)
                             </button>

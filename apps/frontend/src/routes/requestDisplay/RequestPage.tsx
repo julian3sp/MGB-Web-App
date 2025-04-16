@@ -46,10 +46,10 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-h-[85vh] bg-white mr-19 ml-19 font-[Poppins] py-4"
-                style={{ borderColor: '#005E64', borderWidth: '4px', borderStyle: 'solid' }}
+                className="border min-h-[85vh] bg-white mr-8 ml-8 mb-1 font-[Poppins] py-4"
+                style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
-                <div className="flex gap-4 justify-between pl-4 pr-4 pt-2 pb-2 items-center">
+                <div className="flex gap-4 justify-between pl-4 pr-4 pb-1 pt-1 items-end">
                     <h1
                         className="text-4xl font-bold font-[Poppins] text-left"
                         style={{ color: '#003A96' }}
@@ -57,7 +57,7 @@ export default function RequestPage() {
                         Service Requests:
                     </h1>
 
-                    <div className="flex items-center gap-5 z-100">
+                    <div className="flex items-end gap-8 z-100">
                         <div className="flex flex-col mb-[-10px]">
                             <Switch
                                 defaultChecked={!isActive}
@@ -79,7 +79,7 @@ export default function RequestPage() {
                             </div>
                         </div>
 
-                        <div className="flex-col row-gap-4">
+                        <div className="flex flex-row gap-4">
                             <div className="relative">
                                 <button
                                     onClick={() => setShowFilterPanel((prev) => !prev)}

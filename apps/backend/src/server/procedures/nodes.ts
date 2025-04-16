@@ -19,24 +19,10 @@ export const makeNode = publicProcedure
         return client.nodes.createMany({ data: input });
     });
 
-export const getAllNodes = publicProcedure
-    .input(
-        z.object({
-            building: z.string(),
-            floor: z.number(),
-        })
-    )
-    .query(async (opts) => {
-        const { input } = opts;
-        // Retrieve the user with the given ID
-        const nodes = await client.nodes.findMany({
-            where: {
-                building: input.building,
-                floor: input.floor,
-            },
-        });
-        return nodes;
-    });
+export const getAllNodes = publicProcedure.query(async () => {
+    const nodes = await client.nodes.findMany();
+    return nodes;
+});
 
 export const getNode = publicProcedure
     .input(

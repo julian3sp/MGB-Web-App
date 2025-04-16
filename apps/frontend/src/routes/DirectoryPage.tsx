@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { trpc } from '../lib/trpc';
-import axios from 'axios';
 import ImportCSV from "../components/ImportDept.tsx";
-import ImportDept from '../components/ImportDept.tsx';
+
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ const DirectoryPage = () => {
         telephone: '',
     });
 
-    const utils = trpc.useUtils();
+    //const utils = trpc.useUtils();
     const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
     const addDirectory = trpc.makeDirectory.useMutation();
@@ -26,7 +25,7 @@ const DirectoryPage = () => {
         // Construct CSV string
         let csv = 'id;name;services;location;telephone\n';
         directories.forEach((dir) => {
-            csv += `${dir.id}";"${dir.name}";"${dir.services}";"${dir.location}";"${dir.telephone}"\n`;
+            csv += `${dir.id}';'${dir.name}";"${dir.services.replace(/,/g,"#")}";"${dir.location}";"${dir.telephone}"\n`;
         });
 
         // Encode the CSV data as a Data URI
@@ -54,9 +53,9 @@ const DirectoryPage = () => {
     };
 
 
-    const handleCSVExport = () => {
-        window.open('/api/directory/export', '_blank');
-    };
+    //const handleCSVExport = () => {
+        //window.open('/api/directory/export', '_blank');
+    //};
 
     return (
         <div className="p-6 max-w-4xl mx-auto">

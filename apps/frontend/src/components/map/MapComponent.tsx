@@ -5,7 +5,6 @@ import MapRenderer from './MapRenderer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
-import DrawingPath from "../navigation/pathfinding/drawingPath.tsx";
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import icon from '../../../assets/icon.png';
 import FloorSelector from './FloorSelector';
@@ -364,7 +363,7 @@ const MapComponent: React.FC = () => {
       <div className="w-3/4 relative">
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <MapRenderer 
-          M  onMapReady={handleapReady} 
+            onMapReady={handleMapReady} 
             selectedDestination={selectedPlace} 
             onZoomChange={handleZoomChange}
             selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
@@ -374,11 +373,6 @@ const MapComponent: React.FC = () => {
           )}
         </div>
         <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          {/* <DrawingPath
-            key={selectedDepartment?.name}
-            source="south entrance"
-            destination={selectedDepartment?.name ?? "south entrance"}
-          /> */}
         </div>
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className="flex flex-col items-center gap-4">

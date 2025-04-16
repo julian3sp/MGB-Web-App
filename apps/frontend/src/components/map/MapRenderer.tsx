@@ -1,10 +1,10 @@
   import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
+import {addDraggableMarker, createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import { createMarkers } from './overlays/createMarkers'; // optional helper if implemented
-import Graph, { Node } from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
+import {createMarkers, drawAllEdges} from './overlays/createMarkers'; // optional helper if implemented
+import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
 
 // Example TRPC hooks (adjust to your own TRPC query hooks)
 import { trpc } from "@/lib/trpc";
@@ -82,7 +82,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
   const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
-  console.log("nodesdata: ",nodesData);
+  // console.log("nodesdata: ",nodesData);
 
   useEffect(() => {
     // Make sure map is loaded and data is available
@@ -95,10 +95,12 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   
     // Extract nodes from the graph
     const allNodes: Node[] = graph.getNodes();
-    console.log('All Nodes:', allNodes);
+    const allEdges: Edge[] = graph.getEdges();
+    // console.log('All Nodes:', allNodes);
   
     // Using the createMarkers helper
     createMarkers(map, allNodes);
+    drawAllEdges(map, allEdges);
   }, [map, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
   
 
@@ -125,13 +127,22 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         const overlays: MGBOverlays = createMGBOverlays(map);
         setParkingOverlay(overlays.parkingOverlay);
         setFloorOverlay(overlays.floorOverlay);
+        addDraggableMarker(map, {
+          lat: 42.32574519161382,
+          lng: -71.14923688279762,
+        });
       } else if (selectedDestination.name === "20 Patriot Place") {
         createPatriot20Overlays(map);
+        addDraggableMarker(map, {
+          lat: 42.09268500610588,
+          lng: -71.26550646809393,
+        });
       } else if (selectedDestination.name === "22 Patriot Place") {
         const overlays = createPatriot22Overlays(map);
         setPatriot22Overlays(overlays);
       }
     }
+
     // Only run this effect when selectedDestination or map changes.
   }, [selectedDestination, map]);
   

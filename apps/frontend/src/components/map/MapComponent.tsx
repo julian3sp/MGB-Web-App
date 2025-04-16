@@ -20,6 +20,7 @@ const MapComponent: React.FC = () => {
   const [showMap, setShowMap] = useState<boolean>(false);
   const [showText, setShowText] = useState(true);
   const [selectedDepartment, setSelectedDepartment] = useState<{ name: string; floor: string[] } | null>(null);
+  const [deptNumber, setDeptNumber] = useState<number | null>(null);
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
@@ -125,23 +126,25 @@ const MapComponent: React.FC = () => {
     }
   };
 
-  const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
-    setSelectedDepartment(department);
-    setShowHospitalMap(false);
+    const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
+      setSelectedDepartment(department);
+      // setShowHospitalMap(false);
 
-    const departmentMapping: Record<string, google.maps.LatLngLiteral> = {
-      'Laboratory': { lat: 42.32575227638497, lng: -71.15003975413042 },
-      'Radiology': {lat: 42.325991023027356, lng: -71.14925534772229}
+      const departmentMapping: Record<string, number> = {
+        'Multi-Specialty Clinic': 912,
+        'Radiology': 80,
+        'Radiology, MRI/CT Scan': 66
 
-      // Add additional mappings as needed.
+        // Add additional mappings as needed.
+      };
+
+      const deptNum = departmentMapping[department.name];
+      if (deptNum) {
+        setDeptNumber(deptNum);
+      } else {
+        console.error(`No mapping found for department: ${department.name}`);
+      }
     };
-
-    const destCoord = departmentMapping[department.name];
-    if (destCoord && mapInstance && mgbOverlays) {
-      // Update (or create) the path polyline inside the building.
-      updateDepartmentPath(mgbOverlays, mapInstance, destCoord);
-    }
-  };
 
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {
@@ -319,17 +322,6 @@ const MapComponent: React.FC = () => {
         <div className="flex flex-col mt-10">
           <h2 className="text-sm font-semibold mb-2">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
-          {selectedDepartment && !showHospitalMap && (
-            <button
-              onClick={handleViewHospitalMap}
-              className="w-full bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-                         transition-all duration-300 ease-in-out
-                         hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                         active:scale-95 mt-4"
-            >
-              Show Inside Hospital Map
-            </button>
-          )}
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
               <div className="flex flex-col gap-2">
@@ -366,6 +358,7 @@ const MapComponent: React.FC = () => {
             selectedDestination={selectedPlace} 
             onZoomChange={handleZoomChange}
             selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
+            departmentNumber={deptNumber}
           />
           {selectedPlace?.name === "22 Patriot Place" && (
             <FloorSelector selectedFloor={selectedFloor} onSelect={handleFloorSelect} />

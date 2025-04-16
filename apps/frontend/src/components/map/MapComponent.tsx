@@ -245,7 +245,6 @@ const MapComponent: React.FC = () => {
   const handleZoomChange = (zoom: number) => {
     // Update the routing destination marker (if using it elsewhere)
     if (destinationMarkerRef.current) {
-      // Example: hide the general destination marker when zoomed in.
       if (zoom >= 19) {
         destinationMarkerRef.current.setVisible(false);
       } else {
@@ -371,8 +370,6 @@ const MapComponent: React.FC = () => {
           {selectedPlace?.name === "22 Patriot Place" && (
             <FloorSelector selectedFloor={selectedFloor} onSelect={handleFloorSelect} />
           )}
-        </div>
-        <div className={`absolute inset-0 transition-all duration-500 ease-in-out ${showHospitalMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
         </div>
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className="flex flex-col items-center gap-4">

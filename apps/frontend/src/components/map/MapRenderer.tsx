@@ -156,7 +156,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
 
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
-      // trigger the parent's callback 
+      // trigger the parent's callback
       if (onZoomChange) onZoomChange(zoom || 0);
       if (zoom && zoom >= 20) {
         animateOverlayOpacity(parkingOverlay, parkingOpacityRef, 0, 300);

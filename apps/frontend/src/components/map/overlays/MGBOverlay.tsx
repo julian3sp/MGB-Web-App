@@ -75,7 +75,7 @@ export const updateDepartmentPath = (
   const navigationPolyline = new google.maps.Polyline({
     path: [frontEntrance, destinationCoord],
     geodesic: true,
-    strokeColor: '#4285F4',
+    strokeColor: '#FF000',
     strokeOpacity: 1,
     strokeWeight: 3,
   });

@@ -5,7 +5,7 @@ import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
-import Graph, {Node} from "@/components/navigation/pathfinding/Graph.ts";
+import DirectionsGuide from './DirectionsGuide.tsx';
 import {trpc} from "../../lib/trpc"
 
 const MapComponent: React.FC = () => {
@@ -21,6 +21,7 @@ const MapComponent: React.FC = () => {
   const [deptNumber, setDeptNumber] = useState<number | null>(null);
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [directionsResult, setDirectionsResult] = useState<google.maps.DirectionsResult | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<3 | 4>(3);
@@ -200,6 +201,7 @@ const MapComponent: React.FC = () => {
       console.log('Route calculation result:', { status, result });
   
       if (status === google.maps.DirectionsStatus.OK && result) {
+        setDirectionsResult(result);
         mapInstance.setOptions({ draggableCursor: 'default' });
   
         // Add the start marker.
@@ -296,6 +298,10 @@ const MapComponent: React.FC = () => {
           }}
           handleGetCurrentLocation={handleGetCurrentLocation}
         />
+        
+        {directionsResult && (
+          <DirectionsGuide directions={directionsResult} />
+        )}
 
         {/* Hospital Map Section */}
         <div className="flex flex-col mt-10">

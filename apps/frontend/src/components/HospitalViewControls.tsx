@@ -35,23 +35,26 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
             <span className="font-light">Viewing: </span><span className="font-bold">{selectedDestination.name}</span>
           </div>
         ) : isPatriotPlace ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center space-x-2 px-3 py-1 rounded-full border">
-              <span className="text-sm">Floor {selectedFloor}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuLabel>{selectedDestination?.name}</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => onFloorChange(3)} className={selectedFloor === 3 ? "bg-blue-50" : ""}>
-                Floor 3 {selectedFloor === 3 && "✓"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onFloorChange(4)} className={selectedFloor === 4 ? "bg-blue-50" : ""}>
-                Floor 4 {selectedFloor === 4 && "✓"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center font-medium">
+            <span className="font-light mr-1">Viewing:</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center space-x-2 px-3 py-1 rounded-full border">
+                <span className="text-sm font-bold">Floor {selectedFloor}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuLabel>{selectedDestination?.name}</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => onFloorChange(3)} className={selectedFloor === 3 ? "bg-blue-50" : ""}>
+                  Floor 3 {selectedFloor === 3 && "✓"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onFloorChange(4)} className={selectedFloor === 4 ? "bg-blue-50" : ""}>
+                  Floor 4 {selectedFloor === 4 && "✓"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : (
           <div className="font-medium text-gray-500">
             Select a destination

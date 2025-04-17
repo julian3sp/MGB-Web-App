@@ -36,7 +36,7 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
           </div>
         ) : isPatriotPlace ? (
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center space-x-2 px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 mr-5">
+            <DropdownMenuTrigger className="flex items-center space-x-2 px-3 py-1 rounded-full border">
               <span className="text-sm">Floor {selectedFloor}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                 <path d="m6 9 6 6 6-6" />

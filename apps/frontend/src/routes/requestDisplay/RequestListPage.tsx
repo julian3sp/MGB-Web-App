@@ -67,15 +67,15 @@ export default function RequestListPage() {
                             >
                                 {res.request_id}.{' '}
                                 {res.request_type === 'Sanitation'
-                                    ? 'Sanitation 🧹'
+                                    ? 'Sanitation'
                                     : res.request_type === 'Transportation'
-                                      ? 'Transportation 🚌'
+                                      ? 'Transportation'
                                       : res.request_type === 'Security'
-                                        ? 'Security 🛡️'
+                                        ? 'Security'
                                         : res.request_type === 'AudioVisual'
-                                          ? 'Audio/Visual Accommodations 👨‍🦯'
+                                          ? 'Audio/Visual Accommodations'
                                           : res.request_type === 'Language'
-                                            ? 'Language Interpreter 🗣️'
+                                            ? 'Language Interpreter'
                                             : 'N/A'}{' '}
                                 (Priority:{' '}
                                 <span
@@ -133,15 +133,15 @@ export default function RequestListPage() {
                             >
                                 {selectedRequest.request_id}.{' '}
                                 {selectedRequest.request_type === 'Sanitation'
-                                    ? 'Sanitation 🧹'
+                                    ? 'Sanitation'
                                     : selectedRequest.request_type === 'Transportation'
-                                      ? 'Transportation 🚌'
+                                      ? 'Transportation'
                                       : selectedRequest.request_type === 'Security'
-                                        ? 'Security 🛡️'
+                                        ? 'Security'
                                         : selectedRequest.request_type === 'AudioVisual'
-                                          ? 'Audio/Visual Accommodations 👨‍🦯'
+                                          ? 'Audio/Visual Accommodations'
                                           : selectedRequest.request_type === 'Language'
-                                            ? 'Language Interpreter 🗣️'
+                                            ? 'Language Interpreter'
                                             : 'N/A'}{' '}
                                 (Priority:{' '}
                                 <span
@@ -173,15 +173,15 @@ export default function RequestListPage() {
                                 <p>
                                     <i>
                                         {selectedRequest.request_type === 'Sanitation'
-                                            ? 'Sanitation 🧹'
+                                            ? 'Sanitation'
                                             : selectedRequest.request_type === 'Transportation'
-                                              ? 'Transportation 🚌'
+                                              ? 'Transportation'
                                               : selectedRequest.request_type === 'Security'
-                                                ? 'Security 🛡️'
+                                                ? 'Security'
                                                 : selectedRequest.request_type === 'AudioVisual'
-                                                  ? 'Audio/Visual Accommodations 👨‍🦯'
+                                                  ? 'Audio/Visual Accommodations'
                                                   : selectedRequest.request_type === 'Language'
-                                                    ? 'Language Interpreter 🗣️'
+                                                    ? 'Language Interpreter'
                                                     : 'N/A'}
                                     </i>
                                 </p>

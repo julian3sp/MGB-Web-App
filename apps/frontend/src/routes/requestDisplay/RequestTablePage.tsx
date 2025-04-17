@@ -262,15 +262,15 @@ export default function RequestTablePage() {
                                         <td className="p-4 whitespace=normal break-words max-w-[125px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
                                                 <i>{res.request_type === "Sanitation" ?
-                                                    "Sanitation 🧹"
+                                                    "Sanitation"
                                                     : res.request_type === "Transportation" ?
-                                                    "Transportation 🚌"
+                                                    "Transportation"
                                                     : res.request_type === "Security" ?
-                                                    "Security 🛡️"
+                                                    "Security"
                                                     : res.request_type === "AudioVisual" ?
-                                                    "Audio/Visual Accomodations 👨‍🦯"
+                                                    "Audio/Visual Accommodations"
                                                     : res.request_type === "Language" ?
-                                                    "Language Interpreter 🗣️"
+                                                    "Language Interpreter ️"
                                                                     : "N/A"
                                                 }</i>
                                             </p>

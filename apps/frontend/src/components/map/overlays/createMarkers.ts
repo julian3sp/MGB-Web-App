@@ -14,37 +14,74 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
         const marker = new google.maps.Marker({
             position: coord,
             map: map,
-            title: '',
-            icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
+            title: node.id.toString(),
+            icon: {
+                url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
+                scaledSize: new google.maps.Size(8, 8) // width, height in pixels
+            }        });
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
+            pixelOffset: new google.maps.Size(0, -8),
         });
+
+        marker.addListener('mouseover', () => {
+            infoWindow.open({ map, anchor: marker });
+        });
+
+        marker.addListener('mouseout', () => {
+            infoWindow.close();
+        });
+
         markers.push(marker);
     }
 
     return markers
 }
 
-export function drawAllEdges(map: google.maps.Map, Edges: Edge[]){
-
-    for (const edge of Edges) {
-        const source: Node = edge.source;
-        const target: Node = edge.target;
-        // console.log("Source: ", source.id, ", target: ", target.id);
-
-        const sourceCoord: google.maps.LatLngLiteral = { lat: source.x, lng: source.y };
-        const targetCoord: google.maps.LatLngLiteral = { lat: target.x, lng: target.y };
-
-        const edgeLine = new google.maps.Polyline({
-            path: [sourceCoord, targetCoord],
-            geodesic: true,
-            strokeColor: "#FF0000",
-            strokeOpacity: 1.0,
-            strokeWeight: 2,
-        });
-
-        edgeLine.setMap(map);
+export function drawAllEdges(
+    map: google.maps.Map,
+    edges: Edge[]
+  ): google.maps.Polyline[] {
+    const polylines: google.maps.Polyline[] = [];
+  
+    for (const edge of edges) {
+      const source: Node = edge.source;
+      const target: Node = edge.target;
+  
+      const sourceCoord: google.maps.LatLngLiteral = { lat: source.x, lng: source.y };
+      const targetCoord: google.maps.LatLngLiteral = { lat: target.x, lng: target.y };
+  
+      const edgeLine = new google.maps.Polyline({
+        path: [sourceCoord, targetCoord],
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+  
+      edgeLine.setMap(map);
+      polylines.push(edgeLine);
     }
-
+  
+    return polylines;
 }
 
+export function drawPath(map: google.maps.Map, nodes: Node[]){
+    // Initialize an array to hold coordinates (using LatLngLiteral for type-safety)
+    const path: google.maps.LatLngLiteral[] = [];
 
-
+    for (const node of nodes) {
+        const targetCoord: google.maps.LatLngLiteral = { lat: node.x, lng: node.y};
+        path.push(targetCoord);
+    }
+    const polyline = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+    });
+    polyline.setMap(map);
+    return polyline;
+}

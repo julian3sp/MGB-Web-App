@@ -48,23 +48,16 @@ export default function MapEditor() {
     }, []);
 
     return (
-        <>
-            <div
-                ref={containerRef}
-                className="relative outline-2 outline-gray-500 bg-sky-100 w-5/6 h-80 truncate m-10"
-            >
-                <div>
-                    <DraggableNode ref={nodeRef} />
-                </div>
-            </div>
-            <div>
+        <div className={"min-h-screen"}>
+
+            <div className={"mb-2 mt-2 ml-2"}>
                 <h2>Import Nodes:</h2>
                 <ImportNodes />
             </div>
-            <div>
+            <div className={"mb-2 mt-2 ml-2"}>
                 <h2>Import Edges:</h2>
                 <ImportEdges />
             </div>
-        </>
+        </div>
     );
 }

@@ -72,6 +72,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       apiKey,
       version: 'weekly',
       libraries: ['places'],
+      language: 'en',
     });
     
     loader.load()

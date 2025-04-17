@@ -53,6 +53,7 @@ function App() {
         <Router>
             <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
             <Routes>
+                {/*<Route path="/map3d" element={<Map3DPage />} />*/}
                 <Route path="/navigation" element={<NavigationPage />} />
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />

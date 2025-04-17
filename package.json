@@ -20,8 +20,10 @@
   "devDependencies": {
     "@types/google.maps": "^3.58.1",
     "@types/node": "^22.13.13",
+    "@types/pathfinding": "^0",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/three": "^0",
     "@vitest/ui": "^3.0.9",
     "@yarnpkg/pnpify": "^4.1.4",
     "eslint": "^9.23.0",
@@ -38,15 +40,19 @@
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
     "@react-google-maps/api": "^2.20.6",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
     "@tabler/icons-react": "^3.31.0",
     "clsx": "^2.1.1",
     "common": "workspace:*",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "dotenv-cli": "^7.4.4",
     "motion": "^12.6.3",
+    "pathfinding": "^0.4.18",
     "react": "latest",
     "react-dom": "latest",
-    "tailwind-merge": "^3.2.0"
+    "tailwind-merge": "^3.2.0",
+    "three": "^0.175.0"
   },
   "resolutions": {
     "dotenv": "^16.4.7",

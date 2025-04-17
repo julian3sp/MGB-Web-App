@@ -46,12 +46,14 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             onClick={() => handleFormRequest({
                                 type:"Language",
                                 title: "Language Interpreter Service Form"})}
+                            type="Language"
                         />
                         <RequestButton
                             label={'Sanitation Services Form'}
                             onClick={() => handleFormRequest({
                                 type: "Sanitation",
                                 title: 'Sanitation Service Form'})}
+                            type="Sanitation"
                         />
                         <RequestButton
                             label={'Security Request Form'}
@@ -59,6 +61,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                                 type: "Security",
                                 title: "Security Request Form",
                             })}
+                            type="Security"
                         />
                         <RequestButton
                             label={'Transportation Request Form'}
@@ -66,6 +69,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                                 type: "Transportation",
                                 title: "Transportation Request Form",
                             })}
+                            type="Transportation"
                         />
                         <RequestButton
                             label={'Audio/Visual Request Form'}
@@ -73,9 +77,9 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                                 type: "AudioVisual",
                                 title: "Audio/Visual Request Form",
                             })}
+                            type="AudioVisual"
                         />
                     </div>
-
                 </div>
             </SideNav>
         </>

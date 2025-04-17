@@ -1,11 +1,12 @@
 import { NavLink, Outlet, redirect, useNavigate } from 'react-router-dom';
 import RequestTablePage from './RequestTablePage.tsx';
 import RequestListPage from './RequestListPage.tsx';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
+import { useClickAway } from '@uidotdev/usehooks';
 
 export default function RequestPage() {
     const [isActive, setActive] = useState(true);
@@ -40,6 +41,10 @@ export default function RequestPage() {
             (filters.location.length === 0 || filters.location.includes(res.location)) &&
             (filters.department.length === 0 || filters.department.includes(res.department))
     );
+
+    const handleFilterClick = () => {
+        setShowFilterPanel(!showFilterPanel);
+    };
 
     return (
         <RequestDataContext.Provider
@@ -82,14 +87,17 @@ export default function RequestPage() {
                         <div className="flex flex-row gap-4">
                             <div className="relative">
                                 <button
-                                    onClick={() => setShowFilterPanel((prev) => !prev)}
+                                    onClick={handleFilterClick}
                                     className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     Filters
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[450px]">
+                                    <div
+                                        ref={ref}
+                                        className="absolute top-full mt-2 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[450px]"
+                                    >
                                         <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                             Filter Requests
                                         </h3>

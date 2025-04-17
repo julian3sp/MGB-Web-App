@@ -28,7 +28,7 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
                           selectedDestination?.name === "22 Patriot Place";
 
   return (
-    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-full flex items-center justify-center px-4 shadow-md border border-gray-300 w-auto max-w-full py-1">
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-full flex items-center justify-center px-4 shadow-md border border-gray-300 w-auto max-w-full py-1.5">
       <div className="flex items-center space-x-2">
         {isMGB ? (
           <div className="font-medium">
@@ -59,7 +59,6 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
         )}
       </div>
   
-      {/* Vertical Divider */}
       <div className="h-6 w-[1px] bg-gray-300 mx-4"></div>
   
       {/* Zoom controls */}

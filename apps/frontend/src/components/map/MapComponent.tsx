@@ -125,7 +125,7 @@ const MapComponent: React.FC = () => {
       setShowHospitalMap(false);
       displayRouteOnMap(startLocation, newDestination);
     }
-  };
+  };  
 
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);

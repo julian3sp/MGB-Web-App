@@ -4,16 +4,8 @@ import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; 
-import ZoomControls from '../ZoomInAndOutButton';
+import HospitalViewControls from '../HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
 
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
@@ -27,6 +19,7 @@ interface MapRendererProps {
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
   selectedFloor?: 3 | 4; 
+  onFloorChange?: (floor: 3 | 4) => void;
   departmentNumber?: number | null;
 }
 
@@ -34,7 +27,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onMapReady, 
   selectedDestination, 
   onZoomChange, 
-  selectedFloor = 3, 
+  selectedFloor = 3,
+  onFloorChange = () => {},
   departmentNumber 
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -369,7 +363,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     <div className="relative w-full h-screen">
       <div ref={mapRef} className="w-full h-full"></div>
       
-      {map && (
+      {/* {map && (
         <div className="absolute top-8 right-2 flex flex-col gap-2 z-50">
           <button
             onClick={toggleNodesHandler}
@@ -384,26 +378,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({
             {showEdges ? 'Hide Edges' : 'Show Edges'}
           </button>
         </div>
-      )}
+      )} */}
       
-      <div className="absolute bottom-4 shadow-lg left-1/2 transform -translate-x-1/2 w-1/2 h-12 bg-white rounded-full flex items-center justify-center space-x-4 p-2 shadow-md border border-gray-300">
-        {/* Dropdown Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="h-8 px-4 bg-gray-200 rounded-full text-sm hover:bg-gray-300 flex items-center">
-            Open
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <ZoomControls map={map} selectedDestination={selectedDestination} />
-      </div>
+      {/* Use the new HospitalViewControls component */}
+      <HospitalViewControls 
+        map={map}
+        selectedDestination={selectedDestination || null}
+        selectedFloor={selectedFloor}
+        onFloorChange={onFloorChange}
+      />
     </div>
   );
 };

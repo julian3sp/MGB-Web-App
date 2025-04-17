@@ -299,18 +299,6 @@ const MapComponent: React.FC = () => {
           handleGetCurrentLocation={handleGetCurrentLocation}
         />
 
-        {selectedPlace && (
-          <button
-            onClick={handleZoomToDestination}
-            className="w-[90%] bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-                         transition-all duration-300 ease-in-out
-                         hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                         active:scale-95 mx-auto"
-          >
-            Zoom to Destination
-          </button>
-        )}
-
         {/* Hospital Map Section */}
         <div className="flex flex-col mt-10">
           <h2 className="text-sm font-semibold mb-2">Select a department</h2>

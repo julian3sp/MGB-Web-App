@@ -3,10 +3,19 @@ import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; // optional helper if implemented
-import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; // Adjust the import path as needed
+import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; 
+import ZoomControls from '../ZoomInAndOutButton';
+import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
-// Example TRPC hooks (adjust to your own TRPC query hooks)
+// TRPC hooks
 import { trpc } from "@/lib/trpc";
 
 interface MapRendererProps {
@@ -21,15 +30,20 @@ interface MapRendererProps {
   departmentNumber?: number | null;
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestination, onZoomChange, selectedFloor, departmentNumber }) => {
+const MapRenderer: React.FC<MapRendererProps> = ({ 
+  onMapReady, 
+  selectedDestination, 
+  onZoomChange, 
+  selectedFloor = 3, 
+  departmentNumber 
+}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  // For overlays (only for MGB in this example)
+  // For overlays
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
-  const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot22Overlays | null>(null);
-  // Optionally, hold onto created markers (for future clearing, etc.)
+  // Markers and visualization
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [showNodes, setShowNodes] = useState(false);
   const [showEdges, setShowEdges] = useState(false);
@@ -40,25 +54,33 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
   const targetMarkerRef = useRef<google.maps.Marker | null>(null);
   
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   // Refs for overlay animations
   const parkingOpacityRef = useRef(1);
   const floorOpacityRef = useRef(0);
+  
+  // Get Google Maps API key
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-  if (!apiKey) {
-    return <div className="text-red-500 p-4">Error: Google Maps API key is missing</div>;
-  }
+  // Fetch graph data via TRPC
+  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
   // Initialize Google Map (only once)
   useEffect(() => {
-    if (map) return;
+    if (!apiKey) {
+      console.error("Google Maps API key is missing");
+      return;
+    }
+    
+    if (map || !mapRef.current) return;
+    
     const loader = new Loader({
       apiKey,
       version: 'weekly',
       libraries: ['places'],
     });
-    loader
-      .load()
+    
+    loader.load()
       .then(() => {
         if (mapRef.current) {
           const newMap = new google.maps.Map(mapRef.current, {
@@ -69,7 +91,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
             streetViewControl: true,
             zoomControl: true,
           });
+          
           setMap(newMap);
+          
           const directionsService = new google.maps.DirectionsService();
           const directionsRenderer = new google.maps.DirectionsRenderer({
             map: newMap,
@@ -80,55 +104,55 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
               strokeWeight: 4,
             },
           });
+          
           directionsRenderer.setMap(newMap);
           onMapReady(newMap, directionsService, directionsRenderer);
         }
       })
       .catch((error) => console.error('Error loading Google Maps:', error));
-  }, [onMapReady, apiKey, map]);
+  }, [onMapReady, apiKey]);
 
-  // Fetch graph data via TRPC
-  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
-
-  // console.log("nodesdata: ",nodesData);
-
+  // Toggle nodes visibility
   const toggleNodesHandler = () => {
-    if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+    if (!map || isNodesLoading || !nodesData || !edgesData) return;
+    
     if (showNodes) {
-      // If they are currently visible, remove them
+      // Clear existing node markers
       nodeMarkers.forEach(marker => marker.setMap(null));
       setNodeMarkers([]);
       setShowNodes(false);
     } else {
-      // Otherwise, build and store the markers
+      // Create and display node markers
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
       const allNodes: Node[] = graph.getNodes();
-      const markersCreated: google.maps.Marker[] = createMarkers(map, allNodes); // make sure createMarkers returns markers
+      const markersCreated = createMarkers(map, allNodes);
       setNodeMarkers(markersCreated);
       setShowNodes(true);
     }
   };
   
+  // Toggle edges visibility
   const toggleEdgesHandler = () => {
     if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
+    
     if (showEdges) {
-      // Remove the edge polylines if visible
+      // Clear existing edge polylines
       edgePolylines.forEach(polyline => polyline.setMap(null));
       setEdgePolylines([]);
       setShowEdges(false);
     } else {
-      // Build and store the polylines
+      // Create and display edge polylines
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
       const allEdges: Edge[] = graph.getEdges();
-      const polylinesCreated: google.maps.Polyline[] = drawAllEdges(map, allEdges); 
+      const polylinesCreated = drawAllEdges(map, allEdges); 
       setEdgePolylines(polylinesCreated);
       setShowEdges(true);
     }
   };
 
+  // Handle department pathfinding
   useEffect(() => {
     if (
       !map ||
@@ -137,105 +161,134 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       isEdgesLoading ||
       !nodesData ||
       !edgesData
-    )
-      return;
+    ) return;
 
-    // Build the graph from TRPC data.
-    const graph = new Graph();
-    graph.populate(nodesData, edgesData);
+    try {
+      // Build the graph from TRPC data
+      const graph = new Graph();
+      graph.populate(nodesData, edgesData);
 
-    // Fixed entrance node (for example, node 941).
-    const entrance = graph.getNode(941);
-    const target = graph.getNode(departmentNumber);
-    if (!entrance || !target) {
-      console.error('Either the entrance or department node is missing');
-      return;
+      // Fixed entrance node and target department node
+      const entrance = graph.getNode(941);
+      const target = graph.getNode(departmentNumber);
+      
+      if (!entrance || !target) {
+        console.error('Either the entrance or department node is missing');
+        return;
+      }
+
+      // Clear previous path if exists
+      if (pathPolylineRef.current) {
+        pathPolylineRef.current.setMap(null);
+        pathPolylineRef.current = null;
+      }
+      
+      // Compute and draw the new path
+      const pathNodes: Node[] = graph.aStar(entrance, target);
+      const newPolyline = drawPath(map, pathNodes);
+      pathPolylineRef.current = newPolyline;
+
+      // Clear existing markers
+      if (startMarkerRef.current) {
+        startMarkerRef.current.setMap(null);
+        startMarkerRef.current = null;
+      }
+      if (targetMarkerRef.current) {
+        targetMarkerRef.current.setMap(null);
+        targetMarkerRef.current = null;
+      }
+      
+      // Add new markers for start and destination
+      startMarkerRef.current = new google.maps.Marker({
+        position: { lat: entrance.x, lng: entrance.y },
+        map: map,
+        title: 'Start (Entrance)',
+        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+      });
+      
+      targetMarkerRef.current = new google.maps.Marker({
+        position: { lat: target.x, lng: target.y },
+        map: map,
+        title: 'Department',
+        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+      });
+    } catch (error) {
+      console.error('Error in pathfinding:', error);
     }
-
-    // Compute the path with A* search.
-    const pathNodes: Node[] = graph.aStar(entrance, target);
-
-    // Clear previously drawn path if exists.
-    if (pathPolylineRef.current) {
-      pathPolylineRef.current.setMap(null);
-      pathPolylineRef.current = null;
-    }
-    // Draw the new path.
-    const newPolyline = drawPath(map, pathNodes);
-    pathPolylineRef.current = newPolyline;
-
-    // Clear existing markers.
-    if (startMarkerRef.current) {
-      startMarkerRef.current.setMap(null);
-      startMarkerRef.current = null;
-    }
-    if (targetMarkerRef.current) {
-      targetMarkerRef.current.setMap(null);
-      targetMarkerRef.current = null;
-    }
-    // Add new markers for the start and department location.
-    startMarkerRef.current = new google.maps.Marker({
-      position: { lat: entrance.x, lng: entrance.y },
-      map: map,
-      title: 'Start (Entrance)',
-      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-    });
-    targetMarkerRef.current = new google.maps.Marker({
-      position: { lat: target.x, lng: target.y },
-      map: map,
-      title: 'Department',
-      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-    });
   }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
   
-  // Existing overlay logic for selectedDestination
+  // Handle overlay updates based on selected destination
   useEffect(() => {
     if (!map) return;
-    // Clear previous overlays, if any.
-    if (parkingOverlay) {
-      parkingOverlay.setMap(null);
-      setParkingOverlay(null);
-    }
-    if (floorOverlay) {
-      floorOverlay.setMap(null);
-      setFloorOverlay(null);
-    }
-    if (patriot22Overlays) {
-      patriot22Overlays.floor3Overlay.setMap(null);
-      patriot22Overlays.floor4Overlay.setMap(null);
-      setPatriot22Overlays(null);
-    }
     
+    // Clean up previous overlays
+    const cleanupOverlays = () => {
+      if (parkingOverlay) {
+        parkingOverlay.setMap(null);
+        setParkingOverlay(null);
+      }
+      if (floorOverlay) {
+        floorOverlay.setMap(null);
+        setFloorOverlay(null);
+      }
+      if (patriot22Overlays) {
+        patriot22Overlays.floor3Overlay.setMap(null);
+        patriot22Overlays.floor4Overlay.setMap(null);
+        setPatriot22Overlays(null);
+      }
+    };
+    
+    cleanupOverlays();
+    
+    // Set up new overlays based on destination
     if (selectedDestination) {
-      if (selectedDestination.name === "MGB (Chestnut Hill)") {
-        const overlays: MGBOverlays = createMGBOverlays(map);
-        setParkingOverlay(overlays.parkingOverlay);
-        setFloorOverlay(overlays.floorOverlay);
-      } else if (selectedDestination.name === "20 Patriot Place") {
-        createPatriot20Overlays(map);
-      } else if (selectedDestination.name === "22 Patriot Place") {
-        const overlays = createPatriot22Overlays(map);
-        setPatriot22Overlays(overlays);
+      try {
+        if (selectedDestination.name === "MGB (Chestnut Hill)") {
+          const overlays: MGBOverlays = createMGBOverlays(map);
+          setParkingOverlay(overlays.parkingOverlay);
+          setFloorOverlay(overlays.floorOverlay);
+        } else if (selectedDestination.name === "20 Patriot Place") {
+          createPatriot20Overlays(map);
+        } else if (selectedDestination.name === "22 Patriot Place") {
+          const overlays = createPatriot22Overlays(map);
+          setPatriot22Overlays(overlays);
+        }
+        
+        // Center map on the selected destination
+        map.setCenter(selectedDestination.location);
+        map.setZoom(18);
+      } catch (error) {
+        console.error('Error setting up overlays:', error);
       }
     }
-
+    
+    return cleanupOverlays;
   }, [selectedDestination, map]);
-  
 
-  // 22 Patriot Place overlays update on floor change
+  // Update Patriot Place overlays on floor change
   useEffect(() => {
     if (!map || !patriot22Overlays) return;
-    updatePatriotPlace22(patriot22Overlays, selectedFloor || 3);
-    const patriotZoomListener = map.addListener('zoom_changed', () => {
-      const zoom = map.getZoom();
-      if (onZoomChange) onZoomChange(zoom || 0);
-    });
-    return () => google.maps.event.removeListener(patriotZoomListener);
+    
+    try {
+      updatePatriotPlace22(patriot22Overlays, selectedFloor);
+      
+      const patriotZoomListener = map.addListener('zoom_changed', () => {
+        const zoom = map.getZoom();
+        if (onZoomChange && zoom !== undefined) {
+          onZoomChange(zoom);
+        }
+      });
+      
+      return () => google.maps.event.removeListener(patriotZoomListener);
+    } catch (error) {
+      console.error('Error updating Patriot Place overlays:', error);
+    }
   }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
 
-  // Zoom event handling for MGB overlays opacity animation
+  // Handle MGB overlay opacity animations
   useEffect(() => {
     if (!map || !parkingOverlay || !floorOverlay) return;
+    
     const animateOverlayOpacity = (
       overlay: google.maps.GroundOverlay,
       opacityRef: MutableRefObject<number>,
@@ -247,11 +300,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       const current = opacityRef.current;
       const delta = (target - current) / steps;
       let count = 0;
+      
       const interval = setInterval(() => {
         count++;
         const newOpacity = current + delta * count;
         overlay.setOpacity(newOpacity);
         opacityRef.current = newOpacity;
+        
         if (count >= steps) {
           clearInterval(interval);
           overlay.setOpacity(target);
@@ -259,9 +314,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         }
       }, stepTime);
     };
+    
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
-      if (onZoomChange) onZoomChange(zoom || 0);
+      if (onZoomChange && zoom !== undefined) {
+        onZoomChange(zoom);
+      }
+      
       if (zoom && zoom >= 20) {
         animateOverlayOpacity(parkingOverlay, parkingOpacityRef, 0, 300);
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 1, 300);
@@ -270,25 +329,28 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 0, 300);
       }
     });
+    
     return () => google.maps.event.removeListener(zoomListener);
   }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 
+  // Handle path visibility based on zoom level
   useEffect(() => {
     if (!map) return;
   
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
-      // If the zoom level is below 20, hide the drawn path and markers;
-      // if zoomed in (>=20), show them.
-      if (pathPolylineRef.current) {
-        if (zoom < 20) {
-          pathPolylineRef.current.setVisible(false);
-          if (startMarkerRef.current) startMarkerRef.current.setVisible(false);
-          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(false);
-        } else {
-          pathPolylineRef.current.setVisible(true);
-          if (startMarkerRef.current) startMarkerRef.current.setVisible(true);
-          if (targetMarkerRef.current) targetMarkerRef.current.setVisible(true);
+      
+      if (zoom !== undefined && pathPolylineRef.current) {
+        const isVisible = zoom >= 20;
+        
+        pathPolylineRef.current.setVisible(isVisible);
+        
+        if (startMarkerRef.current) {
+          startMarkerRef.current.setVisible(isVisible);
+        }
+        
+        if (targetMarkerRef.current) {
+          targetMarkerRef.current.setVisible(isVisible);
         }
       }
     });
@@ -297,28 +359,53 @@ const MapRenderer: React.FC<MapRendererProps> = ({ onMapReady, selectedDestinati
       google.maps.event.removeListener(zoomListener);
     };
   }, [map]);
-  
+
+  // Error handling
+  if (!apiKey) {
+    return <div className="text-red-500 p-4">Error: Google Maps API key is missing</div>;
+  }
 
   return (
-    <div ref={mapRef} style={{ width: '100%', height: '100vh', position: 'relative' }}>
+    <div className="relative w-full h-screen">
+      <div ref={mapRef} className="w-full h-full"></div>
+      
       {map && (
-        <div className="absolute top-30 right-1 flex flex-col  z-50">
+        <div className="absolute top-8 right-2 flex flex-col gap-2 z-50">
           <button
             onClick={toggleNodesHandler}
-            className="bg-[#003a96] text-white px-3 py-2 shadow hover:bg-blue-600 focus:outline-none"
+            className="bg-[#003a96] text-white px-3 py-2 rounded shadow hover:bg-blue-600 focus:outline-none"
           >
             {showNodes ? 'Hide Nodes' : 'Show Nodes'}
           </button>
           <button
             onClick={toggleEdgesHandler}
-            className="bg-[#003a96] text-white px-3 py-2 shadow hover:bg-blue-600 focus:outline-none"
+            className="bg-[#003a96] text-white px-3 py-2 rounded shadow hover:bg-blue-600 focus:outline-none"
           >
             {showEdges ? 'Hide Edges' : 'Show Edges'}
           </button>
         </div>
       )}
+      
+      <div className="absolute bottom-4 shadow-lg left-1/2 transform -translate-x-1/2 w-1/2 h-12 bg-white rounded-full flex items-center justify-center space-x-4 p-2 shadow-md border border-gray-300">
+        {/* Dropdown Menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger className="h-8 px-4 bg-gray-200 rounded-full text-sm hover:bg-gray-300 flex items-center">
+            Open
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Team</DropdownMenuItem>
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <ZoomControls map={map} selectedDestination={selectedDestination} />
+      </div>
     </div>
-  )
+  );
 };
 
 export default MapRenderer;

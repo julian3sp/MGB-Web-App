@@ -13,7 +13,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
+    AlertDialogOverlay,
 } from '../../components/ui/AlertDialogue';
+import edit from '../../../assets/edit.png';
+import deleteicon from '../../../assets/deleteicon.png';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -56,7 +59,7 @@ export default function RequestTablePage() {
     const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
     const [activeRequest, setActiveRequest] = useState<ServiceRequest | null>(null);
 
-    const handleContextMenu = (e: React.MouseEvent, request: ServiceRequest) => {
+    const handleMenu = (e: React.MouseEvent, request: ServiceRequest) => {
         e.preventDefault();
         setActiveRequest(request);
 
@@ -298,7 +301,6 @@ export default function RequestTablePage() {
                                             Additional Comments
                                         </h3>
                                     </th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -306,11 +308,11 @@ export default function RequestTablePage() {
                                     <tr
                                         key={res.request_id}
                                         className="even:bg-gray-100 even:hover:bg-indigo-100 odd:hover:bg-blue-100 pt-0 pb-0"
-                                        onClick={() => {
-                                            sendToDetailedView(res);
+                                        onClick={(e) => {
+                                            handleMenu(e, res);
                                         }}
-                                        onContextMenu={(e) => {
-                                            handleContextMenu(e, res);
+                                        onContextMenu={() => {
+                                            sendToDetailedView(res);
                                         }}
                                     >
                                         <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
@@ -530,50 +532,87 @@ export default function RequestTablePage() {
                                                 )}
                                             </p>
                                         </td>
-
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                         {menuVisible && activeRequest && (
                             <div
-                                className="fixed bg-white shadow-md rounded p-2 border z-50"
+                                className="fixed bg-white shadow-md rounded border z-50"
                                 style={{ top: menuPos.y, left: menuPos.x }}
                             >
+                                <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="hover:bg-gray-100 pb-1 pt-2 pl-2 pr-2 select-none"
+                                >
+                                    <div
+                                        className={'container'}
+                                        onClick={() => {
+                                            console.log('edit: ');
+                                            console.log(activeRequest);
+                                            setMenuVisible(false);
+                                        }}
+                                    >
+                                        <img
+                                            src={edit}
+                                            alt="(Edit icon)"
+                                            className="pb-1 inline-flex max-w-[20px]"
+                                        />{' '}
+                                        <p className="inline-flex ml-1">Edit Service Request</p>
+                                    </div>
+                                </div>
+
                                 <AlertDialog>
-                                    <AlertDialogTrigger onClick={(e) => e.stopPropagation()}>
-                                        Delete Service Request
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
-                                                Are you absolutely sure?
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. This will permanently
-                                                delete the service request and remove the data from
-                                                our servers.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel
-                                                onClick={() => {
-                                                    setMenuVisible(false);
-                                                }}
-                                            >
-                                                Go Back
-                                            </AlertDialogCancel>
-                                            <AlertDialogAction
-                                                onClick={() => {
-                                                    console.log("delete: ")
-                                                    console.log(activeRequest);
-                                                    setMenuVisible(false);
-                                                }}
-                                            >
-                                                Delete
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
+                                    <div>
+                                        <AlertDialogTrigger
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="hover:bg-gray-100 pb-2 pt-1 pl-2 pr-2"
+                                        >
+                                            <div className={'container'}>
+                                                <img
+                                                    src={deleteicon}
+                                                    alt="(Delete icon)"
+                                                    className="h-6 pb-1 inline-flex max-w-[20px]"
+                                                />{' '}
+                                                <p className="pt-2 inline-flex ml-1">
+                                                    Delete Service Request
+                                                </p>
+                                            </div>
+                                        </AlertDialogTrigger>
+
+                                        <AlertDialogContent className="flex flex-col justify-between w-[600px] max-w-none p-8 rounded-lg border-3 border-[#003A96]">
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle className="text-2xl font-semibold text-[#003A96]">
+                                                    Are you absolutely sure?
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription className="text-lg text-gray-700 mt-2">
+                                                    This action cannot be undone. This will
+                                                    permanently delete the service request and
+                                                    remove the data from our servers.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter className="flex justify-center gap-6 mt-8">
+                                                <AlertDialogCancel
+                                                    className="px-6 py-2 pb-3 text-base font-medium text-white bg-[#003A96] hover:bg-blue-950 hover:text-white"
+                                                    onClick={() => {
+                                                        setMenuVisible(false);
+                                                    }}
+                                                >
+                                                    Go Back
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    className="px-6 py-2 pb-3 text-base font-medium text-white bg-red-600 hover:bg-red-800"
+                                                    onClick={() => {
+                                                        console.log('delete: ');
+                                                        console.log(activeRequest);
+                                                        setMenuVisible(false);
+                                                    }}
+                                                >
+                                                    Delete Request
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </div>
                                 </AlertDialog>
                             </div>
                         )}

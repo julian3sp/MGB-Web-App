@@ -1,4 +1,4 @@
-import { NavLink, Outlet, redirect, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
 import RequestTablePage from './RequestTablePage.tsx';
 import RequestListPage from './RequestListPage.tsx';
 import React, { useState, useRef, useEffect } from 'react';
@@ -7,6 +7,7 @@ import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
 
+//Handles closing the filter popup when you click outside the popup
 const useClickOutside = (handler: () => void) => {
     const reference = useRef();
 
@@ -20,15 +21,25 @@ const useClickOutside = (handler: () => void) => {
         return () => {
             document.removeEventListener('mousedown', newHandler);
         };
-    });
+    }, [handler]);
     return reference;
 };
 
 export default function RequestPage() {
-    const [isActive, setActive] = useState(true);
-    const toggleActive = () => setActive(!isActive);
     const navigate = useNavigate();
     const [showFilterPanel, setShowFilterPanel] = useState(false);
+    const location = useLocation();
+
+    {
+        /*Necessary for switching to detailed view from table, so the main request page knows which you are on and updates the switch accordingly*/
+    }
+    const currentPage = location.pathname.split('/').pop() ?? 'table';
+    const [currentView, setCurrentView] = useState(currentPage);
+    const toggleActive = () => setCurrentView(currentPage === 'table' ? 'list' : 'table');
+
+    useEffect(() => {
+        setCurrentView(currentPage);
+    }, [currentPage]);
 
     const [filters, setFilters] = useState({
         request_type: [] as string[],
@@ -85,17 +96,19 @@ export default function RequestPage() {
                     <div className="flex items-end gap-8 z-100">
                         <div className="flex flex-col mb-[-10px]">
                             <Switch
-                                defaultChecked={!isActive}
+                                checked={currentView === 'list'}
                                 onCheckedChange={() => {
                                     toggleActive();
-                                    if (!isActive) {
+                                    if (currentView === 'list') {
                                         navigate('table');
                                     } else {
                                         navigate('list');
                                     }
                                 }}
                                 className="mx-auto"
-                                style={{ backgroundColor: isActive ? '' : '#003A96' }}
+                                style={{
+                                    backgroundColor: currentView === 'table' ? '' : '#003A96',
+                                }}
                             />
                             <div>
                                 <p className="whitespace-nowrap text-sm font-[Poppins] py-1">

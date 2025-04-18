@@ -1,11 +1,19 @@
 import { trpc } from '../../lib/trpc.ts';
-import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
-import DepartmentList from '../../components/DepartmentList.ts';
-import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRequestData } from './RequestDataContext.tsx';
 import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '../../components/ui/AlertDialogue';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -21,7 +29,6 @@ import { useNavigate } from 'react-router-dom';
 // }
 
 export default function RequestTablePage() {
-    const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
     const { filteredData, isLoading, error } = useRequestData();
 
     const [sortKey, setSortKey] = useState<
@@ -44,6 +51,29 @@ export default function RequestTablePage() {
         console.log(highlightedRequest);
         navigate('/requests/list', { state: { ServiceRequest: highlightedRequest } });
     };
+
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
+    const [activeRequest, setActiveRequest] = useState<ServiceRequest | null>(null);
+
+    const handleContextMenu = (e: React.MouseEvent, request: ServiceRequest) => {
+        e.preventDefault();
+        setActiveRequest(request);
+
+        setMenuPos({ x: e.clientX, y: e.clientY });
+        setMenuVisible(true);
+    };
+
+    const handleClick = () => {
+        if (menuVisible) {
+            setMenuVisible(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClick);
+        return () => document.removeEventListener('click', handleClick);
+    }, []);
 
     const sortedData = (filteredData ? [...filteredData] : []).sort((a, b) => {
         if (!sortKey) return 0;
@@ -278,6 +308,9 @@ export default function RequestTablePage() {
                                         onClick={() => {
                                             sendToDetailedView(res);
                                         }}
+                                        onContextMenu={(e) => {
+                                            handleContextMenu(e, res);
+                                        }}
                                     >
                                         <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -500,6 +533,48 @@ export default function RequestTablePage() {
                                 ))}
                             </tbody>
                         </table>
+                        {menuVisible && activeRequest && (
+                            <div
+                                className="fixed bg-white shadow-md rounded p-2 border z-50"
+                                style={{ top: menuPos.y, left: menuPos.x }}
+                            >
+                                <AlertDialog>
+                                    <AlertDialogTrigger onClick={(e) => e.stopPropagation()}>
+                                        Delete Service Request
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Are you absolutely sure?
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently
+                                                delete the service request and remove the data from
+                                                our servers.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel
+                                                onClick={() => {
+                                                    setMenuVisible(false);
+                                                }}
+                                            >
+                                                Go Back
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={() => {
+                                                    console.log("delete: ")
+                                                    console.log(activeRequest);
+                                                    setMenuVisible(false);
+                                                }}
+                                            >
+                                                Delete
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <nav

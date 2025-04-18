@@ -305,7 +305,7 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 pt-0 pb-0"
+                                        className="even:bg-gray-100 even:hover:bg-indigo-100 odd:hover:bg-blue-100 pt-0 pb-0"
                                         onClick={() => {
                                             sendToDetailedView(res);
                                         }}

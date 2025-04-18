@@ -126,11 +126,11 @@ export default function RequestTablePage() {
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto">
-                        <table className="w-full text-left table-auto min-w-max w-fit">
+                        <table className="w-full text-left table-auto min-w-max w-fit overflow-x-auto">
                             <thead className="bg-gray-200 sticky top-0 z-10">
                                 <tr>
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[60px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_id') setAscending(!ascending);
                                             else {
@@ -148,7 +148,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[90px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_type')
                                                 setAscending(!ascending);
@@ -168,7 +168,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100p]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'priority') setAscending(!ascending);
                                             else {
@@ -186,7 +186,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[125px]">
+                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -196,7 +196,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'location') setAscending(!ascending);
                                             else {
@@ -215,7 +215,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'department') setAscending(!ascending);
                                             else {
@@ -234,7 +234,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[120px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'name') setAscending(!ascending);
                                             else {
@@ -253,7 +253,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_date')
                                                 setAscending(!ascending);
@@ -272,17 +272,8 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]">
-                                        <h3
-                                            className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
-                                        >
-                                            Additional Comments
-                                        </h3>
-                                    </th>
-
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[55px]"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
                                         onClick={() => {
                                             if (sortKey === 'status') setAscending(!ascending);
                                             else {
@@ -298,6 +289,16 @@ export default function RequestTablePage() {
                                             Status {sortKey === 'status' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
+
+                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words">
+                                        <h3
+                                            className="block text-lg font-semibold font-[Poppins]"
+                                            style={{ color: '#003A96' }}
+                                        >
+                                            Additional Comments
+                                        </h3>
+                                    </th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -354,7 +355,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[160px] pt-0 pb-2">
+                                        <td className="p-4 whitespace=normal break-words max-w-[275px] pt-0 pb-2">
                                             <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
@@ -502,16 +503,6 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-2 pb-2">
-                                            <p className="block font-[Poppins] text-med text-blue-gray-900">
-                                                {res.additional_comments?.trim() ? (
-                                                    <i>{res.additional_comments}</i>
-                                                ) : (
-                                                    'N/A'
-                                                )}
-                                            </p>
-                                        </td>
-
                                         <td className="p-4 whitespace=normal break-words max-w-[115px] pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
@@ -529,6 +520,17 @@ export default function RequestTablePage() {
                                                 {res.status}
                                             </p>
                                         </td>
+
+                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-2 pb-2">
+                                            <p className="block font-[Poppins] text-med text-blue-gray-900">
+                                                {res.additional_comments?.trim() ? (
+                                                    <i>{res.additional_comments}</i>
+                                                ) : (
+                                                    'N/A'
+                                                )}
+                                            </p>
+                                        </td>
+
                                     </tr>
                                 ))}
                             </tbody>

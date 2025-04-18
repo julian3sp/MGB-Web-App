@@ -4,7 +4,8 @@ import DepartmentList from '../../components/DepartmentList.ts';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useRequestData } from './RequestDataContext.tsx';
-import type { ServiceRequest } from "@/types.tsx";
+import type { ServiceRequest } from '@/types.tsx';
+import { useNavigate } from 'react-router-dom';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -37,6 +38,12 @@ export default function RequestTablePage() {
 
     const priorityOrder = ['Emergency', 'High', 'Medium', 'Low'];
     const statusOrder = ['Unassigned', 'Assigned', 'Working', 'Done'];
+    const navigate = useNavigate();
+
+    const sendToDetailedView = (highlightedRequest: ServiceRequest) => {
+        console.log(highlightedRequest);
+        navigate('/requests/list', { state: { ServiceRequest: highlightedRequest } });
+    };
 
     const sortedData = (filteredData ? [...filteredData] : []).sort((a, b) => {
         if (!sortKey) return 0;
@@ -144,7 +151,8 @@ export default function RequestTablePage() {
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
                                         >
-                                            Priority {sortKey === 'priority' && (ascending ? '↑' : '↓')}
+                                            Priority{' '}
+                                            {sortKey === 'priority' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
@@ -157,70 +165,80 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
-                                    onClick={() => {
-                                        if(sortKey === 'location') setAscending(!ascending);
-                                        else {
-                                            setSortKey('location');
-                                            setAscending(true);
-                                        }
-                                    }}
+                                    <th
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
+                                        onClick={() => {
+                                            if (sortKey === 'location') setAscending(!ascending);
+                                            else {
+                                                setSortKey('location');
+                                                setAscending(true);
+                                            }
+                                        }}
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
                                         >
-                                            Location {sortKey === 'location' && (ascending ? '↑' : '↓')}
+                                            Location{' '}
+                                            {sortKey === 'location' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
-                                    onClick={() => {
-                                        if(sortKey === 'department') setAscending(!ascending);
-                                        else {
-                                            setSortKey('department');
-                                            setAscending(true);
-                                        }
-                                    }}>
+                                    <th
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[50px]"
+                                        onClick={() => {
+                                            if (sortKey === 'department') setAscending(!ascending);
+                                            else {
+                                                setSortKey('department');
+                                                setAscending(true);
+                                            }
+                                        }}
+                                    >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
                                         >
-                                            Department {sortKey === 'department' && (ascending ? '↑' : '↓')}
+                                            Department{' '}
+                                            {sortKey === 'department' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[120px]"
-                                    onClick={() => {
-                                        if(sortKey === 'name') setAscending(!ascending);
-                                        else {
-                                            setSortKey('name');
-                                            setAscending(true);
-                                        }
-                                    }}>
-                                        <p className="block font-bold font-[Poppins] text-sm text-blue-gray-900">
-                                            <h3
-                                                className="block text-lg font-semibold font-[Poppins]"
-                                                style={{ color: '#003A96' }}
-                                            >
-                                                Name (ID) {sortKey === 'name' && (ascending ? '↑' : '↓')}
-                                            </h3>
-                                        </p>
-                                    </th>
-
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100px]"
-                                    onClick={() => {
-                                        if(sortKey === 'request_date') setAscending(!ascending);
-                                        else {
-                                            setSortKey('request_date');
-                                            setAscending(true);
-                                        }
-                                    }}>
+                                    <th
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[120px]"
+                                        onClick={() => {
+                                            if (sortKey === 'name') setAscending(!ascending);
+                                            else {
+                                                setSortKey('name');
+                                                setAscending(true);
+                                            }
+                                        }}
+                                    >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
                                         >
-                                            Request Date {sortKey === 'request_date' && (ascending ? '↑' : '↓')}
+                                            Name (ID){' '}
+                                            {sortKey === 'name' && (ascending ? '↑' : '↓')}
+                                        </h3>
+                                    </th>
+
+                                    <th
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[100px]"
+                                        onClick={() => {
+                                            if (sortKey === 'request_date')
+                                                setAscending(!ascending);
+                                            else {
+                                                setSortKey('request_date');
+                                                setAscending(true);
+                                            }
+                                        }}
+                                    >
+                                        <h3
+                                            className="block text-lg font-semibold font-[Poppins]"
+                                            style={{ color: '#003A96' }}
+                                        >
+                                            Request Date{' '}
+                                            {sortKey === 'request_date' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
@@ -233,14 +251,16 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[55px]"
-                                    onClick={() => {
-                                        if(sortKey === 'status') setAscending(!ascending);
-                                        else {
-                                            setSortKey('status');
-                                            setAscending(true);
-                                        }
-                                    }}>
+                                    <th
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words max-w-[55px]"
+                                        onClick={() => {
+                                            if (sortKey === 'status') setAscending(!ascending);
+                                            else {
+                                                setSortKey('status');
+                                                setAscending(true);
+                                            }
+                                        }}
+                                    >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -252,7 +272,13 @@ export default function RequestTablePage() {
                             </thead>
                             <tbody>
                                 {sortedData.map((res) => (
-                                    <tr key={res.request_id} className="even:bg-gray-100 pt-0 pb-0">
+                                    <tr
+                                        key={res.request_id}
+                                        className="even:bg-gray-100 pt-0 pb-0"
+                                        onClick={() => {
+                                            sendToDetailedView(res);
+                                        }}
+                                    >
                                         <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
@@ -261,18 +287,19 @@ export default function RequestTablePage() {
 
                                         <td className="p-4 whitespace=normal break-words max-w-[125px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
-                                                <i>{res.request_type === "Sanitation" ?
-                                                    "Sanitation"
-                                                    : res.request_type === "Transportation" ?
-                                                    "Transportation"
-                                                    : res.request_type === "Security" ?
-                                                    "Security"
-                                                    : res.request_type === "AudioVisual" ?
-                                                    "Audio/Visual Accommodations"
-                                                    : res.request_type === "Language" ?
-                                                    "Language Interpreter ️"
-                                                                    : "N/A"
-                                                }</i>
+                                                <i>
+                                                    {res.request_type === 'Sanitation'
+                                                        ? 'Sanitation'
+                                                        : res.request_type === 'Transportation'
+                                                          ? 'Transportation'
+                                                          : res.request_type === 'Security'
+                                                            ? 'Security'
+                                                            : res.request_type === 'AudioVisual'
+                                                              ? 'Audio/Visual Accommodations'
+                                                              : res.request_type === 'Language'
+                                                                ? 'Language Interpreter ️'
+                                                                : 'N/A'}
+                                                </i>
                                             </p>
                                         </td>
 

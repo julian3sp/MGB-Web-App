@@ -39,6 +39,7 @@
     "@popperjs/core": "^2.11.8",
     "@react-google-maps/api": "^2.20.6",
     "@tabler/icons-react": "^3.31.0",
+    "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "common": "workspace:*",
     "dotenv": "^16.4.7",

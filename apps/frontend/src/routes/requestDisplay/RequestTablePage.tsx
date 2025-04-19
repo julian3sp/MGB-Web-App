@@ -1,5 +1,5 @@
 import { trpc } from '../../lib/trpc.ts';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRequestData } from './RequestDataContext.tsx';
 import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -15,8 +15,9 @@ import {
     AlertDialogTrigger,
     AlertDialogOverlay,
 } from '../../components/ui/AlertDialogue';
-import edit from '../../../assets/edit.png';
-import deleteicon from '../../../assets/deleteicon.png';
+import EditIcon from '../../../assets/EditIcon.png';
+import DeleteIcon from '../../../assets/DeleteIcon.png';
+import OptionsIcon from '../../../assets/OptionsIcon.png';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -31,9 +32,28 @@ import deleteicon from '../../../assets/deleteicon.png';
 //     return `(${start}) ${middle}-${end}`;
 // }
 
+//Handles closing the filter popup when you click outside the popup
+const useClickOutside = (handler: () => void) => {
+    const reference = useRef();
+
+    useEffect(() => {
+        const newHandler = (event: MouseEvent) => {
+            if (!reference.current?.contains(event.target)) handler();
+        };
+
+        document.addEventListener('mousedown', newHandler);
+
+        return () => {
+            document.removeEventListener('mousedown', newHandler);
+        };
+    }, [handler]);
+    return reference;
+};
+
 export default function RequestTablePage() {
     const { filteredData, isLoading, error } = useRequestData();
 
+    // Prop for column to sort by, has to be one of following columns
     const [sortKey, setSortKey] = useState<
         | 'request_id'
         | 'priority'
@@ -46,43 +66,44 @@ export default function RequestTablePage() {
     >('request_id');
     const [ascending, setAscending] = useState(true);
 
+    //Defining ascending & descending sort order for priority and status
     const priorityOrder = ['Emergency', 'High', 'Medium', 'Low'];
     const statusOrder = ['Unassigned', 'Assigned', 'Working', 'Done'];
-    const navigate = useNavigate();
 
+    // Input a service request, sets page to detailed view with that service request selected.
+    const navigate = useNavigate();
     const sendToDetailedView = (highlightedRequest: ServiceRequest) => {
         console.log(highlightedRequest);
         navigate('/requests/list', { state: { ServiceRequest: highlightedRequest } });
     };
 
+    // Edit & Delete menu props
     const [menuVisible, setMenuVisible] = useState(false);
     const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
     const [activeRequest, setActiveRequest] = useState<ServiceRequest | null>(null);
 
+    // On event (typically used with onClick) with service request input, set to active request, and make menu visible at location of users cursor
     const handleMenu = (e: React.MouseEvent, request: ServiceRequest) => {
         e.preventDefault();
         setActiveRequest(request);
 
-        setMenuPos({ x: e.clientX, y: e.clientY });
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMenuPos({ x: rect.left - 233, y: rect.top + 8 });
         setMenuVisible(true);
     };
 
-    const handleClick = () => {
-        if (menuVisible) {
-            setMenuVisible(false);
-        }
-    };
+    const menuRef = useClickOutside(() => {
+        setMenuVisible(false);
+    });
 
-    useEffect(() => {
-        document.addEventListener('click', handleClick);
-        return () => document.removeEventListener('click', handleClick);
-    }, []);
-
+    // Sort logic. Takes array of service requests (filteredData -- passed through with context from RequestPage to keep filters active), sorts it based on current SortKey
     const sortedData = (filteredData ? [...filteredData] : []).sort((a, b) => {
         if (!sortKey) return 0;
 
         const aVal = a[sortKey];
         const bVal = b[sortKey];
+
+        // Uses order defined above to compare each value in array and sort, in ascending order if ascending true, else in descending.
 
         if (sortKey === 'priority') {
             return (
@@ -98,6 +119,7 @@ export default function RequestTablePage() {
             );
         }
 
+        // Sort by date
         if (sortKey === 'request_date') {
             return (
                 (new Date(aVal as string).getTime() - new Date(bVal as string).getTime()) *
@@ -105,17 +127,20 @@ export default function RequestTablePage() {
             );
         }
 
+        // Numerical sort for request_id
         if (sortKey === 'request_id') {
             return ((aVal as number) - (bVal as number)) * (ascending ? 1 : -1);
         }
 
-        // alphabetical sort if not one of the cases above
+        // Alphabetical sort if not one of the cases above
         return String(aVal).localeCompare(String(bVal)) * (ascending ? 1 : -1);
     });
 
+    // Loading & Error messages
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
+    //Table page
     return (
         <nav className="flex flex-1">
             <nav
@@ -128,9 +153,12 @@ export default function RequestTablePage() {
                 }}
             >
                 {filteredData && filteredData.length > 0 ? (
-                    <div className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl rounded-lg overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto">
-                        <table className="w-full text-left table-auto min-w-max w-fit overflow-x-auto">
-                            <thead className="bg-gray-200 sticky top-0 z-10">
+                    <div
+                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto"
+                        ref={menuRef}
+                    >
+                        <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
+                            <thead className="bg-gray-200 sticky top-0 z-20">
                                 <tr>
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
@@ -301,19 +329,21 @@ export default function RequestTablePage() {
                                             Additional Comments
                                         </h3>
                                     </th>
+                                    <th className="p-4 border-b border-gray-300 whitespace=normal bg-gray-200 sticky right-0 z-10 text-center">
+                                        <h3
+                                            className="block text-lg font-semibold font-[Poppins]"
+                                            style={{ color: '#003A96' }}
+                                        >
+                                            Manage
+                                        </h3>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 even:hover:bg-indigo-100 odd:hover:bg-blue-100 pt-0 pb-0"
-                                        onClick={(e) => {
-                                            handleMenu(e, res);
-                                        }}
-                                        onContextMenu={() => {
-                                            sendToDetailedView(res);
-                                        }}
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
                                     >
                                         <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -357,7 +387,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[275px] pt-0 pb-2">
+                                        <td className="p-4 whitespace=normal break-words max-w-[225px] pt-0 pb-2">
                                             <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
@@ -523,7 +553,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-2 pb-2">
+                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
                                                     <i>{res.additional_comments}</i>
@@ -532,12 +562,24 @@ export default function RequestTablePage() {
                                                 )}
                                             </p>
                                         </td>
+
+                                        <td className="whitespace=normal pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15 text-center">
+                                            <img
+                                                src={OptionsIcon}
+                                                alt="(Delete icon)"
+                                                className="mx-auto max-w-[20px] cursor-pointer"
+                                                onClick={(e) => {
+                                                    handleMenu(e, res);
+                                                }}
+                                            />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                         {menuVisible && activeRequest && (
                             <div
+                                ref={menuRef}
                                 className="fixed bg-white shadow-md rounded border z-50"
                                 style={{ top: menuPos.y, left: menuPos.x }}
                             >
@@ -551,10 +593,11 @@ export default function RequestTablePage() {
                                             console.log('edit: ');
                                             console.log(activeRequest);
                                             setMenuVisible(false);
+                                            sendToDetailedView(activeRequest);
                                         }}
                                     >
                                         <img
-                                            src={edit}
+                                            src={EditIcon}
                                             alt="(Edit icon)"
                                             className="pb-1 inline-flex max-w-[20px]"
                                         />{' '}
@@ -565,12 +608,14 @@ export default function RequestTablePage() {
                                 <AlertDialog>
                                     <div>
                                         <AlertDialogTrigger
-                                            onClick={(e) => e.stopPropagation()}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
                                             className="hover:bg-gray-100 pb-2 pt-1 pl-2 pr-2"
                                         >
                                             <div className={'container'}>
                                                 <img
-                                                    src={deleteicon}
+                                                    src={DeleteIcon}
                                                     alt="(Delete icon)"
                                                     className="h-6 pb-1 inline-flex max-w-[20px]"
                                                 />{' '}

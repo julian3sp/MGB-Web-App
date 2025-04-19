@@ -21,6 +21,21 @@ const getDirectionIcon = (maneuver?: string) => {
   }
 };
 
+const speakSteps = (steps: google.maps.DirectionsStep[]) => {
+  if (!window.speechSynthesis) return;
+
+  const combinedInstructions = steps.map(step => {
+    // Strip HTML tags from instructions
+    const parser = new DOMParser();
+    const html = parser.parseFromString(step.instructions, 'text/html');
+    return html.body.textContent + ` (${step.distance?.text})`;
+  }).join('. ');
+
+  const utterance = new SpeechSynthesisUtterance(combinedInstructions);
+  utterance.lang = 'en-US';
+  window.speechSynthesis.speak(utterance);
+};
+
 const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   if (!directions) return null;
 
@@ -28,7 +43,16 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
 
   return (
     <div className="mt-4 p-4 bg-white rounded shadow border border-gray-200 max-h-60 overflow-y-auto text-sm">
-      <h3 className="font-semibold mb-3">Step-by-step directions</h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="font-semibold">Step-by-step directions</h3>
+        <button
+          onClick={() => speakSteps(steps)}
+          aria-label="Play directions"
+          className="hover:text-blue-600 transition"
+        >
+          🔊
+        </button>
+      </div>
       <div className="flex flex-col divide-y divide-gray-200">
         {steps.map((step, index) => (
           <div key={index} className="py-3 flex items-start gap-3">

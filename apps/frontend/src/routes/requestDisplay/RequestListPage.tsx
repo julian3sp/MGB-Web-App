@@ -2,30 +2,36 @@ import { trpc } from '../../lib/trpc.ts';
 import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
 import DepartmentList from '../../components/DepartmentList.ts';
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
+import { useLocation } from 'react-router-dom';
 
-{
-    /*
+/*
 function formatPhoneNumber(phone: string): string {
-    // Get rid of all non numbers
-    const digits = phone.replace(/\D/g, '');
+// Get rid of all non numbers
+const digits = phone.replace(/\D/g, '');
 
-    if (digits.length !== 10) return phone; // if not 10 numbers just return original string
+if (digits.length !== 10) return phone; // if not 10 numbers just return original string
 
-    const start = digits.slice(0, 3);
-    const middle = digits.slice(3, 6);
-    const end = digits.slice(6, 10);
+const start = digits.slice(0, 3);
+const middle = digits.slice(3, 6);
+const end = digits.slice(6, 10);
 
-    return `(${start}) ${middle}-${end}`;
-}
+return `(${start}) ${middle}-${end}`;
 */
-}
 
 export default function RequestListPage() {
+    const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
+
+    useEffect(() => {
+        if (tableRequest.state !== null) {
+            setSelectedRequest(tableRequest.state?.ServiceRequest);
+        }
+    });
+
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 

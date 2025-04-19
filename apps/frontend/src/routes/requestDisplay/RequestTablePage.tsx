@@ -15,9 +15,14 @@ import {
     AlertDialogTrigger,
     AlertDialogOverlay,
 } from '../../components/ui/AlertDialogue';
+
+import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/Popover';
+
 import EditIcon from '../../../assets/EditIcon.png';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
+
 import OptionsIcon from '../../../assets/OptionsIcon.png';
+import {PopoverClose} from "@radix-ui/react-popover";
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -161,7 +166,7 @@ export default function RequestTablePage() {
                             <thead className="bg-gray-200 sticky top-0 z-20">
                                 <tr>
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_id') setAscending(!ascending);
                                             else {
@@ -179,7 +184,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_type')
                                                 setAscending(!ascending);
@@ -199,7 +204,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'priority') setAscending(!ascending);
                                             else {
@@ -217,7 +222,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words">
+                                    <th className="p-4 border-b border-gray-300  break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -227,7 +232,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'location') setAscending(!ascending);
                                             else {
@@ -246,7 +251,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'department') setAscending(!ascending);
                                             else {
@@ -265,7 +270,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'name') setAscending(!ascending);
                                             else {
@@ -284,7 +289,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_date')
                                                 setAscending(!ascending);
@@ -304,7 +309,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 whitespace=normal break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
                                         onClick={() => {
                                             if (sortKey === 'status') setAscending(!ascending);
                                             else {
@@ -321,7 +326,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal break-words">
+                                    <th className="p-4 border-b border-gray-300  break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -329,7 +334,7 @@ export default function RequestTablePage() {
                                             Additional Comments
                                         </h3>
                                     </th>
-                                    <th className="p-4 border-b border-gray-300 whitespace=normal bg-gray-200 sticky right-0 z-10 text-center">
+                                    <th className="p-4 border-b border-gray-300  bg-gray-200 sticky right-0 z-10 text-center">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -345,13 +350,13 @@ export default function RequestTablePage() {
                                         key={res.request_id}
                                         className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
                                     >
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[125px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[125px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
                                                 <i>
                                                     {res.request_type === 'Sanitation'
@@ -369,7 +374,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[110px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[110px] pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med font-semibold ${
                                                     res.priority === 'Low'
@@ -387,7 +392,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[225px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[225px] pt-0 pb-2">
                                             <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
@@ -501,25 +506,25 @@ export default function RequestTablePage() {
                                             {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[150px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.location}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[130px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[130px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.department}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.name} ({res.employee_id})
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {new Date(res.request_date).toLocaleDateString(
                                                     undefined,
@@ -535,7 +540,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[115px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[115px] pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
                                                     res.status === 'Unassigned'
@@ -553,7 +558,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 whitespace=normal break-words max-w-[50px] pt-2 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
                                                     <i>{res.additional_comments}</i>
@@ -563,104 +568,74 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="whitespace=normal pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15 text-center">
-                                            <img
-                                                src={OptionsIcon}
-                                                alt="(Delete icon)"
-                                                className="mx-auto max-w-[20px] cursor-pointer"
-                                                onClick={(e) => {
-                                                    handleMenu(e, res);
-                                                }}
-                                            />
+                                        <td className="pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15">
+                                            <div className="flex justify-center gap-2 mx-auto w-fit">
+                                                <button
+                                                    onClick={() => {
+                                                        console.log('edit: ');
+                                                        console.log(activeRequest);
+                                                        setMenuVisible(false);
+                                                        sendToDetailedView(res);
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={EditIcon}
+                                                        alt="Edit"
+                                                        className="max-w-[20px] fill-red-500"
+                                                        title="Edit Service Request"
+                                                    />
+                                                </button>
+                                                <Popover>
+                                                    <PopoverTrigger className="p-2 pr-0">
+                                                        <div>
+                                                            <img
+                                                                src={DeleteIcon}
+                                                                alt="Delete"
+                                                                className="max-w-[20px] fill-red-500"
+                                                                title="Delete Service Request"
+                                                            />
+                                                        </div>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent>
+                                                        <div>
+                                                            <h3
+                                                                className="block text-lg font-semibold font-[Poppins] text-center pb-2"
+                                                                style={{ color: '#003A96' }}
+                                                            >
+                                                                Delete Service Request
+                                                            </h3>
+                                                            <p className="text-center">Are you sure you want to delete this service request? This action cannot be undone.</p>
+                                                            <br/>
+                                                            <div className="flex justify-center gap-2 mx-auto w-fit">
+                                                                <PopoverClose asChild>
+                                                                <button
+                                                                    className="p-4 pt-1 pb-1 text-base font-medium text-white bg-[#003A96] hover:bg-blue-950 shadow-lg rounded-lg"
+                                                                >
+                                                                    Go Back
+                                                                </button>
+                                                                </PopoverClose>
+                                                                <PopoverClose asChild>
+                                                                <button
+                                                                    className="p-4 pt-1 pb-1 text-base font-medium text-white bg-red-600 hover:bg-red-800 shadow-lg rounded-lg"
+                                                                    onClick={() => {
+                                                                        console.log('delete: ');
+                                                                        console.log(res);
+                                                                        setMenuVisible(false);
+                                                                    }}
+                                                                >
+                                                                    Delete Request
+                                                                </button>
+                                                                </PopoverClose>
+                                                            </div>
+                                                        </div>
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        {menuVisible && activeRequest && (
-                            <div
-                                ref={menuRef}
-                                className="fixed bg-white shadow-md rounded border z-50"
-                                style={{ top: menuPos.y, left: menuPos.x }}
-                            >
-                                <div
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="hover:bg-gray-100 pb-1 pt-2 pl-2 pr-2 select-none"
-                                >
-                                    <div
-                                        className={'container'}
-                                        onClick={() => {
-                                            console.log('edit: ');
-                                            console.log(activeRequest);
-                                            setMenuVisible(false);
-                                            sendToDetailedView(activeRequest);
-                                        }}
-                                    >
-                                        <img
-                                            src={EditIcon}
-                                            alt="(Edit icon)"
-                                            className="pb-1 inline-flex max-w-[20px]"
-                                        />{' '}
-                                        <p className="inline-flex ml-1">Edit Service Request</p>
-                                    </div>
-                                </div>
-
-                                <AlertDialog>
-                                    <div>
-                                        <AlertDialogTrigger
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                            }}
-                                            className="hover:bg-gray-100 pb-2 pt-1 pl-2 pr-2"
-                                        >
-                                            <div className={'container'}>
-                                                <img
-                                                    src={DeleteIcon}
-                                                    alt="(Delete icon)"
-                                                    className="h-6 pb-1 inline-flex max-w-[20px]"
-                                                />{' '}
-                                                <p className="pt-2 inline-flex ml-1">
-                                                    Delete Service Request
-                                                </p>
-                                            </div>
-                                        </AlertDialogTrigger>
-
-                                        <AlertDialogContent className="flex flex-col justify-between w-[600px] max-w-none p-8 rounded-lg border-3 border-[#003A96]">
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle className="text-2xl font-semibold text-[#003A96]">
-                                                    Are you absolutely sure?
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription className="text-lg text-gray-700 mt-2">
-                                                    This action cannot be undone. This will
-                                                    permanently delete the service request and
-                                                    remove the data from our servers.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter className="flex justify-center gap-6 mt-8">
-                                                <AlertDialogCancel
-                                                    className="px-6 py-2 pb-3 text-base font-medium text-white bg-[#003A96] hover:bg-blue-950 hover:text-white"
-                                                    onClick={() => {
-                                                        setMenuVisible(false);
-                                                    }}
-                                                >
-                                                    Go Back
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    className="px-6 py-2 pb-3 text-base font-medium text-white bg-red-600 hover:bg-red-800"
-                                                    onClick={() => {
-                                                        console.log('delete: ');
-                                                        console.log(activeRequest);
-                                                        setMenuVisible(false);
-                                                    }}
-                                                >
-                                                    Delete Request
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </div>
-                                </AlertDialog>
-                            </div>
-                        )}
                     </div>
                 ) : (
                     <nav

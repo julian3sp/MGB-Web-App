@@ -1,14 +1,14 @@
-import { trpc } from '../../lib/trpc.ts';
+import {trpc} from '../../lib/trpc.ts';
 import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
 import DepartmentList from '../../components/DepartmentList.ts';
-import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import type { ServiceRequest } from '@/types.tsx';
-import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
-import { useLocation } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import type {ServiceRequest} from '@/types.tsx';
+import {useRequestData} from '@/routes/requestDisplay/RequestDataContext.tsx';
+import {useLocation} from 'react-router-dom';
 import EditRequest from '@/components/ui/EditRequest.tsx';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
-import {ServiceComponentDropdown} from "@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx";
+import {ServiceComponentDropdown} from '@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -26,13 +26,13 @@ return `(${start}) ${middle}-${end}`;
 
 export default function RequestListPage() {
     const tableRequest = useLocation();
-    const { filteredData, isLoading, error } = useRequestData();
+    const {filteredData, isLoading, error} = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
         tableRequest.state?.ServiceRequest
     );
-    const [editMode, setEditMode] = useState(false);
-    const [editPriority, setEditPriority] = useState("");
-    const [editStatus, setEditStatus] = useState("");
+    const [editMode, setEditMode] = useState(tableRequest.state?.editMode);
+    const [editPriority, setEditPriority] = useState(tableRequest.state?.ServiceRequest.priority);
+    const [editStatus, setEditStatus] = useState(tableRequest.state?.ServiceRequest.status);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -48,7 +48,7 @@ export default function RequestListPage() {
                     borderLeft: 'none',
                 }}
             >
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{color: '#003A96'}}>
                     Select a Request:
                 </h3>{' '}
                 {/*Header for list of departments on page*/}
@@ -56,7 +56,12 @@ export default function RequestListPage() {
                     filteredData?.map((res) => (
                         <ul key={res.request_id} className="mb-2">
                             <button
-                                onClick={() => setSelectedRequest(res)}
+                                onClick={() => {
+                                    setSelectedRequest(res);
+                                    setEditMode(false);
+                                    setEditPriority(res.priority);
+                                    setEditStatus(res.status);
+                                }}
                                 className={
                                     `w-full text-left block p-5 border rounded ${
                                         selectedRequest?.request_id == res.request_id
@@ -77,26 +82,26 @@ export default function RequestListPage() {
                                 {res.request_type === 'Sanitation'
                                     ? 'Sanitation'
                                     : res.request_type === 'Transportation'
-                                      ? 'Transportation'
-                                      : res.request_type === 'Security'
-                                        ? 'Security'
-                                        : res.request_type === 'AudioVisual'
-                                          ? 'Audio/Visual Accommodations'
-                                          : res.request_type === 'Language'
-                                            ? 'Language Interpreter'
-                                            : 'N/A'}{' '}
+                                        ? 'Transportation'
+                                        : res.request_type === 'Security'
+                                            ? 'Security'
+                                            : res.request_type === 'AudioVisual'
+                                                ? 'Audio/Visual Accommodations'
+                                                : res.request_type === 'Language'
+                                                    ? 'Language Interpreter'
+                                                    : 'N/A'}{' '}
                                 (Priority:{' '}
                                 <span
                                     className={
                                         res.priority === 'Low'
                                             ? 'text-green-600'
                                             : res.priority === 'Medium'
-                                              ? 'text-yellow-600'
-                                              : res.priority === 'High'
-                                                ? 'text-orange-600'
-                                                : res.priority === 'Emergency'
-                                                  ? 'text-red-600'
-                                                  : 'text-gray-600'
+                                                ? 'text-yellow-600'
+                                                : res.priority === 'High'
+                                                    ? 'text-orange-600'
+                                                    : res.priority === 'Emergency'
+                                                        ? 'text-red-600'
+                                                        : 'text-gray-600'
                                     }
                                 >
                                     {res.priority}
@@ -108,7 +113,7 @@ export default function RequestListPage() {
                 ) : (
                     <nav
                         className="border p-5 rounded-lg flex items-center"
-                        style={{ borderColor: '#005E64' }}
+                        style={{borderColor: '#005E64'}}
                     >
                         <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
                     </nav>
@@ -126,41 +131,41 @@ export default function RequestListPage() {
             >
                 {' '}
                 {/*Border styling*/}
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{color: '#003A96'}}>
                     Request Details:
                 </h3>
                 {selectedRequest ? (
                     <nav
                         className="border p-6 rounded-lg text-blue-gray-900"
-                        style={{ borderColor: '#005E64' }}
+                        style={{borderColor: '#005E64'}}
                     >
                         <div>
                             <div className="flex justify-between mx-auto border-b pb-2 mb-3">
-                                <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
+                                <h2 className="text-xl font-bold" style={{color: '#003A96'}}>
                                     {selectedRequest.request_id}.{' '}
                                     {selectedRequest.request_type === 'Sanitation'
                                         ? 'Sanitation'
                                         : selectedRequest.request_type === 'Transportation'
-                                          ? 'Transportation'
-                                          : selectedRequest.request_type === 'Security'
-                                            ? 'Security'
-                                            : selectedRequest.request_type === 'AudioVisual'
-                                              ? 'Audio/Visual Accommodations'
-                                              : selectedRequest.request_type === 'Language'
-                                                ? 'Language Interpreter'
-                                                : 'N/A'}{' '}
+                                            ? 'Transportation'
+                                            : selectedRequest.request_type === 'Security'
+                                                ? 'Security'
+                                                : selectedRequest.request_type === 'AudioVisual'
+                                                    ? 'Audio/Visual Accommodations'
+                                                    : selectedRequest.request_type === 'Language'
+                                                        ? 'Language Interpreter'
+                                                        : 'N/A'}{' '}
                                     (Priority:{' '}
                                     <span
                                         className={
                                             selectedRequest.priority === 'Low'
                                                 ? 'text-green-600'
                                                 : selectedRequest.priority === 'Medium'
-                                                  ? 'text-yellow-600'
-                                                  : selectedRequest.priority === 'High'
-                                                    ? 'text-orange-600'
-                                                    : selectedRequest.priority === 'Emergency'
-                                                      ? 'text-red-600'
-                                                      : 'text-gray-600'
+                                                    ? 'text-yellow-600'
+                                                    : selectedRequest.priority === 'High'
+                                                        ? 'text-orange-600'
+                                                        : selectedRequest.priority === 'Emergency'
+                                                            ? 'text-red-600'
+                                                            : 'text-gray-600'
                                         }
                                     >
                                         {selectedRequest.priority}
@@ -188,7 +193,7 @@ export default function RequestListPage() {
                             </div>
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Request Type:{' '}
                             </h3>
@@ -198,14 +203,14 @@ export default function RequestListPage() {
                                         {selectedRequest.request_type === 'Sanitation'
                                             ? 'Sanitation'
                                             : selectedRequest.request_type === 'Transportation'
-                                              ? 'Transportation'
-                                              : selectedRequest.request_type === 'Security'
-                                                ? 'Security'
-                                                : selectedRequest.request_type === 'AudioVisual'
-                                                  ? 'Audio/Visual Accommodations'
-                                                  : selectedRequest.request_type === 'Language'
-                                                    ? 'Language Interpreter'
-                                                    : 'N/A'}
+                                                ? 'Transportation'
+                                                : selectedRequest.request_type === 'Security'
+                                                    ? 'Security'
+                                                    : selectedRequest.request_type === 'AudioVisual'
+                                                        ? 'Audio/Visual Accommodations'
+                                                        : selectedRequest.request_type === 'Language'
+                                                            ? 'Language Interpreter'
+                                                            : 'N/A'}
                                     </i>
                                 </p>
                             </ul>
@@ -215,65 +220,61 @@ export default function RequestListPage() {
                                 <>
                                     <h3
                                         className="text-lg font-semibold font-[Poppins] py-1"
-                                        style={{ color: '#005E64' }}
+                                        style={{color: '#005E64'}}
                                     >
                                         Priority:{' '}
                                     </h3>
-                                    <ul className="list-disc ml-6 mb-3">
-                                        <p
-                                            className={`block font-[Poppins] text-med font-semibold ${
-                                                selectedRequest.priority === 'Low'
-                                                    ? 'text-green-600'
-                                                    : selectedRequest.priority === 'Medium'
-                                                      ? 'text-yellow-500'
-                                                      : selectedRequest.priority === 'High'
-                                                        ? 'text-red-500'
-                                                        : selectedRequest.priority === 'Emergency'
-                                                          ? 'text-red-700 underline'
-                                                          : 'text-blue-gray-900'
-                                            }`}
-                                        >
-                                            {selectedRequest.priority}
-                                        </p>
-                                    </ul>
+
                                     <ServiceComponentDropdown
                                         value={editPriority}
                                         setState={setEditPriority}
-                                        width={"w-full"}
-                                        options={["Low", "Medium", "High", "Emergency"]}
+                                        width={'w-auto'}
+                                        options={[{value: 'Low', label: 'Low'}, {value: 'Medium', label: 'Medium'} ,{value: 'High', label: 'High'}, {value: 'Emergency', label: '🚨 Emergency 🚨'}]}
                                         placeholder={selectedRequest.priority}
+                                        originalValue = {selectedRequest.priority}
+                                        styledOptions={(option) =>
+                                            `block font-[Poppins] text-med ${
+                                                option === 'Low'
+                                                    ? 'text-green-600 font-semibold'
+                                                    : option === 'Medium'
+                                                        ? 'text-yellow-500 font-semibold'
+                                                        : option === 'High'
+                                                            ? 'text-red-500 font-semibold'
+                                                            : option === 'Emergency'
+                                                                ? 'text-red-700 underline font-semibold'
+                                                                : 'text-blue-gray-900'
+                                            }`
+                                        }
                                     />
                                     {/*Priority*/}
 
                                     <h3
                                         className="text-lg font-semibold font-[Poppins] py-1"
-                                        style={{ color: '#005E64' }}
+                                        style={{color: '#005E64'}}
                                     >
                                         Status:{' '}
                                     </h3>
-                                    <ul className="list-disc ml-6 mb-3">
-                                        <p
-                                            className={`block font-[Poppins] text-med ${
-                                                selectedRequest.status === 'Unassigned'
-                                                    ? 'text-gray-500'
-                                                    : selectedRequest.status === 'Assigned'
-                                                      ? 'text-blue-600'
-                                                      : selectedRequest.status === 'Working'
-                                                        ? 'text-amber-600'
-                                                        : selectedRequest.status === 'Done'
-                                                          ? 'text-green-600'
-                                                          : 'text-blue-gray-900'
-                                            }`}
-                                        >
-                                            {selectedRequest.status}
-                                        </p>
-                                    </ul>
+
                                     <ServiceComponentDropdown
                                         value={editStatus}
                                         setState={setEditStatus}
-                                        width={"w-full"}
-                                        options={["Unassigned", "Assigned", "Working", "Done"]}
+                                        width={'w-auto'}
+                                        options={['Unassigned', 'Assigned', 'Working', 'Done']}
                                         placeholder={selectedRequest.status}
+                                        originalValue = {selectedRequest.status}
+                                        styledOptions={(option) =>
+                                            `block font-[Poppins] text-med ${
+                                                option === 'Unassigned'
+                                                    ? 'text-gray-500 font-semibold'
+                                                    : option === 'Assigned'
+                                                        ? 'text-blue-600 font-semibold'
+                                                        : option === 'Working'
+                                                            ? 'text-amber-600 font-semibold bg-blue-gray-900'
+                                                            : option === 'Done'
+                                                                ? 'text-green-600 font-semibold'
+                                                                : 'text-blue-gray-900'
+                                            }`
+                                        }
                                     />
                                     {/*Status*/}
                                 </>
@@ -281,7 +282,7 @@ export default function RequestListPage() {
                                 <>
                                     <h3
                                         className="text-lg font-semibold font-[Poppins] py-1"
-                                        style={{ color: '#005E64' }}
+                                        style={{color: '#005E64'}}
                                     >
                                         Priority:{' '}
                                     </h3>
@@ -291,12 +292,12 @@ export default function RequestListPage() {
                                                 selectedRequest.priority === 'Low'
                                                     ? 'text-green-600'
                                                     : selectedRequest.priority === 'Medium'
-                                                      ? 'text-yellow-500'
-                                                      : selectedRequest.priority === 'High'
-                                                        ? 'text-red-500'
-                                                        : selectedRequest.priority === 'Emergency'
-                                                          ? 'text-red-700 underline'
-                                                          : 'text-blue-gray-900'
+                                                        ? 'text-yellow-500'
+                                                        : selectedRequest.priority === 'High'
+                                                            ? 'text-red-500'
+                                                            : selectedRequest.priority === 'Emergency'
+                                                                ? 'text-red-700 underline'
+                                                                : 'text-blue-gray-900'
                                             }`}
                                         >
                                             {selectedRequest.priority}
@@ -306,7 +307,7 @@ export default function RequestListPage() {
 
                                     <h3
                                         className="text-lg font-semibold font-[Poppins] py-1"
-                                        style={{ color: '#005E64' }}
+                                        style={{color: '#005E64'}}
                                     >
                                         Status:{' '}
                                     </h3>
@@ -314,14 +315,14 @@ export default function RequestListPage() {
                                         <p
                                             className={`block font-[Poppins] text-med ${
                                                 selectedRequest.status === 'Unassigned'
-                                                    ? 'text-gray-500'
+                                                    ? 'text-gray-500 font-semibold'
                                                     : selectedRequest.status === 'Assigned'
-                                                      ? 'text-blue-600'
-                                                      : selectedRequest.status === 'Working'
-                                                        ? 'text-amber-600'
-                                                        : selectedRequest.status === 'Done'
-                                                          ? 'text-green-600'
-                                                          : 'text-blue-gray-900'
+                                                        ? 'text-blue-600 font-semibold'
+                                                        : selectedRequest.status === 'Working'
+                                                            ? 'text-amber-600 font-semibold'
+                                                            : selectedRequest.status === 'Done'
+                                                                ? 'text-green-600 font-semibold'
+                                                                : 'text-blue-gray-900'
                                             }`}
                                         >
                                             {selectedRequest.status}
@@ -331,7 +332,7 @@ export default function RequestListPage() {
                             )}
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Name:{' '}
                             </h3>
@@ -345,7 +346,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Request Details:{' '}
                             </h3>
@@ -381,7 +382,7 @@ export default function RequestListPage() {
                                             {selectedRequest.security.accessZones}{' '}
                                         </>
                                     )}
-                                    <br />
+                                    <br/>
                                     {selectedRequest.request_type === 'Sanitation' && (
                                         <>
                                             <span className="underline">Contaminant:</span>{' '}
@@ -429,7 +430,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Additional Comments:{' '}
                             </h3>
@@ -446,7 +447,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Location:{' '}
                             </h3>
@@ -457,7 +458,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Department:{' '}
                             </h3>
@@ -468,7 +469,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Request Date:{' '}
                             </h3>
@@ -492,7 +493,7 @@ export default function RequestListPage() {
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
+                                style={{color: '#005E64'}}
                             >
                                 Request ID:{' '}
                             </h3>
@@ -503,10 +504,10 @@ export default function RequestListPage() {
                         </div>
                     </nav>
                 ) : (
-                    <div className="flex-1" style={{ borderColor: '#005E64' }}>
+                    <div className="flex-1" style={{borderColor: '#005E64'}}>
                         <nav
                             className="border p-5 rounded-lg flex items-center"
-                            style={{ borderColor: '#005E64' }}
+                            style={{borderColor: '#005E64'}}
                         >
                             <p className="text-gray-700 font-[Poppins]">
                                 Select a service request to view details.

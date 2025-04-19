@@ -61,7 +61,7 @@ export default function RequestTablePage() {
     const navigate = useNavigate();
     const sendToDetailedView = (highlightedRequest: ServiceRequest) => {
         console.log(highlightedRequest);
-        navigate('/requests/list', { state: { ServiceRequest: highlightedRequest } });
+        navigate('/requests/list', { state: { ServiceRequest: highlightedRequest, editMode: true } });
     };
 
     // Edit & Delete menu props

@@ -148,7 +148,7 @@ export default function RequestTablePage() {
                             <thead className="bg-gray-200 sticky top-0 z-20">
                                 <tr>
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_id') setAscending(!ascending);
                                             else {
@@ -166,7 +166,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_type')
                                                 setAscending(!ascending);
@@ -177,7 +177,7 @@ export default function RequestTablePage() {
                                         }}
                                     >
                                         <h3
-                                            className="block text-lg font-semibold font-[Poppins]"
+                                            className="block text-lg font-semibold font-[Poppins] break-words"
                                             style={{ color: '#003A96' }}
                                         >
                                             Request Type{' '}
@@ -186,7 +186,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'priority') setAscending(!ascending);
                                             else {
@@ -338,7 +338,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[125px] pt-0 pb-2">
+                                        <td className="p-4 break-words max-w-[200px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
                                                 <i>
                                                     {res.request_type === 'Sanitation'

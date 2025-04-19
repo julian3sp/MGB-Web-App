@@ -6,8 +6,9 @@ import { useEffect, useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
-import EditRequest from "@/components/ui/EditRequest.tsx";
-import DeleteRequest from "@/components/ui/DeleteRequest.tsx";
+import EditRequest from '@/components/ui/EditRequest.tsx';
+import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
+import {ServiceComponentDropdown} from "@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx";
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -26,8 +27,12 @@ return `(${start}) ${middle}-${end}`;
 export default function RequestListPage() {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
-    const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(tableRequest.state?.ServiceRequest);
+    const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
+        tableRequest.state?.ServiceRequest
+    );
     const [editMode, setEditMode] = useState(false);
+    const [editPriority, setEditPriority] = useState("");
+    const [editStatus, setEditStatus] = useState("");
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -131,58 +136,55 @@ export default function RequestListPage() {
                     >
                         <div>
                             <div className="flex justify-between mx-auto border-b pb-2 mb-3">
-
-                            <h2
-                                className="text-xl font-bold"
-                                style={{ color: '#003A96' }}
-                            >
-                                {selectedRequest.request_id}.{' '}
-                                {selectedRequest.request_type === 'Sanitation'
-                                    ? 'Sanitation'
-                                    : selectedRequest.request_type === 'Transportation'
-                                      ? 'Transportation'
-                                      : selectedRequest.request_type === 'Security'
-                                        ? 'Security'
-                                        : selectedRequest.request_type === 'AudioVisual'
-                                          ? 'Audio/Visual Accommodations'
-                                          : selectedRequest.request_type === 'Language'
-                                            ? 'Language Interpreter'
-                                            : 'N/A'}{' '}
-                                (Priority:{' '}
-                                <span
-                                    className={
-                                        selectedRequest.priority === 'Low'
-                                            ? 'text-green-600'
-                                            : selectedRequest.priority === 'Medium'
-                                              ? 'text-yellow-600'
-                                              : selectedRequest.priority === 'High'
-                                                ? 'text-orange-600'
-                                                : selectedRequest.priority === 'Emergency'
-                                                  ? 'text-red-600'
-                                                  : 'text-gray-600'
-                                    }
-                                >
-                                    {selectedRequest.priority}
-                                </span>
-                                )
-                            </h2>
-                            {/*ReqID. Type (Priority)*/}
-<div className="flex gap-8">
-                                <EditRequest
-                                    size={20}
-                                    onClick={() => {
-                                        console.log('Edit');
-                                        console.log(selectedRequest);
-                                    }}
-                                />
-                                <DeleteRequest
-                                    size={20}
-                                    onClick={() => {
-                                        console.log('Delete: ');
-                                        console.log(selectedRequest);
-                                    }}
-                                />
-</div>
+                                <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
+                                    {selectedRequest.request_id}.{' '}
+                                    {selectedRequest.request_type === 'Sanitation'
+                                        ? 'Sanitation'
+                                        : selectedRequest.request_type === 'Transportation'
+                                          ? 'Transportation'
+                                          : selectedRequest.request_type === 'Security'
+                                            ? 'Security'
+                                            : selectedRequest.request_type === 'AudioVisual'
+                                              ? 'Audio/Visual Accommodations'
+                                              : selectedRequest.request_type === 'Language'
+                                                ? 'Language Interpreter'
+                                                : 'N/A'}{' '}
+                                    (Priority:{' '}
+                                    <span
+                                        className={
+                                            selectedRequest.priority === 'Low'
+                                                ? 'text-green-600'
+                                                : selectedRequest.priority === 'Medium'
+                                                  ? 'text-yellow-600'
+                                                  : selectedRequest.priority === 'High'
+                                                    ? 'text-orange-600'
+                                                    : selectedRequest.priority === 'Emergency'
+                                                      ? 'text-red-600'
+                                                      : 'text-gray-600'
+                                        }
+                                    >
+                                        {selectedRequest.priority}
+                                    </span>
+                                    )
+                                </h2>
+                                {/*ReqID. Type (Priority)*/}
+                                <div className="flex gap-8">
+                                    <EditRequest
+                                        size={20}
+                                        onClick={() => {
+                                            console.log('Edit');
+                                            console.log(selectedRequest);
+                                            setEditMode(true);
+                                        }}
+                                    />
+                                    <DeleteRequest
+                                        size={20}
+                                        onClick={() => {
+                                            console.log('Delete: ');
+                                            console.log(selectedRequest);
+                                        }}
+                                    />
+                                </div>
                             </div>
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
@@ -209,55 +211,137 @@ export default function RequestListPage() {
                             </ul>
                             {/*Request Type*/}
 
-                            <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
-                            >
-                                Priority:{' '}
-                            </h3>
-                            <ul className="list-disc ml-6 mb-3">
-                                <p
-                                    className={`block font-[Poppins] text-med font-semibold ${
-                                        selectedRequest.priority === 'Low'
-                                            ? 'text-green-600'
-                                            : selectedRequest.priority === 'Medium'
-                                              ? 'text-yellow-500'
-                                              : selectedRequest.priority === 'High'
-                                                ? 'text-red-500'
-                                                : selectedRequest.priority === 'Emergency'
-                                                  ? 'text-red-700 underline'
-                                                  : 'text-blue-gray-900'
-                                    }`}
-                                >
-                                    {selectedRequest.priority}
-                                </p>
-                            </ul>
-                            {/*Priority*/}
+                            {editMode ? (
+                                <>
+                                    <h3
+                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        style={{ color: '#005E64' }}
+                                    >
+                                        Priority:{' '}
+                                    </h3>
+                                    <ul className="list-disc ml-6 mb-3">
+                                        <p
+                                            className={`block font-[Poppins] text-med font-semibold ${
+                                                selectedRequest.priority === 'Low'
+                                                    ? 'text-green-600'
+                                                    : selectedRequest.priority === 'Medium'
+                                                      ? 'text-yellow-500'
+                                                      : selectedRequest.priority === 'High'
+                                                        ? 'text-red-500'
+                                                        : selectedRequest.priority === 'Emergency'
+                                                          ? 'text-red-700 underline'
+                                                          : 'text-blue-gray-900'
+                                            }`}
+                                        >
+                                            {selectedRequest.priority}
+                                        </p>
+                                    </ul>
+                                    <ServiceComponentDropdown
+                                        value={editPriority}
+                                        setState={setEditPriority}
+                                        width={"w-full"}
+                                        options={["Low", "Medium", "High", "Emergency"]}
+                                        placeholder={selectedRequest.priority}
+                                    />
+                                    {/*Priority*/}
 
+                                    <h3
+                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        style={{ color: '#005E64' }}
+                                    >
+                                        Status:{' '}
+                                    </h3>
+                                    <ul className="list-disc ml-6 mb-3">
+                                        <p
+                                            className={`block font-[Poppins] text-med ${
+                                                selectedRequest.status === 'Unassigned'
+                                                    ? 'text-gray-500'
+                                                    : selectedRequest.status === 'Assigned'
+                                                      ? 'text-blue-600'
+                                                      : selectedRequest.status === 'Working'
+                                                        ? 'text-amber-600'
+                                                        : selectedRequest.status === 'Done'
+                                                          ? 'text-green-600'
+                                                          : 'text-blue-gray-900'
+                                            }`}
+                                        >
+                                            {selectedRequest.status}
+                                        </p>
+                                    </ul>
+                                    <ServiceComponentDropdown
+                                        value={editStatus}
+                                        setState={setEditStatus}
+                                        width={"w-full"}
+                                        options={["Unassigned", "Assigned", "Working", "Done"]}
+                                        placeholder={selectedRequest.status}
+                                    />
+                                    {/*Status*/}
+                                </>
+                            ) : (
+                                <>
+                                    <h3
+                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        style={{ color: '#005E64' }}
+                                    >
+                                        Priority:{' '}
+                                    </h3>
+                                    <ul className="list-disc ml-6 mb-3">
+                                        <p
+                                            className={`block font-[Poppins] text-med font-semibold ${
+                                                selectedRequest.priority === 'Low'
+                                                    ? 'text-green-600'
+                                                    : selectedRequest.priority === 'Medium'
+                                                      ? 'text-yellow-500'
+                                                      : selectedRequest.priority === 'High'
+                                                        ? 'text-red-500'
+                                                        : selectedRequest.priority === 'Emergency'
+                                                          ? 'text-red-700 underline'
+                                                          : 'text-blue-gray-900'
+                                            }`}
+                                        >
+                                            {selectedRequest.priority}
+                                        </p>
+                                    </ul>
+                                    {/*Priority*/}
+
+                                    <h3
+                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        style={{ color: '#005E64' }}
+                                    >
+                                        Status:{' '}
+                                    </h3>
+                                    <ul className="list-disc ml-6 mb-3">
+                                        <p
+                                            className={`block font-[Poppins] text-med ${
+                                                selectedRequest.status === 'Unassigned'
+                                                    ? 'text-gray-500'
+                                                    : selectedRequest.status === 'Assigned'
+                                                      ? 'text-blue-600'
+                                                      : selectedRequest.status === 'Working'
+                                                        ? 'text-amber-600'
+                                                        : selectedRequest.status === 'Done'
+                                                          ? 'text-green-600'
+                                                          : 'text-blue-gray-900'
+                                            }`}
+                                        >
+                                            {selectedRequest.status}
+                                        </p>
+                                    </ul>
+                                </>
+                            )}
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
                                 style={{ color: '#005E64' }}
                             >
-                                Status:{' '}
+                                Name:{' '}
                             </h3>
                             <ul className="list-disc ml-6 mb-3">
-                                <p
-                                    className={`block font-[Poppins] text-med ${
-                                        selectedRequest.status === 'Unassigned'
-                                            ? 'text-gray-500'
-                                            : selectedRequest.status === 'Assigned'
-                                              ? 'text-blue-600'
-                                              : selectedRequest.status === 'Working'
-                                                ? 'text-amber-600'
-                                                : selectedRequest.status === 'Done'
-                                                  ? 'text-green-600'
-                                                  : 'text-blue-gray-900'
-                                    }`}
-                                >
-                                    {selectedRequest.status}
+                                <p>
+                                    {selectedRequest.name} (Employee ID:{' '}
+                                    {selectedRequest.employee_id})
                                 </p>
                             </ul>
-                            {/*Status*/}
+                            {/*Name (Employee ID: #)*/}
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
@@ -381,20 +465,6 @@ export default function RequestListPage() {
                                 <p>{selectedRequest.department}</p>
                             </ul>
                             {/*Department*/}
-
-                            <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
-                                style={{ color: '#005E64' }}
-                            >
-                                Name:{' '}
-                            </h3>
-                            <ul className="list-disc ml-6 mb-3">
-                                <p>
-                                    {selectedRequest.name} (Employee ID:{' '}
-                                    {selectedRequest.employee_id})
-                                </p>
-                            </ul>
-                            {/*Name (Employee ID: #)*/}
 
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"

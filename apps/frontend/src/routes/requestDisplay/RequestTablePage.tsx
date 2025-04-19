@@ -3,26 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useRequestData } from './RequestDataContext.tsx';
 import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-    AlertDialogOverlay,
-} from '../../components/ui/AlertDialogue';
-
-import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/Popover';
-
-import EditIcon from '../../../assets/EditIcon.png';
-import DeleteIcon from '../../../assets/DeleteIcon.png';
-
-import OptionsIcon from '../../../assets/OptionsIcon.png';
-import { PopoverClose } from '@radix-ui/react-popover';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import EditRequest from '@/components/ui/EditRequest.tsx';
 

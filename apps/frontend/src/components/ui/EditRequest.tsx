@@ -16,7 +16,8 @@ export default function EditRequest({
             <img
                 src={EditIcon}
                 alt="Edit"
-                className={`max-w-[${size}px] fill-red-500`}
+                className={`fill-red-500`}
+                style = {{maxWidth: size}}
                 title="Edit Service Request"
             />
         </button>

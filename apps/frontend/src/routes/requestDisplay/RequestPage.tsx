@@ -6,6 +6,8 @@ import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
+import FilterIcon from '../../../assets/FilterIcon.png';
+
 
 //Handles closing the filter popup when you click outside the popup
 const useClickOutside = (handler: () => void) => {
@@ -123,7 +125,7 @@ export default function RequestPage() {
                                     onClick={handleFilterClick}
                                     className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
-                                    Filters
+                                    <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>
 
                                 {showFilterPanel && (
@@ -143,9 +145,9 @@ export default function RequestPage() {
                                                         department: [],
                                                     })
                                                 }
-                                                className="px-4 py-2 border rounded text-white bg-red-600 hover:bg-red-900 w-[130px]"
+                                                className="px-4 py-2 border rounded text-white bg-red-600 hover:bg-red-800 w-[130px]"
                                             >
-                                                Reset Filters
+                                                Clear
                                             </button>
                                         </div>
 

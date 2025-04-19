@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
+import EditRequest from "@/components/ui/EditRequest.tsx";
+import DeleteRequest from "@/components/ui/DeleteRequest.tsx";
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -24,13 +26,8 @@ return `(${start}) ${middle}-${end}`;
 export default function RequestListPage() {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
-    const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
-
-    useEffect(() => {
-        if (tableRequest.state !== null) {
-            setSelectedRequest(tableRequest.state?.ServiceRequest);
-        }
-    });
+    const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(tableRequest.state?.ServiceRequest);
+    const [editMode, setEditMode] = useState(false);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -133,8 +130,10 @@ export default function RequestListPage() {
                         style={{ borderColor: '#005E64' }}
                     >
                         <div>
+                            <div className="flex justify-between mx-auto border-b pb-2 mb-3">
+
                             <h2
-                                className="text-xl font-bold border-b pb-2 mb-3"
+                                className="text-xl font-bold"
                                 style={{ color: '#003A96' }}
                             >
                                 {selectedRequest.request_id}.{' '}
@@ -168,7 +167,23 @@ export default function RequestListPage() {
                                 )
                             </h2>
                             {/*ReqID. Type (Priority)*/}
-
+<div className="flex gap-8">
+                                <EditRequest
+                                    size={20}
+                                    onClick={() => {
+                                        console.log('Edit');
+                                        console.log(selectedRequest);
+                                    }}
+                                />
+                                <DeleteRequest
+                                    size={20}
+                                    onClick={() => {
+                                        console.log('Delete: ');
+                                        console.log(selectedRequest);
+                                    }}
+                                />
+</div>
+                            </div>
                             <h3
                                 className="text-lg font-semibold font-[Poppins] py-1"
                                 style={{ color: '#005E64' }}

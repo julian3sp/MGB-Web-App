@@ -22,7 +22,9 @@ import EditIcon from '../../../assets/EditIcon.png';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
 
 import OptionsIcon from '../../../assets/OptionsIcon.png';
-import {PopoverClose} from "@radix-ui/react-popover";
+import { PopoverClose } from '@radix-ui/react-popover';
+import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
+import EditRequest from '@/components/ui/EditRequest.tsx';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -570,66 +572,22 @@ export default function RequestTablePage() {
 
                                         <td className="pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15">
                                             <div className="flex justify-center gap-2 mx-auto w-fit">
-                                                <button
+                                                <EditRequest
+                                                    size={20}
                                                     onClick={() => {
-                                                        console.log('edit: ');
-                                                        console.log(activeRequest);
+                                                        console.log('Edit');
                                                         setMenuVisible(false);
                                                         sendToDetailedView(res);
                                                     }}
-                                                >
-                                                    <img
-                                                        src={EditIcon}
-                                                        alt="Edit"
-                                                        className="max-w-[20px] fill-red-500"
-                                                        title="Edit Service Request"
-                                                    />
-                                                </button>
-                                                <Popover>
-                                                    <PopoverTrigger className="p-2 pr-0">
-                                                        <div>
-                                                            <img
-                                                                src={DeleteIcon}
-                                                                alt="Delete"
-                                                                className="max-w-[20px] fill-red-500"
-                                                                title="Delete Service Request"
-                                                            />
-                                                        </div>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent>
-                                                        <div>
-                                                            <h3
-                                                                className="block text-lg font-semibold font-[Poppins] text-center pb-2"
-                                                                style={{ color: '#003A96' }}
-                                                            >
-                                                                Delete Service Request
-                                                            </h3>
-                                                            <p className="text-center">Are you sure you want to delete this service request? This action cannot be undone.</p>
-                                                            <br/>
-                                                            <div className="flex justify-center gap-2 mx-auto w-fit">
-                                                                <PopoverClose asChild>
-                                                                <button
-                                                                    className="p-4 pt-1 pb-1 text-base font-medium text-white bg-[#003A96] hover:bg-blue-950 shadow-lg rounded-lg"
-                                                                >
-                                                                    Go Back
-                                                                </button>
-                                                                </PopoverClose>
-                                                                <PopoverClose asChild>
-                                                                <button
-                                                                    className="p-4 pt-1 pb-1 text-base font-medium text-white bg-red-600 hover:bg-red-800 shadow-lg rounded-lg"
-                                                                    onClick={() => {
-                                                                        console.log('delete: ');
-                                                                        console.log(res);
-                                                                        setMenuVisible(false);
-                                                                    }}
-                                                                >
-                                                                    Delete Request
-                                                                </button>
-                                                                </PopoverClose>
-                                                            </div>
-                                                        </div>
-                                                    </PopoverContent>
-                                                </Popover>
+                                                />
+                                                <DeleteRequest
+                                                    size={20}
+                                                    onClick={() => {
+                                                        console.log('Delete: ');
+                                                        console.log(res);
+                                                        setMenuVisible(false);
+                                                    }}
+                                                />
                                             </div>
                                         </td>
                                     </tr>

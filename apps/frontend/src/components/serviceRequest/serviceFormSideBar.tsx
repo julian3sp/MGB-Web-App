@@ -1,61 +1,38 @@
-import RequestButton from "./formTypeButton.tsx";
-import TextInput from "../TextInput.tsx";
-import React, { useState } from 'react';
+import SideBarButton from "./sideBarButton.tsx";
 import SideNav from "../serviceRequest/sideNavigation.tsx"
-import accImage from './images/user.png'
 import {serviceRequest} from "@/routes/ServiceRequestPage.tsx";
 
 function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceRequest, setActiveTab: (form: serviceRequest)=>void}) {
-    const [searchData, setSearch] = useState('')
     const handleFormRequest = (form: serviceRequest) => {
         console.log(form + "requested");
         setActiveTab(form)
     };
 
     return (
-        <>
             <SideNav>
-                <h2 className="text-gray-800 text-lg mb-4">Mass General</h2>
-                <div className="flex flex-wrap items-center justify-center">
-                    <img
-                        src={accImage}
-                        alt="user"
-                        width="50"
-                        height="50"
-                        className={"mr-1"}
-                    />
-                    <h2 className={'text-gray-700 font-bold text-2xl'}> Account</h2>
+                <div className="flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-200 border-b-2 border-gray-300 shadow-sm">
+                    <span className="font-semibold text-gray-700 text-lg">Menu</span>
+
+                    {/* Optional subtle icon - can be removed if preferred */}
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7"></path>
+                    </svg>
                 </div>
-
-                <div className="w-full">
-                    <div className="text-gray-700 font-semibold mb-2">Menu</div>
-
-
-                    <div className="p-2 bg-gray-300 rounded">
-                        <div className="text-gray-700 flex justify-between  py-2">
-                            <TextInput
-                                label={'Search Form:'}
-                                placeholder={'Search Form ...'}
-                                value={searchData}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </div>
-
-                        <RequestButton
+                        <SideBarButton
                             label={'Language Interpreter Service Form'}
                             onClick={() => handleFormRequest({
                                 type:"Language",
                                 title: "Language Interpreter Service Form"})}
                             type="Language"
                         />
-                        <RequestButton
+                        <SideBarButton
                             label={'Sanitation Services Form'}
                             onClick={() => handleFormRequest({
                                 type: "Sanitation",
                                 title: 'Sanitation Service Form'})}
                             type="Sanitation"
                         />
-                        <RequestButton
+                        <SideBarButton
                             label={'Security Request Form'}
                             onClick={() => handleFormRequest({
                                 type: "Security",
@@ -63,7 +40,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="Security"
                         />
-                        <RequestButton
+                        <SideBarButton
                             label={'Transportation Request Form'}
                             onClick={() => handleFormRequest({
                                 type: "Transportation",
@@ -71,7 +48,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="Transportation"
                         />
-                        <RequestButton
+                        <SideBarButton
                             label={'Audio/Visual Request Form'}
                             onClick={() => handleFormRequest({
                                 type: "AudioVisual",
@@ -79,10 +56,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="AudioVisual"
                         />
-                    </div>
-                </div>
             </SideNav>
-        </>
     );
 }
 export default ServiceFormSideBar;

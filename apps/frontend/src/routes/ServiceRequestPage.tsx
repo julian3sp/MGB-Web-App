@@ -1,7 +1,7 @@
 import RequestForm from '../components/serviceRequest/RequestForm.tsx';
 import { useState } from 'react';
 import SideNav from '../components/serviceRequest/sideNavigation.tsx';
-import RequestButton from '../components/serviceRequest/formTypeButton.tsx';
+import RequestButton from '../components/serviceRequest/sideBarButton.tsx';
 import TextInput from '../components/TextInput.tsx';
 import ServiceFormSideBar from '../components/serviceRequest/serviceFormSideBar.tsx';
 import { trpc } from '../lib/trpc.ts';
@@ -19,7 +19,7 @@ function ServiceRequestPage() {
 
     return (
         <>
-            <div className="bg-gray-200 min-h-screen flex flex-col items-center justify-center">
+            <div className="relative bg-gray-200 min-h-screen flex flex-col items-center justify-center">
                 <ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />
                 <div>
                     <RequestForm title={activeTab.title} type={activeTab.type} />

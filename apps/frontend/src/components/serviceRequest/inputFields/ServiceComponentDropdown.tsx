@@ -1,23 +1,24 @@
 import React from 'react';
 
-export function ServiceComponentDropdown({
-                                             value,
-                                             setState,
-                                             width = '',
-                                             type,
-                                             numOptions = 0,
-                                             options = [],
-                                             error,
-                                              placeholder,
-                                         }: {
-    value: string;
-    setState: (value: string) => void;
-    width?: string;
-    type?: string;
-    numOptions?: number;
-    options: string[];
-    error?: string;
-    placeholder: string;
+export function ServiceComponentDropdown(
+    {
+        value,
+        setState,
+        width = '',
+        type,
+        numOptions = 0,
+        options = [],
+        error,
+        placeholder,
+    }: {
+        value: string;
+        setState: (value: string) => void;
+        width?: string;
+        type?: string;
+        numOptions?: number;
+        options: string[];
+        error?: string;
+        placeholder: string;
 }) {
     return (
         <div className="relative">

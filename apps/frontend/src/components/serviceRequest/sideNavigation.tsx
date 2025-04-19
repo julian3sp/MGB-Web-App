@@ -1,39 +1,49 @@
 import React, { useState } from 'react';
 
 interface SideNavProps {
-    children: React.ReactNode; // Add other react components
+    children: React.ReactNode;
 }
 
 const SideNav: React.FC<SideNavProps> = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
     return (
-        <div className={"items-start"}>
-            {/* Toggle button */}
-            <button
-                onClick={toggleSidebar}
-                className={`fixed top-1/2 left-0 z-30  shadow-md text-xl text-right text-darkgray p-3 h-25 w-10 rounded-r-lg bg-[#F4F4F4]  focus:outline-none transform transition-transform duration-300 ${
-                    isOpen ? 'translate-x-64' : 'translate-x-0' // Move button 64px right when sidebar is open
-                }`}
-            >
-                {isOpen ? '←': '→'}
-            </button>
+        <>
+            {/*toggle button*/}
+            <div className="fixed top-18 left-2 z-40">
+                <button
+                    onClick={toggleSidebar}
+                    aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+                    aria-expanded={isOpen}
+                    className="flex items-center justify-center w-10 h-10 rounded-full
+                              bg-gradient-to-r from-blue-500 to-blue-700
+                              shadow-lg hover:shadow-xl transition-all duration-200
+                              focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+                >
+                    {/*indicator*/}
+                    <div className={`w-5 h-5 rounded-full border-2 border-white transition-all duration-300 ${
+                        isOpen ? 'bg-white' : 'bg-transparent'
+                    }`}/>
+                </button>
+            </div>
 
-            {/* Sidebar */}
-            <div
-                className={`fixed top-15 left-0 h-full bg-[#F4F4F4] shadow-xl text-white w-64 transform transition-transform duration-300 rounded-r-lg ${
-                    isOpen ? 'translate-x-0' : '-translate-x-full'
-                }`}
-            >
-                <div className="p-5"> {/* Padding inside the sidebar */}
-                    {children}
+            <div className="absolute top-0 left-0 h-full">
+                {/* Sidebar*/}
+                <div
+                    className={`pt-10 h-full bg-[#F4F4F4] shadow-xl text-white w-64 transform transition-transform duration-300 ease-in-out ${
+                        isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                >
+
+                    <div className="p-5 overflow-y-auto h-full">
+                        {children}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

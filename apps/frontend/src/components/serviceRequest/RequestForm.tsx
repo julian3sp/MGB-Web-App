@@ -353,9 +353,22 @@ function RequestForm({ title, type }: requestFormProps) {
                                     value={priority}
                                     setState={setPriority}
                                     width={"w-full"}
-                                    options={["Low", "Medium", "High", "Emergency"]}
+                                    options={[{value: 'Low', label: 'Low'}, {value: 'Medium', label: 'Medium'} ,{value: 'High', label: 'High'}, {value: 'Emergency', label: '🚨 Emergency 🚨'}]}
                                     placeholder={"Select Priority"}
                                     error={errors.priority}
+                                    styledOptions={(option) =>
+                                        `block font-[Poppins] text-med ${
+                                            option === 'Low'
+                                                ? 'text-green-600 font-semibold'
+                                                : option === 'Medium'
+                                                    ? 'text-yellow-500 font-semibold'
+                                                    : option === 'High'
+                                                        ? 'text-red-500 font-semibold'
+                                                        : option === 'Emergency'
+                                                            ? 'text-red-700 underline font-semibold'
+                                                            : 'text-blue-gray-900'
+                                        }`
+                                    }
                                 />
                             </div>
 
@@ -368,6 +381,19 @@ function RequestForm({ title, type }: requestFormProps) {
                                     width={"w-full"}
                                     error={errors.status}
                                     options={["Unassigned", "Assigned", "Working", "Done"]}
+                                    styledOptions={(option) =>
+                                        `block font-[Poppins] text-med ${
+                                            option === 'Unassigned'
+                                                ? 'text-gray-500 font-semibold'
+                                                : option === 'Assigned'
+                                                    ? 'text-blue-600 font-semibold'
+                                                    : option === 'Working'
+                                                        ? 'text-amber-600 font-semibold'
+                                                        : option === 'Done'
+                                                            ? 'text-green-600 font-semibold'
+                                                            : 'text-blue-gray-900'
+                                        }`
+                                    }
                                 />
                             </div>
 

@@ -60,6 +60,16 @@ export class Graph {
         }
     }
 
+    deleteNode(id:number): void {
+        this.edges = this.edges.filter(e => e.source.id !== id || e.target.id !== id);
+        for (const node of this.nodes) {
+            if (node.id === id) {
+                this.nodes.delete(node);
+                break;
+            }
+        }
+    }
+
     addEdge(source: Node, destination: Node, weight: number, bidirectional: boolean = true): void {
         this.addNode(source);
         this.addNode(destination);

@@ -3,8 +3,8 @@ import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {addNewMarkers, createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
-import HospitalViewControls from '../HospitalViewControls';
+import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
+import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
 
 // TRPC hooks
@@ -118,7 +118,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       nodeMarkers.forEach(marker => marker.setMap(null));
       setNodeMarkers([]);
       setShowNodes(false);
+      console.log("showing nodes")
     } else {
+
       // Create and display node markers
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
@@ -128,8 +130,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       setShowNodes(true);
     }
   };
-
-
+  
   // Toggle edges visibility
   const toggleEdgesHandler = () => {
     if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;

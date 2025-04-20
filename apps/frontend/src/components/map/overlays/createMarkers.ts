@@ -3,6 +3,7 @@ import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
 
 export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetails: (node: Node) => void) {
     const markers: google.maps.Marker[] = [];
+    console.log("creating markers")
 
 
 
@@ -34,6 +35,7 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
         });
 
         google.maps.event.addListener(map, 'dblclick', function(event) {
+            console.log("double")
             // Try to prevent event propagation to the map
             const newMarker = new google.maps.Marker({
                 position: event.latLng,
@@ -46,6 +48,7 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
             });
             markers.push(newMarker)
         });
+
 
         markers.push(marker);
     }

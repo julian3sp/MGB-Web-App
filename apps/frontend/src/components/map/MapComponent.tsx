@@ -278,7 +278,7 @@ const MapComponent: React.FC = () => {
   return (
     <div className="flex h-screen">
       {/* Left Column: Search area */}
-      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
+      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
         <h2 className="font-bold text-center">Enter your location and destination</h2>
 
         <GoogleMapSection

@@ -201,12 +201,12 @@ export default function RequestListPage() {
 
                             {/*Request Type*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Request Type:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-3 font-semibold text-blue-gray-900">
+                            <ul className="list-disc ml-6 mt-1 mb-3 font-semibold text-blue-gray-900">
                                 <p>
                                     <i>
                                         {selectedRequest.request_type === 'Sanitation'
@@ -228,18 +228,18 @@ export default function RequestListPage() {
                             {editMode ? (
                                 <>
                                     <h3
-                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        className="text-lg font-semibold font-[Poppins] py-1 underline"
                                         style={{ color: '#005E64' }}
                                     >
                                         Priority:{' '}
                                     </h3>
 
                                     {/*Priority Editing*/}
-                                    <div className="flex flex-row row-2 gap-12">
+                                    <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
                                         <ServiceComponentDropdown
                                             value={editPriority}
                                             setState={setEditPriority}
-                                            width={'w-auto'}
+                                            width={'w-[175px]'}
                                             options={[
                                                 { value: 'Low', label: 'Low' },
                                                 {
@@ -278,22 +278,23 @@ export default function RequestListPage() {
                                             onDeny={() => console.log('Deny submit (priority)')}
                                             errorMessage={'Error: No change made'}
                                             successMessage={'Priority successfully changed'}
+                                            width={"w-[150px]"}
                                         />
                                     </div>
 
                                     <h3
-                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        className="text-lg font-semibold font-[Poppins] py-1 underline"
                                         style={{ color: '#005E64' }}
                                     >
                                         Status:{' '}
                                     </h3>
 
                                     {/*Status Editing*/}
-                                    <div className="flex flex-row row-2 gap-12">
+                                        <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
                                         <ServiceComponentDropdown
                                             value={editStatus}
                                             setState={setEditStatus}
-                                            width={'w-auto'}
+                                            width={'w-[175px]'}
                                             options={['Unassigned', 'Assigned', 'Working', 'Done']}
                                             placeholder={selectedRequest.status}
                                             originalValue={selectedRequest.status}
@@ -322,6 +323,7 @@ export default function RequestListPage() {
                                             onDeny={() => console.log('Deny submit (status)')}
                                             errorMessage={'Error: No changes made'}
                                             successMessage={'Status successfully changed'}
+                                            width={"w-[150px]"}
                                         />
                                     </div>
                                 </>
@@ -329,12 +331,12 @@ export default function RequestListPage() {
                                 <>
                                     {/*Priority Normal*/}
                                     <h3
-                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        className="text-lg font-semibold font-[Poppins] py-1 underline"
                                         style={{ color: '#005E64' }}
                                     >
                                         Priority:{' '}
                                     </h3>
-                                    <ul className="list-disc ml-6 mb-3">
+                                    <ul className="list-disc ml-6 mb-3 mt-1">
                                         <p
                                             className={`block font-[Poppins] text-med font-semibold ${
                                                 selectedRequest.priority === 'Low'
@@ -354,12 +356,12 @@ export default function RequestListPage() {
 
                                     {/*Status Normal*/}
                                     <h3
-                                        className="text-lg font-semibold font-[Poppins] py-1"
+                                        className="text-lg font-semibold font-[Poppins] py-1 underline"
                                         style={{ color: '#005E64' }}
                                     >
                                         Status:{' '}
                                     </h3>
-                                    <ul className="list-disc ml-6 mb-3">
+                                    <ul className="list-disc ml-6 mb-3 mt-1">
                                         <p
                                             className={`block font-[Poppins] text-med ${
                                                 selectedRequest.status === 'Unassigned'
@@ -381,12 +383,12 @@ export default function RequestListPage() {
 
                             {/*Name (Employee ID: #)*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Name:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-3">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>
                                     {selectedRequest.name} (Employee ID:{' '}
                                     {selectedRequest.employee_id})
@@ -395,12 +397,12 @@ export default function RequestListPage() {
 
                             {/*Request Details*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Request Details:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-4">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>
                                     {selectedRequest.sanitation?.cleaningType && (
                                         <>
@@ -479,12 +481,12 @@ export default function RequestListPage() {
 
                             {/*Additional comments*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Additional Comments:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-4">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>
                                     {selectedRequest.additional_comments?.trim() ? (
                                         <i>{selectedRequest.additional_comments}</i>
@@ -496,34 +498,34 @@ export default function RequestListPage() {
 
                             {/*Location*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Location:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-3">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>{selectedRequest.location}</p>
                             </ul>
 
                             {/*Department*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Department:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-3">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>{selectedRequest.department}</p>
                             </ul>
 
                             {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Request Date:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-4">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>
                                     {new Date(selectedRequest.request_date).toLocaleDateString(
                                         undefined,
@@ -542,12 +544,12 @@ export default function RequestListPage() {
 
                             {/*Request ID*/}
                             <h3
-                                className="text-lg font-semibold font-[Poppins] py-1"
+                                className="text-lg font-semibold font-[Poppins] py-1 underline"
                                 style={{ color: '#005E64' }}
                             >
                                 Request ID:{' '}
                             </h3>
-                            <ul className="list-disc ml-6 mb-3">
+                            <ul className="list-disc ml-6 mb-3 mt-1">
                                 <p>#{selectedRequest.request_id}</p>
                             </ul>
                         </div>

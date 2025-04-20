@@ -1,0 +1,36 @@
+type CustomSwitchProps = {
+    checked: boolean; // controlled value
+    onCheckedChange: (value: boolean) => void;
+};
+
+export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchProps) {
+    return (
+        <div className="flex border-[2px] border-[#003A96] rounded-full overflow-hidden w-fit text-sm font-medium cursor-pointer text-center">
+
+            {/* true */}
+            <button
+                onClick={() => onCheckedChange(true)}
+                className={`px-4 py-1 transition-colors duration-200 w-20 ${
+                    checked
+                        ? "bg-white text-[#003A96]"
+                        : "bg-[#003A96] text-white"
+                }`}
+            >
+                Table
+            </button>
+
+            {/* false */}
+            <button
+                onClick={() => onCheckedChange(false)}
+                className={`px-4 py-1 transition-colors duration-200 w-20 ${
+                    !checked
+                        ? "bg-white text-[#003A96]"
+                        : "bg-[#003A96] text-white"
+                }`}
+            >
+                List
+            </button>
+
+        </div>
+    );
+}

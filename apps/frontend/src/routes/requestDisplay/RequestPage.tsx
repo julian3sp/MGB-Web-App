@@ -7,6 +7,7 @@ import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
+import CustomSwitch from "@/components/ui/CustomSwitch.tsx";
 
 
 //Handles closing the filter popup when you click outside the popup
@@ -96,27 +97,19 @@ export default function RequestPage() {
                     </h1>
 
                     <div className="flex items-end gap-8 z-100 mr-2">
-                        <div className="flex flex-col mb-[-10px]">
-                            <Switch
-                                checked={currentView === 'list'}
-                                onCheckedChange={() => {
-                                    toggleActive();
-                                    if (currentView === 'list') {
-                                        navigate('table');
-                                    } else {
-                                        navigate('list');
-                                    }
-                                }}
-                                className="mx-auto"
-                                style={{
-                                    backgroundColor: currentView === 'table' ? '' : '#003A96',
-                                }}
+                        <div className="flex flex-col items-center mb-2">
+
+                            <CustomSwitch
+                            checked={currentView === 'list'}
+                            onCheckedChange={() => {
+                                toggleActive();
+                                if (currentView === 'table') {
+                                    navigate('list');
+                                } else {
+                                    navigate('table');
+                                }
+                            }}
                             />
-                            <div>
-                                <p className="whitespace-nowrap text-sm font-[Poppins] py-1">
-                                    Switch view
-                                </p>
-                            </div>
                         </div>
 
                         <div ref={filterRef} className="flex flex-row gap-4">

@@ -27,8 +27,8 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSel
   };
 
   return (
-    <div className="relative right-3">
-      <div className="relative w-full bg-white rounded-3xl shadow-lg m-2 transition-all duration-200">
+    <div className="relative">
+      <div className="relative w-[90%] mx-auto bg-white rounded-3xl shadow-lg m-2 transition-all duration-200">
         <button
           type="button"
           className="relative w-full cursor-default rounded-3xl bg-white py-2 pl-3 pr-10 text-left text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm sm:leading-6"

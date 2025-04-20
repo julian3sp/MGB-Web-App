@@ -304,8 +304,8 @@ const MapComponent: React.FC = () => {
         )}
 
         {/* Hospital Map Section */}
-        <div className="flex flex-col mt-10">
-          <h2 className="text-sm font-semibold mb-2">Select a department</h2>
+        <div className="flex flex-col mt-10 ">
+          <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">

@@ -84,7 +84,7 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-vh-10 bg-white mr-8 ml-8 mb-1 font-[Poppins] py-4"
+                className="border min-vh-10 bg-white mr-1 ml-1 mb-1 font-[Poppins] py-4"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
                 <div className="flex gap-4 justify-between pl-4 pr-4 pb-2 pt-1 items-end">
@@ -95,7 +95,7 @@ export default function RequestPage() {
                         Service Requests:
                     </h1>
 
-                    <div className="flex items-end gap-8 z-100">
+                    <div className="flex items-end gap-8 z-100 mr-2">
                         <div className="flex flex-col mb-[-10px]">
                             <Switch
                                 checked={currentView === 'list'}
@@ -123,7 +123,7 @@ export default function RequestPage() {
                             <div className="relative">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-2 border border-blue-950 border-2 rounded-lg text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>

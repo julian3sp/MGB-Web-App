@@ -132,7 +132,7 @@ export default function RequestTablePage() {
     return (
         <nav className="flex flex-1">
             <nav
-                className="w-full max-h-[105vh] bg-white p-6 font-[Poppins]"
+                className="w-full max-h-[105vh] bg-white p-6 pl-4 font-[Poppins]"
                 style={{
                     borderTop: 'none',
                     borderBottom: 'none',
@@ -309,7 +309,7 @@ export default function RequestTablePage() {
                                     </h3>
                                 </th>
 
-                                <th className="p-4 border-b border-gray-300  break-words">
+                                <th className="p-4 border-b border-gray-300 break-words">
                                     <h3
                                         className="block text-lg font-semibold font-[Poppins]"
                                         style={{color: '#003A96'}}
@@ -317,7 +317,7 @@ export default function RequestTablePage() {
                                         Additional Comments
                                     </h3>
                                 </th>
-                                <th className="p-4 border-b border-gray-300  bg-gray-200 sticky right-0 z-10 text-center">
+                                <th className="p-4 border-b border-gray-300 bg-gray-200 sticky right-0 z-10 text-center">
                                     <h3
                                         className="block text-lg font-semibold font-[Poppins]"
                                         style={{color: '#003A96'}}
@@ -333,7 +333,7 @@ export default function RequestTablePage() {
                                     key={res.request_id}
                                     className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
                                 >
-                                    <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                    <td className="p-4 break-words max-w-[50px] pt-0 pb-2">
                                         <p className="block font-[Poppins] text-med text-blue-gray-900">
                                             {res.request_id}
                                         </p>
@@ -523,7 +523,7 @@ export default function RequestTablePage() {
                                         </p>
                                     </td>
 
-                                    <td className="p-4  break-words w-fit pt-0 pb-2">
+                                    <td className="p-4 break-words w-fit pt-0 pb-2">
                                         <p
                                             className={`block font-[Poppins] text-med ${
                                                 res.status === 'Unassigned'
@@ -551,8 +551,8 @@ export default function RequestTablePage() {
                                         </p>
                                     </td>
 
-                                    <td className="pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15">
-                                        <div className="flex justify-center gap-2 mx-auto w-fit mx-8">
+                                    <td className="p-4 sticky right-0 bg-inherit z-15 w-fit pt-2 pb-2 break-words">
+                                        <div className="flex justify-center gap-2">
                                             <div className={"flex justify-center gap-4"}>
                                             <ViewRequest
                                                 size={25}

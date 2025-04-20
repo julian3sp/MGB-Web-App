@@ -34,7 +34,7 @@ export default function ViewRequest({
                         />
                     </button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-[#003A96] border-2 border-blue-950 w-auto">
+                <TooltipContent className="bg-white text-[#003A96] border-2 border-[#003A96] w-auto">
                     <p>{tooltip}</p>
                 </TooltipContent>
             </Tooltip>

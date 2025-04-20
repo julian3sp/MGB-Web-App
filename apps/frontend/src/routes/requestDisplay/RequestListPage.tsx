@@ -11,6 +11,7 @@ import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import { ServiceComponentDropdown } from '@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
+import ExitButton from '@/components/ui/ExitButton.tsx';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -181,6 +182,8 @@ export default function RequestListPage() {
                                 </h2>
                                 {/*ReqID. Type (Priority)*/}
                                 <div className="flex gap-8">
+                                    {!editMode ? (
+                                        //If not in edit mode, show edit icon
                                     <EditRequest
                                         size={20}
                                         onClick={() => {
@@ -188,13 +191,27 @@ export default function RequestListPage() {
                                             console.log(selectedRequest);
                                             setEditMode(true);
                                         }}
+                                        tooltip={"Edit Service Request"}
                                     />
+                                    ) : (
+                                        //If in edit mode, show exit icon
+
+                                        <ExitButton
+                                            size={24}
+                                            onClick={() => {
+                                                console.log('Edit');
+                                                setEditMode(false);
+                                            }}
+                                            tooltip={"Exit Edit Mode"}
+                                        />
+                                    )}
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
                                             console.log('Delete: ');
                                             console.log(selectedRequest);
                                         }}
+                                        tooltip={"Delete Service Request"}
                                     />
                                 </div>
                             </div>

@@ -5,12 +5,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip.tsx';
-import DeleteIcon from '../../../assets/DeleteIcon.png';
 
-export default function EditRequest({
+export default function ExitButton({
     size = 20,
     onClick,
-    tooltip = 'Edit',
+    tooltip = 'Exit',
 }: {
     size?: number;
     onClick: () => void;
@@ -20,21 +19,16 @@ export default function EditRequest({
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger>
-                    <button
-                        className="select-none cursor-pointer"
+                    <div
+                        className="flex items-center cursor-pointer select-none"
                         onClick={(e) => {
                             onClick();
                         }}
                     >
-                        <img
-                            src={EditIcon}
-                            alt="Edit"
-                            className={`fill-red-500`}
-                            style={{ maxWidth: size }}
-                        />
-                    </button>
+                        <p style={{ fontSize: size }}>&times;</p>
+                    </div>
                 </TooltipTrigger>
-                <TooltipContent className="bg-[#003A96] border-2 border-blue-950 w-auto">
+                <TooltipContent className="bg-white text-[#003A96] border-2 border-[#003A96] w-auto">
                     <p>{tooltip}</p>
                 </TooltipContent>
             </Tooltip>

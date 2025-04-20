@@ -3,26 +3,39 @@ import DeleteIcon from '../../../assets/DeleteIcon.png';
 import {PopoverClose} from "@radix-ui/react-popover";
 import { useState } from 'react';
 import { ServiceRequest } from '@/types';
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/Tooltip.tsx";
+import ExitButton from "@/components/ui/ExitButton.tsx";
 
 export default function DeleteRequest({
                                           size = 20,
                                           onClick,
+    tooltip = 'Delete',
                                       }: {
     size?: number;
     onClick: () => void;
+    tooltip?: string;
 }) {
     return (
         <Popover>
-            <PopoverTrigger className="p-2 pr-0">
-                <div>
-                    <img
-                        src={DeleteIcon}
-                        alt="Delete"
-                        className={`fill-red-500`}
-                        style = {{maxWidth: size}}
-                        title="Delete Service Request"
-                    />
-                </div>
+            <PopoverTrigger className="p-2 pr-0 select-none cursor-pointer">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <div>
+                                <img
+                                    src={DeleteIcon}
+                                    alt="Delete"
+                                    className={`fill-red-500`}
+                                    style={{ maxWidth: size }}
+                                />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent
+                        className="bg-red-600 border-2 border-red-800 w-auto">
+                            <p>{tooltip}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </PopoverTrigger>
             <PopoverContent>
                 <div>
@@ -47,7 +60,7 @@ export default function DeleteRequest({
                             <button
                                 className="p-4 pt-1 pb-1 text-base font-medium text-white bg-red-600 hover:bg-red-800 shadow-lg rounded-lg"
                                 onClick={(e) => {
-                                    onClick()
+                                    onClick();
                                 }}
                             >
                                 Delete Request

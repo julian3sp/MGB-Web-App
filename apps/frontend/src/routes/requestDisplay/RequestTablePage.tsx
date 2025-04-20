@@ -559,6 +559,7 @@ export default function RequestTablePage() {
                                                         setMenuVisible(false);
                                                         sendToDetailedView(res);
                                                     }}
+                                                    tooltip={"Edit in Detailed View"}
                                                 />
                                                 <DeleteRequest
                                                     size={20}
@@ -567,6 +568,7 @@ export default function RequestTablePage() {
                                                         console.log(res);
                                                         setMenuVisible(false);
                                                     }}
+                                                    tooltip={"Delete Service Request"}
                                                 />
                                             </div>
                                         </td>

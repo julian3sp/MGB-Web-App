@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
+import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
+import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from '../../map/overlays/22PatriotOverlay'
 import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from "@/lib/trpc";
@@ -21,16 +23,26 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
+
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+
     const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+
+    const [mgbOverlay, setMgbOverlay] = useState<{
+        parkingOverlay: google.maps.GroundOverlay;
+        floorOverlay: google.maps.GroundOverlay;
+    } | null>(null);
+
+    const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
+
 
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
     const hospitalLocationMap = {
         "MGB (Chestnut Hill)": { lat: 42.32610671664074, lng: -71.14958629820883 },
-        "20 Patriot Place": { lat: 42.09236331125932, lng:  -71.26640880069897 },
+        "20 Patriot Place": { lat: 42.09236331125932, lng: -71.26640880069897 },
         "22 Patriot Place": { lat: 42.09265105806092, lng: -71.26676051809467 }
     };
 
@@ -110,6 +122,58 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     };
 
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
+
+        // Cleanup old overlays
+        if (mgbOverlay) {
+            mgbOverlay.parkingOverlay.setMap(null);
+            mgbOverlay.floorOverlay.setMap(null);
+            setMgbOverlay(null);
+        }
+        if (patriot22Overlay) {
+            patriot22Overlay.floor3Overlay.setMap(null);
+            patriot22Overlay.floor4Overlay.setMap(null);
+            setPatriot22Overlay(null);
+        }
+
+        try {
+            if (selectedHospital === "MGB (Chestnut Hill)") {
+                const overlays = createMGBOverlays(map);
+                setMgbOverlay(overlays);
+            }
+
+            if (selectedHospital === "20 Patriot Place") {
+                createPatriot20Overlays(map); // No floor control needed
+            }
+
+            if (selectedHospital === "22 Patriot Place") {
+                const overlays = createPatriot22Overlays(map);
+                setPatriot22Overlay(overlays);
+            }
+
+            if (selectedHospital in hospitalLocationMap) {
+                const location = hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
+                if (location && map) {
+                  map.setZoom(19);
+                  map.panTo(location);
+                }
+            }              
+        } catch (err) {
+            console.error("Overlay setup error:", err);
+        }
+    }, [map, selectedHospital]);
+
+    useEffect(() => {
+        if (!map || !patriot22Overlay || !selectedHospital || selectedHospital !== "22 Patriot Place") return;
+        try {
+            updatePatriotPlace22(patriot22Overlay, selectedFloor || 3);
+        } catch (err) {
+            console.error("Error updating Patriot22 floor overlay:", err);
+        }
+    }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
+
+
     return (
         <div className="flex h-screen">
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
@@ -142,7 +206,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     onFloorChange={setSelectedFloor}
                     hospitalLocationMap={hospitalLocationMap}
                 />
-
             </div>
         </div>
     );

@@ -19,8 +19,8 @@ function ServiceRequestPage() {
 
     return (
         <>
-            <div className="relative bg-gray-200 min-h-screen flex flex-col items-center justify-center">
-                <ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />
+            <div className="relative flex-1 bg-gray-200 min-h-screen flex flex-col items-center justify-center">
+                {/*<ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />*/}
                 <div>
                     <RequestForm title={activeTab.title} type={activeTab.type} />
                 </div>

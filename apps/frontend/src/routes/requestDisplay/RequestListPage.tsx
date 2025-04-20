@@ -34,14 +34,46 @@ export default function RequestListPage() {
         tableRequest.state?.ServiceRequest
     );
     const [editMode, setEditMode] = useState(tableRequest.state?.editMode);
+    const [editId, setEditId] = useState(tableRequest.state?.ServiceRequest.request_id);
     const [editPriority, setEditPriority] = useState(tableRequest.state?.ServiceRequest.priority);
     const [editStatus, setEditStatus] = useState(tableRequest.state?.ServiceRequest.status);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-    function allowSubmit(editValue: string, originalValue: string): boolean {
-        return editValue !== originalValue;
+    function allowSwap(
+        editPriorityValue: string,
+        editStatusValue: string,
+        originalRequest: ServiceRequest
+    ): boolean {
+        if (
+            !editPriorityValue ||
+            !editMode ||
+            (editMode &&
+                editPriorityValue === originalRequest.priority &&
+                editStatusValue === originalRequest.status)
+        ) {
+            console.log('no unsaved edits');
+            console.log(`Edit Priority: ${editPriorityValue}`);
+            console.log(`Original Priority: ${originalRequest.priority}`);
+            console.log(`Edit Status: ${editStatusValue}`);
+            console.log(`Original Status: ${originalRequest.status}`);
+            return true;
+        } else {
+            console.log('some unsaved edits');
+            console.log(`Edit Priority: ${editPriorityValue}`);
+            console.log(`Original Priority: ${originalRequest.priority}`);
+            console.log(`Edit Status: ${editStatusValue}`);
+            console.log(`Original Status: ${originalRequest.status}`);
+            return false;
+        }
+    }
+
+    function unsafeSwap() {
+        return;
+        <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[450px]">
+            You will lose any unsaved changes. (Go back) (Contine anyways)
+        </div>;
     }
 
     return (
@@ -58,18 +90,30 @@ export default function RequestListPage() {
                 <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96' }}>
                     Select a Request:
                 </h3>{' '}
-
                 {/*Header for list of departments on page*/}
                 {filteredData && filteredData.length > 0 ? (
                     filteredData?.map((res) => (
                         <ul key={res.request_id} className="mb-2">
                             <button
                                 onClick={() => {
-                                    setSelectedRequest(res);
-                                    setEditMode(false);
-                                    setEditPriority(res.priority);
-                                    setEditStatus(res.status);
-                                }}
+                                    if(!selectedRequest) {
+                                        console.log('SAFE SWAP!!!!!');
+                                        setSelectedRequest(res);
+                                        setEditMode(false);
+                                        setEditPriority(res.priority);
+                                        setEditStatus(res.status);
+                                    } else {
+                                    if (allowSwap(editPriority, editStatus, selectedRequest)) {
+                                        console.log('SAFE SWAP!!!!!');
+                                        setSelectedRequest(res);
+                                        setEditMode(false);
+                                        setEditPriority(res.priority);
+                                        setEditStatus(res.status);
+                                    } else {
+                                        console.log('UNSAFE SWAP!!!!!');
+                                        unsafeSwap();
+                                    }
+                                }}}
                                 className={
                                     `w-full text-left block p-5 border rounded ${
                                         selectedRequest?.request_id == res.request_id
@@ -184,15 +228,15 @@ export default function RequestListPage() {
                                 <div className="flex gap-8">
                                     {!editMode ? (
                                         //If not in edit mode, show edit icon
-                                    <EditRequest
-                                        size={20}
-                                        onClick={() => {
-                                            console.log('Edit');
-                                            console.log(selectedRequest);
-                                            setEditMode(true);
-                                        }}
-                                        tooltip={"Edit Service Request"}
-                                    />
+                                        <EditRequest
+                                            size={20}
+                                            onClick={() => {
+                                                console.log('Edit');
+                                                console.log(selectedRequest);
+                                                setEditMode(true);
+                                            }}
+                                            tooltip={'Edit Service Request'}
+                                        />
                                     ) : (
                                         //If in edit mode, show exit icon
 
@@ -202,7 +246,7 @@ export default function RequestListPage() {
                                                 console.log('Edit');
                                                 setEditMode(false);
                                             }}
-                                            tooltip={"Exit Edit Mode"}
+                                            tooltip={'Exit Edit Mode'}
                                         />
                                     )}
                                     <DeleteRequest
@@ -211,7 +255,7 @@ export default function RequestListPage() {
                                             console.log('Delete: ');
                                             console.log(selectedRequest);
                                         }}
-                                        tooltip={"Delete Service Request"}
+                                        tooltip={'Delete Service Request'}
                                     />
                                 </div>
                             </div>
@@ -287,15 +331,12 @@ export default function RequestListPage() {
                                         />
                                         <SubmitFormEdit
                                             label={'Submit Priority Change'}
-                                            submitCondition={allowSubmit(
-                                                editPriority,
-                                                selectedRequest.priority
-                                            )}
+                                            submitCondition={editPriority !== selectedRequest.priority}
                                             onSubmit={() => console.log('Allow submit (priority)')}
                                             onDeny={() => console.log('Deny submit (priority)')}
                                             errorMessage={'Error: No change made'}
                                             successMessage={'Priority successfully changed'}
-                                            width={"w-[150px]"}
+                                            width={'w-[150px]'}
                                         />
                                     </div>
 
@@ -307,7 +348,7 @@ export default function RequestListPage() {
                                     </h3>
 
                                     {/*Status Editing*/}
-                                        <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
+                                    <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
                                         <ServiceComponentDropdown
                                             value={editStatus}
                                             setState={setEditStatus}
@@ -332,15 +373,12 @@ export default function RequestListPage() {
 
                                         <SubmitFormEdit
                                             label={'Submit Status Change'}
-                                            submitCondition={allowSubmit(
-                                                editStatus,
-                                                selectedRequest.status
-                                            )}
+                                            submitCondition={editStatus !== selectedRequest.status}
                                             onSubmit={() => console.log('Allow submit (status)')}
                                             onDeny={() => console.log('Deny submit (status)')}
                                             errorMessage={'Error: No changes made'}
                                             successMessage={'Status successfully changed'}
-                                            width={"w-[150px]"}
+                                            width={'w-[150px]'}
                                         />
                                     </div>
                                 </>

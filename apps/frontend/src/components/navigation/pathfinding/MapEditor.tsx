@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
+import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from "@/lib/trpc";
 
 interface MapEditorProps {
@@ -120,6 +121,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
                 </button>
+
+                <ImportAllNodesAndEdges />
             </div>
 
             <div className="w-3/4 relative">

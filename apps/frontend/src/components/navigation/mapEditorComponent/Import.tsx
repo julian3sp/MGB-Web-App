@@ -1,0 +1,62 @@
+import React, { useState, useRef, useEffect } from 'react';
+import ImportCSV from '../../ImportDept.tsx';
+import ImportDept from '../../ImportDept.tsx';
+import ImportNodes from '../../ImportNodes.tsx';
+import ImportEdges from '../../ImportEdges.tsx';
+
+export default function ImportNodesAndEdges() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const nodeRef = useRef<HTMLDivElement>(null);
+    const isClicked = useRef<boolean>(false);
+
+    useEffect(() => {
+        if (!nodeRef.current || !containerRef.current) return;
+
+        const node = nodeRef.current;
+        const container = containerRef.current;
+
+        const onMouseDown = (e: MouseEvent) => {
+            console.log('onMouseDown');
+            isClicked.current = true;
+
+        };
+
+        const onMouseUp = (e: MouseEvent) => {
+            isClicked.current = false;
+        };
+
+        const onMouseMove = (e: MouseEvent) => {
+            if (!isClicked.current) return;
+
+            console.log('onMouseMove');
+            node.style.top = `${e.clientY}px`;
+            node.style.left = `${e.clientX}px`;
+        };
+
+        node.addEventListener('mousedown', onMouseDown);
+        node.addEventListener('mouseup', onMouseUp);
+        container.addEventListener('mousemove', onMouseMove);
+
+        const cleanup = () => {
+            node.removeEventListener('mousedown', onMouseDown);
+            node.removeEventListener('mouseup', onMouseUp);
+            container.removeEventListener('mousemove', onMouseMove);
+        };
+
+        return cleanup;
+    }, []);
+
+    return (
+        <div className={"min-h-screen"}>
+
+            <div className={"mb-2 mt-2 ml-2"}>
+                <h2>Import Nodes:</h2>
+                <ImportNodes />
+            </div>
+            <div className={"mb-2 mt-2 ml-2"}>
+                <h2>Import Edges:</h2>
+                <ImportEdges />
+            </div>
+        </div>
+    );
+}

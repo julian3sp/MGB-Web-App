@@ -106,18 +106,18 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     return (
         <div className="flex h-screen">
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
-                <h2 className="font-bold text-center">Map Editor Controls</h2>
+                <h2 className="font-bold text-lg text-center">Map Editor Controls</h2>
                 
                 <button
                     onClick={toggleNodesHandler}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600"
+                    className="bg-[#003a96] w-[85%] mx-auto text-white py-2 px-4 rounded hover:bg-blue-600"
                 >
                     {showNodes ? 'Hide Nodes' : 'Show Nodes'}
                 </button>
 
                 <button
                     onClick={toggleEdgesHandler}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600"
+                    className="bg-[#003a96] w-[85%] mx-auto text-white py-2 px-4 rounded hover:bg-blue-600"
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
                 </button>

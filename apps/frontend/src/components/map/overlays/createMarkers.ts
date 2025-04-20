@@ -5,9 +5,6 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
     const markers: google.maps.Marker[] = [];
     console.log("creating markers")
 
-
-
-
     for(const node of Nodes){
         const coord: google.maps.LatLngLiteral = {
             lat: node.x,
@@ -25,10 +22,10 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
                 scaledSize: new google.maps.Size(8, 8) // width, height in pixels
             }        });
 
-        const infoWindow = new google.maps.InfoWindow({
-            content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
-            pixelOffset: new google.maps.Size(0, -8),
-        });
+        // const infoWindow = new google.maps.InfoWindow({
+        //     content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
+        //     pixelOffset: new google.maps.Size(0, -8),
+        // });
 
         marker.addListener('click', () => {
             setNodeDetails(node); // Call setNodeDetails to set the clicked node info
@@ -41,6 +38,7 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
                 position: event.latLng,
                 map: map,
                 title: 'New Node',
+                zIndex: 9999,
                 icon: {
                     url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
                     scaledSize: new google.maps.Size(8, 8),

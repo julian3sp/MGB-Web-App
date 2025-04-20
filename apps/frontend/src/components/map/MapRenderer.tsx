@@ -4,7 +4,7 @@ import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; 
-import HospitalViewControls from '../HospitalViewControls';
+import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
 
 // TRPC hooks

@@ -4,6 +4,7 @@ import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from "@/lib/trpc";
+import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 
 interface MapEditorProps {
     onMapReady: (
@@ -20,12 +21,18 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
-    const [nodesData, setNodesData] = useState<any[]>([]); // You can replace `any` with your data type
-    const [edgesData, setEdgesData] = useState<any[]>([]); // Same as above for edges data
+    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+    const hospitalLocationMap = {
+        "MGB (Chestnut Hill)": { lat: 42.32610671664074, lng: -71.14958629820883 },
+        "20 Patriot Place": { lat: 42.09236331125932, lng:  -71.26640880069897 },
+        "22 Patriot Place": { lat: 42.09265105806092, lng: -71.26676051809467 }
+    };
 
     useEffect(() => {
         if (!apiKey) {
@@ -107,7 +114,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         <div className="flex h-screen">
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-lg text-center">Map Editor Controls</h2>
-                
+
                 <button
                     onClick={toggleNodesHandler}
                     className="bg-[#003a96] w-[85%] mx-auto text-white py-2 px-4 rounded hover:bg-blue-600"
@@ -127,6 +134,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
             <div className="w-3/4 relative">
                 <div ref={mapRef} className="w-full h-full"></div>
+                <MapEditorControls
+                    map={map}
+                    selectedHospital={selectedHospital}
+                    selectedFloor={selectedFloor}
+                    onHospitalChange={setSelectedHospital}
+                    onFloorChange={setSelectedFloor}
+                    hospitalLocationMap={hospitalLocationMap}
+                />
+
             </div>
         </div>
     );

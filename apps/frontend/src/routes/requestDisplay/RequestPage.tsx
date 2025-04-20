@@ -129,7 +129,7 @@ export default function RequestPage() {
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[450px]">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-[#003A96] rounded-lg shadow-lg p-4 w-[450px]">
                                         <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests

@@ -142,7 +142,7 @@ export default function RequestTablePage() {
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-[#003A96] max-h-5/6 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">

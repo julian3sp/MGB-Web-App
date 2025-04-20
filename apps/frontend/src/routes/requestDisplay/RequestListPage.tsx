@@ -123,8 +123,8 @@ export default function RequestListPage() {
                                 style={{
                                     borderColor:
                                         selectedRequest?.request_id == res.request_id
-                                            ? '#009CA6'
-                                            : '#005E64',
+                                            ? '#005E64'
+                                            : '#003A96',
                                     borderWidth: '1 px',
                                     borderStyle: 'solid',
                                 }}
@@ -164,7 +164,7 @@ export default function RequestListPage() {
                 ) : (
                     <nav
                         className="border p-5 rounded-lg flex items-center"
-                        style={{ borderColor: '#005E64' }}
+                        style={{ borderColor: '#003A96' }}
                     >
                         <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
                     </nav>
@@ -258,10 +258,10 @@ export default function RequestListPage() {
                 {selectedRequest ? (
                     <nav
                         className="border p-6 rounded-lg text-blue-gray-900"
-                        style={{ borderColor: '#005E64' }}
+                        style={{ borderColor: '#003A96' }}
                     >
                         <div>
-                            <div className="flex justify-between mx-auto border-b pb-2 mb-3">
+                            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] pb-2 mb-3">
                                 <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
                                     {selectedRequest.request_id}.{' '}
                                     {selectedRequest.request_type === 'Sanitation'

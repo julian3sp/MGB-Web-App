@@ -3,7 +3,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers'; 
+import {addNewMarkers, createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
 import HospitalViewControls from '../HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
 
@@ -21,6 +21,7 @@ interface MapRendererProps {
   selectedFloor?: 3 | 4; 
   onFloorChange?: (floor: 3 | 4) => void;
   departmentNumber?: number | null;
+  disableDoubleClickZoom: true
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({ 
@@ -85,6 +86,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
             mapTypeControl: false,
             streetViewControl: true,
             zoomControl: true,
+            disableDoubleClickZoom: true
           });
           
           setMap(newMap);
@@ -126,7 +128,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       setShowNodes(true);
     }
   };
-  
+
+
   // Toggle edges visibility
   const toggleEdgesHandler = () => {
     if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;

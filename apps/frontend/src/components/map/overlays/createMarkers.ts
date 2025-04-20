@@ -1,8 +1,12 @@
 import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
 
 
-export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
+export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetails: (node: Node) => void) {
     const markers: google.maps.Marker[] = [];
+
+
+
+
     for(const node of Nodes){
         const coord: google.maps.LatLngLiteral = {
             lat: node.x,
@@ -25,19 +29,35 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
             pixelOffset: new google.maps.Size(0, -8),
         });
 
-        marker.addListener('mouseover', () => {
-            infoWindow.open({ map, anchor: marker });
+        marker.addListener('click', () => {
+            setNodeDetails(node); // Call setNodeDetails to set the clicked node info
         });
 
-        marker.addListener('mouseout', () => {
-            infoWindow.close();
+        google.maps.event.addListener(map, 'dblclick', function(event) {
+            // Try to prevent event propagation to the map
+            const newMarker = new google.maps.Marker({
+                position: event.latLng,
+                map: map,
+                title: 'New Node',
+                icon: {
+                    url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
+                    scaledSize: new google.maps.Size(8, 8),
+                },
+            });
+            markers.push(newMarker)
         });
 
         markers.push(marker);
     }
 
+
+
+
     return markers
 }
+
+
+
 
 export function drawAllEdges(
     map: google.maps.Map,

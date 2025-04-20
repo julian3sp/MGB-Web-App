@@ -3,6 +3,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
 import { trpc } from "@/lib/trpc";
+import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
 
 interface MapEditorProps {
     onMapReady: (
@@ -21,10 +22,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [showEdges, setShowEdges] = useState(false);
     const [nodesData, setNodesData] = useState<any[]>([]); // You can replace `any` with your data type
     const [edgesData, setEdgesData] = useState<any[]>([]); // Same as above for edges data
+    const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
     const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+    const addNode = trpc.makeNode.useMutation()
+
 
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
 
     useEffect(() => {
         if (!apiKey) {
@@ -51,6 +56,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         mapTypeControl: false,
                         streetViewControl: true,
                         zoomControl: true,
+                        disableDoubleClickZoom: true
                     });
 
                     setMap(newMap);
@@ -82,7 +88,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setNodeMarkers([]);
             setShowNodes(false);
         } else {
-            const markersCreated = createMarkers(map, nodesDataFromAPI);
+            const markersCreated = createMarkers(map, nodesDataFromAPI, setNodeDetails);
             setNodeMarkers(markersCreated);
             setShowNodes(true);
         }
@@ -102,25 +108,54 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     };
 
+    const handleAddNode = () => {
+    }
+
+    const handleRemoveNode = () => {
+
+    }
+
+    const setNodeDetails = (node: Node) => {
+        setNodeInfo({ id: node.id.toString(), x: node.x, y: node.y});
+    };
+
+
+
     return (
         <div className="flex h-screen">
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
-                <h2 className="font-bold text-center">Map Editor Controls</h2>
+                <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
                 
                 <button
                     onClick={toggleNodesHandler}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600"
+                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showNodes ? 'Hide Nodes' : 'Show Nodes'}
                 </button>
 
                 <button
                     onClick={toggleEdgesHandler}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600"
+                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
                 </button>
+
+                {nodeInfo && (
+                    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
+                        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
+                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {(nodeInfo.x).toFixed(6)}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {(nodeInfo.y).toFixed(6)}</p>
+                        <button className={"bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded-2xl p-3 "}>
+                            Remove Node
+                        </button>
+                    </div>
+
+                )}
+
             </div>
+
+
 
             <div className="w-3/4 relative">
                 <div ref={mapRef} className="w-full h-full"></div>

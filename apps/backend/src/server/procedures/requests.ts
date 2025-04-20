@@ -2,6 +2,8 @@ import { publicProcedure } from '../trpc';
 import client from '../../bin/prisma-client';
 import { z } from 'zod';
 import { trpc } from '../trpc.ts';
+import { Simulate } from 'react-dom/test-utils';
+import input = Simulate.input;
 
 export const getRequests = trpc.procedure.query(async () => {
     console.log('getRequests called');
@@ -14,6 +16,7 @@ export const getRequests = trpc.procedure.query(async () => {
             transportation: true,
         },
     });
+
     console.log('getRequests returned');
     return requests;
 });

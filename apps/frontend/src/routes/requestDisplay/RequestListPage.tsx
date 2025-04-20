@@ -39,6 +39,23 @@ export default function RequestListPage() {
     const [pendingRequest, setPendingRequest] = useState<ServiceRequest | null>(null);
     const [swapMenu, setSwapMenu] = useState(false);
     const [exitMenu, setExitMenu] = useState(false);
+    const[formData, setFormData] = useState({
+        request_type: '',
+        priority: '',
+        status: '',
+        name: '',
+        request_details: '',
+        aditional_comments: '',
+        location: '',
+        department: '',
+        request_date: '',
+
+
+    })
+    //const getdirec = trpc.getRequests
+    //const makeNewRequest = trpc.createRequest.useMutation()
+    //const deleteRequest = trpc.createRequest.useMutation()
+
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -417,7 +434,7 @@ export default function RequestListPage() {
                                             submitCondition={
                                                 editPriority !== selectedRequest.priority
                                             }
-                                            onSubmit={() => console.log('Allow submit (priority)')}
+                                            onSubmit={() => console.log('accpet submit (priority)')}
                                             onDeny={() => console.log('Deny submit (priority)')}
                                             errorMessage={'Error: No change made'}
                                             successMessage={'Priority successfully changed'}

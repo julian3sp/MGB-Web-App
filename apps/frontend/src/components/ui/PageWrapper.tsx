@@ -7,10 +7,11 @@ type PageWrapperProps ={
     children: React.ReactNode;
     contents?: React.ReactNode;
     width?: number;
+    open?: boolean;
 }
 
-const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, width}) => {
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
+const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, width, open = false}) => {
+    const [isSidebarOpen, setSidebarOpen] = useState(open);
     const translateMargin = isSidebarOpen ? 0 : -1*(width ?? 256);
 
     return (
@@ -26,6 +27,7 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, width}) =
         </SideNav>
         <motion.main
             animate={{ marginLeft: translateMargin}}
+            initial={{marginLeft: translateMargin}}
             transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}
             className="flex-1 min-h-screen"
         >

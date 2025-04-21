@@ -6,20 +6,27 @@ interface SideNavProps {
     setIsOpen: (open: boolean) => void;
     children: React.ReactNode;
     width?: number;
+    absolute?: boolean;
 }
 
-const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256}) => {
+const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256, absolute}) => {
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
     const translateX = isOpen ? 0 : -width;
+    const translateButton = isOpen ? width-50 : 18;
 
 
     return (
         <>
+            <motion.div
+                className="h-screen bg-[#F4F4F4] shadow-xl z-20"
+                animate={{x: translateButton, y: 16}}
+                initial={{x: translateButton, y: 16}}
+                transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
             {/*toggle button*/}
-            <div className="fixed top-18 left-2 z-40">
+            <div className={`${absolute ? `absolute` : `fixed`} z-40`}>
                 <button
                     onClick={toggleSidebar}
                     aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
@@ -35,16 +42,17 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
                     }`}/>
                 </button>
             </div>
+            </motion.div>
 
                 {/* Sidebar*/}
                 <motion.div
-                    className="pt-10 h-screen bg-[#F4F4F4] shadow-xl"
+                    className="h-screen bg-[#F4F4F4] shadow-xl"
                     style={{width}}
                     animate={{x: translateX}}
                     initial={{x: translateX}}
                     transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
 
-                    <div className="p-5 overflow-y-auto h-full">
+                    <div className="overflow-y-auto h-full">
                         {children}
                     </div>
                 </motion.div>

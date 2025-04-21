@@ -85,18 +85,18 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-vh-10 bg-white mr-1 ml-1 mb-1 font-[Poppins] py-4"
+                className="border min-vh-10 bg-white mb-1 font-[Poppins] py-4"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
                 <div className="flex gap-4 justify-between pl-4 pr-4 pb-2 pt-1 items-end">
                     <h1
-                        className="text-4xl font-bold font-[Poppins] text-left"
+                        className="text-4xl font-bold font-[Poppins] text-left pl-[2px]"
                         style={{ color: '#003A96' }}
                     >
                         Service Requests:
                     </h1>
 
-                    <div className="flex items-end gap-8 z-100 mr-2">
+                    <div className="flex items-end gap-8 z-100">
                         <div className="flex flex-col items-center mb-2">
 
                             <CustomSwitch

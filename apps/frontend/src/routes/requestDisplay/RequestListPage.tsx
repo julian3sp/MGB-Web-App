@@ -12,6 +12,8 @@ import { ServiceComponentDropdown } from '@/components/serviceRequest/inputField
 import FilterIcon from '../../../assets/FilterIcon.png';
 import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
+import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
+import PageWrapper from '@/components/ui/PageWrapper.tsx';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -72,9 +74,9 @@ export default function RequestListPage() {
     }
 
     return (
-        <nav className="flex flex-1 font-[Poppins]">
+        <PageWrapper open={true} contents={<div>
             <nav
-                className="w-1/3 min-h-[85vh] bg-white p-6 overflow-hidden"
+                className="w-full min-h-[85vh] bg-white p-6 overflow-hidden"
                 style={{
                     borderTop: '2px solid #d9d9d9',
                     borderBottom: 'none',
@@ -82,7 +84,7 @@ export default function RequestListPage() {
                     borderLeft: 'none',
                 }}
             >
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center underline" style={{ color: '#003A96' }}>
                     Select a Request:
                 </h3>{' '}
                 {/*Header for list of departments on page*/}
@@ -133,26 +135,26 @@ export default function RequestListPage() {
                                 {res.request_type === 'Sanitation'
                                     ? 'Sanitation'
                                     : res.request_type === 'Transportation'
-                                      ? 'Transportation'
-                                      : res.request_type === 'Security'
-                                        ? 'Security'
-                                        : res.request_type === 'AudioVisual'
-                                          ? 'Audio/Visual Accommodations'
-                                          : res.request_type === 'Language'
-                                            ? 'Language Interpreter'
-                                            : 'N/A'}{' '}
+                                        ? 'Transportation'
+                                        : res.request_type === 'Security'
+                                            ? 'Security'
+                                            : res.request_type === 'AudioVisual'
+                                                ? 'Audio/Visual Accommodations'
+                                                : res.request_type === 'Language'
+                                                    ? 'Language Interpreter'
+                                                    : 'N/A'}{' '}
                                 (Priority:{' '}
                                 <span
                                     className={
                                         res.priority === 'Low'
                                             ? 'text-green-600'
                                             : res.priority === 'Medium'
-                                              ? 'text-yellow-600'
-                                              : res.priority === 'High'
-                                                ? 'text-orange-600'
-                                                : res.priority === 'Emergency'
-                                                  ? 'text-red-600'
-                                                  : 'text-gray-600'
+                                                ? 'text-yellow-600'
+                                                : res.priority === 'High'
+                                                    ? 'text-orange-600'
+                                                    : res.priority === 'Emergency'
+                                                        ? 'text-red-600'
+                                                        : 'text-gray-600'
                                     }
                                 >
                                     {res.priority}
@@ -170,6 +172,9 @@ export default function RequestListPage() {
                     </nav>
                 )}
             </nav>
+        </div>} width = {600}>
+        <nav className="flex flex-1 font-[Poppins]">
+
             {swapMenu && pendingRequest && (
                 <div className="fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg shadow-lg p-6 w-[450px] border-[#003A96] border-1">
                     <h3 className="font-bold text-xl text-center text-[#003A96]">
@@ -242,7 +247,7 @@ export default function RequestListPage() {
             )}
 
             <div
-                className="h-auto flex-1 bg-white p-6"
+                className="h-auto flex-1 bg-white p-4"
                 style={{
                     borderTop: '2px solid #d9d9d9',
                     borderBottom: 'none',
@@ -252,12 +257,12 @@ export default function RequestListPage() {
             >
                 {' '}
                 {/*Border styling*/}
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins]" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center underline" style={{ color: '#003A96' }}>
                     Request Details:
                 </h3>
                 {selectedRequest ? (
                     <nav
-                        className="border p-6 rounded-lg text-blue-gray-900"
+                        className="border p-6 pl-4 rounded-lg text-blue-gray-900"
                         style={{ borderColor: '#003A96' }}
                     >
                         <div>
@@ -711,5 +716,6 @@ export default function RequestListPage() {
                 )}{' '}
             </div>
         </nav>
+        </PageWrapper>
     );
 }

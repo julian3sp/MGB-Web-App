@@ -19,7 +19,6 @@ export function LogInButton({className, rerender}: Props) {
                 console.log("Bad")
                 window.sessionStorage.setItem("isAdmin","false")
                 rerender(false)
-
             }
         }
         },

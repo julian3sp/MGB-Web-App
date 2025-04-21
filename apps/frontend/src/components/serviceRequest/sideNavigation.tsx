@@ -15,15 +15,15 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
         setIsOpen(!isOpen);
     };
     const translateX = isOpen ? 0 : -width;
-    const translateButton = isOpen ? width-50 : 18;
+    const translateButton = isOpen ? width-68 : 18;
 
 
     return (
         <>
             <motion.div
-                className="h-screen bg-[#F4F4F4] shadow-xl z-20"
-                animate={{x: translateButton, y: 16}}
-                initial={{x: translateButton, y: 16}}
+                className="min-h-screen bg-[#F4F4F4] z-20"
+                animate={{x: translateButton, y: 25}}
+                initial={{x: translateButton, y: 25}}
                 transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
             {/*toggle button*/}
             <div className={`${absolute ? `absolute` : `fixed`} z-40`}>
@@ -46,15 +46,12 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
 
                 {/* Sidebar*/}
                 <motion.div
-                    className="h-screen bg-[#F4F4F4] shadow-xl"
+                    className="min-h-screen" // D9D9D9
                     style={{width}}
                     animate={{x: translateX}}
                     initial={{x: translateX}}
                     transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
-
-                    <div className="overflow-y-auto h-full">
-                        {children}
-                    </div>
+                    {children}
                 </motion.div>
         </>
     );

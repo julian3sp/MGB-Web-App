@@ -4,9 +4,8 @@ import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
-import FloorSelector from './FloorSelector';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
-import Graph, {Node} from "@/components/navigation/pathfinding/Graph.ts";
+import DirectionsGuide from './DirectionsGuide.tsx';
 import {trpc} from "../../lib/trpc"
 
 const MapComponent: React.FC = () => {
@@ -22,6 +21,7 @@ const MapComponent: React.FC = () => {
   const [deptNumber, setDeptNumber] = useState<number | null>(null);
   const [showHospitalMap, setShowHospitalMap] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [directionsResult, setDirectionsResult] = useState<google.maps.DirectionsResult | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<3 | 4>(3);
@@ -69,6 +69,7 @@ const MapComponent: React.FC = () => {
   };
 
   const handleFloorSelect = (floor: 3 | 4) => {
+    console.log(`Floor changed to: ${floor}`);
     setSelectedFloor(floor);
   };
 
@@ -125,7 +126,7 @@ const MapComponent: React.FC = () => {
       setShowHospitalMap(false);
       displayRouteOnMap(startLocation, newDestination);
     }
-  };
+  };  
 
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);
@@ -134,7 +135,6 @@ const MapComponent: React.FC = () => {
         'Multi-Specialty Clinic': 912,
         'Radiology': 80,
         'Radiology, MRI/CT Scan': 66
-
       };
 
       const deptNum = departmentMapping[department.name];
@@ -144,6 +144,7 @@ const MapComponent: React.FC = () => {
         console.error(`No mapping found for department: ${department.name}`);
       }
     };
+    
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {
     if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;
@@ -200,6 +201,7 @@ const MapComponent: React.FC = () => {
       console.log('Route calculation result:', { status, result });
   
       if (status === google.maps.DirectionsStatus.OK && result) {
+        setDirectionsResult(result);
         mapInstance.setOptions({ draggableCursor: 'default' });
   
         // Add the start marker.
@@ -249,7 +251,6 @@ const MapComponent: React.FC = () => {
     }
   
     // Also hide/show the department path polyline and its markers (from MGB overlays).
-    // (Make sure mgbOverlays is defined.)
     if (mgbOverlays) {
       if (zoom < 20) {
         // When zoomed out, hide the department overlay markers and polyline.
@@ -267,7 +268,6 @@ const MapComponent: React.FC = () => {
     }
   };
   
-
   // Update route when transport mode or locations change.
   useEffect(() => {
     if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) {
@@ -278,7 +278,7 @@ const MapComponent: React.FC = () => {
   return (
     <div className="flex h-screen">
       {/* Left Column: Search area */}
-      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
+      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
         <h2 className="font-bold text-center">Enter your location and destination</h2>
 
         <GoogleMapSection
@@ -298,22 +298,14 @@ const MapComponent: React.FC = () => {
           }}
           handleGetCurrentLocation={handleGetCurrentLocation}
         />
-
-        {selectedPlace && (
-          <button
-            onClick={handleZoomToDestination}
-            className="w-[90%] bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-                         transition-all duration-300 ease-in-out
-                         hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-                         active:scale-95 mx-auto"
-          >
-            Zoom to Destination
-          </button>
+        
+        {directionsResult && (
+          <DirectionsGuide directions={directionsResult} />
         )}
 
         {/* Hospital Map Section */}
-        <div className="flex flex-col mt-10">
-          <h2 className="text-sm font-semibold mb-2">Select a department</h2>
+        <div className="flex flex-col mt-10 ">
+          <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
@@ -350,12 +342,11 @@ const MapComponent: React.FC = () => {
             onMapReady={handleMapReady} 
             selectedDestination={selectedPlace} 
             onZoomChange={handleZoomChange}
-            selectedFloor={selectedPlace?.name === "22 Patriot Place" ? selectedFloor : undefined}
+            selectedFloor={selectedFloor}
+            onFloorChange={handleFloorSelect}
             departmentNumber={deptNumber}
           />
-          {selectedPlace?.name === "22 Patriot Place" && (
-            <FloorSelector selectedFloor={selectedFloor} onSelect={handleFloorSelect} />
-          )}
+          {/* We don't need the FloorSelector component since we have it in HospitalViewControls now */}
         </div>
         <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className="flex flex-col items-center gap-4">

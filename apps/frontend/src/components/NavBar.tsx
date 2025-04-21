@@ -1,6 +1,6 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
 import {Link, useLocation} from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
 import {LogOutButton} from "./signIn/LogOutButton.tsx"
@@ -19,6 +19,22 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const location = useLocation();
     const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
+
+    useEffect(() => {
+        if (location.pathname === "/navigation") {
+            const navbar = document.getElementById("navbar") as HTMLElement;
+            if (navbar) {
+                navbar.style.display = "none";
+            }
+            window.scrollTo(0, 65);
+        } else {
+            const navbar = document.getElementById("navbar") as HTMLElement;
+            if (navbar) {
+                navbar.style.display = "block";
+            }
+        }
+    }, [location.pathname]);
+
     return (
         <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">

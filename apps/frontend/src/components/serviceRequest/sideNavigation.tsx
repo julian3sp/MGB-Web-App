@@ -1,15 +1,20 @@
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 interface SideNavProps {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
     children: React.ReactNode;
+    width?: number;
 }
 
-const SideNav: React.FC<SideNavProps> = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(true);
+const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256}) => {
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    const translateX = isOpen ? 0 : -width;
+
 
     return (
         <>
@@ -31,18 +36,18 @@ const SideNav: React.FC<SideNavProps> = ({ children }) => {
                 </button>
             </div>
 
-            <div className="absolute top-0 left-0 h-full">
                 {/* Sidebar*/}
-                <div
-                    className={`pt-10 h-full bg-[#F4F4F4] shadow-xl text-white w-64 transform transition-transform duration-300 ease-in-out ${
-                        isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-                >
+                <motion.div
+                    className="pt-10 h-screen bg-[#F4F4F4] shadow-xl"
+                    style={{width}}
+                    animate={{x: translateX}}
+                    initial={{x: translateX}}
+                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
 
                     <div className="p-5 overflow-y-auto h-full">
                         {children}
                     </div>
-                </div>
-            </div>
+                </motion.div>
         </>
     );
 };

@@ -1,5 +1,4 @@
 import SideBarButton from "./sideBarButton.tsx";
-import SideNav from "../serviceRequest/sideNavigation.tsx"
 import {serviceRequest} from "@/routes/ServiceRequestPage.tsx";
 
 function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceRequest, setActiveTab: (form: serviceRequest)=>void}) {
@@ -9,7 +8,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
     };
 
     return (
-            <SideNav>
+            <div>
                 <div className="flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-200 border-b-2 border-gray-300 shadow-sm">
                     <span className="font-semibold text-gray-700 text-lg">Menu</span>
 
@@ -55,7 +54,7 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="AudioVisual"
                         />
-            </SideNav>
+            </div>
     );
 }
 export default ServiceFormSideBar;

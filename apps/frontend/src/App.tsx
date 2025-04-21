@@ -20,6 +20,7 @@ import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
 import SideNav from "@/components/serviceRequest/sideNavigation.tsx";
 import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");

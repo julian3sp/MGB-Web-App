@@ -6,11 +6,20 @@ interface SearchContainerProps {
   onGetCurrentLocation: () => void;
 }
 
+interface SearchItem {
+  name: string;
+  location: google.maps.LatLngLiteral;
+}
+
 const MAX_RECENT_SEARCHES = 3;
 
-const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, placeholder = "Search Google Maps", onGetCurrentLocation }) => {
+const SearchContainer: React.FC<SearchContainerProps> = ({ 
+  onPlaceSelected, 
+  placeholder = "Search Google Maps", 
+  onGetCurrentLocation 
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [recentSearches, setRecentSearches] = useState<any[]>([]);
+  const [recentSearches, setRecentSearches] = useState<SearchItem[]>([]);
   const [showRecent, setShowRecent] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
@@ -18,9 +27,12 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
   useEffect(() => {
     const stored = localStorage.getItem('recentSearches');
     if (stored) {
-      const parsed = JSON.parse(stored);
-      // Ensure we only keep the most recent 3 searches
-       setRecentSearches(parsed.slice(0, MAX_RECENT_SEARCHES));
+      try {
+        const parsed = JSON.parse(stored) as SearchItem[];
+        setRecentSearches(parsed.slice(0, MAX_RECENT_SEARCHES));
+      } catch (e) {
+        console.error('Failed to parse recent searches', e);
+      }
     }
   }, []);
 
@@ -44,7 +56,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
           setSearchValue(placeName);
 
           // Update recent searches - only keep the 3 most recent
-          const newSearch = { name: placeName, location: destination };
+          const newSearch: SearchItem = { name: placeName, location: destination };
           const updatedSearches = [
             newSearch,
             ...recentSearches.filter((s) => s.name !== placeName),
@@ -59,7 +71,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({ onPlaceSelected, plac
     });
   }, [recentSearches, onPlaceSelected]);
 
-  const handleRecentSearchClick = (search: any) => {
+  const handleRecentSearchClick = (search: SearchItem) => {
     if (search.location) {
       setSearchValue(search.name);
       onPlaceSelected(search);

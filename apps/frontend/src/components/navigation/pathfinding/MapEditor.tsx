@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
@@ -241,6 +242,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     onToggleNodes={toggleNodesHandler}
                     onToggleEdges={toggleEdgesHandler}
                 />
+
             </div>
         </div>
     );

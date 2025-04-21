@@ -340,8 +340,11 @@ export default function RequestListPage() {
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
-                                            console.log('Delete: ');
-                                            console.log(selectedRequest);
+                                            if(window.sessionStorage.getItem("isAdmin") === 'true') {
+                                                console.log('Delete: ');
+                                                console.log(selectedRequest);
+                                            } else {
+                                            console.log('Insufficient Permissions');                                            }
                                         }}
                                         tooltip={'Delete Service Request'}
                                     />

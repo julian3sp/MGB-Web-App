@@ -576,9 +576,14 @@ export default function RequestTablePage() {
                                             <DeleteRequest
                                                 size={20}
                                                 onClick={() => {
-                                                    console.log('Delete: ');
-                                                    console.log(res);
-                                                    setMenuVisible(false);
+                                                    console.log(window.sessionStorage.getItem("isAdmin"))
+                                                    if(window.sessionStorage.getItem("isAdmin") === 'true') {
+                                                        console.log('Delete: ');
+                                                        console.log(res);
+                                                        setMenuVisible(false);
+                                                    } else {
+                                                    console.log("Insufficient Permissions");
+                                                    }
                                                 }}
                                                 tooltip={"Delete Service Request"}
                                             />

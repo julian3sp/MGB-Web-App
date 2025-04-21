@@ -48,11 +48,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
     };
 
-    const filterNodesByHospital = (building: string): Node[] => {
-        console.log("Showing: " + building);
-        return graph.getAllNodes()?.filter((node) => node.building === building) || [];
-    };
-
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
@@ -102,6 +97,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
+    function getNodeMarkers(){
+        if(!selectedHospital || !map) return;
+        const floor = selectedFloor === null ? 1: selectedFloor;
+        return createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
+    }
+
+    function getEdgeLines(){
+        if(!selectedHospital || !map) return;
+        const floor = selectedFloor === null ? 1: selectedFloor;
+        return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
+    }
+
+
     const toggleNodesHandler = () => {
         if (!map || isNodesLoading || !nodesDataFromAPI || !selectedHospital) return;
 
@@ -110,13 +118,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setNodeMarkers([]);
             setShowNodes(false);
         } else {
-            console.log('Show Nodes');
-            // const filteredNodes = filterNodesByHospital(selectedHospital);
-            console.log("building: ", selectedHospital + " floor: ", selectedFloor);
-            if(!selectedHospital) return;
-            const floor = selectedFloor === null ? 1: selectedFloor;
-            const normalMarkers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
-            setNodeMarkers([...normalMarkers]);
+            const currentMarkers = getNodeMarkers();
+            if (!currentMarkers) return;
+            setNodeMarkers([...currentMarkers]);
             setShowNodes(true);
         }
     };
@@ -151,16 +155,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setEdgePolylines([]);
             setShowEdges(false);
         } else {
-            const filteredNodes = filterNodesByHospital(selectedHospital);
-            const nodeIds = new Set(filteredNodes.map((node: Node) => node.id));
+            if(!selectedHospital) return;
 
-            const filteredEdges = edgesDataFromAPI.filter(
-                (edge: { sourceId: number; targetId: number }) =>
-                    nodeIds.has(edge.sourceId) && nodeIds.has(edge.targetId)
-            );
-
-            const polylinesCreated = drawAllEdges(map, edgesDataFromAPI);
-            console.log(edgesDataFromAPI)
+            const polylinesCreated = getEdgeLines()
+            if (!polylinesCreated) return;
             setEdgePolylines(polylinesCreated);
             setShowEdges(true);
         }
@@ -195,10 +193,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const setNodeDetails = (node: Node) => {
         setNodeInfo({ id: node.id.toString(), x: node.x, y: node.y });
     };
-
-
-
-
 
     useEffect(() => {
         if (!map || !selectedHospital) return;

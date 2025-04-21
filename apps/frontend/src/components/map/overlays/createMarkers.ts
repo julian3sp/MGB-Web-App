@@ -84,7 +84,6 @@ export function drawAllEdges(
     for (const edge of edges) {
       const source: Node = edge.sourceId;
       const target: Node = edge.targetId;
-    console.log(source)
       const sourceCoord: google.maps.LatLngLiteral = { lat: source.x, lng: source.y };
       const targetCoord: google.maps.LatLngLiteral = { lat: target.x, lng: target.y };
   

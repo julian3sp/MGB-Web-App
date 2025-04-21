@@ -224,6 +224,24 @@ export class Graph {
         );
     }
 
+    getBuildingEdges(building: string, floor: number): Edge[] {
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        console.log("Getting edges building: ", building, " Floor:", floor);
+        return Array.from(this.edges).filter(
+            edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
+                edge.targetId.building === building && edge.targetId.floor  === floor
+        );
+    }
+
     BFS(startNode: Node, targetNode: Node): Node[] {
         const visited: Node[] = [];
         const queue: Node[] = [startNode];

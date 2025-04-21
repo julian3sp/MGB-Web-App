@@ -19,7 +19,8 @@ export const createPatriot20Overlays = (map: google.maps.Map) => {
     const floor1Overlay = new google.maps.GroundOverlay(
         floor1OverlayImg,
         bounds,
-        {opacity: 1}
+        {clickable: false,
+            opacity: 1}
     )
     floor1Overlay.setMap(map);
 

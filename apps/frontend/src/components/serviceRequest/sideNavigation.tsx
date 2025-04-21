@@ -15,7 +15,7 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
         setIsOpen(!isOpen);
     };
     const translateX = isOpen ? 0 : -width;
-    const translateButton = isOpen ? width-68 : 18;
+    const translateButton = isOpen ? width-68 : 20;
 
 
     return (

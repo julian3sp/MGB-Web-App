@@ -246,7 +246,7 @@ export default function RequestListPage() {
             )}
 
             <div
-                className="h-auto flex-1 bg-white p-6"
+                className="h-auto flex-1 bg-white p-6 pl-5"
                 style={{
                     borderTop: '4px solid #d9d9d9',
                     borderBottom: 'none',

@@ -7,6 +7,8 @@ import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } f
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 import DirectionsGuide from './DirectionsGuide.tsx';
 import {trpc} from "../../lib/trpc"
+import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
+import PageWrapper from "@/components/ui/PageWrapper.tsx";
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -276,37 +278,38 @@ const MapComponent: React.FC = () => {
   }, [selectedTransport, startLocation, selectedPlace]);
 
   return (
-    <div className="flex h-screen">
-      {/* Left Column: Search area */}
-      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
-        <h2 className="font-bold text-center">Enter your location and destination</h2>
+      <PageWrapper open={true}
+                   contents=
+                       {
+        <div className="min-h-screen w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
+          <h2 className="font-bold text-center">Enter your location and destination</h2>
+          <GoogleMapSection
+              startLocation={startLocation}
+              selectedPlace={selectedPlace}
+              selectedTransport={selectedTransport}
+              travelTimes={travelTimes}
+              mapInstance={mapInstance}
+              handleStartLocationSelected={handleStartLocationSelected}
+              handleDestinationSelected={handleDestinationSelected}
+              handleViewMap={handleViewMap}
+              onTransportChange={(mode) => {
+                setSelectedTransport(mode);
+                if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer)
+                {displayRouteOnMap(startLocation, selectedPlace);}
+              }}
+              handleGetCurrentLocation={handleGetCurrentLocation}/>
+          {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
-        <GoogleMapSection
-          startLocation={startLocation}
-          selectedPlace={selectedPlace}
-          selectedTransport={selectedTransport}
-          travelTimes={travelTimes}
-          mapInstance={mapInstance}
-          handleStartLocationSelected={handleStartLocationSelected}
-          handleDestinationSelected={handleDestinationSelected}
-          handleViewMap={handleViewMap}
-          onTransportChange={(mode) => {
-            setSelectedTransport(mode);
-            if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) {
-              displayRouteOnMap(startLocation, selectedPlace);
-            }
-          }}
-          handleGetCurrentLocation={handleGetCurrentLocation}
-        />
-        
-        {directionsResult && (
-          <DirectionsGuide directions={directionsResult} />
-        )}
-
-        {/* Hospital Map Section */}
-        <div className="flex flex-col mt-10 ">
+          {/* Select Department dropdown */}
           <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
+        </div>}
+                   scaling = {4}
+                   absolute={false}>
+
+    <div className="flex">
+        {/* Hospital Map Section */}
+        <div className="flex flex-col mt-10 ">
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
               <div className="flex flex-col gap-2">
@@ -336,7 +339,7 @@ const MapComponent: React.FC = () => {
       </div>
 
       {/* Right Column: Map area */}
-      <div className="w-3/4 relative">
+      <div className="w-full relative">
         <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <MapRenderer 
             onMapReady={handleMapReady} 
@@ -363,7 +366,7 @@ const MapComponent: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      </PageWrapper>
   );
 };
 

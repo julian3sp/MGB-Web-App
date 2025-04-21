@@ -1,8 +1,10 @@
 import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
 
 
-export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
+export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetails: (node: Node) => void) {
     const markers: google.maps.Marker[] = [];
+    console.log("creating markers")
+
     for(const node of Nodes){
         const coord: google.maps.LatLngLiteral = {
             lat: node.x,
@@ -20,24 +22,43 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[]) {
                 scaledSize: new google.maps.Size(8, 8) // width, height in pixels
             }        });
 
-        const infoWindow = new google.maps.InfoWindow({
-            content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
-            pixelOffset: new google.maps.Size(0, -8),
+        // const infoWindow = new google.maps.InfoWindow({
+        //     content: `<div style="font-size:12px; padding:2px;">${node.id}</div>`,
+        //     pixelOffset: new google.maps.Size(0, -8),
+        // });
+
+        marker.addListener('click', () => {
+            setNodeDetails(node); // Call setNodeDetails to set the clicked node info
         });
 
-        marker.addListener('mouseover', () => {
-            infoWindow.open({ map, anchor: marker });
+        google.maps.event.addListener(map, 'dblclick', function(event) {
+            console.log("double")
+            // Try to prevent event propagation to the map
+            const newMarker = new google.maps.Marker({
+                position: event.latLng,
+                map: map,
+                title: 'New Node',
+                zIndex: 9999,
+                icon: {
+                    url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
+                    scaledSize: new google.maps.Size(8, 8),
+                },
+            });
+            markers.push(newMarker)
         });
 
-        marker.addListener('mouseout', () => {
-            infoWindow.close();
-        });
 
         markers.push(marker);
     }
 
+
+
+
     return markers
 }
+
+
+
 
 export function drawAllEdges(
     map: google.maps.Map,

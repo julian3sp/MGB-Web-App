@@ -149,11 +149,11 @@ export default function RequestListPage() {
                                         res.priority === 'Low'
                                             ? 'text-green-600'
                                             : res.priority === 'Medium'
-                                                ? 'text-yellow-600'
+                                                ? 'text-yellow-500'
                                                 : res.priority === 'High'
-                                                    ? 'text-orange-600'
+                                                    ? 'text-orange-500'
                                                     : res.priority === 'Emergency'
-                                                        ? 'text-red-600'
+                                                        ? 'text-red-700 underline'
                                                         : 'text-gray-600'
                                     }
                                 >
@@ -246,7 +246,7 @@ export default function RequestListPage() {
             )}
 
             <div
-                className="h-auto flex-1 bg-white p-6"
+                className="h-auto flex-1 bg-white p-6 pl-5"
                 style={{
                     borderTop: '4px solid #d9d9d9',
                     borderBottom: 'none',
@@ -285,11 +285,11 @@ export default function RequestListPage() {
                                             selectedRequest.priority === 'Low'
                                                 ? 'text-green-600'
                                                 : selectedRequest.priority === 'Medium'
-                                                  ? 'text-yellow-600'
+                                                  ? 'text-yellow-500'
                                                   : selectedRequest.priority === 'High'
-                                                    ? 'text-orange-600'
+                                                    ? 'text-orange-500'
                                                     : selectedRequest.priority === 'Emergency'
-                                                      ? 'text-red-600'
+                                                      ? 'text-red-700 underline'
                                                       : 'text-gray-600'
                                         }
                                     >
@@ -339,8 +339,11 @@ export default function RequestListPage() {
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
-                                            console.log('Delete: ');
-                                            console.log(selectedRequest);
+                                            if(window.sessionStorage.getItem("isAdmin") === 'true') {
+                                                console.log('Delete: ');
+                                                console.log(selectedRequest);
+                                            } else {
+                                            console.log('Insufficient Permissions');                                            }
                                         }}
                                         tooltip={'Delete Service Request'}
                                     />

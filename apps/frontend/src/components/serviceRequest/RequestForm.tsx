@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
 import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
+import {ErrorPopUp} from "./inputFields/ErrorPopUp.tsx";
 import { ServiceComponentInputBox } from "./inputFields/ServiceComponentInputBox.tsx";
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
@@ -274,6 +275,10 @@ function RequestForm({ title, type }: requestFormProps) {
         });
     };
 
+    const clearError = (field: string) => {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+    };
+
 
 
     return (
@@ -298,17 +303,18 @@ function RequestForm({ title, type }: requestFormProps) {
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
                                 <InputHeader>Name:</InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     value={name}
                                     setState={setName}
                                     placeholder="Name"
                                     width="w-full"
-                                    error={errors.name}/>
+                                    error={errors.name}
+                                    clearError={() => clearError('name')}/>
                             </div>
 
                             <div>
                                 <InputHeader>Employee ID:</InputHeader>
-                                <ServiceComponentInputBox
+                                <ErrorPopUp
                                     value={employeeID}
                                     setState={(value) => {
                                         if (/^\d*$/.test(value)) {
@@ -317,7 +323,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                     maxLength={9}
                                     placeholder="Employee ID"
                                     width="w-full"
-                                    error={errors.employeeID}/>
+                                    error={errors.employeeID}
+                                    clearError={() => clearError('employeeID')}/>
                             </div>
 
                             <div>
@@ -378,7 +385,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                 <>
                                     <div>
                                         <InputHeader>Source Language</InputHeader>
-                                        <ServiceComponentInputBox
+                                        <ErrorPopUp
                                         value={sourceLanguage}
                                         setState={setSourceLanguage}
                                         placeholder={"Source Language"}
@@ -387,7 +394,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     </div>
                                     <div>
                                         <InputHeader>Target Language</InputHeader>
-                                        <ServiceComponentInputBox
+                                        <ErrorPopUp
                                             value={targetLanguage}
                                             setState={setTargetLanguage}
                                             placeholder={"Target Language"}
@@ -411,7 +418,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     </div>
                                     <div>
                                         <InputHeader>Contaminant (Optional)</InputHeader>
-                                        <ServiceComponentInputBox
+                                        <ErrorPopUp
                                             value={contaminant}
                                             setState={setContaminant}
                                             placeholder={"Contaminant"}
@@ -449,7 +456,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     </div>
                                     <div>
                                         <InputHeader>Security Issue</InputHeader>
-                                        <ServiceComponentInputBox
+                                        <ErrorPopUp
                                             value={securityIssue}
                                             setState={setSecurityIssue}
                                             placeholder={"Security Issue"}
@@ -501,7 +508,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     </div>
                                     <div>
                                         <InputHeader>Accommodation Details (Optional)</InputHeader>
-                                        <ServiceComponentInputBox
+                                        <ErrorPopUp
                                             value={accommodationDetails}
                                             setState={setAccommodationDetails}
                                             placeholder={"Enter Accommodation Details"}

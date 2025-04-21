@@ -10,6 +10,7 @@ export function ServiceComponentDropdown(
         options = [],
         error,
         placeholder,
+        clearError,
     }: {
         value: string;
         setState: (value: string) => void;
@@ -19,13 +20,30 @@ export function ServiceComponentDropdown(
         options: string[];
         error?: string;
         placeholder: string;
+        clearError?: () => void;
 }) {
     return (
         <div className="relative">
             {error && (
                 <div className="absolute bottom-full left-4 mb-2">
                     <div className="bg-red-100 text-red-800 font-medium px-3 py-2 rounded text-sm relative border border-red-300 shadow-md">
+                        <svg
+                            viewBox="0 0 24 24"
+                            className="absolute top-2 left-1 text-red-800 w-5 h-5 sm:w-5 sm:h-5 mr-3"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M23.119,20,13.772,2.15h0a2,2,0,0,0-3.543,0L.881,20a2,2,0,0,0,1.772,2.928H21.347A2,2,0,0,0,23.119,20ZM11,8.423a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Zm1.05,11.51h-.028a1.528,1.528,0,0,1-1.522-1.47,1.476,1.476,0,0,1,1.448-1.53h.028A1.527,1.527,0,0,1,13.5,18.4,1.475,1.475,0,0,1,12.05,19.933Z"
+                            ></path>
+                        </svg>
                         {error}
+                        <button
+                            onClick={() => clearError?.()}
+                            className="absolute top-0 right-1 text-red-300 hover:text-red-800 font-bold text-base leading-none"
+                            aria-label="Dismiss error"
+                        >
+                            &times;
+                        </button>
 
                         {/* Triangle container div - for positioning */}
                         <div className="absolute top-full left-0 w-full h-0 flex justify-center items-start overflow-visible">

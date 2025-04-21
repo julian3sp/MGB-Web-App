@@ -117,6 +117,39 @@ export class Graph {
         return this.reCreatePath(targetNode);
     }
 
+    DFS(startNode: Node, targetNode: Node): Node[] {
+        const visited: Node[] = [];
+        const stack: Node[] = [startNode];
+
+        startNode.parent = undefined;
+
+        while (stack.length > 0) {
+            const currentNode = stack.pop();
+            if (!currentNode) break;
+
+            if (!visited.includes(currentNode)) {
+                visited.push(currentNode);
+
+                if (currentNode === targetNode) break;
+
+                const neighbors = this.getNeighbors(currentNode);
+
+                for (let i = neighbors.length - 1; i >= 0; i--) {
+                    const neighbor = neighbors[i].target;
+                    if (!visited.includes(neighbor)) {
+                        neighbor.parent = currentNode;
+                        stack.push(neighbor);
+                    }
+                }
+            }
+        }
+
+        return this.reCreatePath(targetNode);
+    }
+
+
+
+
     heuristicCost(startNode: Node, targetNode: Node): number {
         /**
          * Calculate the heuristic cost for current node

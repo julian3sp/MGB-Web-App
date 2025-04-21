@@ -52,22 +52,22 @@ function App() {
             <QueryClientProvider client={queryClient}>
                 <Router>
                     <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
-                    <Routes>
-                        <Route path="/navigation" element={<NavigationPage/>}/>
-                        <Route path="/" element={<WelcomePage/>}/>
-                        <Route path="/directory" element={<DepartmentDirectory/>}/>
-                        <Route path="/directory/*" element={<DepartmentDirectory/>}/>
-                        <Route path="/aboutus" element={<AboutUs/>}/>
-                            <Route element={<PrivateRoutes/>}>
-                                <Route path="/services" element={<ServiceRequestPage/>}/>
-                                <Route path="requests" element={<RequestPage/>}>
-                                    <Route index element={<Navigate to="table" replace/>}/>
-                                    <Route path="table" element={<RequestTablePage/>}/>
-                                    <Route path="list" element={<RequestListPage/>}/>
-                                </Route>
-                                <Route path="/admin/directory" element={<DirectoryPage/>}/>
-                                <Route path="/editor" element={<MapEditor/>}/></Route>
-                    </Routes>
+                            <Routes>
+                                <Route path="/navigation" element={<NavigationPage/>}/>
+                                <Route path="/" element={<WelcomePage/>}/>
+                                <Route path="/directory" element={<DepartmentDirectory/>}/>
+                                <Route path="/directory/*" element={<DepartmentDirectory/>}/>
+                                <Route path="/aboutus" element={<AboutUs/>}/>
+                                    <Route element={<PrivateRoutes/>}>
+                                        <Route path="/services" element={<ServiceRequestPage/>}/>
+                                        <Route path="requests" element={<RequestPage/>}>
+                                            <Route index element={<Navigate to="table" replace/>}/>
+                                            <Route path="table" element={<RequestTablePage/>}/>
+                                            <Route path="list" element={<RequestListPage/>}/>
+                                        </Route>
+                                        <Route path="/admin/directory" element={<DirectoryPage/>}/>
+                                        <Route path="/editor" element={<MapEditor/>}/></Route>
+                            </Routes>
                     <FooterBar/>
                 </Router>
             </QueryClientProvider>

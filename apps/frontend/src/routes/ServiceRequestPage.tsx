@@ -1,11 +1,9 @@
 import RequestForm from '../components/serviceRequest/RequestForm.tsx';
 import { useState } from 'react';
-import SideNav from '../components/serviceRequest/sideNavigation.tsx';
-import RequestButton from '../components/serviceRequest/sideBarButton.tsx';
-import TextInput from '../components/TextInput.tsx';
-import ServiceFormSideBar from '../components/serviceRequest/serviceFormSideBar.tsx';
 import { trpc } from '../lib/trpc.ts';
 import { getRequests } from '../../../backend/src/server/procedures/requests.ts';
+import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 
 export type serviceRequest = {
     type: "Security" | "Language" | "Sanitation" | "AudioVisual" | "Transportation"
@@ -18,14 +16,14 @@ function ServiceRequestPage() {
     });
 
     return (
-        <>
-            <div className="relative bg-gray-200 min-h-screen flex flex-col items-center justify-center">
-                <ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />
+        <PageWrapper contents = {<ServiceFormSideBar activeTab ={activeTab} setActiveTab ={setActiveTab} />} width = {300}>
+            <div className="relative flex-1 bg-gray-200 min-h-screen flex flex-col items-center justify-center">
+                {/*<ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />*/}
                 <div>
                     <RequestForm title={activeTab.title} type={activeTab.type} />
                 </div>
             </div>
-        </>
+        </PageWrapper>
     );
 }
 

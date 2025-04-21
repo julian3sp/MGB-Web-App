@@ -1,62 +1,48 @@
-import DraggableNode from './DraggableNode.tsx';
-import React, { useState, useRef, useEffect } from 'react';
-import ImportCSV from '../../ImportDept.tsx';
-import ImportDept from '../../ImportDept.tsx';
+import React, { useRef, useEffect } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
 import ImportNodes from '../../ImportNodes.tsx';
 import ImportEdges from '../../ImportEdges.tsx';
+import SideNav from "@/components/serviceRequest/sideNavigation.tsx";
+
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function MapEditor() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const nodeRef = useRef<HTMLDivElement>(null);
-    const isClicked = useRef<boolean>(false);
+    const mapRef = useRef<google.maps.Map | null>(null);
 
     useEffect(() => {
-        if (!nodeRef.current || !containerRef.current) return;
+        const loader = new Loader({
+            apiKey: apiKey,
+            version: 'weekly',
+        });
 
-        const node = nodeRef.current;
-        const container = containerRef.current;
-
-        const onMouseDown = (e: MouseEvent) => {
-            console.log('onMouseDown');
-            isClicked.current = true;
-
-        };
-
-        const onMouseUp = (e: MouseEvent) => {
-            isClicked.current = false;
-        };
-
-        const onMouseMove = (e: MouseEvent) => {
-            if (!isClicked.current) return;
-
-            console.log('onMouseMove');
-            node.style.top = `${e.clientY}px`;
-            node.style.left = `${e.clientX}px`;
-        };
-
-        node.addEventListener('mousedown', onMouseDown);
-        node.addEventListener('mouseup', onMouseUp);
-        container.addEventListener('mousemove', onMouseMove);
-
-        const cleanup = () => {
-            node.removeEventListener('mousedown', onMouseDown);
-            node.removeEventListener('mouseup', onMouseUp);
-            container.removeEventListener('mousemove', onMouseMove);
-        };
-
-        return cleanup;
+        loader.load().then(() => {
+            if (containerRef.current) {
+                mapRef.current = new google.maps.Map(containerRef.current, {
+                    center: { lat: 42.3183, lng: -71.1661 }, // Mass General Brigham - Chestnut Hill
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                });
+            }
+        });
     }, []);
 
     return (
-        <div className={"min-h-screen"}>
-
-            <div className={"mb-2 mt-2 ml-2"}>
-                <h2>Import Nodes:</h2>
-                <ImportNodes />
-            </div>
-            <div className={"mb-2 mt-2 ml-2"}>
-                <h2>Import Edges:</h2>
-                <ImportEdges />
+        <div className="flex min-h-screen">
+            {/* Main Content */}
+            <div className="flex-1 p-4">
+                <div
+                    ref={containerRef}
+                    className="rounded-2xl border-2 border-gray-300 shadow-md w-full h-[500px] mb-8"
+                />
+                <div className="mb-8">
+                    <h2 className="text-xl font-semibold mb-2">Import Nodes:</h2>
+                    <ImportNodes />
+                </div>
+                <div>
+                    <h2 className="text-xl font-semibold mb-2">Import Edges:</h2>
+                    <ImportEdges />
+                </div>
             </div>
         </div>
     );

@@ -18,7 +18,7 @@ interface MapEditorProps {
   ) => void;
 }
 
-const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
+  const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);

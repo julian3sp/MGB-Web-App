@@ -74,13 +74,13 @@ export default function RequestListPage() {
     }
 
     return (
-        <PageWrapper open={true} contents={<div>
+        <PageWrapper open={true} contents={
             <nav
-                className="w-full min-h-[85vh] bg-white p-6 overflow-hidden"
+                className="w-full h-full bg-white p-6 overflow-hidden"
                 style={{
-                    borderTop: '2px solid #d9d9d9',
+                    borderTop: '4px solid #d9d9d9',
                     borderBottom: 'none',
-                    borderRight: '2px solid #d9d9d9',
+                    borderRight: '4px solid #d9d9d9',
                     borderLeft: 'none',
                 }}
             >
@@ -171,9 +171,8 @@ export default function RequestListPage() {
                         <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
                     </nav>
                 )}
-            </nav>
-        </div>} width = {600}>
-        <nav className="flex flex-1 font-[Poppins]">
+            </nav>} scaling = {3}>
+        <nav className="min-h-screen flex flex-1 font-[Poppins]">
 
             {swapMenu && pendingRequest && (
                 <div className="fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg shadow-lg p-6 w-[450px] border-[#003A96] border-1">
@@ -247,12 +246,12 @@ export default function RequestListPage() {
             )}
 
             <div
-                className="h-auto flex-1 bg-white p-4"
+                className="h-auto flex-1 bg-white p-6"
                 style={{
-                    borderTop: '2px solid #d9d9d9',
+                    borderTop: '4px solid #d9d9d9',
                     borderBottom: 'none',
                     borderRight: 'none',
-                    borderLeft: '2px solid #d9d9d9',
+                    borderLeft: 'none',
                 }}
             >
                 {' '}

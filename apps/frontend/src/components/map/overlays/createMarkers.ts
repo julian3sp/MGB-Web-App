@@ -31,7 +31,7 @@ export function createMarkers(map: google.maps.Map, Nodes: Node[], setNodeDetail
             setNodeDetails(node); // Call setNodeDetails to set the clicked node info
         });
 
-        google.maps.event.addListener(map, 'dblclick', function(event) {
+        google.maps.event.addListener(map, 'dblclick', function(event: google.maps.MapMouseEvent) {
             console.log("double")
             // Try to prevent event propagation to the map
             const newMarker = new google.maps.Marker({

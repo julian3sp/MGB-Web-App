@@ -10,59 +10,62 @@ export default function ImportPage() {
   const makeEdge = trpc.makeEdge.useMutation()
   const deleteEdges = trpc.deleteAllEdges.useMutation()
 
+  const readFile = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = reject
+      reader.readAsText(file)
+    })
+
   const handleImportFiles = async () => {
     if (files.length === 0) {
       alert("No files selected.")
       return
     }
 
-    for (const file of files) {
-      const reader = new FileReader()
-      reader.onload = async () => {
-        const text = reader.result as string
+    try {
+      for (const file of files) {
+        const text = await readFile(file)
         const lines = text.split("\n").filter(Boolean)
         const headers = lines[0].split(",")
 
-        try {
-          if (headers.length >= 5) {
-            await deleteNodes.mutateAsync()
-            const inputs = lines.slice(1).map((line) => {
-              const values = line.split(",")
-              return {
-                building: values[0]?.trim().replace(/"/g, ""),
-                floor: Number(values[1]?.trim().replace(/"/g, "")),
-                name: values[2]?.trim().replace(/"/g, ""),
-                x: Number(values[3]?.trim().replace(/"/g, "")),
-                y: Number(values[4]?.trim().replace(/"/g, "")),
-              }
-            })
-            await makeNode.mutateAsync(inputs)
-            alert(`Nodes from "${file.name}" uploaded successfully.`)
-          } else if (headers.length === 3) {
-            await deleteEdges.mutateAsync()
-            const inputs = lines.slice(1).map((line) => {
-              const values = line.split(",")
-              return {
-                sourceId: Number(values[0]?.trim().replace(/"/g, "")),
-                targetId: Number(values[1]?.trim().replace(/"/g, "")),
-                weight: Number(values[2]?.trim().replace(/"/g, "")),
-              }
-            })
-            await makeEdge.mutateAsync(inputs)
-            alert(`Edges from "${file.name}" uploaded successfully.`)
-          } else {
-            alert(`Unrecognized format in file "${file.name}".`)
-          }
-        } catch (err) {
-          console.error(`Upload failed for ${file.name}:`, err)
-          alert(`Failed to upload "${file.name}". See console for details.`)
+        if (headers.length >= 5) {
+          await deleteNodes.mutateAsync()
+          const inputs = lines.slice(1).map((line) => {
+            const values = line.split(",")
+            return {
+              building: values[0]?.trim().replace(/"/g, ""),
+              floor: Number(values[1]?.trim().replace(/"/g, "")),
+              name: values[2]?.trim().replace(/"/g, ""),
+              x: Number(values[3]?.trim().replace(/"/g, "")),
+              y: Number(values[4]?.trim().replace(/"/g, "")),
+            }
+          })
+          await makeNode.mutateAsync(inputs)
+          alert(`Nodes from "${file.name}" uploaded successfully.`)
+        } else if (headers.length === 3) {
+          await deleteEdges.mutateAsync()
+          const inputs = lines.slice(1).map((line) => {
+            const values = line.split(",")
+            return {
+              sourceId: Number(values[0]?.trim().replace(/"/g, "")),
+              targetId: Number(values[1]?.trim().replace(/"/g, "")),
+              weight: Number(values[2]?.trim().replace(/"/g, "")),
+            }
+          })
+          await makeEdge.mutateAsync(inputs)
+          alert(`Edges from "${file.name}" uploaded successfully.`)
+        } else {
+          alert(`Unrecognized format in file "${file.name}".`)
         }
       }
-
-      reader.readAsText(file)
+    } catch (err) {
+      console.error("Error importing files:", err)
+      alert("Import failed. See console for details.")
+    } finally {
+      setFiles([])
     }
-
-    setFiles([]) // Clear the files after processing
   }
 
   return (

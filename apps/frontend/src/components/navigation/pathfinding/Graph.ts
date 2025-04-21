@@ -13,9 +13,17 @@ export type Node = {
 }
 
 export type  Edge = {
+    id: number
     source: Node
     target: Node;
     weight: number;
+}
+
+export type Edit = {
+    id: number
+    nodeOrEdge: boolean
+    addOrDelete: boolean
+    toBeEdited: number
 }
 
 
@@ -23,14 +31,18 @@ export class Graph {
     private nodes: Set<Node>;
     private adjacencyList: Map<Node, Edge[]>;
     private edges: Edge[];
+    private edits: Edit[];
+    private edgeNum: number;
 
     constructor() {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
         this.edges = []
+        this.edits = []
+        this.edgeNum = 0;
     }
 
-    populate(nodesData: Node[], edgesData: { sourceId: number, targetId: number, weight: number }[]) {
+    populate(nodesData: Node[], edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
         // Create nodes from nodesData.
         const allNodes: Node[] = nodesData.map((n) => ({
           ...n,
@@ -65,7 +77,9 @@ export class Graph {
         for (const node of this.nodes) {
             if (node.id === id) {
                 this.nodes.delete(node);
-                break;
+            }
+            if(node.parent && node.parent.id === id) {
+                node.parent = undefined
             }
         }
     }
@@ -74,11 +88,15 @@ export class Graph {
         this.addNode(source);
         this.addNode(destination);
 
-        this.adjacencyList.get(source)?.push({source: source, target: destination, weight });
-
+        this.adjacencyList.get(source)?.push({id: this.edgeNum, source: source, target: destination, weight });
         if (bidirectional) {
-            this.adjacencyList.get(destination)?.push({source: source, target: source, weight });
+            this.adjacencyList.get(destination)?.push({id: this.edgeNum, source: source, target: source, weight });
         }
+        this.edgeNum++
+    }
+
+    deleteEdge(id:number): void {
+        this.edges = this.edges.filter(e => e.id !== id);
     }
 
     getNeighbors(node: Node): Edge[] {

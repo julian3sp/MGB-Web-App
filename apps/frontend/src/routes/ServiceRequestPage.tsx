@@ -16,9 +16,8 @@ function ServiceRequestPage() {
     });
 
     return (
-        <PageWrapper contents = {<ServiceFormSideBar activeTab ={activeTab} setActiveTab ={setActiveTab} />} width = {300}>
+        <PageWrapper open={true} contents={<ServiceFormSideBar activeTab ={activeTab} setActiveTab={setActiveTab} />} width = {300}>
             <div className="relative flex-1 bg-gray-200 min-h-screen flex flex-col items-center justify-center">
-                {/*<ServiceFormSideBar activeTab = {activeTab} setActiveTab={setActiveTab} />*/}
                 <div>
                     <RequestForm title={activeTab.title} type={activeTab.type} />
                 </div>

@@ -41,8 +41,8 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
                     className="pt-10 h-screen bg-[#F4F4F4] shadow-xl"
                     style={{width}}
                     animate={{x: translateX}}
-                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}
-                    initial="open">
+                    initial={{x: translateX}}
+                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
 
                     <div className="p-5 overflow-y-auto h-full">
                         {children}

@@ -30,14 +30,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
   const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
 
   const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
-    const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+  const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
   const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
-    const addNode = trpc.makeNode.useMutation()
+  const addNode = trpc.makeNode.useMutation()
 
   const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
   const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
 
   const hospitalLocationMap = {
     "MGB (Chestnut Hill)": { lat: 42.32610671664074, lng: -71.14958629820883 },

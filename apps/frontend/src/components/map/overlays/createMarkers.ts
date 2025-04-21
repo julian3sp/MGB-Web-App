@@ -67,8 +67,8 @@ export function drawAllEdges(
     const polylines: google.maps.Polyline[] = [];
   
     for (const edge of edges) {
-      const source: Node = edge.source;
-      const target: Node = edge.target;
+      const source: Node = edge.sourceId;
+      const target: Node = edge.targetId;
   
       const sourceCoord: google.maps.LatLngLiteral = { lat: source.x, lng: source.y };
       const targetCoord: google.maps.LatLngLiteral = { lat: target.x, lng: target.y };

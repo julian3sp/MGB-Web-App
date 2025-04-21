@@ -124,7 +124,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Create and display node markers
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
-      const allNodes: Node[] = graph.getNodes();
+      const allNodes: Node[] = graph.getAllNodes();
       const markersCreated = createMarkers(map, allNodes);
       setNodeMarkers(markersCreated);
       setShowNodes(true);
@@ -144,8 +144,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Create and display edge polylines
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
-      const allEdges: Edge[] = graph.getEdges();
-      const polylinesCreated = drawAllEdges(map, allEdges); 
+      const polylinesCreated = drawAllEdges(map, graph.getAllEdges());
       setEdgePolylines(polylinesCreated);
       setShowEdges(true);
     }

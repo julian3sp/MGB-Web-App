@@ -7,6 +7,8 @@ export default function SubmitFormEdit({
     onDeny,
     errorMessage = "Error: Cannot submit form",
     successMessage = "Successfully submitted",
+    width = '',
+    height = '',
 }: {
     label?: string;
     submitCondition: boolean;
@@ -14,6 +16,8 @@ export default function SubmitFormEdit({
     onDeny?: () => void;
     errorMessage?: string;
     successMessage?: string;
+    width?: string;
+    height?: string;
 }) {
     const [showError, setShowError] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -34,7 +38,7 @@ export default function SubmitFormEdit({
                         </div>
                     </div>
                 </div>
-                )}
+            )}
             {showSuccess && (
                 <div className="absolute bottom-full left-4 mb-2">
                     <div className="bg-green-100 text-green-800 font-medium px-3 py-2 rounded text-sm relative border border-green-300 shadow-md">
@@ -71,9 +75,9 @@ export default function SubmitFormEdit({
                         }, 5000);
                     }
                 }}
-                className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96] w-[auto]"
+                className={`border rounded-lg text-white hover:bg-blue-950 bg-[#003A96] ${width || 'w-[auto]'} ${height || 'h-[48px]'}`}
             >
-                <p className="inline-flex ml-1">{label}</p>
+                <p className="inline-flex text-center text-sm">{label}</p>
             </button>
         </div>
     );

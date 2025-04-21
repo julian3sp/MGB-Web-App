@@ -19,6 +19,37 @@ export const makeNode = publicProcedure
         return client.nodes.createMany({ data: input });
     });
 
+export const makeManyNodes = publicProcedure
+    .input(
+        z.array(
+            z.object({
+                building: z.string(),
+                floor: z.number(),
+                name: z.string() || z.null(),
+                x: z.number(),
+                y: z.number(),
+            })
+        )
+    )
+    .mutation(async ({ input }) => {
+        try {
+            const result = await client.nodes.createMany({
+                data: input,
+                skipDuplicates: true, // optional: avoids inserting if unique constraints are violated
+            });
+
+            return {
+                success: true,
+                count: result.count,
+            };
+        } catch (error) {
+            console.error('Error creating nodes:', error);
+            return {
+                success: false,
+                error: 'Failed to create nodes',
+            };
+        }
+    });
 export const getAllNodes = publicProcedure.query(async () => {
     const nodes = await client.nodes.findMany();
     return nodes;

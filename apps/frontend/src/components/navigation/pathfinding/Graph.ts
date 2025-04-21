@@ -1,8 +1,8 @@
 import {trpc} from "@/lib/trpc.ts";
 
 export type Node = {
-    id: number
     name: string
+    id: number
     building: string
     floor: number
     x: number
@@ -203,6 +203,25 @@ export class Graph {
 
     getAllEdges(): Edge[] {
         return this.edges;
+    }
+
+    getBuildingNodes(building: string, floor: number): Node[] {
+
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        console.log("Getting nodes building: ", building, " Floor:", floor);
+
+        return Array.from(this.nodes).filter(
+            n => n.building === building && n.floor === floor
+        );
     }
 
     BFS(startNode: Node, targetNode: Node): Node[] {

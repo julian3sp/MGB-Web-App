@@ -9,6 +9,7 @@ import Graph, {Edge, Node} from '../navigation/pathfinding/Graph';
 
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
+import { graph } from "./GraphObject.ts"
 
 interface MapRendererProps {
   onMapReady: (
@@ -122,7 +123,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     } else {
 
       // Create and display node markers
-      const graph = new Graph();
+      // const graph = new Graph();
       graph.populate(nodesData, edgesData);
       const allNodes: Node[] = graph.getAllNodes();
       const markersCreated = createMarkers(map, allNodes);

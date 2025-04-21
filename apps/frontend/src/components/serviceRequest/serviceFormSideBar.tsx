@@ -64,10 +64,15 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="AudioVisual"
                         />
+                        <SideBarButton
+                            label={'Facilities Request Form'}
+                            onClick={() => handleFormRequest({
+                                type: "Facilities",
+                                title: "Facilities Request Form",
+                            })}
+                            type="AudioVisual"
+                        />
             </SideNav>
     );
 }
 export default ServiceFormSideBar;
-
-
-

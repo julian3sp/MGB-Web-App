@@ -33,6 +33,8 @@ type errorProps =
     transportationDestination: string,
     device: string,
     operatorRequired: string,
+    maintenanceType: string,
+    equipmentType: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
@@ -55,6 +57,8 @@ function RequestForm({ title, type }: requestFormProps) {
     const [transportationDestination, setTransportationDestination] = useState<string>("");
     const [device, setDevice] = useState<string>("");
     const [operatorRequired, setOperatorRequired] = useState<string>("");
+    const [maintenanceType, setMaintenanceType] = useState<string>("");
+    const [equipmentType, setEquipmentType] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -75,6 +79,8 @@ function RequestForm({ title, type }: requestFormProps) {
         transportationDestination: '',
         device: '',
         operatorRequired: '',
+        maintenanceType: '',
+        equipmentType: '',
     });
 
     const Validate = (): boolean => {
@@ -95,6 +101,8 @@ function RequestForm({ title, type }: requestFormProps) {
             transportationDestination: '',
             device: '',
             operatorRequired: '',
+            maintenanceType: '',
+            equipmentType: '',
         }
 
         if (!name) {
@@ -186,6 +194,16 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('operatorRequired error');
         }
 
+        if(!maintenanceType && type==='MaintenanceType') {
+            errors.maintenanceType = 'Please select a maintenance type';
+            console.log('maintenance error');
+        }
+
+        if(!equipmentType && type==='EquipmentType') {
+            errors.maintenanceType = 'Please select an equipment type';
+            console.log('equipment error');
+        }
+
         setErrors(errors);
         return Object.values(errors).some(value => value.length > 0);
     };
@@ -246,6 +264,12 @@ function RequestForm({ title, type }: requestFormProps) {
                     operatorRequired: operatorRequired,
                 },
             }),
+            ...(type === 'Facilities' && {
+                facilities: {
+                    maintenanceType: maintenanceType,
+                    equipmentType: equipmentType,
+                },
+            }),
         });
 
         handleReset(e);
@@ -270,6 +294,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setAccommodationDetails('');
         setDevice('');
         setOperatorRequired('');
+        setMaintenanceType('');
+        setEquipmentType('');
 
         setErrors({
             name: '',
@@ -288,6 +314,8 @@ function RequestForm({ title, type }: requestFormProps) {
             transportationDestination: '',
             device: '',
             operatorRequired: '',
+            maintenanceType: '',
+            equipmentType: '',
         });
     };
 
@@ -568,6 +596,30 @@ function RequestForm({ title, type }: requestFormProps) {
                                             error={errors.operatorRequired}
                                             options={["Yes", "No"]}
                                             clearError={() => clearError('operatorRequired')}/>
+                                    </div>
+                                </>
+                                : null}
+                            {type === "Facilities" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Maintenance Type</InputHeader>
+                                        <ErrorPopUp
+                                            value={maintenanceType}
+                                            setState={setMaintenanceType}
+                                            placeholder={"Select a Maintenance Type"}
+                                            width={"w-full"}
+                                            error={errors.maintenanceType}
+                                            clearError={() => clearError('maintenanceType')}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Equipment Type</InputHeader>
+                                        <ErrorPopUp
+                                            value={equipmentType}
+                                            setState={setEquipmentType}
+                                            placeholder={"Select an Equipment Type"}
+                                            width={"w-full"}
+                                            error={errors.equipmentType}
+                                            clearError={() => clearError('equipmentType')}/>
                                     </div>
                                 </>
                                 : null}

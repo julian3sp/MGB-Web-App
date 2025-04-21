@@ -281,6 +281,7 @@ const MapComponent: React.FC = () => {
       <PageWrapper open={true}
                    contents=
                        {
+        // put sidebar contents here:
         <div className="min-h-screen w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
           <h2 className="font-bold text-center">Enter your location and destination</h2>
           <GoogleMapSection
@@ -307,34 +308,33 @@ const MapComponent: React.FC = () => {
                    scaling = {4}
                    absolute={false}>
 
-    <div className="flex">
         {/* Hospital Map Section */}
-        <div className="flex flex-col">
-          {showHospitalMap && (
-            <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
-              <div className="flex flex-col gap-2">
-                <div className="text-md font-medium font-bold mb-2">Map Legend</div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                    alt="Your Location"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Your Location</span>
+        <div className="flex">
+          <div className="flex flex-col">
+            {showHospitalMap && (
+                <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="text-md font-medium font-bold mb-2">Map Legend</div>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                        alt="Your Location"
+                        className="w-6 h-6"
+                      />
+                      <span className="text-sm text-gray-600 font-bold">Your Location</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                        alt="Destination"
+                        className="w-6 h-6"
+                      />
+                      <span className="text-sm text-gray-600 font-bold">Destination</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    alt="Destination"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Destination</span>
-                </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
-
         {error && <div className="text-red-500">{error}</div>}
       </div>
 

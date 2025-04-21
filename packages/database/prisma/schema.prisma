@@ -38,6 +38,7 @@ model service_request {
   audioVisual    AudioVisual?
   security       Security?
   transportation Transportation?
+  medicalDevice  MedicalDevice?
 }
 
 model Sanitation {
@@ -78,6 +79,14 @@ model Security {
   securityIssue   String
   securityId      Int             @unique
   service_request service_request @relation(fields: [securityId], references: [request_id])
+}
+
+model MedicalDevice {
+  request_id       Int             @id @default(autoincrement())
+  device           String
+  operatorRequired String
+  medicalDeviceId  Int             @unique
+  service_request  service_request @relation(fields: [medicalDeviceId], references: [request_id])
 }
 
 model directory {

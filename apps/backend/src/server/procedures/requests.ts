@@ -12,6 +12,7 @@ export const getRequests = trpc.procedure.query(async () => {
             security: true,
             audioVisual: true,
             transportation: true,
+            medicalDevice: true,
         },
     });
     console.log('getRequests returned');
@@ -59,6 +60,12 @@ export const makeRequest = publicProcedure
                     transportationDestination: z.string(),
                 })
             ),
+            medicalDevice: z.optional(
+                z.object({
+                    device: z.string(),
+                    operatorRequired: z.string(),
+                })
+            ),
         })
     )
     .mutation(async ({ input }) => {
@@ -79,6 +86,9 @@ export const makeRequest = publicProcedure
                 },
                 transportation: {
                     create: input.transportation,
+                },
+                medicalDevice: {
+                    create: input.medicalDevice,
                 },
             },
         });

@@ -56,6 +56,14 @@ function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab: serviceReques
                             })}
                             type="AudioVisual"
                         />
+                        <SideBarButton
+                            label={'Medical Device Request Form'}
+                            onClick={() => handleFormRequest({
+                                type: "MedicalDevice",
+                                title: "Medical Device Request Form",
+                            })}
+                            type="AudioVisual"
+                        />
             </SideNav>
     );
 }

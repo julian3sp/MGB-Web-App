@@ -31,6 +31,8 @@ type errorProps =
     securityIssue: string,
     transportationType: string,
     transportationDestination: string,
+    device: string,
+    operatorRequired: string,
 }
 
 function RequestForm({ title, type }: requestFormProps) {
@@ -51,6 +53,8 @@ function RequestForm({ title, type }: requestFormProps) {
     const [securityIssue, setSecurityIssue] = useState<string>("");
     const [transportationType, setTransportationType] = useState<string>("");
     const [transportationDestination, setTransportationDestination] = useState<string>("");
+    const [device, setDevice] = useState<string>("");
+    const [operatorRequired, setOperatorRequired] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
@@ -69,6 +73,8 @@ function RequestForm({ title, type }: requestFormProps) {
         securityIssue: '',
         transportationType: '',
         transportationDestination: '',
+        device: '',
+        operatorRequired: '',
     });
 
     const Validate = (): boolean => {
@@ -87,6 +93,8 @@ function RequestForm({ title, type }: requestFormProps) {
             securityIssue: '',
             transportationType: '',
             transportationDestination: '',
+            device: '',
+            operatorRequired: '',
         }
 
         if (!name) {
@@ -168,6 +176,16 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('transportationDestination error');
         }
 
+        if (!device && type==='MedicalDevice') {
+            errors.device = 'Please select a device';
+            console.log('medicalDevice error');
+        }
+
+        if (!operatorRequired && type==='MedicalDevice') {
+            errors.operatorRequired = 'Please select an option';
+            console.log('operatorRequired error');
+        }
+
         setErrors(errors);
         return Object.values(errors).some(value => value.length > 0);
     };
@@ -222,6 +240,12 @@ function RequestForm({ title, type }: requestFormProps) {
                     accommodationDetails: accommodationDetails,
                 },
             }),
+            ...(type === 'MedicalDevice' && {
+                medicalDevice: {
+                    device: device,
+                    operatorRequired: operatorRequired,
+                },
+            }),
         });
 
         handleReset(e);
@@ -244,6 +268,8 @@ function RequestForm({ title, type }: requestFormProps) {
         setTransportationDestination('');
         setAccommodationType('');
         setAccommodationDetails('');
+        setDevice('');
+        setOperatorRequired('');
 
         setErrors({
             name: '',
@@ -260,6 +286,8 @@ function RequestForm({ title, type }: requestFormProps) {
             securityIssue: '',
             transportationType: '',
             transportationDestination: '',
+            device: '',
+            operatorRequired: '',
         });
     };
 
@@ -514,6 +542,32 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Enter Accommodation Details"}
                                             width="w-full"
                                             />
+                                    </div>
+                                </>
+                                : null}
+                            {type === "MedicalDevice" ?
+                                <>
+                                    <div>
+                                        <InputHeader>Medical Device</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={device}
+                                            setState={setDevice}
+                                            placeholder={"Select a Device"}
+                                            width={"w-full"}
+                                            error={errors.device}
+                                            options={["EKG", "X-Ray", "Ventilator", "CT Scan", "Defibrillator"]}
+                                            clearError={() => clearError('device')}/>
+                                    </div>
+                                    <div>
+                                        <InputHeader>Operator Required</InputHeader>
+                                        <ServiceComponentDropdown
+                                            value={operatorRequired}
+                                            setState={setOperatorRequired}
+                                            placeholder={"Do You Require an Operator?"}
+                                            width={"w-full"}
+                                            error={errors.operatorRequired}
+                                            options={["Yes", "No"]}
+                                            clearError={() => clearError('operatorRequired')}/>
                                     </div>
                                 </>
                                 : null}

@@ -309,7 +309,7 @@ const MapComponent: React.FC = () => {
 
     <div className="flex">
         {/* Hospital Map Section */}
-        <div className="flex flex-col mt-10 ">
+        <div className="flex flex-col">
           {showHospitalMap && (
             <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
               <div className="flex flex-col gap-2">

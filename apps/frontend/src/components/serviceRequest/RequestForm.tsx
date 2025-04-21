@@ -19,15 +19,12 @@ type errorProps =
     {
     name: string,
     employeeID: string,
-    comments: string,
     department: string,
     priority: string,
     location: string,
     status: string,
     cleaningType: string,
-    contaminant: string,
     accommodationType: string,
-    accommodationDetails: string,
     sourceLanguage: string,
     targetLanguage: string,
     accessZones: string,
@@ -64,13 +61,10 @@ function RequestForm({ title, type }: requestFormProps) {
         location: '',
         department: '',
         status: '',
-        comments: '',
         cleaningType: '',
-        contaminant: '',
         sourceLanguage: '',
         targetLanguage: '',
         accommodationType: '',
-        accommodationDetails: '',
         accessZones: '',
         securityIssue: '',
         transportationType: '',
@@ -85,13 +79,10 @@ function RequestForm({ title, type }: requestFormProps) {
             location: '',
             department: '',
             status: '',
-            comments: '',
             cleaningType: '',
-            contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
             accommodationType: '',
-            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
             transportationType: '',
@@ -261,13 +252,10 @@ function RequestForm({ title, type }: requestFormProps) {
             location: '',
             department: '',
             status: '',
-            comments: '',
             cleaningType: '',
-            contaminant: '',
             sourceLanguage: '',
             targetLanguage: '',
             accommodationType: '',
-            accommodationDetails: '',
             accessZones: '',
             securityIssue: '',
             transportationType: '',
@@ -339,6 +327,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                         "Chestnut Hill",
                                         "Faulkner Hospital",
                                         "Patriot Place"]}
+                                    clearError={() => clearError('location')}
                                 />
                             </div>
 
@@ -351,6 +340,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     width={"w-full"}
                                     error={errors.department}
                                     options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
+                                    clearError={() => clearError('department')}
                                 />
                             </div>
 
@@ -363,6 +353,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     options={["Low", "Medium", "High", "Emergency"]}
                                     placeholder={"Select Priority"}
                                     error={errors.priority}
+                                    clearError={() => clearError('priority')}
                                 />
                             </div>
 
@@ -375,6 +366,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     width={"w-full"}
                                     error={errors.status}
                                     options={["Unassigned", "Assigned", "Working", "Done"]}
+                                    clearError={() => clearError('status')}
                                 />
                             </div>
 
@@ -390,7 +382,9 @@ function RequestForm({ title, type }: requestFormProps) {
                                         setState={setSourceLanguage}
                                         placeholder={"Source Language"}
                                         width="w-full"
-                                        error={errors.sourceLanguage}/>
+                                        error={errors.sourceLanguage}
+                                        clearError={() => clearError('sourceLanguage')}
+                                        />
                                     </div>
                                     <div>
                                         <InputHeader>Target Language</InputHeader>
@@ -399,7 +393,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setState={setTargetLanguage}
                                             placeholder={"Target Language"}
                                             width="w-full"
-                                            error={errors.targetLanguage}/>
+                                            error={errors.targetLanguage}
+                                            clearError={() => clearError('targetLanguage')}/>
                                     </div>
                                 </>
                                 : null}
@@ -414,7 +409,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                         placeholder={"Select Cleaning Needed"}
                                         width={"w-full"}
                                         error={errors.cleaningType}
-                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}/>
+                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}
+                                        clearError={() => clearError('cleaningType')}/>
                                     </div>
                                     <div>
                                         <InputHeader>Contaminant (Optional)</InputHeader>
@@ -422,8 +418,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             value={contaminant}
                                             setState={setContaminant}
                                             placeholder={"Contaminant"}
-                                            width="w-full"
-                                            error={errors.contaminant}/>
+                                            width="w-full"/>
                                     </div>
                                 </>
                                 : null}
@@ -452,6 +447,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                                 "Radiology",
                                                 "Morgue"
                                             ]}
+                                            clearError={() => clearError('accessZones')}
                                         />
                                     </div>
                                     <div>
@@ -461,7 +457,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setState={setSecurityIssue}
                                             placeholder={"Security Issue"}
                                             width="w-full"
-                                            error={errors.securityIssue}/>
+                                            error={errors.securityIssue}
+                                            clearError={() => clearError('securityIssue')}/>
                                     </div>
                                 </>
                                 : null}
@@ -476,7 +473,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Select Transportation Type"}
                                             width={"w-full"}
                                             error={errors.transportationType}
-                                            options={["Ambulance", "Helicopter", "Other"]}/>
+                                            options={["Ambulance", "Helicopter", "Other"]}
+                                            clearError={() => clearError('transportationType')}/>
                                     </div>
                                     <div>
                                         <InputHeader>Destination</InputHeader>
@@ -489,7 +487,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             options={["Brigham & Women's Hospital Main Campus",
                                                 "Chestnut Hill",
                                                 "Faulkner Hospital",
-                                                "Patriot Place"]}/>
+                                                "Patriot Place"]}
+                                            clearError={() => clearError('transportationDestination')}/>
                                     </div>
                                 </>
                                 : null}
@@ -504,7 +503,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             placeholder={"Select Accommodation Type"}
                                             width={"w-full"}
                                             error={errors.accommodationType}
-                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}/>
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}
+                                            clearError={() => clearError('accommodationType')}/>
                                     </div>
                                     <div>
                                         <InputHeader>Accommodation Details (Optional)</InputHeader>
@@ -513,7 +513,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setState={setAccommodationDetails}
                                             placeholder={"Enter Accommodation Details"}
                                             width="w-full"
-                                            error={errors.accommodationDetails}/>
+                                            />
                                     </div>
                                 </>
                                 : null}

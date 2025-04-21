@@ -25,8 +25,8 @@ export function ServiceComponentDropdown(
     return (
         <div className="relative">
             {error && (
-                <div className="absolute bottom-full left-4 mb-2">
-                    <div className="bg-red-100 text-red-800 font-medium px-3 py-2 rounded text-sm relative border border-red-300 shadow-md">
+                <div className="absolute bottom-full left-18 mb-2">
+                    <div className="bg-red-100 text-red-800 font-medium pr-5 pl-8 py-2 rounded text-sm relative border border-red-300 shadow-md">
                         <svg
                             viewBox="0 0 24 24"
                             className="absolute top-2 left-1 text-red-800 w-5 h-5 sm:w-5 sm:h-5 mr-3"

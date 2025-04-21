@@ -2,8 +2,6 @@ import { publicProcedure } from '../trpc';
 import client from '../../bin/prisma-client';
 import { z } from 'zod';
 import { trpc } from '../trpc.ts';
-import { Simulate } from 'react-dom/test-utils';
-import input = Simulate.input;
 
 export const getRequests = trpc.procedure.query(async () => {
     console.log('getRequests called');
@@ -88,3 +86,7 @@ export const makeRequest = publicProcedure
 
         return request;
     });
+export const deleteRequests = publicProcedure.mutation(async () => {
+    await client.service_request.deleteMany();
+    await client.$executeRaw`ALTER SEQUENCE "directory_id_seq" RESTART WITH 1`;
+});

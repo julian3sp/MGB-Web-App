@@ -12,6 +12,7 @@ import { ServiceComponentDropdown } from '@/components/serviceRequest/inputField
 import FilterIcon from '../../../assets/FilterIcon.png';
 import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
+import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -34,27 +35,51 @@ export default function RequestListPage() {
         tableRequest.state?.ServiceRequest
     );
     const [editMode, setEditMode] = useState(tableRequest.state?.editMode);
+    const [editId, setEditId] = useState(tableRequest.state?.ServiceRequest.request_id);
     const [editPriority, setEditPriority] = useState(tableRequest.state?.ServiceRequest.priority);
     const [editStatus, setEditStatus] = useState(tableRequest.state?.ServiceRequest.status);
     const [pendingRequest, setPendingRequest] = useState<ServiceRequest | null>(null);
     const [swapMenu, setSwapMenu] = useState(false);
     const [exitMenu, setExitMenu] = useState(false);
     const[formData, setFormData] = useState({
-        request_type: '',
-        priority: '',
-        status: '',
         name: '',
-        request_details: '',
-        aditional_comments: '',
         location: '',
+        request_id: '',
+        employee_id: '',
+        priority: '',
         department: '',
+        status: '',
+        request_type: '',
         request_date: '',
+        additional_comments: '',
+        assigned_employee: '',
 
 
     })
-    //const getdirec = trpc.getRequests
-    //const makeNewRequest = trpc.createRequest.useMutation()
-    //const deleteRequest = trpc.createRequest.useMutation()
+    const makeNewRequest = trpc.createRequest.useMutation()
+    const deleteRequest = trpc.deleteRequest.useMutation()
+
+    const handleDelete = () =>{
+        deleteRequest.mutateAsync()
+        window.location.reload();//for delete request add the field selectedRequest
+    }
+    const handleSubmit = (name : string, location : string, request_id : number, employee_id : string|null, priority : string, department : string, status : string, request_type : string, request_date : string, additional_comments : string|null, assigned_employee : string|null) =>{
+        const newRequest = {
+            ...formData,
+            name: name,
+            location: location,
+            request_id: request_id,
+            employee_id: employee_id,
+            priority: priority,
+            department: department,
+            status: status,
+            request_type: request_type,
+            request_date: request_date,
+            additional_comments: additional_comments,
+            assigned_employee: assigned_employee,
+        }
+        makeNewRequest.mutate(newRequest);
+    }
 
 
     if (isLoading) return <p>Loading...</p>;
@@ -112,6 +137,7 @@ export default function RequestListPage() {
                                         console.log('SAFE SWAP!!!!!');
                                         setSelectedRequest(res);
                                         setEditMode(false);
+                                        setEditId(res.request_id);
                                         setEditPriority(res.priority);
                                         setEditStatus(res.status);
                                     } else {
@@ -119,6 +145,7 @@ export default function RequestListPage() {
                                             console.log('SAFE SWAP!!!!!');
                                             setSelectedRequest(res);
                                             setEditMode(false);
+                                            setEditId(res.request_id);
                                             setEditPriority(res.priority);
                                             setEditStatus(res.status);
                                         } else {
@@ -210,6 +237,7 @@ export default function RequestListPage() {
                                     console.log('IGNORE AND SWAP');
                                     setSelectedRequest(pendingRequest);
                                     setEditMode(false);
+                                    setEditId(pendingRequest.request_id);
                                     setEditPriority(pendingRequest.priority);
                                     setEditStatus(pendingRequest.status);
                                     setPendingRequest(null);
@@ -244,6 +272,7 @@ export default function RequestListPage() {
                                     console.log('Exit edit mode discard changes');
                                     setExitMenu(false);
                                     setEditMode(false);
+                                    setEditId(selectedRequest.request_id);
                                     setEditPriority(selectedRequest.priority);
                                     setEditStatus(selectedRequest.status);
                                 } else {
@@ -338,6 +367,7 @@ export default function RequestListPage() {
                                                     ) {
                                                         console.log('Exit edit');
                                                         setEditMode(false);
+                                                        setEditId(selectedRequest?.request_id)
                                                         setEditPriority(selectedRequest.priority);
                                                         setEditStatus(selectedRequest.status);
                                                     } else {
@@ -434,7 +464,7 @@ export default function RequestListPage() {
                                             submitCondition={
                                                 editPriority !== selectedRequest.priority
                                             }
-                                            onSubmit={() => console.log('accpet submit (priority)')}
+                                            onSubmit={handleSubmit(selectedRequest.name,selectedRequest.location,selectedRequest.request_id,selectedRequest.employee_id,selectedRequest.priority,selectedRequest.department,selectedRequest.status,selectedRequest.request_type,selectedRequest.request_date,selectedRequest.additional_comments,selectedRequest.assigned_employee)}
                                             onDeny={() => console.log('Deny submit (priority)')}
                                             errorMessage={'Error: No change made'}
                                             successMessage={'Priority successfully changed'}

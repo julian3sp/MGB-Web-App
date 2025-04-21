@@ -71,7 +71,7 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-vh-10 bg-white mr-8 ml-8 mb-1 font-[Poppins] py-4"
+                className="border min-h-screen flex flex-col bg-white mr-8 ml-8 mb-1 font-[Poppins] py-4"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
                 <div className="flex gap-4 justify-between pl-4 pr-4 pb-2 pt-1 items-end">

@@ -14,7 +14,13 @@ import {
     getUniqueDirectories,
     makeDirectories,
 } from './server/procedures/directories.ts';
-import { deleteAllNodes, getAllNodes, getNode, makeNode } from './server/procedures/nodes.ts';
+import {
+    deleteAllNodes,
+    getAllNodes,
+    getNode,
+    makeManyNodes,
+    makeNode,
+} from './server/procedures/nodes.ts';
 import { deleteAllEdges, getAllEdges, makeEdge } from './server/procedures/edges.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
@@ -34,6 +40,7 @@ const appRouter = t.router({
     getUniqueDirectory: getUniqueDirectories,
     deleteAllDirectories: deleteAllDirectories,
     makeNode: makeNode,
+    makeManyNodes: makeManyNodes,
     getNode: getNode,
     getAllNodes: getAllNodes,
     deleteAllNodes: deleteAllNodes,

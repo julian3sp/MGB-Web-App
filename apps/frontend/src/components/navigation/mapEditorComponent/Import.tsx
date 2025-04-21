@@ -36,6 +36,7 @@ export default function ImportPage() {
                 y: Number(values[4]?.trim().replace(/"/g, "")),
               }
             })
+            console.log(inputs)
             await makeNode.mutateAsync(inputs)
             alert(`Nodes from "${file.name}" uploaded successfully.`)
           } else if (headers.length === 3) {
@@ -71,7 +72,7 @@ export default function ImportPage() {
       <FileUploadCard files={files} onFilesChange={setFiles} />
       <button
         onClick={handleImportFiles}
-        className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800"
+        className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-600"
       >
         Import CSV
       </button>

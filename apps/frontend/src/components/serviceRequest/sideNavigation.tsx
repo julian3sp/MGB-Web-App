@@ -8,17 +8,6 @@ interface SideNavProps {
     width?: number;
 }
 
-const sidebarVariants = {
-    open: (width: number) => ({
-        x: 0,
-        transition: { type: 'tween', duration: 0.35, ease: 'easeOut' },
-    }),
-    closed: (width: number) => ({
-        x: -width,
-        transition: { type: 'tween', duration: 0.35, ease: 'easeOut' },
-    }),
-};
-
 const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256}) => {
 
     const toggleSidebar = () => {

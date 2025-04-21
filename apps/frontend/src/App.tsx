@@ -18,9 +18,6 @@ import AboutUs from './routes/AboutUs.tsx';
 import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
-import SideNav from "@/components/serviceRequest/sideNavigation.tsx";
-import PageWrapper from "@/components/ui/PageWrapper.tsx";
-import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -62,7 +59,7 @@ function App() {
                                 <Route path="/directory/*" element={<DepartmentDirectory/>}/>
                                 <Route path="/aboutus" element={<AboutUs/>}/>
                                     <Route element={<PrivateRoutes/>}>
-                                        <Route path="/services" element={<PageWrapper width = {300}><ServiceRequestPage/></PageWrapper>}/>
+                                        <Route path="/services" element={<ServiceRequestPage/>}/>
                                         <Route path="requests" element={<RequestPage/>}>
                                             <Route index element={<Navigate to="table" replace/>}/>
                                             <Route path="table" element={<RequestTablePage/>}/>

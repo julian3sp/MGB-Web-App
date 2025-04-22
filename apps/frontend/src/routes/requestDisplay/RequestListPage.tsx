@@ -151,7 +151,7 @@ export default function RequestListPage() {
                                             : res.priority === 'Medium'
                                                 ? 'text-yellow-500'
                                                 : res.priority === 'High'
-                                                    ? 'text-orange-500'
+                                                    ? 'text-red-500'
                                                     : res.priority === 'Emergency'
                                                         ? 'text-red-700 underline'
                                                         : 'text-gray-600'
@@ -287,7 +287,7 @@ export default function RequestListPage() {
                                                 : selectedRequest.priority === 'Medium'
                                                   ? 'text-yellow-500'
                                                   : selectedRequest.priority === 'High'
-                                                    ? 'text-orange-500'
+                                                    ? 'text-red-500'
                                                     : selectedRequest.priority === 'Emergency'
                                                       ? 'text-red-700 underline'
                                                       : 'text-gray-600'
@@ -704,7 +704,6 @@ export default function RequestListPage() {
                 ) : (
                     <>
                         {/*No service selected yet*/}
-                        <div className="flex-1" style={{ borderColor: '#005E64' }}>
                             <nav
                                 className="border p-5 rounded-lg flex items-center"
                                 style={{ borderColor: '#005E64' }}
@@ -713,7 +712,6 @@ export default function RequestListPage() {
                                     Select a service request to view details.
                                 </p>
                             </nav>
-                        </div>
                     </>
                 )}{' '}
             </div>

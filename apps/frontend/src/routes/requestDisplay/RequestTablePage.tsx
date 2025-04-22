@@ -132,7 +132,7 @@ export default function RequestTablePage() {
     return (
         <nav className="flex flex-1">
             <nav
-                className="w-full max-h-[105vh] bg-white p-6 pl-4 font-[Poppins]"
+                className="w-full max-h-[105vh] bg-white p-6 pl-4 pr-4 font-[Poppins]"
                 style={{
                     borderTop: 'none',
                     borderBottom: 'none',

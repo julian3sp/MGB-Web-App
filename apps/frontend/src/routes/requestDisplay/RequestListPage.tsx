@@ -177,7 +177,7 @@ export default function RequestListPage() {
                                     `w-full text-left block p-5 border rounded ${
                                         selectedRequest?.request_id == res.request_id
                                             ? 'border-2 text-blue-900 bg-slate-100 font-bold font-[Poppins]'
-                                            : 'text-gray-700 hover:bg-gray-100 font-[Poppins]'
+                                            : 'text-gray-700 hover:bg-gray-100 font-[Poppins] shadow-lg'
                                     }` /* Put requests in rounded rectangle boxes*/
                                 }
                                 style={{
@@ -320,7 +320,7 @@ export default function RequestListPage() {
                 </h3>
                 {selectedRequest ? (
                     <nav
-                        className="border p-6 pl-4 rounded-lg text-blue-gray-900"
+                        className=" border-[1px] border-gray shadow-lg p-6 pl-4 rounded-lg text-blue-gray-900"
                         style={{ borderColor: '#003A96' }}
                     >
                         <div>

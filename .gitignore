@@ -4,7 +4,6 @@
 **/.vscode
 **/.run
 **/.turbo
-**/.prisma
 **/dist
 
 out

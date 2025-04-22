@@ -58,8 +58,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // Fetch graph data via TRPC
-  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+  const { data: nodesData, isLoading: isNodesLoading} = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading} = trpc.getAllEdges.useQuery();
 
   // Initialize Google Map (only once)
   useEffect(() => {

@@ -63,7 +63,7 @@ function App() {
                     <Route path="/admin/directory" element={<DirectoryPage />} />
                     <Route path="/editor" element={<MapEditor/>} />
                     <Route path= "requests" element={<RequestPage />}>
-                        <Route index element={<Navigate to="list" replace />} />
+                        <Route index element={<Navigate to="table" replace />} />
                         <Route path="table" element={<RequestTablePage />} />
                         <Route path="list" element={<RequestListPage />} /></Route>
                 </Route>

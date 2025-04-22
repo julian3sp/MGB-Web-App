@@ -4,7 +4,12 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { getRequests, makeRequest } from './server/procedures/requests';
+import {
+    getRequests,
+    makeRequest,
+    deleteRequest,
+    updateRequest,
+} from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
@@ -38,6 +43,8 @@ const cors = require('cors');
 const appRouter = t.router({
     requestList: getRequests,
     createRequest: makeRequest,
+    deleteRequest: deleteRequest,
+    updateRequest: updateRequest,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
     validUser: getUser,

@@ -101,8 +101,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if(!selectedHospital || !map) return;
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log(graph.getBuildingNodes(selectedHospital, floor))
-        createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed');
-        return createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
+
+        let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
+        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed')]
+        return markers;
     }
 
     function getEdgeLines(){
@@ -116,7 +118,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     };
 
 
-
+    // Display nodes
     useEffect(() => {
         if (!map || !selectedHospital) return;
 
@@ -130,38 +132,28 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setNodeMarkers(markers);
             }
         }
-    }, [showNodes, selectedHospital, selectedFloor, map]);
+    }, [showNodes, selectedHospital, selectedFloor, map, nodesToRemove]);
 
 
-    const toggleEdgesButtonHandler = () =>{
-        if(showEdges){
-            setShowEdges(false)
-        }
-        else{
-            setShowEdges(true);
-        }
-    }
+    const handleToggleEdges = () => {
+        setShowEdges(prev => !prev);
+    };
 
-    const toggleEdgesHandler = () => {
-        if (
-            !map ||
-            isNodesLoading ||
-            isEdgesLoading ||
-            !nodesDataFromAPI ||
-            !edgesDataFromAPI ||
-            !selectedHospital
-        )
-            return;
+    // Display Edges
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
+
+        // clear edges
+        edgePolylines.forEach(poly => poly.setMap(null));
+        setEdgePolylines([]);
 
         if (showEdges) {
-            const polylinesCreated = getEdgeLines()
-            if (!polylinesCreated) return;
-            setEdgePolylines(polylinesCreated);
-        } else {
-            edgePolylines.forEach((polyline) => polyline.setMap(null));
-            setEdgePolylines([]);
+            const lines = getEdgeLines();
+            if (lines) {
+                setEdgePolylines(lines);
+            }
         }
-    };
+    }, [showEdges, selectedHospital, selectedFloor, map]);
 
     const setAddNode = (node: Node) => {
         setNodesToAdd(prev => [
@@ -264,8 +256,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
                 <button
                     onClick={() =>{
-                        toggleEdgesHandler();
-                        toggleEdgesButtonHandler();}}
+                        handleToggleEdges();}}
                     className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
@@ -322,7 +313,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     showNodes={showNodes}
                     showEdges={showEdges}
                     onToggleNodes={handleToggleNodes}
-                    onToggleEdges={toggleEdgesButtonHandler}
+                    onToggleEdges={handleToggleEdges}
                 />
             </div>
         </div>

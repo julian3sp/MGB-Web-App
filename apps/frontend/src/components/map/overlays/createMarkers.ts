@@ -74,6 +74,22 @@ export function createMarkers(
             setNodeDetails(node);
         });
 
+        marker.addListener('dblclick', () => {
+           graph.deleteNode(node.id);
+            const newMarker = new google.maps.Marker({
+                position: {lat: node.x, lng: node.y},
+                map: map,
+                title: 'New Node',
+                zIndex: 9999,
+                icon: {
+                    url: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png',
+                    scaledSize: scaledSize,
+                },
+            });
+            console.log("remove node");
+            markers.push(newMarker);
+        });
+
 
         markers.push(marker);
     }

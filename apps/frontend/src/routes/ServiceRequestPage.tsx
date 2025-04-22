@@ -8,7 +8,7 @@ import { trpc } from '../lib/trpc.ts';
 import { getRequests } from '../../../backend/src/server/procedures/requests.ts';
 
 export type serviceRequest = {
-    type: "Security" | "Language" | "Sanitation" | "AudioVisual" | "Transportation" | "MedicalDevice";
+    type: "Security" | "Language" | "Sanitation" | "AudioVisual" | "Transportation" | "MedicalDevice" | "Facilities";
     title: string;
 }
 function ServiceRequestPage() {

@@ -39,6 +39,7 @@ model service_request {
   security       Security?
   transportation Transportation?
   medicalDevice  MedicalDevice?
+  facilities Facilities?
 }
 
 model Sanitation {
@@ -87,6 +88,14 @@ model MedicalDevice {
   operatorRequired String
   medicalDeviceId  Int             @unique
   service_request  service_request @relation(fields: [medicalDeviceId], references: [request_id])
+}
+
+model Facilities { //for later verisons, possibly a photo upload?
+  request_id Int @id@default(autoincrement())
+  maintenanceType String
+  equipmentType String
+  facilitiesID Int @unique
+  service_request  service_request @relation(fields: [facilitiesID], references: [request_id])
 }
 
 model directory {

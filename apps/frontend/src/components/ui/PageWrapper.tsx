@@ -1,28 +1,39 @@
 import { motion } from 'framer-motion';
 import SideNav from "@/components/serviceRequest/sideNavigation.tsx";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 type PageWrapperProps ={
     children: React.ReactNode;
     contents?: React.ReactNode;
-    width?: number;
+    scaling?: 8|6|5|4|3;
     open?: boolean;
+    absolute?: boolean;
 }
 
-const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, width, open = false}) => {
+const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling = 3, open = false, absolute = true}) => {
     const [isSidebarOpen, setSidebarOpen] = useState(open);
+
+    const useOneThirdWidth = () => {
+        const [width, setWidth] = useState(window.innerWidth / scaling);
+        useEffect(() => {
+            const handleResize = () => {
+                setWidth(window.innerWidth / scaling);
+            };
+
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+        }, []);
+        return width;
+    };
+
+    const width = useOneThirdWidth();
     const translateMargin = isSidebarOpen ? 0 : -1*(width ?? 256);
 
     return (
         <div className="flex flex-1">
-        <SideNav isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} width={width}>
-            <div className="flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-200 border-b-2 border-gray-300 shadow-sm">
-                <span className="font-semibold text-gray-700 text-lg">Menu</span>
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7"></path>
-                </svg>
-            </div>
+        <SideNav isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} width={width} absolute={absolute}>
+
             {contents}
         </SideNav>
         <motion.main

@@ -71,7 +71,7 @@ export const deleteSelectedEdges = publicProcedure
                 },
             },
         });
-        console.log(input)
+        console.log(input);
 
         return { success: true, deletedIds: input };
     });

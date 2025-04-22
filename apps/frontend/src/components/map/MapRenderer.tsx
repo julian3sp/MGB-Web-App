@@ -365,7 +365,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   }
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full h-[95vh]">
       <div ref={mapRef} className="w-full h-full"></div>
       
       {/* {map && (

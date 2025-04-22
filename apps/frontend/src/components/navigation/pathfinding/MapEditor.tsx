@@ -109,49 +109,26 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
     }
 
-    const toggleShowNodesButtonHandler = () => {
-        if(showNodes){
-            setShowNodes(false);
-        }
-        else{
-            setShowNodes(true);
-        }
-    }
-
-
-    const toggleNodesHandler = () => {
-        if (!map || isNodesLoading || !nodesDataFromAPI || !selectedHospital) return;
-
-        if (showNodes) {
-            const currentMarkers = getNodeMarkers();
-            if (!currentMarkers) return;
-            setNodeMarkers([...currentMarkers]);
-        }
-        else{
-            console.log("Hiding Nodes")
-            nodeMarkers.forEach((marker) => marker.setMap(null));
-            setNodeMarkers([]);
-        }
+    const handleToggleNodes = () => {
+        setShowNodes(prev => !prev);
     };
 
-    useEffect(() => {
-        if (!map || !nodesDataFromAPI || !selectedHospital) return;
 
-        nodeMarkers.forEach((marker) => marker.setMap(null));
+
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
+
+        // Always clear
+        nodeMarkers.forEach(m => m.setMap(null));
         setNodeMarkers([]);
 
-        edgePolylines.forEach((polyline) => polyline.setMap(null));
-        setEdgePolylines([]);
-
-        // Create new markers
-        const currentMarkers = getNodeMarkers();
-        const removedMarkers = createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed');
-
-        // Update state with new markers
-        if (!currentMarkers) return;
-        setNodeMarkers([...currentMarkers, ...removedMarkers]);
-        setShowNodes(true);
-    }, [nodesToRemove]);
+        if (showNodes) {
+            const markers = getNodeMarkers();
+            if (markers) {
+                setNodeMarkers(markers);
+            }
+        }
+    }, [showNodes, selectedHospital, selectedFloor, map]);
 
 
     const toggleEdgesButtonHandler = () =>{
@@ -275,8 +252,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
                 <button
                     onClick={()=>{
-                        toggleShowNodesButtonHandler();
-                        toggleNodesHandler();
+                        handleToggleNodes();
                         }}
                     className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
@@ -342,9 +318,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     hospitalLocationMap={hospitalLocationMap}
                     showNodes={showNodes}
                     showEdges={showEdges}
-                    updateNodeDisplay = {toggleNodesHandler}
-                    updateEdgeDisplay = {toggleEdgesHandler}
-                    onToggleNodes={toggleShowNodesButtonHandler}
+                    onToggleNodes={handleToggleNodes}
                     onToggleEdges={toggleEdgesButtonHandler}
                 />
             </div>

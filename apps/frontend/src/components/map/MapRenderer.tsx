@@ -186,10 +186,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
       // Compute and draw the new path
       if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
+        console.log("Using A-Star")
         pathNodes = graph.aStar(entrance, target);
       } else if (window.sessionStorage.getItem("algoType") === "DFS"){
+        console.log("Using DFS")
         pathNodes = graph.DFS(entrance, target)
       } else if (window.sessionStorage.getItem("algoType") === "BFS"){
+        console.log("Using BFS")
         pathNodes = graph.BFS(entrance, target)
       }
 

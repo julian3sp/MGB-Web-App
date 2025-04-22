@@ -1,4 +1,5 @@
-import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
+import {graph} from "@/components/map/GraphObject.ts";
+import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
 
 export function createMarkers(
@@ -40,6 +41,16 @@ export function createMarkers(
             edgeCost: 0, // default value
             totalCost: 0, // default value
         });
+        graph.addNode({
+            id: Date.now(), // or another unique value
+            name: '',
+            building: 'Main',
+            floor:  1,
+            x: event.latLng.lat(),
+            y: event.latLng.lng(),
+            edgeCost: 0, // default value
+            totalCost: 0, // default value
+        })
     });
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
@@ -68,6 +79,75 @@ export function createMarkers(
     }
 
     return markers;
+}
+export function displayMarkers(
+    map: google.maps.Map,
+    nodes: Node[],
+    setNodeDetails: (node: Node) => void,
+    type: 'normal' | 'removed' = 'normal'
+): google.maps.Marker[] {
+    const markers: google.maps.Marker[] = [];
+    const iconUrl =
+        type === 'removed'
+            ? 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png'
+            : 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png';
+
+    const zIndex = type === 'removed' ? 9999 : 1;
+    const scaledSize = new google.maps.Size(10, 10);
+
+    for (const node of nodes) {
+        const coord: google.maps.LatLngLiteral = { lat: node.x, lng: node.y };
+
+        const marker = new google.maps.Marker({
+            position: coord,
+            map,
+            title: node.id.toString(),
+            icon: {
+                url: iconUrl,
+                scaledSize
+            },
+            zIndex
+        });
+
+        marker.addListener('click', () => setNodeDetails(node));
+        markers.push(marker);
+    }
+
+    return markers;
+}
+
+export function enableAddNodeOnDoubleClick(
+    map: google.maps.Map,
+    setAddNode: (node: Node) => void
+): void {
+    const scaledSize = new google.maps.Size(10, 10);
+
+    google.maps.event.addListener(map, 'dblclick', function (event) {
+        const newNode: Node = {
+            id: Date.now(),
+            name: '',
+            building: 'Main',
+            floor: 1,
+            x: event.latLng.lat(),
+            y: event.latLng.lng(),
+            edgeCost: 0,
+            totalCost: 0
+        };
+
+        new google.maps.Marker({
+            position: event.latLng,
+            map,
+            title: 'New Node',
+            zIndex: 9999,
+            icon: {
+                url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png',
+                scaledSize
+            }
+        });
+
+        setAddNode(newNode);
+        graph.addNode(newNode);
+    });
 }
 
 

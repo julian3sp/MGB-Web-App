@@ -71,7 +71,22 @@ export const getNode = publicProcedure
         });
         return node;
     });
+export const deleteSelectedNodes = publicProcedure
+    .input(z.array(z.number())) // expects an array of node IDs
+    .mutation(async ({ input }) => {
+        await client.nodes.deleteMany({
+            where: {
+                id: {
+                    in: input,
+                },
+            },
+        });
 
+        // Optional: reset sequence only if you plan to fully reset after certain deletions
+        // await client.$executeRaw`ALTER SEQUENCE "nodes_id_seq" RESTART WITH 1`;
+
+        return { success: true, deletedIds: input };
+    });
 export const deleteAllNodes = publicProcedure.mutation(async () => {
     await client.nodes.deleteMany();
     await client.$executeRaw`ALTER SEQUENCE "nodes_id_seq" RESTART WITH 1`;

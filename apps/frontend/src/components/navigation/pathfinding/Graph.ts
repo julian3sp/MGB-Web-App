@@ -1,4 +1,5 @@
 import {trpc} from "@/lib/trpc.ts";
+import {graph} from "@/components/map/GraphObject.ts";
 
 export type Node = {
     name: string
@@ -68,6 +69,19 @@ export class Graph {
         this.addEdges(allEdges);
         this.resetEditHistory();
         console.log("Graph successfully populated")
+    }
+
+    commitEdits() {
+        const addNodes = trpc.makeManyNodes.useMutation()
+        const addEdges = trpc.makeManyEdges.useMutation()
+        const deleteNodes = trpc.deleteSelectedNodes.useMutation()
+        const deleteEdges = trpc.deleteSelectedEdges.useMutation()
+
+        addNodes.mutateAsync(this.edits.addedNodes)
+        addEdges.mutateAsync(this.edits.addedEdges)
+        deleteNodes.mutateAsync(this.edits.deletedNodes)
+        deleteEdges.mutateAsync(this.edits.deletedEdges)
+        console.log("edits committed")
     }
 
     resetEditHistory(): void{

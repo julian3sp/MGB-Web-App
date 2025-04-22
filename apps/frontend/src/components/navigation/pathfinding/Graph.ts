@@ -19,7 +19,7 @@ export type  Edge = {
     weight: number;
 }
 
-export type Edit = {
+type Edit = {
     deletedNodes: number[];
     deletedEdges: number[];
     addedNodes: Node[];
@@ -217,7 +217,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        console.log("Getting nodes building: ", building, " Floor:", floor);
+        // console.log("Getting nodes building: ", building, " Floor:", floor);
 
         return Array.from(this.nodes).filter(
             n => n.building === building && n.floor === floor
@@ -235,7 +235,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        console.log("Getting edges building: ", building, " Floor:", floor);
+        // console.log("Getting edges building: ", building, " Floor:", floor);
         return Array.from(this.edges).filter(
             edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
                 edge.targetId.building === building && edge.targetId.floor  === floor
@@ -408,8 +408,8 @@ export default Graph;
 
 
 // Instantiate the graph
-//const graph = new Graph();
-//graph.populate(allNodes, allEdges);
+// const graph = new Graph();
+// graph.populate(allNodes, allEdges);
 // console.log(graph.getEdge(1))
 // console.log(graph.getAllEdges())
 

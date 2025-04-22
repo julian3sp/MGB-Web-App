@@ -110,35 +110,59 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
     }
 
+    const toggleShowNodesButtonHandler = () => {
+        if(showNodes){
+            setShowNodes(false);
+        }
+        else{
+            setShowNodes(true);
+        }
+    }
+
 
     const toggleNodesHandler = () => {
         if (!map || isNodesLoading || !nodesDataFromAPI || !selectedHospital) return;
 
         if (showNodes) {
-            nodeMarkers.forEach((marker) => marker.setMap(null));
-            setNodeMarkers([]);
-            setShowNodes(false);
-        } else {
             const currentMarkers = getNodeMarkers();
             if (!currentMarkers) return;
             setNodeMarkers([...currentMarkers]);
-            setShowNodes(true);
+        }
+        else{
+            console.log("Hiding Nodes")
+            nodeMarkers.forEach((marker) => marker.setMap(null));
+            setNodeMarkers([]);
         }
     };
 
     useEffect(() => {
         if (!map || !nodesDataFromAPI || !selectedHospital) return;
 
-        // Clear existing markers
-        nodeMarkers.forEach(marker => marker.setMap(null));
+        nodeMarkers.forEach((marker) => marker.setMap(null));
+        setNodeMarkers([]);
+
+        edgePolylines.forEach((polyline) => polyline.setMap(null));
+        setEdgePolylines([]);
 
         // Create new markers
-        const normalMarkers = createMarkers(map, nodesDataFromAPI, setNodeDetails, setAddNode, 'normal');
+        const currentMarkers = getNodeMarkers();
         const removedMarkers = createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed');
 
         // Update state with new markers
-        setNodeMarkers([...normalMarkers, ...removedMarkers]);
+        if (!currentMarkers) return;
+        setNodeMarkers([...currentMarkers, ...removedMarkers]);
+        setShowNodes(true);
     }, [nodesToRemove]);
+
+
+    const toggleEdgesButtonHandler = () =>{
+        if(showEdges){
+            setShowEdges(false)
+        }
+        else{
+            setShowEdges(true);
+        }
+    }
 
     const toggleEdgesHandler = () => {
         if (
@@ -152,16 +176,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             return;
 
         if (showEdges) {
-            edgePolylines.forEach((polyline) => polyline.setMap(null));
-            setEdgePolylines([]);
-            setShowEdges(false);
-        } else {
-            if(!selectedHospital) return;
-
             const polylinesCreated = getEdgeLines()
             if (!polylinesCreated) return;
             setEdgePolylines(polylinesCreated);
-            setShowEdges(true);
+        } else {
+            edgePolylines.forEach((polyline) => polyline.setMap(null));
+            setEdgePolylines([]);
         }
     };
 
@@ -255,14 +275,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
                 <button
-                    onClick={toggleNodesHandler}
+                    onClick={()=>{
+                        toggleShowNodesButtonHandler();
+                        toggleNodesHandler();
+                        }}
                     className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showNodes ? 'Hide Nodes' : 'Show Nodes'}
                 </button>
 
                 <button
-                    onClick={toggleEdgesHandler}
+                    onClick={() =>{
+                        toggleEdgesHandler();
+                        toggleEdgesButtonHandler();}}
                     className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
@@ -318,8 +343,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     hospitalLocationMap={hospitalLocationMap}
                     showNodes={showNodes}
                     showEdges={showEdges}
-                    onToggleNodes={toggleNodesHandler}
-                    onToggleEdges={toggleEdgesHandler}
+                    updateNodeDisplay = {toggleNodesHandler}
+                    updateEdgeDisplay = {toggleEdgesHandler}
+                    onToggleNodes={toggleShowNodesButtonHandler}
+                    onToggleEdges={toggleEdgesButtonHandler}
                 />
             </div>
         </div>

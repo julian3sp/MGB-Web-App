@@ -8,7 +8,7 @@ function NavigationPage() {
         window.scrollTo({ top: 0, behavior: "instant" }); // or 'smooth'
     }, []);
     return (
-        <div className="w-full min-h-screen">
+        <div className="w-full min-h-[95vh]">
             <MapComponent />
         </div>
     );

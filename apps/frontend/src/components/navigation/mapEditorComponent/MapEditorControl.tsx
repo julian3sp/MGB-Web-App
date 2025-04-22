@@ -32,6 +32,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
     hospitalLocationMap,
     showNodes,
     showEdges,
+
     onToggleNodes,
     onToggleEdges
 }) => {
@@ -55,7 +56,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center space-x-2 px-3 py-1 rounded-full border">
                         <span className="text-sm font-bold">
-                            {selectedHospital ?? "Select hospital"}
+                            {selectedHospital ?? 'Select hospital'}
                         </span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +77,9 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                         {Object.keys(hospitalLocationMap).map((hospital) => (
                             <DropdownMenuItem
                                 key={hospital}
-                                onClick={() => handleHospitalSelect(hospital)}
+                                onClick={() => {
+                                    handleHospitalSelect(hospital);
+                                }}
                             >
                                 {hospital}
                             </DropdownMenuItem>
@@ -88,7 +91,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                 {selectedHospital && hospitalsWithFloors.includes(selectedHospital) && (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="ml-2 flex items-center space-x-2 px-3 py-1 rounded-full border">
-                            <span className="text-sm font-bold">Floor {selectedFloor ?? "-"}</span>
+                            <span className="text-sm font-bold">Floor {selectedFloor ?? '-'}</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -107,16 +110,21 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                         <DropdownMenuContent align="start">
                             <DropdownMenuLabel>{selectedHospital}</DropdownMenuLabel>
                             <DropdownMenuItem
-                                onClick={() => onFloorChange(3)}
-                                className={selectedFloor === 3 ? "bg-blue-50" : ""}
+                                onClick={() => {
+                                    onFloorChange(3);
+                                }}
+                                className={selectedFloor === 3 ? 'bg-blue-50' : ''}
                             >
-                                Floor 3 {selectedFloor === 3 && "✓"}
+                                Floor 3 {selectedFloor === 3 && '✓'}
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => onFloorChange(4)}
-                                className={selectedFloor === 4 ? "bg-blue-50" : ""}
+                                onClick={() => {
+                                    onFloorChange(4);
+
+                                }}
+                                className={selectedFloor === 4 ? 'bg-blue-50' : ''}
                             >
-                                Floor 4 {selectedFloor === 4 && "✓"}
+                                Floor 4 {selectedFloor === 4 && '✓'}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -124,10 +132,17 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                 <button
                     onClick={onToggleNodes}
                     title="Toggle Nodes"
-                    className={`p-2 rounded-full hover:bg-gray-200 ${showNodes ? "bg-blue-100 text-blue-700" : "text-gray-500"
-                        }`}
+                    className={`p-2 rounded-full hover:bg-gray-200 ${
+                        showNodes ? 'bg-blue-100 text-blue-700' : 'text-gray-500'
+                    }`}
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -146,11 +161,20 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                 <button
                     onClick={onToggleEdges}
                     title="Toggle Edges"
-                    className={`p-2 rounded-full hover:bg-gray-200 ${showEdges ? "bg-blue-100 text-blue-700" : "text-gray-500"
-                        }`}
+                    className={`p-2 rounded-full hover:bg-gray-200 ${
+                        showEdges ? 'bg-blue-100 text-blue-700' : 'text-gray-500'
+                    }`}
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
                         <path d="M18 6L6 18" />
                         <circle cx="18" cy="6" r="2" />
                         <circle cx="6" cy="18" r="2" />

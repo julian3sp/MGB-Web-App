@@ -1,6 +1,8 @@
 import { useState } from "react"
 import FileUploadCard from "../../ui/fileUploadCard"
 import { trpc } from "../../../lib/trpc"
+import {toast} from "sonner"
+import { Toaster } from "../../ui/sonner"
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
@@ -12,7 +14,7 @@ export default function ImportPage() {
 
   const handleImportFiles = async () => {
     if (files.length === 0) {
-      alert("No files selected.")
+      toast.error("Please select at least one file to upload.")
       return
     }
 
@@ -36,8 +38,9 @@ export default function ImportPage() {
                 y: Number(values[4]?.trim().replace(/"/g, "")),
               }
             })
+            console.log(inputs)
             await makeNode.mutateAsync(inputs)
-            alert(`Nodes from "${file.name}" uploaded successfully.`)
+            toast.success(`Nodes from "${file.name}" uploaded successfully.`)
           } else if (headers.length === 3) {
             await deleteEdges.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
@@ -49,13 +52,13 @@ export default function ImportPage() {
               }
             })
             await makeEdge.mutateAsync(inputs)
-            alert(`Edges from "${file.name}" uploaded successfully.`)
+            toast.success(`Edges from "${file.name}" uploaded successfully.`)
           } else {
-            alert(`Unrecognized format in file "${file.name}".`)
+            toast.error(`Invalid file format for "${file.name}". Please check the headers.`)
           }
         } catch (err) {
           console.error(`Upload failed for ${file.name}:`, err)
-          alert(`Failed to upload "${file.name}". See console for details.`)
+          toast.error(`Failed to upload "${file.name}". Please check the console for details.`)
         }
       }
 
@@ -71,10 +74,11 @@ export default function ImportPage() {
       <FileUploadCard files={files} onFilesChange={setFiles} />
       <button
         onClick={handleImportFiles}
-        className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800"
+        className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-600"
       >
         Import CSV
       </button>
+      <Toaster />
     </div>
   )
 }

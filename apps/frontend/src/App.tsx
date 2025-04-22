@@ -50,30 +50,30 @@ function App() {
     return (
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
-        <Router>
-            <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut}/>
-            <Routes>
-                <Route path="/navigation" element={<NavigationPage />} />
-                <Route path="/" element={<WelcomePage />} />
-                <Route path="/directory" element={<DepartmentDirectory />} />
-                <Route path="/directory/*" element={<DepartmentDirectory />} />
-                <Route path="/aboutus" element={<AboutUs />} />
-                <Route element={<PrivateRoutes />}>
-                    <Route path="/services" element={<ServiceRequestPage />} />
-                    <Route path="/admin/directory" element={<DirectoryPage />} />
-                    <Route path="/editor" element={<MapEditor/>} />
-                    <Route path= "requests" element={<RequestPage />}>
-                        <Route index element={<Navigate to="table" replace />} />
-                        <Route path="table" element={<RequestTablePage />} />
-                        <Route path="list" element={<RequestListPage />} /></Route>
-                </Route>
-            </Routes>
-            <FooterBar/>
-        </Router>
-
+                <Router>
+                    <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
+                    <Routes>
+                        <Route path="/navigation" element={<NavigationPage />} />
+                        <Route path="/" element={<WelcomePage />} />
+                        <Route path="/directory" element={<DepartmentDirectory />} />
+                        <Route path="/directory/*" element={<DepartmentDirectory />} />
+                        <Route path="/aboutus" element={<AboutUs />} />
+                        <Route element={<PrivateRoutes />}>
+                            <Route path="/services" element={<ServiceRequestPage />} />
+                            <Route path="/admin/directory" element={<DirectoryPage />} />
+                            <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
+                            <Route path="requests" element={<RequestPage />}>
+                                <Route index element={<Navigate to="table" replace />} />
+                                <Route path="table" element={<RequestTablePage />} />
+                                <Route path="list" element={<RequestListPage />} />
+                            </Route>
+                        </Route>
+                    </Routes>
+                    <FooterBar />
+                </Router>
             </QueryClientProvider>
         </trpc.Provider>
-);
+    );
 }
 
 export default App;

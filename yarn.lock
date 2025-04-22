@@ -5469,6 +5469,7 @@ __metadata:
     lucide-react: "npm:^0.501.0"
     match-sorter: "npm:^6.3.1"
     motion: "npm:^12.6.3"
+    next-themes: "npm:^0.4.6"
     pathfinding: "npm:^0.4.18"
     prettier: "npm:*"
     prettier-config-custom: "workspace:*"
@@ -5479,6 +5480,7 @@ __metadata:
     react-router-dom: "npm:^7.5.0"
     react-social-icons: "npm:^6.24.0"
     serve: "npm:^14.2.0"
+    sonner: "npm:^2.0.3"
     tailwind-merge: "npm:^3.2.0"
     tailwindcss: "npm:^4.0.17"
     three: "npm:^0.160.0"
@@ -7018,6 +7020,16 @@ __metadata:
   version: 1.0.0
   resolution: "negotiator@npm:1.0.0"
   checksum: 10/b5734e87295324fabf868e36fb97c84b7d7f3156ec5f4ee5bf6e488079c11054f818290fc33804cef7b1ee21f55eeb14caea83e7dafae6492a409b3e573153e5
+  languageName: node
+  linkType: hard
+
+"next-themes@npm:^0.4.6":
+  version: 0.4.6
+  resolution: "next-themes@npm:0.4.6"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: 10/48540e77a8f1967fa27338e91037df296f84d8979ba3003f71eed8d9a2f4f29b3cc6797d27b501547fd39cf33611a2accb432eec92ad8a457abe1a142cc5a02e
   languageName: node
   linkType: hard
 
@@ -8699,6 +8711,16 @@ __metadata:
     vitest: "npm:^3.0.9"
   languageName: unknown
   linkType: soft
+
+"sonner@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "sonner@npm:2.0.3"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10/e7e4233c9ef96f2db4f5516a181d0b464104a6b8554ac36b403a53d14f21baddae48187ce48d22a7821eb1e3e9168f7df471405001652ab3abfcfe8930f7a6fa
+  languageName: node
+  linkType: hard
 
 "source-map-js@npm:^1.2.1":
   version: 1.2.1

@@ -21,21 +21,6 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
     const [isAdmin, setAdmin] = React.useState<boolean>(false);
 
-    useEffect(() => {
-        if (location.pathname === "/navigation") {
-            const navbar = document.getElementById("navbar") as HTMLElement;
-            if (navbar) {
-                navbar.style.display = "none";
-            }
-            window.scrollTo(0, 65);
-        } else {
-            const navbar = document.getElementById("navbar") as HTMLElement;
-            if (navbar) {
-                navbar.style.display = "block";
-            }
-        }
-    }, [location.pathname]);
-
     return (
         <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">

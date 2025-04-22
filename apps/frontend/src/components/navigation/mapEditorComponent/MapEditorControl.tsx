@@ -16,8 +16,6 @@ interface MapEditorControlsProps {
     hospitalLocationMap: Record<string, { lat: number; lng: number }>;
     showNodes: boolean;
     showEdges: boolean;
-    updateNodeDisplay: () => void;
-    updateEdgeDisplay: () => void;
     onToggleNodes: () => void;
     onToggleEdges: () => void;
 }
@@ -34,8 +32,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
     hospitalLocationMap,
     showNodes,
     showEdges,
-    updateNodeDisplay,
-    updateEdgeDisplay,
+
     onToggleNodes,
     onToggleEdges
 }) => {
@@ -82,8 +79,6 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                                 key={hospital}
                                 onClick={() => {
                                     handleHospitalSelect(hospital);
-                                    updateNodeDisplay();
-                                    updateEdgeDisplay();
                                 }}
                             >
                                 {hospital}
@@ -117,8 +112,6 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                             <DropdownMenuItem
                                 onClick={() => {
                                     onFloorChange(3);
-                                    updateNodeDisplay();
-                                    updateEdgeDisplay();
                                 }}
                                 className={selectedFloor === 3 ? 'bg-blue-50' : ''}
                             >
@@ -127,8 +120,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                             <DropdownMenuItem
                                 onClick={() => {
                                     onFloorChange(4);
-                                    updateNodeDisplay();
-                                    updateEdgeDisplay();
+
                                 }}
                                 className={selectedFloor === 4 ? 'bg-blue-50' : ''}
                             >

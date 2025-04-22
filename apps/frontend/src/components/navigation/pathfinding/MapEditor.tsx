@@ -105,8 +105,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log(graph.getBuildingNodes(selectedHospital, floor))
 
-        let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
-        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed')]
+        let building = selectedHospital;
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, 'normal', building, floor);
+        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, 'removed', building, floor)]
         return markers;
     }
 
@@ -158,31 +169,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
-    const setAddNode = (node: Node) => {
-        setNodesToAdd(prev => [
-            ...prev,
-            {
-                id: 1,
-                name: '',
-                building: selectedHospital!,   // or default like 'Main'
-                floor: selectedFloor ?? 1,       // default floor if unknown
-                x: node.x,
-                y: node.y,
-                edgeCost: node.edgeCost,
-                totalCost: node.totalCost
-            },
-        ]);
-    };
-
     const handleSubmit = async () => {
 
         const edits = graph.getEditHistory()
         await addNodes.mutateAsync(edits.addedNodes);
-        console.log("We are ready to rolllll1")
         await addEdges.mutateAsync(edits.addedEdges);
-        console.log("We are ready to rolllll2")
         await deleteNodes.mutateAsync(edits.deletedNodes);
-        console.log("We are ready to rolllll3")
         await deleteEdges.mutateAsync(edits.deletedEdges);
         console.log("edits committed");
         // graph.commitEdits()
@@ -191,8 +183,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
         console.log(nodesDataFromAPI);
         if (!nodesReady || !edgesReady) return;
-        console.log("We are ready to rolllll")
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
+        console.log("Graph Repopulated")
 
     }
 

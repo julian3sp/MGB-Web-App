@@ -40,6 +40,29 @@ const useClickOutside = (handler: () => void) => {
 
 export default function RequestTablePage() {
     const {filteredData, isLoading, error} = useRequestData();
+    const deleteRequest = trpc.deleteRequest.useMutation()
+    const handleDelete= (selectedRequest: ServiceRequest) => {
+        console.log('Trying to delete:', selectedRequest);
+
+        if (!selectedRequest?.request_id) {
+            console.error('No request selected or ID is missing');
+            return;
+        }
+
+        deleteRequest.mutate(
+            { request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request deleted');
+                    //window.location.reload();
+                    window.location.href = 'http://localhost:3000/requests/table'
+                },
+                onError: (error) => {
+                    console.error('Error deleting request:', error);
+                },
+            }
+        );
+    };
 
     // Prop for column to sort by, has to be one of following columns
     const [sortKey, setSortKey] = useState<
@@ -580,6 +603,7 @@ export default function RequestTablePage() {
                                                     if(window.sessionStorage.getItem("isAdmin") === 'true') {
                                                         console.log('Delete: ');
                                                         console.log(res);
+                                                        handleDelete(res);
                                                         setMenuVisible(false);
                                                     } else {
                                                     console.log("Insufficient Permissions");

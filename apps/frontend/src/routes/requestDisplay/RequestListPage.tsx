@@ -14,6 +14,8 @@ import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
+
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -36,11 +38,65 @@ export default function RequestListPage() {
         tableRequest.state?.ServiceRequest
     );
     const [editMode, setEditMode] = useState(tableRequest.state?.editMode);
+    const [editId, setEditId] = useState(tableRequest.state?.ServiceRequest.request_id);
     const [editPriority, setEditPriority] = useState(tableRequest.state?.ServiceRequest.priority);
     const [editStatus, setEditStatus] = useState(tableRequest.state?.ServiceRequest.status);
     const [pendingRequest, setPendingRequest] = useState<ServiceRequest | null>(null);
     const [swapMenu, setSwapMenu] = useState(false);
     const [exitMenu, setExitMenu] = useState(false);
+
+    const deleteRequest = trpc.deleteRequest.useMutation()
+    const updateRequest = trpc.updateRequest.useMutation()
+
+    const handleDelete = () => {
+        console.log('Trying to delete:', selectedRequest);
+
+        if (!selectedRequest?.request_id) {
+            console.error('No request selected or ID is missing');
+            return;
+        }
+
+        deleteRequest.mutate(
+            { request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request deleted');
+                    //window.location.reload();
+                    window.location.href = 'http://localhost:3000/requests/table'
+                },
+                onError: (error) => {
+                    console.error('Error deleting request:', error);
+                },
+            }
+        );
+    };
+
+    const handleUpdate = () => {
+        console.log('Trying to update:', selectedRequest);
+
+        if (!selectedRequest?.priority) {
+            console.error('No request selected');
+            return;
+        }
+
+        updateRequest.mutate(
+            { priority: editPriority, status: editStatus, request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request updated');
+                    window.location.reload();
+                    //window.location.href = 'http://localhost:3000/requests/table'
+                },
+                onError: (error) => {
+                    console.error('Error updating request:', error);
+                },
+            }
+        );
+    };
+
+
+
+
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -97,6 +153,7 @@ export default function RequestListPage() {
                                         console.log('SAFE SWAP!!!!!');
                                         setSelectedRequest(res);
                                         setEditMode(false);
+                                        setEditId(res.request_id);
                                         setEditPriority(res.priority);
                                         setEditStatus(res.status);
                                     } else {
@@ -104,6 +161,7 @@ export default function RequestListPage() {
                                             console.log('SAFE SWAP!!!!!');
                                             setSelectedRequest(res);
                                             setEditMode(false);
+                                            setEditId(res.request_id);
                                             setEditPriority(res.priority);
                                             setEditStatus(res.status);
                                         } else {
@@ -231,6 +289,7 @@ export default function RequestListPage() {
                                     console.log('Exit edit mode discard changes');
                                     setExitMenu(false);
                                     setEditMode(false);
+                                    setEditId(selectedRequest.request_id);
                                     setEditPriority(selectedRequest.priority);
                                     setEditStatus(selectedRequest.status);
                                 } else {
@@ -325,6 +384,7 @@ export default function RequestListPage() {
                                                     ) {
                                                         console.log('Exit edit');
                                                         setEditMode(false);
+                                                        setEditId(selectedRequest?.request_id)
                                                         setEditPriority(selectedRequest.priority);
                                                         setEditStatus(selectedRequest.status);
                                                     } else {
@@ -342,6 +402,7 @@ export default function RequestListPage() {
                                             if(window.sessionStorage.getItem("isAdmin") === 'true') {
                                                 console.log('Delete: ');
                                                 console.log(selectedRequest);
+                                                handleDelete()
                                             } else {
                                             console.log('Insufficient Permissions');                                            }
                                         }}
@@ -419,17 +480,6 @@ export default function RequestListPage() {
                                                 }`
                                             }
                                         />
-                                        <SubmitFormEdit
-                                            label={'Submit Priority Change'}
-                                            submitCondition={
-                                                editPriority !== selectedRequest.priority
-                                            }
-                                            onSubmit={() => console.log('Allow submit (priority)')}
-                                            onDeny={() => console.log('Deny submit (priority)')}
-                                            errorMessage={'Error: No change made'}
-                                            successMessage={'Priority successfully changed'}
-                                            width={'w-[150px]'}
-                                        />
                                     </div>
 
                                     <h3
@@ -464,9 +514,9 @@ export default function RequestListPage() {
                                         />
 
                                         <SubmitFormEdit
-                                            label={'Submit Status Change'}
-                                            submitCondition={editStatus !== selectedRequest.status}
-                                            onSubmit={() => console.log('Allow submit (status)')}
+                                            label={'Submit Changes'}
+                                            submitCondition={true}
+                                            onSubmit={handleUpdate}
                                             onDeny={() => console.log('Deny submit (status)')}
                                             errorMessage={'Error: No changes made'}
                                             successMessage={'Status successfully changed'}

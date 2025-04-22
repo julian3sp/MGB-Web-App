@@ -86,7 +86,39 @@ export const makeRequest = publicProcedure
 
         return request;
     });
-export const deleteRequests = publicProcedure.mutation(async () => {
-    await client.service_request.deleteMany();
-    await client.$executeRaw`ALTER SEQUENCE "directory_id_seq" RESTART WITH 1`;
-});
+export const deleteRequest = publicProcedure
+    .input(
+        z.object({
+            request_id: z.number(),
+        })
+    )
+    .mutation(async ({ input }) => {
+        await client.sanitation.deleteMany({ where: { request_id: input.request_id } }); //I got an error if I didnt first delete this
+        await client.language.deleteMany({ where: { request_id: input.request_id } });
+        await client.audioVisual.deleteMany({ where: { request_id: input.request_id } });
+        await client.security.deleteMany({ where: { request_id: input.request_id } });
+        await client.transportation.deleteMany({ where: { request_id: input.request_id } });
+        const deleteRequest = await client.service_request.delete({
+            where: { request_id: input.request_id },
+        });
+        return deleteRequest;
+    });
+
+export const updateRequest = publicProcedure
+    .input(
+        z.object({
+            request_id: z.number(),
+            priority: z.string(),
+            status: z.string(),
+        })
+    )
+    .mutation(async ({ input }) => {
+        const updateRequest = await client.service_request.update({
+            where: { request_id: input.request_id },
+            data: {
+                priority: input.priority,
+                status: input.status,
+            },
+        });
+        return updateRequest;
+    });

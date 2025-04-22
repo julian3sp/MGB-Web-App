@@ -8675,6 +8675,7 @@ __metadata:
   dependencies:
     "@googlemaps/js-api-loader": "npm:^1.16.8"
     "@popperjs/core": "npm:^2.11.8"
+    "@radix-ui/react-slot": "npm:^1.2.0"
     "@react-google-maps/api": "npm:^2.20.6"
     "@react-three/drei": "npm:^10.0.6"
     "@react-three/fiber": "npm:^9.1.2"

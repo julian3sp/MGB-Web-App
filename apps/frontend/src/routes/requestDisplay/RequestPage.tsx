@@ -87,9 +87,9 @@ export default function RequestPage() {
             <div
                 className="min-h-screen font-[Poppins] pt-4"
             >
-                <div className="flex gap-4 justify-between pl-4 pr-4 pb-2 pt-1 items-end">
+                <div className="flex gap-4 justify-between px-[16px] pb-2 pt-1 items-end">
                     <h1
-                        className="text-4xl font-bold font-[Poppins] text-left pl-[2px]"
+                        className="text-4xl font-bold font-[Poppins] text-left"
                         style={{ color: '#003A96' }}
                     >
                         Service Requests:

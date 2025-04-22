@@ -14,6 +14,8 @@ import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
+
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -36,11 +38,65 @@ export default function RequestListPage() {
         tableRequest.state?.ServiceRequest
     );
     const [editMode, setEditMode] = useState(tableRequest.state?.editMode);
+    const [editId, setEditId] = useState(tableRequest.state?.ServiceRequest.request_id);
     const [editPriority, setEditPriority] = useState(tableRequest.state?.ServiceRequest.priority);
     const [editStatus, setEditStatus] = useState(tableRequest.state?.ServiceRequest.status);
     const [pendingRequest, setPendingRequest] = useState<ServiceRequest | null>(null);
     const [swapMenu, setSwapMenu] = useState(false);
     const [exitMenu, setExitMenu] = useState(false);
+
+    const deleteRequest = trpc.deleteRequest.useMutation()
+    const updateRequest = trpc.updateRequest.useMutation()
+
+    const handleDelete = () => {
+        console.log('Trying to delete:', selectedRequest);
+
+        if (!selectedRequest?.request_id) {
+            console.error('No request selected or ID is missing');
+            return;
+        }
+
+        deleteRequest.mutate(
+            { request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request deleted');
+                    //window.location.reload();
+                    window.location.href = 'http://localhost:3000/requests/table'
+                },
+                onError: (error) => {
+                    console.error('Error deleting request:', error);
+                },
+            }
+        );
+    };
+
+    const handleUpdate = () => {
+        console.log('Trying to update:', selectedRequest);
+
+        if (!selectedRequest?.priority) {
+            console.error('No request selected');
+            return;
+        }
+
+        updateRequest.mutate(
+            { priority: editPriority, status: editStatus, request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request updated');
+                    window.location.reload();
+                    //window.location.href = 'http://localhost:3000/requests/table'
+                },
+                onError: (error) => {
+                    console.error('Error updating request:', error);
+                },
+            }
+        );
+    };
+
+
+
+
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -97,6 +153,7 @@ export default function RequestListPage() {
                                         console.log('SAFE SWAP!!!!!');
                                         setSelectedRequest(res);
                                         setEditMode(false);
+                                        setEditId(res.request_id);
                                         setEditPriority(res.priority);
                                         setEditStatus(res.status);
                                     } else {
@@ -104,6 +161,7 @@ export default function RequestListPage() {
                                             console.log('SAFE SWAP!!!!!');
                                             setSelectedRequest(res);
                                             setEditMode(false);
+                                            setEditId(res.request_id);
                                             setEditPriority(res.priority);
                                             setEditStatus(res.status);
                                         } else {
@@ -151,7 +209,7 @@ export default function RequestListPage() {
                                             : res.priority === 'Medium'
                                                 ? 'text-yellow-500'
                                                 : res.priority === 'High'
-                                                    ? 'text-orange-500'
+                                                    ? 'text-red-500'
                                                     : res.priority === 'Emergency'
                                                         ? 'text-red-700 underline'
                                                         : 'text-gray-600'
@@ -231,6 +289,7 @@ export default function RequestListPage() {
                                     console.log('Exit edit mode discard changes');
                                     setExitMenu(false);
                                     setEditMode(false);
+                                    setEditId(selectedRequest.request_id);
                                     setEditPriority(selectedRequest.priority);
                                     setEditStatus(selectedRequest.status);
                                 } else {
@@ -265,7 +324,7 @@ export default function RequestListPage() {
                         style={{ borderColor: '#003A96' }}
                     >
                         <div>
-                            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] pb-2 mb-3">
+                            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] mb-3">
                                 <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
                                     {selectedRequest.request_id}.{' '}
                                     {selectedRequest.request_type === 'Sanitation'
@@ -287,7 +346,7 @@ export default function RequestListPage() {
                                                 : selectedRequest.priority === 'Medium'
                                                   ? 'text-yellow-500'
                                                   : selectedRequest.priority === 'High'
-                                                    ? 'text-orange-500'
+                                                    ? 'text-red-500'
                                                     : selectedRequest.priority === 'Emergency'
                                                       ? 'text-red-700 underline'
                                                       : 'text-gray-600'
@@ -298,50 +357,57 @@ export default function RequestListPage() {
                                     )
                                 </h2>
                                 {/*ReqID. Type (Priority)*/}
-                                <div className="flex gap-8">
-                                    {!editMode ? (
-                                        //If not in edit mode, show edit icon
-                                        <EditRequest
-                                            size={20}
-                                            onClick={() => {
-                                                console.log('Edit');
-                                                console.log(selectedRequest);
-                                                setEditMode(true);
-                                            }}
-                                            tooltip={'Edit Service Request'}
-                                        />
-                                    ) : (
-                                        //If in edit mode, show exit icon
-                                        <div className={''}>
-                                            <ExitButton
-                                                size={24}
+                                <div className="relative -top-[12px] flex gap-4 pl-4 pt-2">
+                                    <div className="h-[35px] flex items-center gap-4">
+                                        {!editMode ? (
+                                            <div className="relative top-[4px]">
+                                            <EditRequest
+                                                size={20}
                                                 onClick={() => {
-                                                    if (
-                                                        allowSwap(
-                                                            editPriority,
-                                                            editStatus,
-                                                            selectedRequest
-                                                        )
-                                                    ) {
-                                                        console.log('Exit edit');
-                                                        setEditMode(false);
-                                                        setEditPriority(selectedRequest.priority);
-                                                        setEditStatus(selectedRequest.status);
-                                                    } else {
-                                                        console.log(`Show exit menu`);
-                                                        setExitMenu(true);
-                                                    }
+                                                    console.log('Edit');
+                                                    console.log(selectedRequest);
+                                                    setEditMode(true);
                                                 }}
-                                                tooltip={'Exit Edit Mode'}
+                                                tooltip={'Edit Service Request'}
                                             />
-                                        </div>
-                                    )}
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <SubmitFormEdit
+                                                    label={'Submit Changes'}
+                                                    submitCondition={true}
+                                                    onSubmit={handleUpdate}
+                                                    onDeny={() => console.log('Deny submit (status)')}
+                                                    errorMessage={'Error: No changes made'}
+                                                    successMessage={'Status successfully changed'}
+                                                    width={'w-[150px]'}
+                                                />
+                                                <ExitButton
+                                                    size={24}
+                                                    onClick={() => {
+                                                        if (allowSwap(editPriority, editStatus, selectedRequest)) {
+                                                            console.log('Exit edit');
+                                                            setEditMode(false);
+                                                            setEditId(selectedRequest?.request_id);
+                                                            setEditPriority(selectedRequest.priority);
+                                                            setEditStatus(selectedRequest.status);
+                                                        } else {
+                                                            console.log(`Show exit menu`);
+                                                            setExitMenu(true);
+                                                        }
+                                                    }}
+                                                    tooltip={'Exit Edit Mode'}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
                                             if(window.sessionStorage.getItem("isAdmin") === 'true') {
                                                 console.log('Delete: ');
                                                 console.log(selectedRequest);
+                                                handleDelete()
                                             } else {
                                             console.log('Insufficient Permissions');                                            }
                                         }}
@@ -419,17 +485,6 @@ export default function RequestListPage() {
                                                 }`
                                             }
                                         />
-                                        <SubmitFormEdit
-                                            label={'Submit Priority Change'}
-                                            submitCondition={
-                                                editPriority !== selectedRequest.priority
-                                            }
-                                            onSubmit={() => console.log('Allow submit (priority)')}
-                                            onDeny={() => console.log('Deny submit (priority)')}
-                                            errorMessage={'Error: No change made'}
-                                            successMessage={'Priority successfully changed'}
-                                            width={'w-[150px]'}
-                                        />
                                     </div>
 
                                     <h3
@@ -461,16 +516,6 @@ export default function RequestListPage() {
                                                               : 'text-blue-gray-900'
                                                 }`
                                             }
-                                        />
-
-                                        <SubmitFormEdit
-                                            label={'Submit Status Change'}
-                                            submitCondition={editStatus !== selectedRequest.status}
-                                            onSubmit={() => console.log('Allow submit (status)')}
-                                            onDeny={() => console.log('Deny submit (status)')}
-                                            errorMessage={'Error: No changes made'}
-                                            successMessage={'Status successfully changed'}
-                                            width={'w-[150px]'}
                                         />
                                     </div>
                                 </>
@@ -704,7 +749,6 @@ export default function RequestListPage() {
                 ) : (
                     <>
                         {/*No service selected yet*/}
-                        <div className="flex-1" style={{ borderColor: '#005E64' }}>
                             <nav
                                 className="border p-5 rounded-lg flex items-center"
                                 style={{ borderColor: '#005E64' }}
@@ -713,7 +757,6 @@ export default function RequestListPage() {
                                     Select a service request to view details.
                                 </p>
                             </nav>
-                        </div>
                     </>
                 )}{' '}
             </div>

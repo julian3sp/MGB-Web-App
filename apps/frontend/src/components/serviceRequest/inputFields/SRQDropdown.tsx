@@ -7,9 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
@@ -19,13 +17,13 @@ import {
     PopoverTrigger,
 } from "../../ui/Popover"
 
-export function Combobox({options, value, setValue, error, clearError, placeholder} : {
+export function SRQDropdown({options, value, setValue, error, clearError, placeholder} : {
     options: string[];
     value: string;
     setValue: (value: string) => void;
-    placeholder: string;
     error?: string;
     clearError?: ()=>void;
+    placeholder: string;
 }) {
     const [open, setOpen] = React.useState(false)
 
@@ -79,11 +77,9 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                         <ChevronDown className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[362px] p-0 font-[Poppins]">
+                <PopoverContent className="w-[362px] max-h-[275px] p-0 font-[Poppins]">
                     <Command>
-                        <CommandInput placeholder="Search languages..." className="h-9" />
-                        <CommandList className={"max-h-[240px] overflow-y-auto"}>
-                            <CommandEmpty>No language found.</CommandEmpty>
+                        <CommandList>
                             <CommandGroup>
                                 {options.map((option) => (
                                     <CommandItem

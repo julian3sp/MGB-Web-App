@@ -65,12 +65,13 @@ export function ErrorPopUp({
                 minLength={minLength}
                 maxLength={maxLength}
                 {...(type && { type })}
-                className={`border-[1px] border-[#ececec] shadow border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
+                className={`border-[1px] border-[#ececec] focus:bg-white shadow border-solid hover:bg-accent hover:text-black rounded-md py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
                 value={value}
                 onChange={(e) => {
                     setState(e.target.value);
                 }}
                 placeholder={placeholder}
+                //removed this if needed for later: hover:border-[#a2caff]
             />
         </div>
     );

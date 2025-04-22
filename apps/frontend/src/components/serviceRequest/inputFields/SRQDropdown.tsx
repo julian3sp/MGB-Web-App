@@ -79,7 +79,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         {value
                             ? options.find((option) => option === value)
                             : placeholder}
-                        <ChevronDown className="opacity-50" />
+                        <ChevronDown className={`opacity-50" ${!open ? "text-gray-500" : "text-black"}`} />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[362px] max-h-[275px] p-0 font-[Poppins]">
@@ -87,6 +87,9 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         <CommandList>
                             <CommandGroup>
                                 {options.map((option) => {
+
+                                    const displayOption = (originalValue === value) ? `${option}*` : option;
+                                    const optionStyle = styledOptions ? styledOptions(value) : '';
                                     return (
                                     <CommandItem
                                         key={option}
@@ -95,8 +98,9 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                                             setValue(currentValue === value ? "" : currentValue)
                                             setOpen(false)
                                         }}
+                                        // className={optionStyle}
                                     >
-                                        {option}
+                                        {displayOption}
                                         <Check
                                             className={cn(
                                                 "ml-auto",

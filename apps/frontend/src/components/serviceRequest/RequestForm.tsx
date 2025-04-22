@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { AuthenticationError } from '@auth0/auth0-react';
 import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
 import {ErrorPopUp} from "./inputFields/ErrorPopUp.tsx";
-import { ServiceComponentInputBox } from "./inputFields/ServiceComponentInputBox.tsx";
+import {Combobox} from "./inputFields/Combobox.tsx";
 import TextArea from '../TextArea.tsx';
 import SubmitButton from '../SubmitButton.tsx';
 import { InputHeader } from '../signIn/InputHeader.tsx';
@@ -416,13 +416,35 @@ function RequestForm({ title, type }: requestFormProps) {
                                     </div>
                                     <div>
                                         <InputHeader>Target Language</InputHeader>
-                                        <ErrorPopUp
-                                            value={targetLanguage}
-                                            setState={setTargetLanguage}
-                                            placeholder={"Target Language"}
-                                            width="w-full"
-                                            error={errors.targetLanguage}
-                                            clearError={() => clearError('targetLanguage')}/>
+                                        {/*<ErrorPopUp*/}
+                                        {/*    value={targetLanguage}*/}
+                                        {/*    setState={setTargetLanguage}*/}
+                                        {/*    placeholder={"Target Language"}*/}
+                                        {/*    width="w-full"*/}
+                                        {/*    error={errors.targetLanguage}*/}
+                                        {/*    clearError={() => clearError('targetLanguage')}/>*/}
+                                        <Combobox options={[
+                                            {
+                                                value: "english",
+                                                label: "English",
+                                            },
+                                            {
+                                                value: "spanish",
+                                                label: "Spanish",
+                                            },
+                                            {
+                                                value: "french",
+                                                label: "French",
+                                            },
+                                            {
+                                                value: "portuguese",
+                                                label: "Portuguese",
+                                            },
+                                            {
+                                                value: "g4",
+                                                label: "German",
+                                            },
+                                        ]}/>
                                     </div>
                                 </>
                                 : null}

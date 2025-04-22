@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronsUpDown } from "lucide-react"
 
 export function ServiceComponentDropdown(
     {
@@ -61,7 +62,7 @@ export function ServiceComponentDropdown(
 
             <select
                 {...(type && { type })}
-                className={`border-[1px] border-[#ececec] border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
+                className={`border-[1px] border-[#ececec] shadow border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
                 value={value}
                 onChange={(e) => {
                     setState(e.target.value);
@@ -72,6 +73,7 @@ export function ServiceComponentDropdown(
                 {options.map((option) => (
                     <option value={option}>{option}</option>
                 ))}
+
             </select>
         </div>
     );

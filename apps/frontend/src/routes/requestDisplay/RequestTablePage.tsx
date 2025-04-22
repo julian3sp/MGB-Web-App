@@ -5,6 +5,7 @@ import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import EditRequest from '@/components/ui/EditRequest.tsx';
+import ViewRequest from '@/components/ui/ViewRequest.tsx';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -39,6 +40,29 @@ const useClickOutside = (handler: () => void) => {
 
 export default function RequestTablePage() {
     const { filteredData, isLoading, error } = useRequestData();
+    const deleteRequest = trpc.deleteRequest.useMutation();
+    const handleDelete = (selectedRequest: ServiceRequest) => {
+        console.log('Trying to delete:', selectedRequest);
+
+        if (!selectedRequest?.request_id) {
+            console.error('No request selected or ID is missing');
+            return;
+        }
+
+        deleteRequest.mutate(
+            { request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request deleted');
+                    //window.location.reload();
+                    window.location.href = 'http://localhost:3000/requests/table';
+                },
+                onError: (error) => {
+                    console.error('Error deleting request:', error);
+                },
+            }
+        );
+    };
 
     // Prop for column to sort by, has to be one of following columns
     const [sortKey, setSortKey] = useState<
@@ -59,9 +83,11 @@ export default function RequestTablePage() {
 
     // Input a service request, sets page to detailed view with that service request selected.
     const navigate = useNavigate();
-    const sendToDetailedView = (highlightedRequest: ServiceRequest) => {
+    const sendToDetailedView = (highlightedRequest: ServiceRequest, editMode: boolean) => {
         console.log(highlightedRequest);
-        navigate('/requests/list', { state: { ServiceRequest: highlightedRequest } });
+        navigate('/requests/list', {
+            state: { ServiceRequest: highlightedRequest, editMode: editMode },
+        });
     };
 
     // Edit & Delete menu props
@@ -129,9 +155,9 @@ export default function RequestTablePage() {
 
     //Table page
     return (
-        <nav className="flex flex-1">
-            <nav
-                className="w-full max-h-[105vh] bg-white p-6 font-[Poppins]"
+        <div className="flex flex-1">
+            <div
+                className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
                 style={{
                     borderTop: 'none',
                     borderBottom: 'none',
@@ -141,14 +167,14 @@ export default function RequestTablePage() {
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-[#003A96] max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
                             <thead className="bg-gray-200 sticky top-0 z-20">
                                 <tr>
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_id') setAscending(!ascending);
                                             else {
@@ -166,7 +192,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'request_type')
                                                 setAscending(!ascending);
@@ -177,7 +203,7 @@ export default function RequestTablePage() {
                                         }}
                                     >
                                         <h3
-                                            className="block text-lg font-semibold font-[Poppins]"
+                                            className="block text-lg font-semibold font-[Poppins] break-words"
                                             style={{ color: '#003A96' }}
                                         >
                                             Request Type{' '}
@@ -186,7 +212,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'priority') setAscending(!ascending);
                                             else {
@@ -308,7 +334,7 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300  break-words">
+                                    <th className="p-4 border-b border-gray-300 break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -316,7 +342,12 @@ export default function RequestTablePage() {
                                             Additional Comments
                                         </h3>
                                     </th>
-                                    <th className="p-4 border-b border-gray-300  bg-gray-200 sticky right-0 z-10 text-center">
+                                    <th
+                                        className="p-4 border-b border-gray-300 sticky right-0 z-20 text-center bg-gray-200"
+                                        style={{
+                                            boxShadow: '-1px 0 0 #003A96',
+                                        }}
+                                    >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
                                             style={{ color: '#003A96' }}
@@ -332,13 +363,13 @@ export default function RequestTablePage() {
                                         key={res.request_id}
                                         className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
                                     >
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[125px] pt-0 pb-2">
+                                        <td className="p-4 break-words max-w-[200px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
                                                 <i>
                                                     {res.request_type === 'Sanitation'
@@ -356,7 +387,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[110px] pt-0 pb-2">
+                                        <td className="p-4  break-words w-fit pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med font-semibold ${
                                                     res.priority === 'Low'
@@ -500,7 +531,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.name} ({res.employee_id})
                                             </p>
@@ -522,7 +553,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[115px] pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
                                                     res.status === 'Unassigned'
@@ -540,7 +571,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] py-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
                                                     <i>{res.additional_comments}</i>
@@ -550,23 +581,54 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15">
-                                            <div className="flex justify-center gap-2 mx-auto w-fit">
-                                                <EditRequest
-                                                    size={20}
-                                                    onClick={() => {
-                                                        console.log('Edit');
-                                                        setMenuVisible(false);
-                                                        sendToDetailedView(res);
-                                                    }}
-                                                />
+                                        <td
+                                            className="p-4 sticky right-0 z-9 w-fit py-2 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
+                                            style={{
+                                                backgroundColor: 'inherit',
+                                                boxShadow: '-1px 0 0 #003A96',
+                                            }}
+                                        >
+                                            <div className="flex justify-center gap-2">
+                                                <div className={'flex justify-center gap-4'}>
+                                                    <ViewRequest
+                                                        size={25}
+                                                        onClick={() => {
+                                                            console.log('View');
+                                                            setMenuVisible(false);
+                                                            sendToDetailedView(res, false);
+                                                        }}
+                                                        tooltip={'View Service Request'}
+                                                    />
+                                                    <EditRequest
+                                                        size={20}
+                                                        onClick={() => {
+                                                            console.log('Edit');
+                                                            setMenuVisible(false);
+                                                            sendToDetailedView(res, true);
+                                                        }}
+                                                        tooltip={'Edit Service Request'}
+                                                    />
+                                                </div>
                                                 <DeleteRequest
                                                     size={20}
                                                     onClick={() => {
-                                                        console.log('Delete: ');
-                                                        console.log(res);
-                                                        setMenuVisible(false);
+                                                        console.log(
+                                                            window.sessionStorage.getItem('isAdmin')
+                                                        );
+                                                        if (
+                                                            window.sessionStorage.getItem(
+                                                                'isAdmin'
+                                                            ) === 'true'
+                                                        ) {
+                                                            console.log('Delete: ');
+                                                            console.log(res);
+                                                            handleDelete(res);
+                                                            setMenuVisible(false);
+                                                        } else {
+                                                            console.log('Insufficient Permissions');
+                                                        }
                                                     }}
+                                                    tooltip={'Delete Service Request'}
                                                 />
                                             </div>
                                         </td>
@@ -583,8 +645,8 @@ export default function RequestTablePage() {
                         <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
                     </nav>
                 )}
-            </nav>
-        </nav>
+            </div>
+        </div>
     );
 }
 /*email phone#*/

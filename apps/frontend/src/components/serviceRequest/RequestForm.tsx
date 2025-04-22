@@ -434,8 +434,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                     value={status}
                                     setValue={setStatus}
                                     placeholder={"Select Status"}
-                                    error={errors.status}
                                     width={"w-full"}
+                                    error={errors.status}
                                     options={["Unassigned", "Assigned", "Working", "Done"]}
                                     clearError={() => clearError('status')}
                                     styledOptions={(option) =>
@@ -511,8 +511,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                             value={accessZones}
                                             setValue={setAccessZones}
                                             placeholder={"Select Access Zones Needed"}
-                                            error={errors.accessZones}
                                             width={"w-full"}
+                                            error={errors.accessZones}
                                             options={[
                                                 "",
                                                 "ICU",

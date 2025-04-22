@@ -47,7 +47,7 @@ model Sanitation {
   cleaningType    String
   contaminant     String?
   sanitationId    Int             @unique
-  service_request service_request @relation(fields: [sanitationId], references: [request_id])
+  service_request service_request @relation(fields: [sanitationId], references: [request_id], onDelete: Cascade)
 }
 
 model Language {
@@ -55,7 +55,7 @@ model Language {
   sourceLanguage  String
   targetLanguage  String
   languageId      Int             @unique
-  service_request service_request @relation(fields: [languageId], references: [request_id])
+  service_request service_request @relation(fields: [languageId], references: [request_id], onDelete: Cascade)
 }
 
 model Transportation {
@@ -63,7 +63,7 @@ model Transportation {
   transportationType        String
   transportationDestination String
   transportationId          Int             @unique
-  service_request           service_request @relation(fields: [transportationId], references: [request_id])
+  service_request           service_request @relation(fields: [transportationId], references: [request_id], onDelete: Cascade)
 }
 
 model AudioVisual {
@@ -71,7 +71,7 @@ model AudioVisual {
   accommodationType    String
   accommodationDetails String?
   audioVisualId        Int             @unique
-  service_request      service_request @relation(fields: [audioVisualId], references: [request_id])
+  service_request      service_request @relation(fields: [audioVisualId], references: [request_id], onDelete: Cascade)
 }
 
 model Security {
@@ -79,7 +79,7 @@ model Security {
   accessZones     String
   securityIssue   String
   securityId      Int             @unique
-  service_request service_request @relation(fields: [securityId], references: [request_id])
+  service_request service_request @relation(fields: [securityId], references: [request_id], onDelete: Cascade)
 }
 
 model MedicalDevice {
@@ -104,6 +104,8 @@ model directory {
   services  String
   location  String
   telephone String
+  node      nodes  @relation(fields: [nodesId], references: [id])
+  nodesId   Int
 }
 
 model users {
@@ -123,8 +125,9 @@ model nodes {
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 
-  outgoingEdges edges[] @relation("SourceEdges")
-  incomingEdges edges[] @relation("TargetEdges")
+  outgoingEdges edges[]     @relation("SourceEdges")
+  incomingEdges edges[]     @relation("TargetEdges")
+  directory     directory[]
 }
 
 model edges {

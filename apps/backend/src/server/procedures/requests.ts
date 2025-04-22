@@ -16,6 +16,7 @@ export const getRequests = trpc.procedure.query(async () => {
             facilities: true,
         },
     });
+
     console.log('getRequests returned');
     return requests;
 });
@@ -104,4 +105,35 @@ export const makeRequest = publicProcedure
         });
 
         return request;
+    });
+export const deleteRequest = publicProcedure
+    .input(
+        z.object({
+            request_id: z.number(),
+        })
+    )
+    .mutation(async ({ input }) => {
+        const deleteRequest = await client.service_request.delete({
+            where: { request_id: input.request_id },
+        });
+        return deleteRequest;
+    });
+
+export const updateRequest = publicProcedure
+    .input(
+        z.object({
+            request_id: z.number(),
+            priority: z.string(),
+            status: z.string(),
+        })
+    )
+    .mutation(async ({ input }) => {
+        const updateRequest = await client.service_request.update({
+            where: { request_id: input.request_id },
+            data: {
+                priority: input.priority,
+                status: input.status,
+            },
+        });
+        return updateRequest;
     });

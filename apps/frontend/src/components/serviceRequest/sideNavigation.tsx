@@ -1,20 +1,32 @@
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 interface SideNavProps {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
     children: React.ReactNode;
+    width?: number;
+    absolute?: boolean;
 }
 
-const SideNav: React.FC<SideNavProps> = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(true);
+const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256, absolute}) => {
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    const translateX = isOpen ? 0 : -width;
+    const translateButton = isOpen ? width-68 : 20;
+
 
     return (
         <>
+            <motion.div
+                className="min-h-screen bg-[#F4F4F4] z-20"
+                animate={{x: translateButton, y: 25}}
+                initial={{x: translateButton, y: 25}}
+                transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
             {/*toggle button*/}
-            <div className="fixed top-18 left-2 z-40">
+            <div className={`${absolute ? `absolute` : `fixed`} z-40`}>
                 <button
                     onClick={toggleSidebar}
                     aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
@@ -30,19 +42,17 @@ const SideNav: React.FC<SideNavProps> = ({ children }) => {
                     }`}/>
                 </button>
             </div>
+            </motion.div>
 
-            <div className="absolute top-0 left-0 h-full">
                 {/* Sidebar*/}
-                <div
-                    className={`pt-10 h-full bg-[#F4F4F4] shadow-xl text-white w-64 transform transition-transform duration-300 ease-in-out ${
-                        isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-                >
-
-                    <div className="p-5 overflow-y-auto h-full">
-                        {children}
-                    </div>
-                </div>
-            </div>
+                <motion.div
+                    className="min-h-screen" // D9D9D9
+                    style={{width}}
+                    animate={{x: translateX}}
+                    initial={{x: translateX}}
+                    transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
+                    {children}
+                </motion.div>
         </>
     );
 };

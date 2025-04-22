@@ -4,7 +4,7 @@ import MapComponent from "../components/map/MapComponent.tsx";
 
 function NavigationPage() {
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-[95vh]">
             <MapComponent />
         </div>
     );

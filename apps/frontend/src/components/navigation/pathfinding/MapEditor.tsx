@@ -11,7 +11,7 @@ import {createMarkers, drawAllEdges} from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import { Node, Edge } from './Graph';
+import {Node, Edge, Graph} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 
 interface MapEditorProps {
@@ -100,6 +100,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     function getNodeMarkers(){
         if(!selectedHospital || !map) return;
         const floor = selectedFloor === null ? 1: selectedFloor;
+        console.log(graph.getBuildingNodes(selectedHospital, floor))
         return createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
     }
 
@@ -183,7 +184,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             addNode.mutateAsync(nodesToAdd)
     }
     const handleSubmit = () => {
-        handleNodeAdd()
+        graph.addNode()
     }
 
     const handleRemoveNode = (id: number) => {

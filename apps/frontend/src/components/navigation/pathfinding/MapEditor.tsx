@@ -130,36 +130,41 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [showNodes, selectedHospital, selectedFloor, map]);
 
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
 
-    const toggleEdgesButtonHandler = () =>{
-        if(showEdges){
-            setShowEdges(false)
-        }
-        else{
-            setShowEdges(true);
-        }
-    }
-
-    const toggleEdgesHandler = () => {
-        if (
-            !map ||
-            isNodesLoading ||
-            isEdgesLoading ||
-            !nodesDataFromAPI ||
-            !edgesDataFromAPI ||
-            !selectedHospital
-        )
-            return;
+        // Always clear
+        edgePolylines.forEach(m => m.setMap(null));
+        setNodeMarkers([]);
 
         if (showEdges) {
-            const polylinesCreated = getEdgeLines()
-            if (!polylinesCreated) return;
-            setEdgePolylines(polylinesCreated);
-        } else {
-            edgePolylines.forEach((polyline) => polyline.setMap(null));
-            setEdgePolylines([]);
+            const markers = getNodeMarkers();
+            if (markers) {
+                setNodeMarkers(markers);
+            }
         }
+    }, [showEdges, selectedHospital, selectedFloor, map]);
+
+
+    const handleToggleEdges = () => {
+        setShowEdges(prev => !prev);
     };
+
+    // Display Edges
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
+
+        // clear edges
+        edgePolylines.forEach(poly => poly.setMap(null));
+        setEdgePolylines([]);
+
+        if (showEdges) {
+            const lines = getEdgeLines();
+            if (lines) {
+                setEdgePolylines(lines);
+            }
+        }
+    }, [showEdges, selectedHospital, selectedFloor, map]);
 
     const setAddNode = (node: Node) => {
         setNodesToAdd(prev => [
@@ -261,8 +266,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
                 <button
                     onClick={() =>{
-                        toggleEdgesHandler();
-                        toggleEdgesButtonHandler();}}
+                        handleToggleEdges();}}
                     className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
                 >
                     {showEdges ? 'Hide Edges' : 'Show Edges'}
@@ -319,7 +323,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     showNodes={showNodes}
                     showEdges={showEdges}
                     onToggleNodes={handleToggleNodes}
-                    onToggleEdges={toggleEdgesButtonHandler}
+                    onToggleEdges={handleToggleEdges}
                 />
             </div>
         </div>

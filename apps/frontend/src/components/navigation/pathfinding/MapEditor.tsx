@@ -311,7 +311,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+                <button className={'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 font-[poppins]'} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 

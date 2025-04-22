@@ -19,7 +19,7 @@ export type  Edge = {
     weight: number;
 }
 
-export type Edit = {
+type Edit = {
     deletedNodes: number[];
     deletedEdges: number[];
     addedNodes: Node[];
@@ -217,7 +217,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        console.log("Getting nodes building: ", building, " Floor:", floor);
+        // console.log("Getting nodes building: ", building, " Floor:", floor);
 
         return Array.from(this.nodes).filter(
             n => n.building === building && n.floor === floor
@@ -235,7 +235,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        console.log("Getting edges building: ", building, " Floor:", floor);
+        // console.log("Getting edges building: ", building, " Floor:", floor);
         return Array.from(this.edges).filter(
             edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
                 edge.targetId.building === building && edge.targetId.floor  === floor
@@ -385,31 +385,31 @@ export class Graph {
 export default Graph;
 
 // Test
-const allNodes: Node[] = [{ id: 1, name: "1", x: 0,  y: 0, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 2, name: "2", x: -1, y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 3, name: "3", x: 1,  y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 4, name: "4", x: -2, y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 5, name: "5", x: 2,  y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 6, name: "6", x: -1, y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 7, name: "7", x: 1,  y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
-                          { id: 8, name: "8", x: 0,  y: 4, building: "", floor: 0, edgeCost: 0, totalCost: 0 }];
-
-const allEdges = [
-    { id: 1, sourceId: 1, targetId: 2, weight: 4 },
-    { id: 2, sourceId: 1, targetId: 3, weight: 8 },
-    { id: 3, sourceId: 1, targetId: 5, weight: 1 },
-    { id: 4, sourceId: 2, targetId: 4, weight: 7 },
-    { id: 5, sourceId: 2, targetId: 6, weight: 1 },
-    { id: 6, sourceId: 4, targetId: 6, weight: 1 },
-    { id: 7, sourceId: 3, targetId: 7, weight: 5 },
-    { id: 8, sourceId: 5, targetId: 7, weight: 9 },
-    { id: 9, sourceId: 6, targetId: 8, weight: 8 },
-] satisfies { id: number; sourceId: number; targetId: number; weight: number }[];
+// const allNodes: Node[] = [{ id: 1, name: "1", x: 0,  y: 0, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 2, name: "2", x: -1, y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 3, name: "3", x: 1,  y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 4, name: "4", x: -2, y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 5, name: "5", x: 2,  y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 6, name: "6", x: -1, y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 7, name: "7", x: 1,  y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 8, name: "8", x: 0,  y: 4, building: "", floor: 0, edgeCost: 0, totalCost: 0 }];
+//
+// const allEdges = [
+//     { id: 1, sourceId: 1, targetId: 2, weight: 4 },
+//     { id: 2, sourceId: 1, targetId: 3, weight: 8 },
+//     { id: 3, sourceId: 1, targetId: 5, weight: 1 },
+//     { id: 4, sourceId: 2, targetId: 4, weight: 7 },
+//     { id: 5, sourceId: 2, targetId: 6, weight: 1 },
+//     { id: 6, sourceId: 4, targetId: 6, weight: 1 },
+//     { id: 7, sourceId: 3, targetId: 7, weight: 5 },
+//     { id: 8, sourceId: 5, targetId: 7, weight: 9 },
+//     { id: 9, sourceId: 6, targetId: 8, weight: 8 },
+// ] satisfies { id: number; sourceId: number; targetId: number; weight: number }[];
 
 
 // Instantiate the graph
-const graph = new Graph();
-graph.populate(allNodes, allEdges);
+// const graph = new Graph();
+// graph.populate(allNodes, allEdges);
 // console.log(graph.getEdge(1))
 // console.log(graph.getAllEdges())
 

@@ -180,9 +180,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     };
 
     const handleSubmit = () => {
-        nodesToAdd.forEach((node) => {
-            graph.addNode(node);
-        });
+
         graph.commitEdits()
         graph.populate(nodesDataFromAPI, edgesDataFromAPI)
 

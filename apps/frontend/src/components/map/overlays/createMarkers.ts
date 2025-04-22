@@ -28,9 +28,6 @@ export function createMarkers(
                 scaledSize: scaledSize,
             },
         });
-        markers.push(newMarker);
-    });
-    google.maps.event.addListener(map, 'dblclick', function (event) {
         setAddNode({
             id: Date.now(), // or another unique value
             name: '',
@@ -51,6 +48,7 @@ export function createMarkers(
             edgeCost: 0, // default value
             totalCost: 0, // default value
         })
+        markers.push(newMarker);
     });
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {

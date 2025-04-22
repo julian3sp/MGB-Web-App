@@ -38,7 +38,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
-    const [nodesToAdd, setNodesToAdd] = useState<{name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
+    const [nodesToAdd, setNodesToAdd] = useState<{id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
 
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -189,6 +189,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setNodesToAdd(prev => [
             ...prev,
             {
+                id: 1,
                 name: '',
                 building: selectedHospital!,   // or default like 'Main'
                 floor: selectedFloor ?? 1,       // default floor if unknown
@@ -200,11 +201,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         ]);
     };
 
-    const handleNodeAdd = () => {
-            addNode.mutateAsync(nodesToAdd)
-    }
     const handleSubmit = () => {
-        graph.addNode()
+        nodesToAdd.forEach((node) => {
+            graph.addNode(node);
+        });
+        graph.commitEdits()
+        graph.populate(nodesDataFromAPI, edgesDataFromAPI)
+
     }
 
     const handleRemoveNode = (id: number) => {
@@ -324,7 +327,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 border-r border-gray-300 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '} onClick={handleSubmit}>
+                <button className={'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 

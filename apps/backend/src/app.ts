@@ -16,12 +16,18 @@ import {
 } from './server/procedures/directories.ts';
 import {
     deleteAllNodes,
+    deleteSelectedNodes,
     getAllNodes,
     getNode,
     makeManyNodes,
     makeNode,
 } from './server/procedures/nodes.ts';
-import { deleteAllEdges, getAllEdges, makeEdge } from './server/procedures/edges.ts';
+import {
+    deleteAllEdges,
+    deleteSelectedEdges,
+    getAllEdges,
+    makeEdge, makeManyEdges,
+} from './server/procedures/edges.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -44,9 +50,12 @@ const appRouter = t.router({
     getNode: getNode,
     getAllNodes: getAllNodes,
     deleteAllNodes: deleteAllNodes,
+    deleteSelectedNodes: deleteSelectedNodes,
     makeEdge: makeEdge,
+    makeManyEdges: makeManyEdges,
     getAllEdges: getAllEdges,
     deleteAllEdges: deleteAllEdges,
+    deleteSelectedEdges: deleteSelectedEdges,
 });
 
 const app: Express = express(); // Set up the backend

@@ -5,8 +5,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuLabel
-} from './ui/dropdown-menu';
-import ZoomControls from './ZoomInAndOutButton';
+} from '../ui/dropdown-menu';
+import ZoomControls from '../ZoomInAndOutButton';
 
 interface HospitalViewControlsProps {
   map: google.maps.Map | null;

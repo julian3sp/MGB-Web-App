@@ -34,7 +34,8 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
   const parkingOverlay = new google.maps.GroundOverlay(
     chestnutHillOverlayImg,
     parkingBounds,
-    { opacity: 1 }
+    { clickable: false,
+      opacity: 1 }
   );
   parkingOverlay.setMap(map);
 
@@ -42,7 +43,9 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
   const floorOverlay = new google.maps.GroundOverlay(
     chestnutFloorPlanOverlay,
     floorBounds,
-    { opacity: 1 }
+
+    { clickable: false,
+      opacity: 1 }
   );
   floorOverlay.setMap(map);
 

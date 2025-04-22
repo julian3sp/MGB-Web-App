@@ -43,8 +43,6 @@ const MuteIcon = () => (
   </svg>
 );
 
-
-
 const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);

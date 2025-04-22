@@ -39,10 +39,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const [nodesToAdd, setNodesToAdd] = useState<{id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
-    // const addNodes = trpc.makeManyNodes.useMutation();
-    // const addEdges = trpc.makeManyEdges.useMutation();
-    // const deleteNodes = trpc.deleteSelectedNodes.useMutation();
-    // const deleteEdges = trpc.deleteSelectedEdges.useMutation();
+    const addNodes = trpc.makeManyNodes.useMutation();
+    const addEdges = trpc.makeManyEdges.useMutation();
+    const deleteNodes = trpc.deleteSelectedNodes.useMutation();
+    const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
     const hospitalLocationMap = {
@@ -103,7 +103,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     function getNodeMarkers(){
         if(!selectedHospital || !map) return;
         const floor = selectedFloor === null ? 1: selectedFloor;
-        // console.log(graph.getBuildingNodes(selectedHospital, floor))
+        console.log(graph.getBuildingNodes(selectedHospital, floor))
 
         let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
         markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed')]
@@ -176,14 +176,23 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleSubmit = async () => {
 
-        // const edits = graph.getEditHistory()
-        // await addNodes.mutateAsync(edits.addedNodes);
-        // await addEdges.mutateAsync(edits.addedEdges);
-        // await deleteNodes.mutateAsync(edits.deletedNodes);
-        // await deleteEdges.mutateAsync(edits.deletedEdges);
-        // console.log("edits committed");
+        const edits = graph.getEditHistory()
+        await addNodes.mutateAsync(edits.addedNodes);
+        console.log("We are ready to rolllll1")
+        await addEdges.mutateAsync(edits.addedEdges);
+        console.log("We are ready to rolllll2")
+        await deleteNodes.mutateAsync(edits.deletedNodes);
+        console.log("We are ready to rolllll3")
+        await deleteEdges.mutateAsync(edits.deletedEdges);
+        console.log("edits committed");
         // graph.commitEdits()
-        // graph.populate(nodesDataFromAPI, edgesDataFromAPI)
+        const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
+        const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
+
+        console.log(nodesDataFromAPI);
+        if (!nodesReady || !edgesReady) return;
+        console.log("We are ready to rolllll")
+        graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
     }
 

@@ -50,7 +50,11 @@ export class Graph {
     populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
                           edgeCost: number, totalCost: number, parent?: Node; }[],
              edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
-        // Create nodes from nodesData.
+        // Reinit
+        this.nodes = new Set<Node>();
+        this.adjacencyList = new Map<Node, Edge[]>();
+        this.edges = []
+
         const nodes: Node[] = nodesData.map((n) => ({
           ...n,
             id: n.id,
@@ -60,16 +64,27 @@ export class Graph {
           parent: undefined
         }));
 
+        // add them one by one
+        for (const node of nodes) {
+            this.nodes.add(node);
+        }
+
+        console.log(edgesData);
         const allEdges: Edge[] = (edgesData).map((e) => ({
             ...e,
             id: e.id,
-            sourceId: nodes[e.sourceId - 1],
-            targetId: nodes[e.targetId - 1],
+            sourceId: this.getNode(e.sourceId),
+            targetId: this.getNode(e.targetId),
         }));
+
+        // sourceId: this.getNode(e.sourceId),
+        //
 
         this.addEdges(allEdges);
         this.resetEditHistory();
         console.log("Graph successfully populated")
+        // console.log(this.nodes)
+        // console.log(allEdges)
     }
 
 
@@ -220,7 +235,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        // console.log("Getting nodes building: ", building, " Floor:", floor);
+        console.log("Getting nodes building: ", building, " Floor:", floor);
 
         return Array.from(this.nodes).filter(
             n => n.building === building && n.floor === floor

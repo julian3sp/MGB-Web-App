@@ -13,8 +13,8 @@ export type serviceRequest = {
 }
 function ServiceRequestPage() {
     const [activeTab, setActiveTab] = useState<serviceRequest>({
-        type: "Security",
-        title: "Security Request Form",
+        type: "Language",
+        title: "Language Interpreter Request Form",
     });
 
     return (

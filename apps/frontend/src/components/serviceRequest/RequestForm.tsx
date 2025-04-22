@@ -427,7 +427,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             {type === "Language" ?
                                 <>
                                     <div>
-                                        <InputHeader>Source Language</InputHeader>
+                                        <InputHeader>Source Language (Patient)</InputHeader>
                                         <Combobox
                                             options={languages}
                                             value={sourceLanguage}
@@ -437,7 +437,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             clearError={() => clearError('sourceLanguage')}/>
                                     </div>
                                     <div>
-                                        <InputHeader>Target Language</InputHeader>
+                                        <InputHeader>Target Language (Doctor/Staff)</InputHeader>
                                         <Combobox
                                             options={languages}
                                             value={targetLanguage}
@@ -520,7 +520,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setValue={setTransportationType}
                                             placeholder={"Select Transportation Type"}
                                             error={errors.transportationType}
-                                            options={["Ambulance", "Helicopter", "Other"]}
+                                            options={["Ambulance", "Helicopter", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('transportationType')}/>
                                     </div>
                                     <div>
@@ -548,7 +548,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setValue={setAccommodationType}
                                             placeholder={"Select Accommodation Type"}
                                             error={errors.accommodationType}
-                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other"]}
+                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('accommodationType')}/>
                                     </div>
                                     <div>
@@ -590,12 +590,12 @@ function RequestForm({ title, type }: requestFormProps) {
                                 <>
                                     <div>
                                         <InputHeader>Maintenance Type</InputHeader>
-                                        <ErrorPopUp
+                                        <SRQDropdown
                                             value={maintenanceType}
-                                            setState={setMaintenanceType}
-                                            placeholder={"Select a Maintenance Type"}
-                                            width={"w-full"}
+                                            setValue={setMaintenanceType}
+                                            placeholder={"Select Maintenance Type"}
                                             error={errors.maintenanceType}
+                                            options={["Elevator", "Plumbing", "HVAC/R", "Power", "Electrical", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('maintenanceType')}/>
                                     </div>
                                     <div>
@@ -603,7 +603,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                         <ErrorPopUp
                                             value={equipmentType}
                                             setState={setEquipmentType}
-                                            placeholder={"Select an Equipment Type"}
+                                            placeholder={"Specify any Equipment Needed"}
                                             width={"w-full"}
                                             error={errors.equipmentType}
                                             clearError={() => clearError('equipmentType')}/>

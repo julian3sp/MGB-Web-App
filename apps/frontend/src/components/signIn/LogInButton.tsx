@@ -1,9 +1,30 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React, { useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 
-export function LogInButton({className}: {className?: string}) {
-    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+interface Props {
+    className?: string;
+    rerender: (isAdmin: boolean) => void;
+}
+
+export function LogInButton({className, rerender}: Props) {
+    const {user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+
+    useEffect(()=>{
+        if(user) {
+            if (user.name === "Admin") {
+                console.log("Good")
+                window.sessionStorage.setItem("isAdmin","true")
+                rerender(true)
+            } else {
+                console.log("Bad")
+                window.sessionStorage.setItem("isAdmin","false")
+                rerender(false)
+            }
+        }
+        },
+        [isAuthenticated]
+    )
+
     return (
         isLoading || !isAuthenticated && (
             <button

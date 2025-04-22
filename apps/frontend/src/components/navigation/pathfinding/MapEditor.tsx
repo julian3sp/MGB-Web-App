@@ -11,7 +11,7 @@ import {createMarkers, drawAllEdges} from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Node, Edge, Graph} from './Graph';
+import {Node, Edge} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 
 interface MapEditorProps {
@@ -22,7 +22,7 @@ interface MapEditorProps {
     ) => void;
 }
 
-const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
+  const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
@@ -230,11 +230,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [map, selectedHospital]);
 
-
-
-
-
-
     useEffect(() => {
         if (!map || !patriot22Overlay || selectedHospital !== '22 Patriot Place') return;
         try {
@@ -243,12 +238,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             console.error('Error updating Patriot22 floor overlay:', err);
         }
     }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
-
-
-
-
-
-
 
     return (
         <div className="flex h-[95vh]">

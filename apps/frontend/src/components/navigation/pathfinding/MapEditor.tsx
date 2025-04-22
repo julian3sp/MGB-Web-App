@@ -9,6 +9,18 @@ import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from "@/lib/trpc";
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 import Graph, { Node, Edge } from './Graph';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem
+} from '../../ui/dropdown-menu.tsx'
+
+import { Button } from "@/components/ui/button"
+import {aL} from "vitest/dist/chunks/reporters.d.CqBhtcTq";
 
 interface MapEditorProps {
   onMapReady: (
@@ -25,6 +37,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
   const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
   const [showNodes, setShowNodes] = useState(false);
   const [showEdges, setShowEdges] = useState(false);
+  const [algoType, setAlgoType] = useState("A-Star")
 
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
@@ -48,6 +61,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
   const filterNodesByHospital = (building: string): Node[] => {
     return nodesDataFromAPI?.filter((node: Node) => node.building === building) || [];
   };
+
+  function setAlgoTypeWrapper(algo: string){
+      //window.sessionStorage.setItem("algoType", algo);
+      window.sessionStorage.clear()
+      setAlgoType(algo);
+  }
 
   useEffect(() => {
     if (!apiKey || map || !mapRef.current) return;
@@ -214,20 +233,30 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     </div>
 
                 )}
-                <div className="w-full p-5 border-r border-gray-300 flex flex-col gap-4">
+                <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
 
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800}">Choose Your Algorithm</button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup value={algoType} onValueChange={setAlgoTypeWrapper}>
+                            <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
-
-
-
-
-
-            <div className="w-3/4 relative">
-                <div ref={mapRef} className="w-full h-full"></div>
+                <div className="w-3/4 relative">
+                    <div ref={mapRef} className="w-full h-full"></div>
+                </div>
             </div>
-            </div>
+
             <div className="w-3/4 relative">
                 <div ref={mapRef} className="w-full h-full"></div>
                 <MapEditorControls

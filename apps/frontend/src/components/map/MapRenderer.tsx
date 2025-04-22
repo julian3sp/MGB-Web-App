@@ -181,9 +181,18 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current.setMap(null);
         pathPolylineRef.current = null;
       }
-      
+
+      let pathNodes: Node[] = []
+
       // Compute and draw the new path
-      const pathNodes: Node[] = graph.aStar(entrance, target);
+      if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
+        pathNodes = graph.aStar(entrance, target);
+      } else if (window.sessionStorage.getItem("algoType") === "DFS"){
+        pathNodes = graph.DFS(entrance, target)
+      } else if (window.sessionStorage.getItem("algoType") === "BFS"){
+        pathNodes = graph.BFS(entrance, target)
+      }
+
       const newPolyline = drawPath(map, pathNodes);
       pathPolylineRef.current = newPolyline;
 

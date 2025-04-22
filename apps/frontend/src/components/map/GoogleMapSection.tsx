@@ -158,17 +158,6 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
           </div>
         </div>
       </div>
-      {startLocation && selectedPlace && (
-        <button
-          onClick={handleViewMap}
-          className="w-[90%] bg-[#003a96] text-white px-4 py-1.5 rounded-full cursor-pointer font-bold text-sm
-          transition-all duration-300 ease-in-out
-          hover:bg-[#002b70] hover:scale-105 hover:shadow-lg
-          active:scale-95 mt-4"
-        >
-          Show Google Map
-        </button>
-      )}
     </div>
   );
 };

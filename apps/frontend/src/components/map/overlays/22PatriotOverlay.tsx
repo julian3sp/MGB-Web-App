@@ -30,14 +30,16 @@ export const createPatriot22Overlays = (map: google.maps.Map) => {
   const floor3Overlay = new google.maps.GroundOverlay(
     floor3OverlayImg, 
     bounds, 
-    {opacity: 1}
+    {clickable: false,
+      opacity: 1}
   )
   floor3Overlay.setMap(map);
 
   const floor4Overlay = new google.maps.GroundOverlay(
     floor4OverlayImg,
       bounds_4,
-    {opacity: 0}
+    {clickable: false,
+      opacity: 0}
   )
   floor4Overlay.setMap(map);
 

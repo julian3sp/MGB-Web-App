@@ -585,7 +585,7 @@ export default function RequestTablePage() {
                                             className="p-4 sticky right-0 z-9 w-fit py-2 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                             style={{
                                                 backgroundColor: 'inherit',
-                                                boxShadow: '-1p x 0 0 #003A96',
+                                                boxShadow: '-1px 0 0 #003A96',
                                             }}
                                         >
                                             <div className="flex justify-center gap-2">

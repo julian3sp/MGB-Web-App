@@ -100,7 +100,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     function getNodeMarkers(){
         if(!selectedHospital || !map) return;
         const floor = selectedFloor === null ? 1: selectedFloor;
-        console.log(graph.getBuildingNodes(selectedHospital, floor))
+        // console.log(graph.getBuildingNodes(selectedHospital, floor))
 
         let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
         markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed')]
@@ -153,7 +153,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setEdgePolylines(lines);
             }
         }
-    }, [showEdges, selectedHospital, selectedFloor, map]);
+        console.log("trigger")
+    }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
     const setAddNode = (node: Node) => {
         setNodesToAdd(prev => [

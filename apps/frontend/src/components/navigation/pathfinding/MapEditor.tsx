@@ -255,23 +255,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
-                <button
-                    onClick={()=>{
-                        handleToggleNodes();
-                        }}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
-                >
-                    {showNodes ? 'Hide Nodes' : 'Show Nodes'}
-                </button>
-
-                <button
-                    onClick={() =>{
-                        handleToggleEdges();}}
-                    className="bg-[#003a96] text-white py-2 px-4 rounded hover:bg-blue-600 font-[poppins]"
-                >
-                    {showEdges ? 'Hide Edges' : 'Show Edges'}
-                </button>
-
                 {nodeInfo && (
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
@@ -303,7 +286,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 

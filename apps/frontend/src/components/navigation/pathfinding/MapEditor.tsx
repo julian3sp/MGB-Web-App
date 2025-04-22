@@ -101,6 +101,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if(!selectedHospital || !map) return;
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log(graph.getBuildingNodes(selectedHospital, floor))
+        createMarkers(map, nodesToRemove, setNodeDetails, setAddNode, 'removed');
         return createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, setAddNode, 'normal');
     }
 

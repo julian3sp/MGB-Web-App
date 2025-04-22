@@ -45,7 +45,6 @@ export const makeManyEdges = publicProcedure
         }
     });
 
-
 export const getAllEdges = publicProcedure.query(async (opts) => {
     // Retrieve the user with the given ID
     const edges = await client.edges.findMany({

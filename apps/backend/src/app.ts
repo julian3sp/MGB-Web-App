@@ -26,7 +26,8 @@ import {
     deleteAllEdges,
     deleteSelectedEdges,
     getAllEdges,
-    makeEdge, makeManyEdges,
+    makeEdge,
+    makeManyEdges,
 } from './server/procedures/edges.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context

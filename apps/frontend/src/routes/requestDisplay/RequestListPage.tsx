@@ -324,7 +324,7 @@ export default function RequestListPage() {
                         style={{ borderColor: '#003A96' }}
                     >
                         <div>
-                            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] pb-2 mb-3">
+                            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] mb-3">
                                 <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
                                     {selectedRequest.request_id}.{' '}
                                     {selectedRequest.request_type === 'Sanitation'
@@ -357,45 +357,50 @@ export default function RequestListPage() {
                                     )
                                 </h2>
                                 {/*ReqID. Type (Priority)*/}
-                                <div className="flex gap-8">
-                                    {!editMode ? (
-                                        //If not in edit mode, show edit icon
-                                        <EditRequest
-                                            size={20}
-                                            onClick={() => {
-                                                console.log('Edit');
-                                                console.log(selectedRequest);
-                                                setEditMode(true);
-                                            }}
-                                            tooltip={'Edit Service Request'}
-                                        />
-                                    ) : (
-                                        //If in edit mode, show exit icon
-                                        <div className={''}>
-                                            <ExitButton
-                                                size={24}
+                                <div className="relative -top-[12px] flex gap-4 pl-4 pt-2">
+                                    <div className="h-[35px] flex items-center gap-4">
+                                        {!editMode ? (
+                                            <div className="relative top-[4px]">
+                                            <EditRequest
+                                                size={20}
                                                 onClick={() => {
-                                                    if (
-                                                        allowSwap(
-                                                            editPriority,
-                                                            editStatus,
-                                                            selectedRequest
-                                                        )
-                                                    ) {
-                                                        console.log('Exit edit');
-                                                        setEditMode(false);
-                                                        setEditId(selectedRequest?.request_id)
-                                                        setEditPriority(selectedRequest.priority);
-                                                        setEditStatus(selectedRequest.status);
-                                                    } else {
-                                                        console.log(`Show exit menu`);
-                                                        setExitMenu(true);
-                                                    }
+                                                    console.log('Edit');
+                                                    console.log(selectedRequest);
+                                                    setEditMode(true);
                                                 }}
-                                                tooltip={'Exit Edit Mode'}
+                                                tooltip={'Edit Service Request'}
                                             />
-                                        </div>
-                                    )}
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <SubmitFormEdit
+                                                    label={'Submit Changes'}
+                                                    submitCondition={true}
+                                                    onSubmit={handleUpdate}
+                                                    onDeny={() => console.log('Deny submit (status)')}
+                                                    errorMessage={'Error: No changes made'}
+                                                    successMessage={'Status successfully changed'}
+                                                    width={'w-[150px]'}
+                                                />
+                                                <ExitButton
+                                                    size={24}
+                                                    onClick={() => {
+                                                        if (allowSwap(editPriority, editStatus, selectedRequest)) {
+                                                            console.log('Exit edit');
+                                                            setEditMode(false);
+                                                            setEditId(selectedRequest?.request_id);
+                                                            setEditPriority(selectedRequest.priority);
+                                                            setEditStatus(selectedRequest.status);
+                                                        } else {
+                                                            console.log(`Show exit menu`);
+                                                            setExitMenu(true);
+                                                        }
+                                                    }}
+                                                    tooltip={'Exit Edit Mode'}
+                                                />
+                                            </>
+                                        )}
+                                    </div>
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
@@ -511,16 +516,6 @@ export default function RequestListPage() {
                                                               : 'text-blue-gray-900'
                                                 }`
                                             }
-                                        />
-
-                                        <SubmitFormEdit
-                                            label={'Submit Changes'}
-                                            submitCondition={true}
-                                            onSubmit={handleUpdate}
-                                            onDeny={() => console.log('Deny submit (status)')}
-                                            errorMessage={'Error: No changes made'}
-                                            successMessage={'Status successfully changed'}
-                                            width={'w-[150px]'}
                                         />
                                     </div>
                                 </>

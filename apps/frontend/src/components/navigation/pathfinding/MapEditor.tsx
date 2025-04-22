@@ -39,7 +39,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const [nodesToAdd, setNodesToAdd] = useState<{id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
-
+    // const addNodes = trpc.makeManyNodes.useMutation();
+    // const addEdges = trpc.makeManyEdges.useMutation();
+    // const deleteNodes = trpc.deleteSelectedNodes.useMutation();
+    // const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
     const hospitalLocationMap = {
@@ -153,7 +156,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setEdgePolylines(lines);
             }
         }
-        console.log("trigger")
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
     const setAddNode = (node: Node) => {
@@ -172,10 +174,16 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         ]);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
-        graph.commitEdits()
-        graph.populate(nodesDataFromAPI, edgesDataFromAPI)
+        // const edits = graph.getEditHistory()
+        // await addNodes.mutateAsync(edits.addedNodes);
+        // await addEdges.mutateAsync(edits.addedEdges);
+        // await deleteNodes.mutateAsync(edits.deletedNodes);
+        // await deleteEdges.mutateAsync(edits.deletedEdges);
+        // console.log("edits committed");
+        // graph.commitEdits()
+        // graph.populate(nodesDataFromAPI, edgesDataFromAPI)
 
     }
 

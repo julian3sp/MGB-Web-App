@@ -1,6 +1,6 @@
 import {trpc} from "@/lib/trpc.ts";
 import {graph} from "@/components/map/GraphObject.ts";
-import {CommitEdits} from "@/components/map/CommitEdits.tsx";
+// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
 
 export type Node = {
     name: string
@@ -72,11 +72,6 @@ export class Graph {
         console.log("Graph successfully populated")
     }
 
-
-    commitEdits() {
-        const { commitEdits } = CommitEdits();
-        commitEdits(this.edits);
-    }
 
     resetEditHistory(): void{
         this.edits = {

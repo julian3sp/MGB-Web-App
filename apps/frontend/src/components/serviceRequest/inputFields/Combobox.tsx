@@ -32,7 +32,7 @@ export function Combobox({options} : {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between"
+                    className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between ${value == "" ? "text-gray-500" : "text-black"}`}
                 >
                     {value
                         ? options.find((option) => option.value === value)?.label

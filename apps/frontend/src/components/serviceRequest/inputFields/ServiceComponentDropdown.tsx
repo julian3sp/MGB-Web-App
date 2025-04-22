@@ -62,7 +62,7 @@ export function ServiceComponentDropdown(
 
             <select
                 {...(type && { type })}
-                className={`border-[1px] border-[#ececec] shadow border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
+                className={`border-[1px] border-[#ececec] shadow border-solid hover:border-[#a2caff] rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'} ${value == "" ? "text-gray-500" : "text-black"}`}
                 value={value}
                 onChange={(e) => {
                     setState(e.target.value);

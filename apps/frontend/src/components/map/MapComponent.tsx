@@ -6,7 +6,7 @@ import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 import DirectionsGuide from './DirectionsGuide.tsx';
-import {trpc} from "../../lib/trpc"
+import {trpc} from "@/lib/trpc.ts"
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 import PageWrapper from "@/components/ui/PageWrapper.tsx";
 

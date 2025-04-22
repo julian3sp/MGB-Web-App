@@ -17,13 +17,16 @@ import {
     PopoverTrigger,
 } from "../../ui/Popover"
 
-export function SRQDropdown({options, value, setValue, error, clearError, placeholder} : {
+export function SRQDropdown({options, value, setValue, error, clearError, placeholder, originalValue, width, styledOptions} : {
     options: string[];
     value: string;
     setValue: (value: string) => void;
     error?: string;
     clearError?: ()=>void;
     placeholder: string;
+    styledOptions?: (option: string) => string;
+    originalValue?: string;
+    width?: string;
 }) {
     const [open, setOpen] = React.useState(false)
 
@@ -69,7 +72,9 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"}`}
+                        className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"} ${width || 'w-[396px]'} ${
+                            styledOptions ? styledOptions(value) : ''}`}
+                        onClick={() => console.log("Dropdown pressed")}
                     >
                         {value
                             ? options.find((option) => option === value)
@@ -81,7 +86,8 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                     <Command>
                         <CommandList>
                             <CommandGroup>
-                                {options.map((option) => (
+                                {options.map((option) => {
+                                    return (
                                     <CommandItem
                                         key={option}
                                         value={option}
@@ -98,7 +104,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                                             )}
                                         />
                                     </CommandItem>
-                                ))}
+                                )})}
                             </CommandGroup>
                         </CommandList>
                     </Command>

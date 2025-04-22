@@ -379,6 +379,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     value={location}
                                     setValue={setLocation}
                                     placeholder={"Select Location"}
+                                    width={"w-full"}
                                     error={errors.location}
                                     options={["Brigham & Women's Hospital Main Campus",
                                         "Chestnut Hill",
@@ -393,6 +394,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                 <SRQDropdown
                                     value={department}
                                     setValue={setDepartment}
+                                    width={"w-full"}
                                     placeholder={"Select Department"}
                                     error={errors.department}
                                     options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
@@ -405,10 +407,24 @@ function RequestForm({ title, type }: requestFormProps) {
                                 <SRQDropdown
                                     value={priority}
                                     setValue={setPriority}
+                                    width={"w-full"}
                                     options={["Low", "Medium", "High", "Emergency"]}
                                     placeholder={"Select Priority"}
                                     error={errors.priority}
                                     clearError={() => clearError('priority')}
+                                    styledOptions={(option) =>
+                                        ` ${
+                                            option === 'Low'
+                                                ? 'text-green-600 font-semibold hover:text-green-700'
+                                                : option === 'Medium'
+                                                    ? 'text-yellow-500 font-semibold hover:text-yellow-600'
+                                                    : option === 'High'
+                                                        ? 'text-red-500 font-semibold hover:text-red-600'
+                                                        : option === 'Emergency'
+                                                            ? 'text-red-700 underline font-semibold hover:text-red-800'
+                                                            : ''
+                                        }`
+                                    }
                                 />
                             </div>
 
@@ -419,8 +435,22 @@ function RequestForm({ title, type }: requestFormProps) {
                                     setValue={setStatus}
                                     placeholder={"Select Status"}
                                     error={errors.status}
+                                    width={"w-full"}
                                     options={["Unassigned", "Assigned", "Working", "Done"]}
                                     clearError={() => clearError('status')}
+                                    styledOptions={(option) =>
+                                        ` ${
+                                            option === 'Unassigned'
+                                                ? 'font-semibold'
+                                                : option === 'Assigned'
+                                                    ? 'text-blue-600 font-semibold hover:text-blue-700'
+                                                    : option === 'Working'
+                                                        ? 'text-amber-600 font-semibold hover:text-amber-700'
+                                                        : option === 'Done'
+                                                            ? 'text-green-600 font-semibold hover:text-green-700'
+                                                            : ''
+                                        }`
+                                    }
                                 />
                             </div>
 
@@ -457,6 +487,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                         value={cleaningType}
                                         setValue={setCleaningType}
                                         placeholder={"Select Cleaning Needed"}
+                                        width={"w-full"}
                                         error={errors.cleaningType}
                                         options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}
                                         clearError={() => clearError('cleaningType')}/>
@@ -481,6 +512,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setValue={setAccessZones}
                                             placeholder={"Select Access Zones Needed"}
                                             error={errors.accessZones}
+                                            width={"w-full"}
                                             options={[
                                                 "",
                                                 "ICU",
@@ -519,6 +551,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             value={transportationType}
                                             setValue={setTransportationType}
                                             placeholder={"Select Transportation Type"}
+                                            width={"w-full"}
                                             error={errors.transportationType}
                                             options={["Ambulance", "Helicopter", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('transportationType')}/>
@@ -528,6 +561,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                         <SRQDropdown
                                             value={transportationDestination}
                                             setValue={setTransportationDestination}
+                                            width={"w-full"}
                                             placeholder={"Select Destination"}
                                             error={errors.transportationDestination}
                                             options={["Brigham & Women's Hospital Main Campus",
@@ -547,6 +581,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             value={accommodationType}
                                             setValue={setAccommodationType}
                                             placeholder={"Select Accommodation Type"}
+                                            width={"w-full"}
                                             error={errors.accommodationType}
                                             options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('accommodationType')}/>
@@ -569,6 +604,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                         <SRQDropdown
                                             value={device}
                                             setValue={setDevice}
+                                            width={"w-full"}
                                             placeholder={"Select a Device"}
                                             error={errors.device}
                                             options={["EKG", "X-Ray", "Ventilator", "CT Scan", "Defibrillator"]}
@@ -581,6 +617,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             setValue={setOperatorRequired}
                                             placeholder={"Do You Require an Operator?"}
                                             error={errors.operatorRequired}
+                                            width={"w-full"}
                                             options={["Yes", "No"]}
                                             clearError={() => clearError('operatorRequired')}/>
                                     </div>
@@ -594,6 +631,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                             value={maintenanceType}
                                             setValue={setMaintenanceType}
                                             placeholder={"Select Maintenance Type"}
+                                            width={"w-full"}
                                             error={errors.maintenanceType}
                                             options={["Elevator", "Plumbing", "HVAC/R", "Power", "Electrical", "Other (Please Specify Below)"]}
                                             clearError={() => clearError('maintenanceType')}/>

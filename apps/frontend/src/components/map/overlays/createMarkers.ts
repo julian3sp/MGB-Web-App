@@ -6,8 +6,9 @@ export function createMarkers(
     map: google.maps.Map,
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
-    setAddNode: (node: Node) => void,
-    type: 'normal' | 'removed' = 'normal'
+    type: 'normal' | 'removed' = 'normal',
+    building: string,
+    floor: number,
 ) {
     const markers: google.maps.Marker[] = [];
     const iconUrl =
@@ -15,7 +16,7 @@ export function createMarkers(
             ? 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png'
             : 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png';
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
-    const scaledSize = new google.maps.Size(10, 10); // Larger red dot
+    const scaledSize = new google.maps.Size(15, 15); // Larger red dot
 
     google.maps.event.addListener(map, 'dblclick', function (event) {
         const newMarker = new google.maps.Marker({
@@ -28,21 +29,21 @@ export function createMarkers(
                 scaledSize: scaledSize,
             },
         });
-        setAddNode({
-            id: Date.now(), // or another unique value
-            name: '',
-            building: 'Main',
-            floor:  1,
-            x: event.latLng.lat(),
-            y: event.latLng.lng(),
-            edgeCost: 0, // default value
-            totalCost: 0, // default value
-        });
+        // setAddNode({
+        //     id: Date.now(), // or another unique value
+        //     name: '',
+        //     building: 'chestnut',
+        //     floor:  floor,
+        //     x: event.latLng.lat(),
+        //     y: event.latLng.lng(),
+        //     edgeCost: 0, // default value
+        //     totalCost: 0, // default value
+        // });
         graph.addNode({
             id: Date.now(), // or another unique value
             name: '',
-            building: 'Main',
-            floor:  1,
+            building: building,
+            floor:  floor,
             x: event.latLng.lat(),
             y: event.latLng.lng(),
             edgeCost: 0, // default value

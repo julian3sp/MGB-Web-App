@@ -15,6 +15,16 @@ import {Node, Edge} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem
+} from '../../ui/dropdown-menu.tsx'
+import { Button } from "@/components/ui/button"
 
 interface MapEditorProps {
     onMapReady: (
@@ -24,15 +34,18 @@ interface MapEditorProps {
     ) => void;
 }
 
-  const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
-    const mapRef = useRef<HTMLDivElement>(null);
-    const [map, setMap] = useState<google.maps.Map | null>(null);
-    const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
-    const [showNodes, setShowNodes] = useState(false);
-    const [showEdges, setShowEdges] = useState(false);
-    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
+const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
+  const [showNodes, setShowNodes] = useState(false);
+  const [showEdges, setShowEdges] = useState(false);
+  const [algoType, setAlgoType] = useState("A-Star")
+
+  const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+  const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+
+  const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
     const addNode = trpc.makeManyNodes.useMutation();
@@ -53,6 +66,10 @@ interface MapEditorProps {
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
     };
+    function setAlgoTypeWrapper(algo: string){
+        window.sessionStorage.setItem("algoType", algo);
+        setAlgoType(algo);
+    }
 
     // Start of map editor
     useEffect(() => {
@@ -79,8 +96,8 @@ interface MapEditorProps {
                         fullscreenControl: true,
                         mapTypeControl: false,
                         disableDoubleClickZoom: true,
-                        streetViewControl: false, 
-                        zoomControl: false, 
+                        streetViewControl: false,
+                        zoomControl: false,
                         scaleControl: false,
                     });
 
@@ -130,7 +147,6 @@ interface MapEditorProps {
     // Display all static graph nodes
     useEffect(() => {
         if (showNodes) {
-            // console.log("trigger")
             displayNodes();
         }
     }, [showNodes, map, newNodeTracker]);
@@ -332,10 +348,26 @@ interface MapEditorProps {
                     Submit Changes
                 </button>
 
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800}">Choose Your Algorithm</button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup value={algoType} onValueChange={setAlgoTypeWrapper}>
+                            <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                 <div className="w-3/4 relative">
                     <div ref={mapRef} className="w-full h-full"></div>
                 </div>
             </div>
+
             <div className="w-3/4 relative">
                 <div ref={mapRef} className="w-full h-full"></div>
                 <MapEditorControls

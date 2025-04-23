@@ -10,13 +10,11 @@ function FooterBar() {
     const [tab, setTab] = React.useState<string>("");
     return (
         <div className="bg-[#003a96] text-white p-5">
-            <nav className="flex justify-between items-center text-white">
-                <div className="flex items-center space-x-20 text-xl font-[Poppins]">
-                    <div className="flex">
-                        <Link to="" onClick={() => setTab("")}>
+            <nav className="flex justify-between items-center bg-[#003a96] text-white">
+                <div className="flex items-center space-x-20">
+                        <Link to="" className={"ml-5"} onClick={() => setTab("")}>
                             <img src={HospitalIcon} alt="Mass General Brigham Logo"  className="width-20"/>
                         </Link>
-                    </div>
                     <div className="flex">
                         <Link to="/aboutus" onClick={() => setTab("")}>
                             About
@@ -38,7 +36,7 @@ function FooterBar() {
                         </Link>
                     </div>
                 </div>
-                <div>
+                <div className="flex">
                     <SocialIcon url="https://www.facebook.com/MassGeneralBrigham" bgColor="#003a96"/>
                     <SocialIcon url="https://x.com/MassGenBrigham" bgColor="#003a96"/>
                     <SocialIcon url="https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fmassgeneralbrigham%2F&is_from_rle" bgColor="#003a96"/>
@@ -46,7 +44,7 @@ function FooterBar() {
                     <SocialIcon url="https://www.linkedin.com/company/mass-general-brigham" bgColor="#003a96"/>
                 </div>
             </nav>
-            <div className="py-5 font-[Poppins]">
+            <div className="ml-5 py-5 font-[Poppins]">
                 This page is not to be used for emergencies. For emergencies, please dial 911
             </div>
         </div>

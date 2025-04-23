@@ -3,7 +3,8 @@ import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
+import {createMarkers} from './overlays/createMarkers';
+import { drawAllEdges, drawPath} from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
 
@@ -181,9 +182,21 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current.setMap(null);
         pathPolylineRef.current = null;
       }
-      
+
+      let pathNodes: Node[] = []
+
       // Compute and draw the new path
-      const pathNodes: Node[] = graph.aStar(entrance, target);
+      if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
+        console.log("Using A-Star")
+        pathNodes = graph.aStar(entrance, target);
+      } else if (window.sessionStorage.getItem("algoType") === "DFS"){
+        console.log("Using DFS")
+        pathNodes = graph.DFS(entrance, target)
+      } else if (window.sessionStorage.getItem("algoType") === "BFS"){
+        console.log("Using BFS")
+        pathNodes = graph.BFS(entrance, target)
+      }
+
       const newPolyline = drawPath(map, pathNodes);
       pathPolylineRef.current = newPolyline;
 

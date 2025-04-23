@@ -20,7 +20,7 @@ export function createMarkers(
 
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
-            lat: node.x,
+            lat: node.x-0.000002,
             lng: node.y,
         };
 

@@ -45,6 +45,10 @@ export async function insertServiceRequest(
     securityIssue: string,
     transportationType: string,
     transportationDestination: string,
+    device: string,
+    operatorRequired: string,
+    maintenanceType: string,
+    equipmentType: string,
     accommodationDetails?: string,
     contaminant?: string,
     additional_comments?: string,
@@ -97,6 +101,22 @@ export async function insertServiceRequest(
                         create: {
                             accommodationType: accommodationType,
                             accommodationDetails: accommodationDetails,
+                        }
+                    },
+                }),
+                ...(request_type === 'medicalDevice' && {
+                    medicalDevice: {
+                        create: {
+                            device: device,
+                            operatorRequired: operatorRequired,
+                        }
+                    },
+                }),
+                ...(request_type === 'Facilities' && {
+                    Facilities: {
+                        create: {
+                            maintenanceType: maintenanceType,
+                            equipmentType: equipmentType,
                         }
                     },
                 }),

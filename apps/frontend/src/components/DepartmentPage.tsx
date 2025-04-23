@@ -22,7 +22,8 @@ export default function DepartmentPage() {
     }
 
     return (
-        <div className="border p-6 rounded-lg" style={{ borderColor: '#005E64' }}>
+        <div className="border p-6 pl-4 rounded-lg text-blue-gray-900 ml-2 shadow-lg"
+             style={{ borderColor: '#003A96' }}>
             <div className="flex justify-between mx-auto border-b border-[#d9d9d9] pb-2 mb-3">
                 <h2 className="text-xl font-bold font-[Poppins]" style={{ color: '#003A96' }}>
                     {department.data?.name}:{' '}

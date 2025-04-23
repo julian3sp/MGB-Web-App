@@ -134,13 +134,13 @@ export default function RequestListPage() {
             <nav
                 className="w-full h-full bg-white p-6 overflow-hidden"
                 style={{
-                    borderTop: '4px solid #d9d9d9',
+                    borderTop: '2px solid #d9d9d9',
                     borderBottom: 'none',
-                    borderRight: '4px solid #d9d9d9',
+                    borderRight: '2px solid #d9d9d9',
                     borderLeft: 'none',
                 }}
             >
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center underline" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center" style={{ color: '#003A96' }}>
                     Select a Request:
                 </h3>{' '}
                 {/*Header for list of departments on page*/}
@@ -176,8 +176,8 @@ export default function RequestListPage() {
                                 className={
                                     `w-full text-left block p-5 border rounded ${
                                         selectedRequest?.request_id == res.request_id
-                                            ? 'border-4 text-blue-900 font-bold font-[Poppins]'
-                                            : 'text-gray-700 hover:bg-gray-100 font-[Poppins]'
+                                            ? 'border-2 text-blue-900 bg-slate-100 font-bold font-[Poppins]'
+                                            : 'text-gray-700 hover:bg-gray-100 font-[Poppins] shadow-lg'
                                     }` /* Put requests in rounded rectangle boxes*/
                                 }
                                 style={{
@@ -307,7 +307,7 @@ export default function RequestListPage() {
             <div
                 className="h-auto flex-1 bg-white p-6 pl-5"
                 style={{
-                    borderTop: '4px solid #d9d9d9',
+                    borderTop: '2px solid #d9d9d9',
                     borderBottom: 'none',
                     borderRight: 'none',
                     borderLeft: 'none',
@@ -315,12 +315,12 @@ export default function RequestListPage() {
             >
                 {' '}
                 {/*Border styling*/}
-                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center underline" style={{ color: '#003A96' }}>
+                <h3 className="text-2xl font-bold mb-4 font-[Poppins] text-center" style={{ color: '#003A96' }}>
                     Request Details:
                 </h3>
                 {selectedRequest ? (
                     <nav
-                        className="border p-6 pl-4 rounded-lg text-blue-gray-900"
+                        className=" border-[1px] border-gray shadow-lg p-6 pl-4 rounded-lg text-blue-gray-900"
                         style={{ borderColor: '#003A96' }}
                     >
                         <div>

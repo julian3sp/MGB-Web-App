@@ -4,7 +4,14 @@ import {Routes, Route} from "react-router-dom";
 function DepartmentRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<p className="text-gray-700 font-[Poppins]">Select a department to view details.</p>} /> {/* Default message */}
+            <Route path="/" element={<nav
+                className="border p-5 rounded-lg flex items-center"
+                style={{ borderColor: '#005E64' }}
+            >
+                <p className="text-gray-700 font-[Poppins]">
+                    Select a department to view details.
+                </p>
+            </nav> } /> {/* Default message */}
             <Route path=":deptId" element={<DepartmentPage />} /> {/* Department page */}
         </Routes>
     );

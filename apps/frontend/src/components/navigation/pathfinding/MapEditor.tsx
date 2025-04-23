@@ -141,7 +141,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         // });
 
         return () => {
-            listener.remove();
+           // listener.remove();
             marker.setMap(null);
         };
     }, [map]);
@@ -209,7 +209,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             // hide mode: just drop our array to empty
             setStaticMarkers([]);
         }
-    }, [map, showNodes, showEdges, selectedHospital, selectedFloor, staticMarkers]);
+    }, [map, showNodes, showEdges, selectedHospital, selectedFloor]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;

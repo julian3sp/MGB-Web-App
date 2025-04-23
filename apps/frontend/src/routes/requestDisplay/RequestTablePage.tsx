@@ -370,7 +370,7 @@ export default function RequestTablePage() {
                                         </td>
 
                                         <td className="p-2 break-words max-w-[200px] pt-0 pb-2">
-                                            <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
+                                            <p className="block font-[Poppins] text-med text-blue-gray-900 ">
                                                 <p>
                                                     {res.request_type === 'Sanitation'
                                                         ? 'Sanitation'
@@ -411,8 +411,8 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[225px] pt-0 pb-2">
-                                            <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
+                                        <td className="p-4  break-words max-w-[225px] pt-0 pb-1">
+                                            <div className="font-[Poppins] text-med text-blue-gray-900 space-y-0">
                                                 {res.sanitation?.cleaningType && (
                                                     <div className="pl-4">
                                                         <span className="underline w-45 pl-4">

@@ -1,4 +1,4 @@
-import EditIcon from '../../../assets/EditIcon.png';
+import EditIcon from '../../../assets/EditIconWhite.png';
 import {
     Tooltip,
     TooltipContent,

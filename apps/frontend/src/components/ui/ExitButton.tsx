@@ -25,7 +25,7 @@ export default function ExitButton({
                             onClick();
                         }}
                     >
-                        <p style={{ fontSize: size }}>&times;</p>
+                        <p style={{ fontSize: size, color: "white" }}>&times;</p>
                     </div>
                 </TooltipTrigger>
                 <TooltipContent className="bg-white text-[#003A96] border-2 border-[#003A96] w-auto">

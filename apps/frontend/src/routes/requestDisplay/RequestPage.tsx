@@ -58,6 +58,8 @@ export default function RequestPage() {
         { label: 'Audio/Visual', value: 'AudioVisual' },
         { label: 'Sanitation', value: 'Sanitation' },
         { label: 'Security', value: 'Security' },
+        { label: 'Medical Device', value: 'MedicalDevice' },
+        { label: 'Facilities', value: 'Facilities' },
     ];
 
     const { data, isLoading, error } = trpc.requestList.useQuery();

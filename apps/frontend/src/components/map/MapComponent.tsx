@@ -339,9 +339,9 @@ const MapComponent: React.FC = () => {
       <PageWrapper open={true}
                    contents=
                        {
-        // put sidebar contents here:
-        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto">
-          <h2 className="font-bold text-center">Enter your location and destination</h2>
+        // put sidebar contents here:</p>
+        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}
               selectedPlace={selectedPlace}

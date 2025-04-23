@@ -5,6 +5,7 @@ import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
 import {LogOutButton} from "./signIn/LogOutButton.tsx"
 import { useAuth0 } from "@auth0/auth0-react";
+import icon from "../../assets/logo-icon-mass-general-brigham.png";
 
 
 type Props = {
@@ -24,8 +25,9 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     return (
         <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
-                <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo"  className="h-6"/>
+                <Link to={"/"} className={"ml-5 flex items-center space-x-2 text-sm text-[#003a96] font-[Poppins]"} onClick={() => setTab("")}>
+                    <img src={icon} alt="Mass General Brigham Logo"  className="h-6"/>
+                    <div className="flex font-semibold">Mass General Brigham</div>
                 </Link>
                 <div className="flex">
                     <Link to="/directory" onClick={() => setTab("dir")}

@@ -24,10 +24,13 @@ RUN yarn install
 # Generate Prisma client
 RUN yarn workspace database generate
 
-#Update DB
-RUN yarn workspace database push
-
 # Build the application
+ARG VITE_PUBLIC_AUTH0_DOMAIN
+ARG VITE_PUBLIC_AUTH0_CLIENT_ID
+ARG VITE_GOOGLE_MAPS_API_KEY
+ENV VITE_PUBLIC_AUTH0_DOMAIN $VITE_PUBLIC_AUTH0_DOMAIN
+ENV VITE_PUBLIC_AUTH0_CLIENT_ID $VITE_PUBLIC_AUTH0_CLIENT_ID
+ENV VITE_GOOGLE_MAPS_API_KEY $VITE_GOOGLE_MAPS_API_KEY
 RUN yarn build
 
 # Stage 2: Production stage

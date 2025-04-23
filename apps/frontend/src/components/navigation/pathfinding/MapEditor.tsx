@@ -133,12 +133,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             title: "Drag me!"
         });
 
-        const listener = marker.addListener("dragend", () => {
-            const pos = marker.getPosition();
-            if (pos) {
-                console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
-            }
-        });
+        // const listener = marker.addListener("dragend", () => {
+        //     const pos = marker.getPosition();
+        //     if (pos) {
+        //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+        //     }
+        // });
 
         return () => {
             listener.remove();
@@ -187,6 +187,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         ? "pat22"
                         : selectedHospital; // e.g. "faulkner"
 
+
+            const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
+                marker => {
+                    setStaticMarkers(markers => [...markers])
+                    setNewNodeTracker(!newNodeTracker)
+                });
+
             // generate the new markers:
             const newMarkers = createMarkers(
                 map,
@@ -196,13 +203,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 buildingKey,
                 floor
             );
-
-            setStaticMarkers(newMarkers);
+            // setStaticMarkers(newMarkers);
+            return () => listener.remove();
         } else {
             // hide mode: just drop our array to empty
             setStaticMarkers([]);
         }
-    }, [map, showNodes, showEdges, selectedHospital, selectedFloor]);
+    }, [map, showNodes, showEdges, selectedHospital, selectedFloor, staticMarkers]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;

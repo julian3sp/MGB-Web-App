@@ -7,7 +7,7 @@ import {
     updatePatriotPlace22,
     Patriot22Overlays,
 } from '../../map/overlays/22PatriotOverlay';
-import {addNodeListener, createMarkers} from '../../map/overlays/createMarkers';
+import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
@@ -23,9 +23,9 @@ import {
     DropdownMenuTrigger,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem
-} from '../../ui/dropdown-menu.tsx'
-import { Button } from "@/components/ui/button"
+} from '../../ui/dropdown-menu.tsx';
 
+// resolve
 interface MapEditorProps {
     onMapReady: (
         map: google.maps.Map,
@@ -35,15 +35,16 @@ interface MapEditorProps {
 }
 
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
-  const [showNodes, setShowNodes] = useState(false);
-  const [showEdges, setShowEdges] = useState(false);
-  const [algoType, setAlgoType] = useState("A-Star")
-
-  const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-  const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
+    const [isLoadingMap, setIsLoadingMap] = useState(true);
+    const [showNodes, setShowNodes] = useState(false);
+    const [showEdges, setShowEdges] = useState(false);
+    const [algoType, setAlgoType] = useState("A-Star");
+    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
 
   const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
@@ -66,7 +67,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
     };
-    function setAlgoTypeWrapper(algo: string){
+
+    function setAlgoTypeWrapper(algo: string) {
         window.sessionStorage.setItem("algoType", algo);
         setAlgoType(algo);
     }
@@ -86,42 +88,42 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         });
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
-        loader
-            .load()
-            .then(() => {
-                if (mapRef.current) {
-                    const newMap = new google.maps.Map(mapRef.current, {
-                        center: { lat: 42.3601, lng: -71.0589 },
-                        zoom: 12,
-                        fullscreenControl: true,
-                        mapTypeControl: false,
-                        disableDoubleClickZoom: true,
+        loader.load().then(() => {
+            if (mapRef.current) {
+                const newMap = new google.maps.Map(mapRef.current, {
+                    center: { lat: 42.3601, lng: -71.0589 },
+                    zoom: 12,
+                    fullscreenControl: true,
+                    mapTypeControl: false,
+                    disableDoubleClickZoom: true,
                         streetViewControl: false,
-                        zoomControl: false,
-                        scaleControl: false,
-                    });
+                    zoomControl: false,
+                    scaleControl: false,
+                });
 
-                    setMap(newMap);
+                setMap(newMap);
+                setIsLoadingMap(false);
 
-                    const directionsService = new google.maps.DirectionsService();
-                    const directionsRenderer = new google.maps.DirectionsRenderer({
-                        map: newMap,
-                        suppressMarkers: true,
-                        preserveViewport: false,
-                        polylineOptions: {
-                            strokeColor: '#1A73E8',
-                            strokeWeight: 4,
-                        },
-                    });
+                const directionsService = new google.maps.DirectionsService();
+                const directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: newMap,
+                    suppressMarkers: true,
+                    preserveViewport: false,
+                    polylineOptions: {
+                        strokeColor: '#1A73E8',
+                        strokeWeight: 4,
+                    },
+                });
 
-                    directionsRenderer.setMap(newMap);
-                    onMapReady(newMap, directionsService, directionsRenderer);
-
-                }
-            })
-            .catch(console.error);
+                directionsRenderer.setMap(newMap);
+                onMapReady(newMap, directionsService, directionsRenderer);
+            }
+        }).catch(console.error);
     }, [onMapReady, apiKey]);
 
+    const getNodeMarkers = () => {
+        if (!selectedHospital || !map) return;
+        const floor = selectedFloor || 1;
     useEffect(() => {
         if (!map) return;
 
@@ -166,6 +168,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setShowNodes(prev => !prev);
     };
 
+    const handleToggleNodes = () => setShowNodes(prev => !prev);
+    const handleToggleEdges = () => setShowEdges(prev => !prev);
 
     // Display all static graph nodes
     useEffect(() => {
@@ -229,24 +233,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         return () => listener.remove();
     }
 
-
-    const handleToggleEdges = () => {
-        setShowEdges(prev => !prev);
-    };
-
-    // Display Edges
     useEffect(() => {
         if (!map || !selectedHospital) return;
-
-        // clear edges
         edgePolylines.forEach(poly => poly.setMap(null));
         setEdgePolylines([]);
 
         if (showEdges) {
             const lines = getEdgeLines();
-            if (lines) {
-                setEdgePolylines(lines);
-            }
+            if (lines) setEdgePolylines(lines);
         }
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
@@ -299,6 +293,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             mgbOverlay.floorOverlay.setMap(null);
             setMgbOverlay(null);
         }
+
         if (patriot22Overlay) {
             patriot22Overlay.floor3Overlay.setMap(null);
             patriot22Overlay.floor4Overlay.setMap(null);
@@ -342,38 +337,26 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 {nodeInfo && (
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">ID:</span> {nodeInfo.id}
-                        </p>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}
-                        </p>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}
-                        </p>
-                        <button
-                            className={
-                                'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '
-                            }
-                            onClick={() => {
-                                setNodesToRemove(prev => [...prev, nodeInfo]);
-                            }}>
+                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
+                        <button className="bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
                             Remove Node
                         </button>
                     </div>
-
                 )}
 
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+
+                <button className="bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={handleSubmit}>
                     Submit Changes
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800}">Choose Your Algorithm</button>
+                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
@@ -385,13 +368,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
-                <div className="w-3/4 relative">
-                    <div ref={mapRef} className="w-full h-full"></div>
-                </div>
             </div>
 
             <div className="w-3/4 relative">
+                {isLoadingMap && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
                 <div ref={mapRef} className="w-full h-full"></div>
                 <MapEditorControls
                     map={map}
@@ -405,7 +389,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     onToggleNodes={handleToggleNodes}
                     onToggleEdges={handleToggleEdges}
                 />
-
                 <HelpDropdown />
             </div>
         </div>

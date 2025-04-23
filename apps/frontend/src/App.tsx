@@ -51,6 +51,8 @@ function App() {
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
                 <Router>
+                    <div className='min-h-screen'>
+
                     <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
                     <Routes>
                         <Route path="/navigation" element={<NavigationPage />} />
@@ -69,6 +71,8 @@ function App() {
                             </Route>
                         </Route>
                     </Routes>
+                    </div>
+
                     <FooterBar />
                 </Router>
             </QueryClientProvider>

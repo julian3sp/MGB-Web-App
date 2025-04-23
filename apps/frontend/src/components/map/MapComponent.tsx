@@ -282,7 +282,7 @@ const MapComponent: React.FC = () => {
                    contents=
                        {
         // put sidebar contents here:
-        <div className="min-h-screen w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
+        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto">
           <h2 className="font-bold text-center">Enter your location and destination</h2>
           <GoogleMapSection
               startLocation={startLocation}

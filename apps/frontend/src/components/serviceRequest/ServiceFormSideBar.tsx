@@ -53,6 +53,22 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
                 })}
                 type="AudioVisual"
             />
+            <SideBarButton
+                label={'Medical Device Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "MedicalDevice",
+                    title: "Medical Device Request Form",
+                })}
+                type="MedicalDevice"
+            />
+            <SideBarButton
+                label={'Facilities Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "Facilities",
+                    title: "Facilities Request Form",
+                })}
+                type="Facilities"
+            />
         </div>
     );
 }

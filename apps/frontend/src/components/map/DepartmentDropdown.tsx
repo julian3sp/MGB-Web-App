@@ -26,6 +26,7 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSel
   useEffect(() => {
     if (searchTerm) {
       setSearchTerm('')
+    }
 
   }, [building]);
 

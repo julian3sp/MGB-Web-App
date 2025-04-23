@@ -226,7 +226,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         startMarkerRef.current.setMap(null);
         startMarkerRef.current = null;
       }
+
       if (targetMarkerRef.current) {
+        console.log("clearing target marker")
         targetMarkerRef.current.setMap(null);
         targetMarkerRef.current = null;
       }
@@ -248,7 +250,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     } catch (error) {
       console.error('Error in pathfinding:', error);
     }
-  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
+  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination]);
 
   // Handle overlay updates based on selected destination
   useEffect(() => {

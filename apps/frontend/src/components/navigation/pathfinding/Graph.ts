@@ -1,8 +1,10 @@
 import {trpc} from "@/lib/trpc.ts";
+import {graph} from "@/components/map/GraphObject.ts";
+// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
 
 export type Node = {
-    name: string | null
-    id: number
+    name: string
+    id: number | undefined
     building: string
     floor: number
     x: number
@@ -13,9 +15,17 @@ export type Node = {
 }
 
 export type  Edge = {
-    source: Node
-    target: Node;
+    id: number
+    sourceId: Node
+    targetId: Node;
     weight: number;
+}
+
+type Edit = {
+    deletedNodes: number[];
+    deletedEdges: number[];
+    addedNodes: Node[];
+    addedEdges: Edge[];
 }
 
 
@@ -23,51 +33,183 @@ export class Graph {
     private nodes: Set<Node>;
     private adjacencyList: Map<Node, Edge[]>;
     private edges: Edge[];
+    private edits: Edit;
 
     constructor() {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
         this.edges = []
+        this.edits = {
+            deletedNodes: [],
+            addedNodes: [],
+            deletedEdges: [],
+            addedEdges: [],
+        }
     }
 
-    populate(nodesData: Node[], edgesData: { sourceId: number, targetId: number, weight: number }[]) {
-        // Create nodes from nodesData.
-        const allNodes: Node[] = nodesData.map((n) => ({
-          ...n,
-          name: `node-${n.id}`,
-          edgeCost: 0,
-          totalCost: 0,
-          parent: undefined
-        }));
+    populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
+                          edgeCost: number, totalCost: number, parent?: Node; }[],
+             edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
+        // Reinit
+        this.nodes = new Set<Node>();
+        this.adjacencyList = new Map<Node, Edge[]>();
+        this.edges = []
+        this.resetEditHistory();
 
-        const allEdges: Edge[] = (edgesData).map((n) => ({
-            ...n,
-            source: allNodes[n.sourceId - 1],
-            target: allNodes[n.targetId - 1],
-        }));
-
-        this.edges = allEdges
-
-        for (const edge of allEdges) {
-            this.addEdge(edge.source, edge.target, edge.weight)
+        for (const raw of nodesData) {
+            const node: Node = {
+                id: raw.id,
+                name: `node-${raw.id}`,
+                building: raw.building,
+                floor: raw.floor,
+                x: raw.x,
+                y: raw.y,
+                edgeCost: 0,
+                totalCost: 0,
+                parent: undefined,
+            };
+            this.nodes.add(node);
+            this.adjacencyList.set(node, []);
         }
+
+        const allEdges: Edge[] = (edgesData).map((e) => ({
+            ...e,
+            id: e.id,
+            sourceId: this.getNode(e.sourceId),
+            targetId: this.getNode(e.targetId),
+        }));
+
+
+        this.addEdges(allEdges);
+        this.resetEditHistory();
+        console.log("Graph successfully populated")
+        console.log("Node Count: ", this.nodes.size);
+        console.log("Edge Count: ", this.edges.length);
+        console.log(this.edits)
+
+    }
+
+
+    resetEditHistory(): void{
+        this.edits = {
+            deletedNodes: [],
+            addedNodes: [],
+            deletedEdges: [],
+            addedEdges: [],
+        }
+        console.log("Edit History Reseted");
+    }
+
+    getEditHistory(): Edit{
+        return this.edits;
     }
 
     addNode(node: Node): void {
         this.nodes.add(node);
         if (!this.adjacencyList.has(node)) {
             this.adjacencyList.set(node, []);
+            this.edits.addedNodes.push(node);
         }
     }
 
-    addEdge(source: Node, destination: Node, weight: number, bidirectional: boolean = true): void {
-        this.addNode(source);
-        this.addNode(destination);
+    deleteNode(id:number): void {
+        const deletedNode = Array.from(this.nodes).find(n => n.id === id);
+        if (!deletedNode){
+            console.log("No node with id " + id);
+            return;
+        }
 
-        this.adjacencyList.get(source)?.push({source: source, target: destination, weight });
+        const addedIdx = this.edits.addedNodes.findIndex(n => n.id === id);
+        if (addedIdx !== -1) {
+            // remove from addedNodes
+            this.edits.addedNodes.splice(addedIdx, 1);
+            this.edits.addedEdges = this.edits.addedEdges.filter(
+                e => e.sourceId.id !== id && e.targetId.id !== id
+            );
+        }
 
-        if (bidirectional) {
-            this.adjacencyList.get(destination)?.push({source: source, target: source, weight });
+        const keptEdges: Edge[] = [];
+        for (const e of this.edges) {
+            const connectedEdge = e.sourceId.id === id || e.targetId.id === id;
+            if (connectedEdge) {
+                this.deleteEdge(e.id);
+            } else {
+                keptEdges.push(e);
+            }
+        }
+        this.edges = keptEdges;
+
+        /* rebuild the adjacency */
+        const newAdjacency = new Map<Node, Edge[]>();
+
+        for (const [node, edges] of this.adjacencyList.entries()) {
+            if (node.id === id) continue;
+
+            const filtered = edges.filter(
+                edge => edge.sourceId.id !== id && edge.targetId.id !== id
+            );
+            newAdjacency.set(node, filtered);
+        }
+        this.adjacencyList = newAdjacency;
+
+        /* rebuild the node set*/
+        this.nodes = new Set([...this.nodes].filter(n => n.id !== id));
+
+        /* clear parent pointers  */
+        for (const n of this.nodes) {
+            if (n.parent?.id === id) n.parent = undefined;
+        }
+
+        if (addedIdx === -1) {
+            this.edits.deletedNodes.push(id);
+        }
+    }
+
+    addEdge(edge: Edge): void {
+        const id = edge.id;
+        const sourceId = edge.sourceId;
+        const targetId = edge.targetId;
+        const weight = edge.weight;
+
+
+        this.addNode(sourceId);
+        this.addNode(targetId);
+
+        this.adjacencyList.get(sourceId)?.push({id: id, sourceId: sourceId, targetId: targetId, weight: weight });
+        this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
+
+        this.edits.addedEdges.push(edge);
+        this.edges.push(edge)
+    }
+
+    addEdges(edges: Edge[]): void {
+        for (const edge of edges) {
+            this.addEdge(edge);
+        }
+    }
+
+    deleteEdge(id:number): void {
+        const edge = this.getEdge(id);
+
+        // Check if edge exists
+        if(!edge) {
+            console.log("Failed to delete edge");
+            return;
+        }
+
+        this.edges = this.edges.filter(e => e.id !== id);
+        this.edits.deletedEdges.push(id);
+
+        const fromSrc = this.adjacencyList.get(edge.sourceId);
+        if (fromSrc) {
+            this.adjacencyList.set(
+                edge.sourceId,
+                fromSrc.filter(e => e.id !== id)
+            );
+            this.adjacencyList.set(
+                edge.targetId,
+                fromSrc.filter(e => e.id !== id)
+            );
         }
     }
 
@@ -76,16 +218,60 @@ export class Graph {
     }
 
     getNode(id: number): Node | undefined {
-        const nodes: Node[] = this.getNodes();
-        return nodes.find((node) => node.id === id);
+        return Array.from(this.nodes).find((node) => node.id === id);
     }
 
-    getNodes(): Node[] {
+    getEdge(id: number): Edge | undefined {
+        const edge = this.edges.find((edge) => edge.id === id);
+        if (!edge) {
+            console.error("Failed to get edge");
+        }
+        return edge;
+    }
+
+    getAllNodes(): Node[] {
         return Array.from(this.nodes);
     }
 
-    getEdges(): Edge[] {
+    getAllEdges(): Edge[] {
         return this.edges;
+    }
+
+    getBuildingNodes(building: string, floor: number): Node[] {
+
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        console.log("Getting nodes building: ", building, " Floor:", floor);
+
+        return Array.from(this.nodes).filter(
+            n => n.building === building && n.floor === floor
+        );
+    }
+
+    getBuildingEdges(building: string, floor: number): Edge[] {
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        // console.log("Getting edges building: ", building, " Floor:", floor);
+        return Array.from(this.edges).filter(
+            edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
+                edge.targetId.building === building && edge.targetId.floor  === floor
+        );
     }
 
     BFS(startNode: Node, targetNode: Node): Node[] {
@@ -100,15 +286,45 @@ export class Graph {
             if (currentNode === undefined) break; // TypeScript weird stuff bruh
             if (!visited.includes(currentNode)) {
                 visited.push(currentNode);
-                //Target is found
+                //targetId is found
                 if (currentNode === targetNode) break;
 
                 const neighbors: Edge[] = this.getNeighbors(currentNode); // Edges
                 for (const edge of neighbors) {
-                    const neighbor = edge.target;
+                    const neighbor = edge.targetId;
                     if (!visited.includes(neighbor)) {
                         neighbor.parent = currentNode;
                         queue.push(neighbor);
+                    }
+                }
+            }
+        }
+
+        return this.reCreatePath(targetNode);
+    }
+
+    DFS(startNode: Node, targetNode: Node): Node[] {
+        const visited: Node[] = [];
+        const stack: Node[] = [startNode];
+
+        startNode.parent = undefined;
+
+        while (stack.length > 0) {
+            const currentNode = stack.pop();
+            if (!currentNode) break;
+
+            if (!visited.includes(currentNode)) {
+                visited.push(currentNode);
+
+                if (currentNode === targetNode) break;
+
+                const neighbors = this.getNeighbors(currentNode);
+
+                for (let i = neighbors.length - 1; i >= 0; i--) {
+                    const neighbor = neighbors[i].targetId;
+                    if (!visited.includes(neighbor)) {
+                        neighbor.parent = currentNode;
+                        stack.push(neighbor);
                     }
                 }
             }
@@ -173,9 +389,9 @@ export class Graph {
 
             const neighbors: Edge[] = this.getNeighbors(currentNode); // Edges
             for (const edge of neighbors) {
-                const neighbor: Node = edge.target;
+                const neighbor: Node = edge.targetId;
                 //skip node if checked
-                if (finished.includes(edge.target)) continue;
+                if (finished.includes(edge.targetId)) continue;
 
                 // cost of moving to new node
                 const currentEdgeCost: number = neighbor.edgeCost + edge.weight;
@@ -201,45 +417,65 @@ export class Graph {
 export default Graph;
 
 // Test
+// const allNodes: Node[] = [{ id: 1, name: "1", x: 0,  y: 0, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 2, name: "2", x: -1, y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 3, name: "3", x: 1,  y: 1, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 4, name: "4", x: -2, y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 5, name: "5", x: 2,  y: 2, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 6, name: "6", x: -1, y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 7, name: "7", x: 1,  y: 3, building: "", floor: 0, edgeCost: 0, totalCost: 0 },
+//                           { id: 8, name: "8", x: 0,  y: 4, building: "", floor: 0, edgeCost: 0, totalCost: 0 }];
+//
+// const allEdges = [
+//     { id: 1, sourceId: 1, targetId: 2, weight: 4 },
+//     { id: 2, sourceId: 1, targetId: 3, weight: 8 },
+//     { id: 3, sourceId: 1, targetId: 5, weight: 1 },
+//     { id: 4, sourceId: 2, targetId: 4, weight: 7 },
+//     { id: 5, sourceId: 2, targetId: 6, weight: 1 },
+//     { id: 6, sourceId: 4, targetId: 6, weight: 1 },
+//     { id: 7, sourceId: 3, targetId: 7, weight: 5 },
+//     { id: 8, sourceId: 5, targetId: 7, weight: 9 },
+//     { id: 9, sourceId: 6, targetId: 8, weight: 8 },
+// ] satisfies { id: number; sourceId: number; targetId: number; weight: number }[];
 
-// const node0: Node = { name: "0", x: 0,  y: 0,  edgeCost: 0, totalCost: 0 };
-// const node1: Node = { name: "1", x: -1, y: 1,  edgeCost: 0, totalCost: 0 };
-// const node2: Node = { name: "2", x: 1,  y: 1,  edgeCost: 0, totalCost: 0 };
-// const node3: Node = { name: "3", x: -2, y: 2,  edgeCost: 0, totalCost: 0 };
-// const node4: Node = { name: "4", x: 2,  y: 2,  edgeCost: 0, totalCost: 0 };
-// const node5: Node = { name: "5", x: -1, y: 3, edgeCost: 0, totalCost: 0 };
-// const node6: Node = { name: "6", x: 1,  y: 3, edgeCost: 0, totalCost: 0 };
-// const node7: Node = { name: "7", x: 0,  y: 4, edgeCost: 0, totalCost: 0 };
-//
-// // Instantiate the graph
+
+// Instantiate the graph
 // const graph = new Graph();
-//
-// graph.addEdge(node0, node1, 4);
-// graph.addEdge(node0, node2, 8);
-// graph.addEdge(node0, node4, 1);
-//
-// graph.addEdge(node1, node3, 7);
-// graph.addEdge(node1, node5, 1);
-// graph.addEdge(node3, node5, 1);
-//
-// graph.addEdge(node2, node6, 5);
-//
-// graph.addEdge(node4, node6, 9);
-//
-// graph.addEdge(node5, node7, 8);
-//
-//
-//
+// graph.populate(allNodes, allEdges);
+// console.log(graph.getEdge(1))
+// console.log(graph.getAllEdges())
+
 // //BFS
-// const bfsPath = graph.BFS(node0, node7);
+// const bfsPath = graph.BFS(node1, node2);
 // console.log("\nBFS Path:");
 // console.log(bfsPath.map(node => node.name).join(" -> "));
-//
-// //A*
-// const aStarPath = graph.aStar(node0, node7);
+
+//A*
+// let test = node1 === graph.getNode(1)
+// graph.getNode(2)
+// const aStarPath = graph.aStar(graph.getNode(1), graph.getNode(8));
 // console.log("\nA* Path:");
 // console.log(aStarPath.map(node => node.name).join(" -> "));
 
-
-
-
+// //dfs
+// const dfsPath = graph.DFS(graph.getNode(1), graph.getNode(8));
+// console.log("\nDFS Path:");
+// console.log(dfsPath.map(node => node.name).join(" -> "));
+//
+// graph.deleteEdge(4)
+//
+// // dfs
+// const dfsPath2 = graph.DFS(graph.getNode(1), graph.getNode(8));
+// console.log("\nDFS new Path:");
+// console.log(dfsPath2.map(node => node.name).join(" -> "));
+//
+// graph.addNode({ id: 1, name: "node-1", x: 0,  y: 0, building: "", floor: 0, edgeCost: 0, totalCost: 0});
+// graph.addEdge({ id: 0, sourceId: graph.getNode(1), targetId: graph.getNode(8), weight: 12 });
+// graph.deleteNode(4)
+//
+// const edits = graph.getEditHistory();
+// console.log("\nEdits:");
+// console.log("Added Edges: " + edits.addedEdges.map(edge => edge.id).join(", "));
+// console.log("Added Nodes: " + edits.addedNodes.map(node => node.name).join(", "));
+// console.log("Deleted Edges: " + edits.deletedEdges.map(ids => ids).join(", "));
+// console.log("Deleted Nodes: " + edits.deletedNodes.map(ids => ids).join(", "));

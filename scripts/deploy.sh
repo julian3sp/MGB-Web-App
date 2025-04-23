@@ -13,11 +13,12 @@ TIMESTAMP=$(date +%m-%d-%H-%M)
 
 # Login to AWS ECR
 echo "Logging in to AWS ECR..."
-aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/k1u5y6k1
+
 
 # Build the Docker image with production target and environment variables
 echo "Building Docker image..."
-docker build --target production \
+docker build --target production --platform linux/amd64 \
   --build-arg POSTGRES_USER=$POSTGRES_USER \
   --build-arg POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
   --build-arg POSTGRES_DB=$POSTGRES_DB \
@@ -28,16 +29,19 @@ docker build --target production \
   --build-arg PORT=$PORT \
   --build-arg FRONTEND_PORT=$FRONTEND_PORT \
   --build-arg BACKEND_PORT=$BACKEND_PORT \
-  -t $REPOSITORY_URI:$TIMESTAMP \
+  --build-arg VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY \
+  --build-arg VITE_PUBLIC_AUTH0_CLIENT_ID=$VITE_PUBLIC_AUTH0_CLIENT_ID \
+  --build-arg VITE_PUBLIC_AUTH0_DOMAIN=$VITE_PUBLIC_AUTH0_DOMAIN \
+  -t public.ecr.aws/k1u5y6k1/softeng-team-f:$TIMESTAMP \
   -f ./docker/Dockerfile .
 
 # Tag the image with latest
 echo "Tagging image as latest..."
-docker tag $REPOSITORY_URI:$TIMESTAMP $REPOSITORY_URI:latest
+docker tag public.ecr.aws/k1u5y6k1/softeng-team-f:$TIMESTAMP public.ecr.aws/k1u5y6k1/softeng-team-f:latest
 
 # Push both tags to ECR
 echo "Pushing images to ECR..."
-docker push $REPOSITORY_URI:$TIMESTAMP
-docker push $REPOSITORY_URI:latest
+docker push public.ecr.aws/k1u5y6k1/softeng-team-f:$TIMESTAMP
+docker push public.ecr.aws/k1u5y6k1/softeng-team-f:latest
 
 echo "Deployment complete!"

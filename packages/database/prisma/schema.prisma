@@ -38,6 +38,8 @@ model service_request {
   audioVisual    AudioVisual?
   security       Security?
   transportation Transportation?
+  medicalDevice  MedicalDevice?
+  facilities     Facilities?
 }
 
 model Sanitation {
@@ -45,7 +47,7 @@ model Sanitation {
   cleaningType    String
   contaminant     String?
   sanitationId    Int             @unique
-  service_request service_request @relation(fields: [sanitationId], references: [request_id])
+  service_request service_request @relation(fields: [sanitationId], references: [request_id], onDelete: Cascade)
 }
 
 model Language {
@@ -53,7 +55,7 @@ model Language {
   sourceLanguage  String
   targetLanguage  String
   languageId      Int             @unique
-  service_request service_request @relation(fields: [languageId], references: [request_id])
+  service_request service_request @relation(fields: [languageId], references: [request_id], onDelete: Cascade)
 }
 
 model Transportation {
@@ -61,7 +63,7 @@ model Transportation {
   transportationType        String
   transportationDestination String
   transportationId          Int             @unique
-  service_request           service_request @relation(fields: [transportationId], references: [request_id])
+  service_request           service_request @relation(fields: [transportationId], references: [request_id], onDelete: Cascade)
 }
 
 model AudioVisual {
@@ -69,7 +71,7 @@ model AudioVisual {
   accommodationType    String
   accommodationDetails String?
   audioVisualId        Int             @unique
-  service_request      service_request @relation(fields: [audioVisualId], references: [request_id])
+  service_request      service_request @relation(fields: [audioVisualId], references: [request_id], onDelete: Cascade)
 }
 
 model Security {
@@ -77,7 +79,24 @@ model Security {
   accessZones     String
   securityIssue   String
   securityId      Int             @unique
-  service_request service_request @relation(fields: [securityId], references: [request_id])
+  service_request service_request @relation(fields: [securityId], references: [request_id], onDelete: Cascade)
+}
+
+model MedicalDevice {
+  request_id       Int             @id @default(autoincrement())
+  device           String
+  operatorRequired String
+  medicalDeviceId  Int             @unique
+  service_request  service_request @relation(fields: [medicalDeviceId], references: [request_id], onDelete: Cascade)
+}
+
+model Facilities {
+  // for later verisons, possibly a photo upload?
+  request_id      Int             @id @default(autoincrement())
+  maintenanceType String
+  equipmentType   String
+  facilitiesID    Int             @unique
+  service_request service_request @relation(fields: [facilitiesID], references: [request_id], onDelete: Cascade)
 }
 
 model directory {

@@ -1,5 +1,6 @@
 import chestnutHillOverlayImg from '../../../../assets/ChestnutHillParkingLots.png';
-import chestnutFloorPlanOverlay from '../../../../assets/chestnut_rotated.png';
+// import chestnutFloorPlanOverlay from '../../../../assets/chestnut_rotated.png';
+import chestnutFloorPlanOverlay from '../../../../assets/chest_rotated.png';
 import {Node} from "../../navigation/pathfinding/Graph"
 
 export interface MGBOverlays {
@@ -21,20 +22,31 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
 
   // Hospital floor plan overlay bounds
   // Coordinates: [Top Right, Bottom Right, Bottom Left, Top Left]
-  const lats = [42.32625842, 42.32572777, 42.32568042, 42.32620219];
-  const lngs = [-71.14927255, -71.14922327, -71.15009599, -71.15015318];
+  // const lats = [42.32625842, 42.32572777, 42.32568042, 42.32620219];
+  // const lngs = [-71.14927255, -71.14922327, -71.15009599, -71.15015318];
+  //
+  // const floorBounds = {
+  //   north: Math.max(...lats),
+  //   south: Math.min(...lats),
+  //   east: Math.max(...lngs),
+  //   west: Math.min(...lngs),
+  // };
+
+  const coordinates_3: number[] = [42.326699937545584 , 42.32542932116046 , -71.14887598191709 , -71.15036909225422]
+
   const floorBounds = {
-    north: Math.max(...lats),
-    south: Math.min(...lats),
-    east: Math.max(...lngs),
-    west: Math.min(...lngs),
+    north: coordinates_3[0],
+    south: coordinates_3[1],
+    east: coordinates_3[2],
+    west: coordinates_3[3],
   };
 
   // Create parking overlay
   const parkingOverlay = new google.maps.GroundOverlay(
     chestnutHillOverlayImg,
     parkingBounds,
-    { opacity: 1 }
+    { clickable: false,
+      opacity: 1 }
   );
   parkingOverlay.setMap(map);
 
@@ -42,7 +54,9 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
   const floorOverlay = new google.maps.GroundOverlay(
     chestnutFloorPlanOverlay,
     floorBounds,
-    { opacity: 1 }
+
+    { clickable: false,
+      opacity: 1 }
   );
   floorOverlay.setMap(map);
 

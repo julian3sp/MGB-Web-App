@@ -21,6 +21,7 @@ export default defineConfig({
         port: parseInt(process.env.FRONTEND_PORT),
         proxy: {
             '/api': process.env.BACKEND_URL,
+            '/trpc': process.env.BACKEND_URL
         },
         watch: {
             usePolling: true,

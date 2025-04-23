@@ -660,7 +660,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         </div>
 
                         {/* Buttons */}
-                        <div className=" flex  gap-5 justify-center">
+                        <div className=" flex  gap-5 justify-center mt-5">
                             <ResetButton label={'Reset'} type={"reset"}/>
                             <SubmitButton
                                 label={'Submit'}

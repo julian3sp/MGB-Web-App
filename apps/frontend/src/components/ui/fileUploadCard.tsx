@@ -74,7 +74,7 @@ export default function FileUploadCard({ files, onFilesChange }: FileUploadCardP
   )
 }
 
-function FileIcon(props: any) {
+function FileIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

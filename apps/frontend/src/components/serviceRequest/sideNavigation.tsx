@@ -21,7 +21,7 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
     return (
         <>
             <motion.div
-                className="min-h-screen bg-[#F4F4F4] z-20"
+                className="bg-[#F4F4F4] z-20"
                 animate={{x: translateButton, y: 25}}
                 initial={{x: translateButton, y: 25}}
                 transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
@@ -81,7 +81,6 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
 
                 {/* Sidebar*/}
                 <motion.div
-                    className="min-h-screen" // D9D9D9
                     style={{width}}
                     animate={{x: translateX}}
                     initial={{x: translateX}}

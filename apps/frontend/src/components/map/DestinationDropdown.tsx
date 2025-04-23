@@ -21,6 +21,10 @@ const destinations = [
   {
     name: "22 Patriot Place",
     location: { lat: 42.09265105806092, lng: -71.26676051809467 }
+  }, 
+  {
+    name: "Faulkner", 
+    location: { lat: 42.30149071877142, lng: -71.12823221807406}
   }
 ];
 

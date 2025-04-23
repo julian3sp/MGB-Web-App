@@ -8,7 +8,7 @@ export function LogOutButton({className}: {className?: string}) {
     function handleLogOut() {
         if (isAuthenticated) {
             window.sessionStorage.setItem("isAdmin", "false");
-            logout();
+            logout({ logoutParams: { returnTo: window.location.origin } });
         }
     }
 

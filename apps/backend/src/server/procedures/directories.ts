@@ -32,6 +32,7 @@ export const makeDirectories = publicProcedure
             services: z.string(),
             location: z.string(),
             telephone: z.string(),
+            node: z.number(),
         })
     )
     .mutation(async ({ input }) => {

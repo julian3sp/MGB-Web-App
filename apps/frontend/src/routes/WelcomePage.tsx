@@ -3,15 +3,16 @@ import React from "react";
 import { ContainerScroll } from "../components/ui/container-scroll-animation";
 import map from "../../assets/map.jpg";
 import {Link} from "react-router-dom";
+import Popup from "../components/ui/Popup.tsx";
 
 export function WelcomePage() {
     const [tab, setTab] = React.useState<string>("");
     return (
         <div className="flex flex-col overflow-hidden -mt-10 p-10">
+            <Popup message="This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI"/>
             <ContainerScroll
                 titleComponent={
                     <>
-                        <h6 className="font-[Poppins] text-[#003a96]">This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI</h6>
                         <br/> <br/>
                         <h1 className="text-4xl font-semibold text-[#003a96]">
                             Never get lost at

@@ -174,7 +174,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const entrances: { [building: string] : number;} = {
         "MGB (Chestnut Hill)": 3900,
         "20 Patriot Place": 1139,
-        "22 Patriot Place": 1952
+        "22 Patriot Place": 1952,
+        "Faulkner": 3995
       }
 
 

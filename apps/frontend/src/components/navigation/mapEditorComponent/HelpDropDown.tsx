@@ -23,7 +23,7 @@ const HelpDropdown = () => {
       <div className="absolute bottom-24 right-1 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-600">
+            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-600 cursor-pointer">
               <CircleHelp className="w-6 h-6" />
             </button>
           </DropdownMenuTrigger>

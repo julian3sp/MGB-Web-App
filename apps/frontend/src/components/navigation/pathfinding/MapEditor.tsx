@@ -7,12 +7,12 @@ import {
     updatePatriotPlace22,
     Patriot22Overlays,
 } from '../../map/overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges} from '../../map/overlays/createMarkers';
+import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Node, Edge} from './Graph';
-import {graph} from "../../map/GraphObject.ts"
+import { Node, Edge } from './Graph';
+import { graph } from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 
 interface MapEditorProps {
@@ -23,11 +23,12 @@ interface MapEditorProps {
     ) => void;
 }
 
-  const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
+const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
+    const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
@@ -39,7 +40,7 @@ interface MapEditorProps {
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
-    const [nodesToAdd, setNodesToAdd] = useState<{id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
+    const [nodesToAdd, setNodesToAdd] = useState<{ id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
@@ -76,12 +77,13 @@ interface MapEditorProps {
                         fullscreenControl: true,
                         mapTypeControl: false,
                         disableDoubleClickZoom: true,
-                        streetViewControl: false, 
-                        zoomControl: false, 
+                        streetViewControl: false,
+                        zoomControl: false,
                         scaleControl: false,
                     });
 
                     setMap(newMap);
+                    setIsLoadingMap(false); // hide loading when map is ready
 
                     const directionsService = new google.maps.DirectionsService();
                     const directionsRenderer = new google.maps.DirectionsRenderer({
@@ -102,19 +104,19 @@ interface MapEditorProps {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    function getNodeMarkers(){
-        if(!selectedHospital || !map) return;
-        const floor = selectedFloor === null ? 1: selectedFloor;
+    function getNodeMarkers() {
+        if (!selectedHospital || !map) return;
+        const floor = selectedFloor === null ? 1 : selectedFloor;
         console.log(graph.getBuildingNodes(selectedHospital, floor))
 
         let building = selectedHospital;
-        if (building === "20 Patriot Place"){
+        if (building === "20 Patriot Place") {
             building = "pat20";
         }
-        else if (building === "22 Patriot Place"){
+        else if (building === "22 Patriot Place") {
             building = "pat22";
         }
-        else if (building === "MGB (Chestnut Hill)"){
+        else if (building === "MGB (Chestnut Hill)") {
             building = "chestnut";
         }
 
@@ -123,9 +125,9 @@ interface MapEditorProps {
         return markers;
     }
 
-    function getEdgeLines(){
-        if(!selectedHospital || !map) return;
-        const floor = selectedFloor === null ? 1: selectedFloor;
+    function getEdgeLines() {
+        if (!selectedHospital || !map) return;
+        const floor = selectedFloor === null ? 1 : selectedFloor;
         return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
     }
 
@@ -265,8 +267,6 @@ interface MapEditorProps {
                             onClick={() => {
                                 setNodesToRemove(prev => [...prev, nodeInfo]);
                             }}
-
-
                         >
                             Remove Node
                         </button>
@@ -286,6 +286,11 @@ interface MapEditorProps {
                 </div>
             </div>
             <div className="w-3/4 relative">
+                {isLoadingMap && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
                 <div ref={mapRef} className="w-full h-full"></div>
                 <MapEditorControls
                     map={map}

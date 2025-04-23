@@ -8,13 +8,14 @@ import {
     updatePatriotPlace22,
     Patriot22Overlays,
 } from '../../map/overlays/22PatriotOverlay';
-import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
+import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import { Node, Edge } from './Graph';
-import { graph } from "../../map/GraphObject.ts";
+import {Node, Edge} from './Graph';
+import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
+import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -37,7 +38,6 @@ interface MapEditorProps {
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
-    const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
     const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
@@ -47,18 +47,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
 
+    const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
+    const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
-    const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([]);
-    const [nodesToAdd, setNodesToAdd] = useState<{ id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([]);
-
-    const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-    const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+    const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
+    const [newNodeTracker,  setNewNodeTracker]  = useState<boolean>(false);
+    const [clearMarkers, setClearMarkers]  = useState<boolean>(false);
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -71,6 +72,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         window.sessionStorage.setItem("algoType", algo);
         setAlgoType(algo);
     }
+
+    // Start of map editor
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
@@ -93,7 +96,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     fullscreenControl: true,
                     mapTypeControl: false,
                     disableDoubleClickZoom: true,
-                    streetViewControl: false,
+                        streetViewControl: false,
                     zoomControl: false,
                     scaleControl: false,
                 });
@@ -118,40 +121,112 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }).catch(console.error);
     }, [onMapReady, apiKey]);
 
-    const getNodeMarkers = () => {
-        if (!selectedHospital || !map) return;
-        const floor = selectedFloor || 1;
+    useEffect(() => {
+        if (!map) return;
+
+        const marker = new google.maps.Marker({
+            position: {  lat: 42.32610671664074, lng: -71.14958629820883},
+            map,
+            draggable: true,
+            title: "Drag me!"
+        });
+
+        const listener = marker.addListener("dragend", () => {
+            const pos = marker.getPosition();
+            if (pos) {
+                console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+            }
+        });
+
+        return () => {
+            listener.remove();
+            marker.setMap(null);
+        };
+    }, [map]);
+
+    function getEdgeLines(){
+        console.log("fetching lines")
+        if(!selectedHospital || !map) return;
         let building = selectedHospital;
-
-        if (building === "20 Patriot Place") building = "pat20";
-        else if (building === "22 Patriot Place") building = "pat22";
-        else if (building === "MGB (Chestnut Hill)") building = "chestnut";
-        else if (building === "Faulkner") building = "aulkner";
-
-        let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, 'normal', building, floor);
-        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, 'removed', building, floor)];
-        return markers;
-    };
-
-    const getEdgeLines = () => {
-        if (!selectedHospital || !map) return;
-        const floor = selectedFloor || 1;
-        return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
-    };
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        } else if (building === "Faulkner"){
+            building = "Faulkner";
+        }
+        const floor = selectedFloor === null ? 1: selectedFloor;
+        return drawAllEdges(map, graph.getBuildingEdges(building, floor));
+    }
 
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
+    // Display all static graph nodes
     useEffect(() => {
-        if (!map || !selectedHospital) return;
-        nodeMarkers.forEach(m => m.setMap(null));
-        setNodeMarkers([]);
-
         if (showNodes) {
-            const markers = getNodeMarkers();
-            if (markers) setNodeMarkers(markers);
+            displayNodes();
         }
-    }, [showNodes, selectedHospital, selectedFloor, map, nodesToRemove]);
+    }, [showNodes, map, newNodeTracker]);
+
+      useEffect(() => {
+          // Prevents seeing other building nodes
+          staticMarkers.forEach(m => m.setMap(null));
+          setStaticMarkers([]);
+
+          if (showNodes) displayNodes();
+
+      }, [selectedHospital, selectedFloor]);
+
+      useEffect(() =>{
+          staticMarkers.forEach(m => m.setMap(null));
+          setStaticMarkers([]);
+      }, [clearMarkers]);
+
+
+    function displayNodes(){
+        if (!map || !selectedHospital) return;
+
+        const floor = selectedFloor === null ? 1: selectedFloor;
+        console.log("Displaying")
+
+        let building = selectedHospital;
+        if (building === "20 Patriot Place"){
+            building = "pat20";
+        }
+        else if (building === "22 Patriot Place"){
+            building = "pat22";
+        }
+        else if (building === "MGB (Chestnut Hill)"){
+            building = "chestnut";
+        }
+
+        const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+            ? "chestnut"
+            : selectedHospital === "20 Patriot Place"
+                ? "pat20"
+                : "pat22";
+
+        const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
+            marker => {
+                setStaticMarkers(markers => [...markers])
+                setNewNodeTracker(!newNodeTracker)
+            });
+
+        const newStatics = createMarkers(map,
+            graph.getBuildingNodes(selectedHospital, floor),
+            setNodeDetails,
+            'normal',
+            building,
+            floor
+        );
+        setStaticMarkers(newStatics);
+        return () => listener.remove();
+    }
 
     useEffect(() => {
         if (!map || !selectedHospital) return;
@@ -165,16 +240,41 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
     const handleSubmit = async () => {
-
         const edits = graph.getEditHistory()
+        console.log("Edits: ", edits.addedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);
         await deleteEdges.mutateAsync(edits.deletedEdges);
+        console.log("edits committed");
 
-        if (!nodesDataFromAPI || isNodesLoading || !edgesDataFromAPI || isEdgesLoading) return;
-        graph.populate(nodesDataFromAPI, edgesDataFromAPI);
-    };
+        const [nodesRes, edgesRes] = await Promise.all([
+            refetchNodes(),
+            refetchEdges(),
+        ]);
+
+        if (!nodesRes.data || !edgesRes.data) {
+            console.error("Failed to fetch fresh data");
+            return;
+        }
+        console.log("Database fetched", {
+            nodes: nodesRes.data.length,
+            edges: edgesRes.data.length
+        });
+
+        staticMarkers.forEach(m => m.setMap(null));
+        setStaticMarkers([]);
+        edgePolylines.forEach(l => l.setMap(null));
+        setEdgePolylines([]);
+        graph.populate(nodesRes.data, edgesRes.data);
+        // setClearMarkers(!clearMarkers);
+        if (showNodes) displayNodes();
+        if (showEdges) {
+            const lines = getEdgeLines();
+            if (lines) setEdgePolylines(lines);
+        }
+    }
+
 
     const setNodeDetails = (node: Node) => {
         setNodeInfo({ id: node.id.toString(), x: node.x, y: node.y });
@@ -206,7 +306,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 createFaulknerOverlays(map);
             }
 
-            const location = hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
+            const location =
+                hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
             if (location) {
                 map.setZoom(19);
                 map.panTo(location);

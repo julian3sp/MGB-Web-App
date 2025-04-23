@@ -171,7 +171,7 @@ export default function RequestTablePage() {
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
-                            <thead className="bg-gray-200 sticky top-0 z-20">
+                            <thead className="bg-gray-200 sticky top-0 z-20 border-b-5 border-b-[#44A6A6]">
                                 <tr>
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
@@ -230,14 +230,14 @@ export default function RequestTablePage() {
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300  break-words">
-                                        <h3
-                                            className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
-                                        >
-                                            Request Details
-                                        </h3>
-                                    </th>
+                                    {/*<th className="p-4 border-b border-gray-300  break-words">*/}
+                                    {/*    <h3*/}
+                                    {/*        className="block text-lg font-semibold font-[Poppins]"*/}
+                                    {/*        style={{ color: '#003A96' }}*/}
+                                    {/*    >*/}
+                                    {/*        Request Details*/}
+                                    {/*    </h3>*/}
+                                    {/*</th>*/}
 
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
@@ -395,175 +395,164 @@ export default function RequestTablePage() {
 
                                         <td className="p-4  break-words w-fit pt-0 pb-2">
                                             <p
-                                                className={`block font-[Poppins] text-med font-semibold ${
-                                                    res.priority === 'Low'
-                                                        ? 'text-green-600'
-                                                        : res.priority === 'Medium'
-                                                          ? 'text-yellow-500'
-                                                          : res.priority === 'High'
-                                                            ? 'text-red-500'
-                                                            : res.priority === 'Emergency'
-                                                              ? 'text-red-700 underline'
-                                                              : 'text-blue-gray-900'
-                                                }`}
                                             >
                                                 {res.priority}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[225px] pt-0 pb-1">
-                                            <div className="font-[Poppins] text-med text-blue-gray-900 space-y-0">
-                                                {res.sanitation?.cleaningType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Cleaning Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.sanitation.cleaningType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.language?.targetLanguage && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Target Language:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.language.targetLanguage}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.audioVisual?.accommodationType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Accommodation Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.audioVisual.accommodationType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.transportation?.transportationType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Transportation Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.transportation.transportationType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.security?.accessZones && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Access Zones:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.security.accessZones}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.medicalDevice?.device && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Medical Device:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.medicalDevice.device}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.facilities?.maintenanceType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Maintenance Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.facilities.maintenanceType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.request_type === 'Sanitation' && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Contaminant:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.sanitation?.contaminant?.trim()
-                                                                ? res.sanitation.contaminant
-                                                                : 'N/A'}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.language?.sourceLanguage && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Source Language:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.language.sourceLanguage}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.request_type === 'AudioVisual' && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Accommodation Details:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.audioVisual?.accommodationDetails?.trim()
-                                                                ? res.audioVisual
-                                                                      .accommodationDetails
-                                                                : 'N/A'}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.transportation?.transportationDestination && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Transportation Destination:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {
-                                                                res.transportation
-                                                                    .transportationDestination
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.security?.securityIssue && (
-                                                    <div className="pl-4">
-                                                        <span className="underline pl-4">
-                                                            <ul>Security Issue:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.security.securityIssue}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.medicalDevice?.operatorRequired && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Operator Required?</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.medicalDevice.operatorRequired}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.facilities?.equipmentType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Equipment Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.facilities.equipmentType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
-                                        </td>
+                                        {/*<td className="p-4  break-words max-w-[225px] pt-0 pb-1">*/}
+                                        {/*    <div className="font-[Poppins] text-med text-blue-gray-900 space-y-0">*/}
+                                        {/*        {res.sanitation?.cleaningType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Cleaning Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.sanitation.cleaningType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.language?.targetLanguage && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Target Language:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.language.targetLanguage}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.audioVisual?.accommodationType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Accommodation Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.audioVisual.accommodationType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.transportation?.transportationType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Transportation Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.transportation.transportationType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.security?.accessZones && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Access Zones:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.security.accessZones}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.medicalDevice?.device && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Medical Device:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.medicalDevice.device}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.facilities?.maintenanceType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Maintenance Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.facilities.maintenanceType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.request_type === 'Sanitation' && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Contaminant:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.sanitation?.contaminant?.trim()*/}
+                                        {/*                        ? res.sanitation.contaminant*/}
+                                        {/*                        : 'N/A'}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.language?.sourceLanguage && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Source Language:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.language.sourceLanguage}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.request_type === 'AudioVisual' && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Accommodation Details:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.audioVisual?.accommodationDetails?.trim()*/}
+                                        {/*                        ? res.audioVisual*/}
+                                        {/*                              .accommodationDetails*/}
+                                        {/*                        : 'N/A'}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.transportation?.transportationDestination && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Transportation Destination:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {*/}
+                                        {/*                        res.transportation*/}
+                                        {/*                            .transportationDestination*/}
+                                        {/*                    }*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.security?.securityIssue && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline pl-4">*/}
+                                        {/*                    <ul>Security Issue:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.security.securityIssue}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.medicalDevice?.operatorRequired && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Operator Required?</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.medicalDevice.operatorRequired}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.facilities?.equipmentType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Equipment Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.facilities.equipmentType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*    </div>*/}
+                                        {/*    /!*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 *!/*/}
+                                        {/*</td>*/}
 
                                         <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">

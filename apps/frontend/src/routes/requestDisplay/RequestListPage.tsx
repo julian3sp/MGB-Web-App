@@ -129,13 +129,7 @@ export default function RequestListPage() {
             open={true}
             contents={
                 <nav
-                    className="w-full h-full bg-white p-6 overflow-hidden"
-                    style={{
-                        borderTop: '2px solid #d9d9d9',
-                        borderBottom: 'none',
-                        borderRight: '2px solid #d9d9d9',
-                        borderLeft: 'none',
-                    }}
+                    className="w-full h-full bg-white border-1  border-light p-6 overflow-hidden shadow-lg"
                 >
                     <h3
                         className="text-2xl font-bold mb-4 font-[Poppins] text-center"
@@ -146,7 +140,7 @@ export default function RequestListPage() {
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (
-                            <ul key={res.request_id} className="mb-2">
+                            <ul key={res.request_id} className="mb-4 group">
                                 <button
                                     onClick={() => {
                                         if (!selectedRequest) {
@@ -176,10 +170,10 @@ export default function RequestListPage() {
                                         }
                                     }}
                                     className={
-                                        `w-full text-left block p-5 rounded border-1 ${
+                                        `w-full text-left block p-5 rounded border-1 border-light-subtle  ${
                                             selectedRequest?.request_id == res.request_id
-                                                ? 'text-blue-900 bg-slate-100 font-semibold font-[Poppins] shadow-md'
-                                                : 'text-gray-700 hover:bg-gray-100 font-[Poppins] shadow-md'
+                                                ? 'text-white bg-[#003a96] font-semibold font-[Poppins] hover:border-b-5 border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
+                                                : 'text-gray-700 hover:bg-white hover:text-gray-700 border-b-0 hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
                                         }` /* Put requests in rounded rectangle boxes*/
                                     }
                                     style={{
@@ -209,27 +203,19 @@ export default function RequestListPage() {
                                                     : 'N/A'}{' '}
                                     (Priority:{' '}
                                     <span
-                                        className={
-                                            res.priority === 'Low'
-                                                ? 'text-green-600'
-                                                : res.priority === 'Medium'
-                                                  ? 'text-yellow-500'
-                                                  : res.priority === 'High'
-                                                    ? 'text-red-500'
-                                                    : res.priority === 'Emergency'
-                                                      ? 'text-red-700 '
-                                                      : 'text-gray-600'
-                                        }
+
                                     >
                                         {res.priority}
                                     </span>
                                     )
+
                                 </button>
                             </ul>
                         ))
                     ) : (
                         <nav
-                            className="border p-5 rounded-lg flex items-center"
+                            className="border p-5
+                             flex items-center"
                             style={{ borderColor: '#003A96' }}
                         >
                             <p className="text-gray-700 font-[Poppins]">
@@ -319,7 +305,7 @@ export default function RequestListPage() {
                 <div
                     className="h-auto flex-1 bg-white p-6 pl-5"
                     style={{
-                        borderTop: '2px solid #d9d9d9',
+                        borderTop: '1px solid lightgrey',
                         borderBottom: 'none',
                         borderRight: 'none',
                         borderLeft: 'none',
@@ -328,19 +314,18 @@ export default function RequestListPage() {
                     {' '}
                     {/*Border styling*/}
                     <h3
-                        className="text-2xl font-bold mb-4 font-[Poppins] text-center"
+                        className="text-2xl font-bold mb-4  font-[Poppins] text-center"
                         style={{ color: '#003A96' }}
                     >
                         Request Details:
                     </h3>
                     {selectedRequest ? (
                         <nav
-                            className=" border-[1px] border-gray shadow-md rounded-sm text-blue-gray-900"
-                            style={{ borderColor: 'lightgrey' }}
+                            className="shadow-md rounded-sm min-h-screen text-blue-gray-900"
                         >
                             <div >
-                                <div className="flex justify-between mx-auto border-b   bg-[#003A96] rounded-tl-[5px] rounded-tr-[5px] border-[#d9d9d9] mb-3 ">
-                                    <h2 className="text-xl font-bold p-5" style={{ color: 'white' }}>
+                                <div className="flex justify-between mx-auto border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-[5px] rounded-tr-[5px] border-[#d9d9d9] mb-3 ">
+                                    <h2 className="text-xl  p-5 " style={{ color: 'white' }} >
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
                                             ? 'Sanitation'
@@ -361,17 +346,7 @@ export default function RequestListPage() {
                                                         : 'N/A'}{' '}
                                         (Priority:{' '}
                                         <span
-                                            className={
-                                                selectedRequest.priority === 'Low'
-                                                    ? 'text-green-400'
-                                                    : selectedRequest.priority === 'Medium'
-                                                      ? 'text-yellow-500'
-                                                      : selectedRequest.priority === 'High'
-                                                        ? 'text-red-500'
-                                                        : selectedRequest.priority === 'Emergency'
-                                                          ? 'text-red-700 '
-                                                          : 'text-gray-600'
-                                            }
+
                                         >
                                             {selectedRequest.priority}
                                         </span>
@@ -455,20 +430,23 @@ export default function RequestListPage() {
                                             }}
                                             tooltip={'Delete Service Request'}
                                         />
+
                                     </div>
                                 </div>
-                                <div className={'columns-2 gap-5 h-full pl-5 pb-5 pr-5'}>
-                                    <div>
+
+
+                                <div className={'columns-2 gap-5 h-200 pl-5 pb-5  pr-5'}>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Request Type*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Request Type:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mt-1 mb-3 text-blue-gray-900">
                                     <p>
-                                        <p>
+                                        <p className={'text-[15pt]'}>
                                             {selectedRequest.request_type === 'Sanitation'
                                                 ? 'Sanitation'
                                                 : selectedRequest.request_type === 'Transportation'
@@ -490,12 +468,12 @@ export default function RequestListPage() {
                                     </p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Render edit mode for priority status if true, else render normally*/}
                                 {editMode ? (
                                     <>
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 "
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Priority:{' '}
@@ -521,24 +499,12 @@ export default function RequestListPage() {
                                                 ]}
                                                 placeholder={selectedRequest.priority}
                                                 originalValue={selectedRequest.priority}
-                                                styledOptions={(option) =>
-                                                    `block font-[Poppins] text-med ${
-                                                        option === 'Low'
-                                                            ? 'text-green-600 font-semibold'
-                                                            : option === 'Medium'
-                                                              ? 'text-yellow-500 font-semibold'
-                                                              : option === 'High'
-                                                                ? 'text-red-500 font-semibold'
-                                                                : option === 'Emergency'
-                                                                  ? 'text-red-700  font-semibold'
-                                                                  : 'text-blue-gray-900'
-                                                    }`
-                                                }
+
                                             />
                                         </div>
 
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 "
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Status:{' '}
@@ -558,60 +524,38 @@ export default function RequestListPage() {
                                                 ]}
                                                 placeholder={selectedRequest.status}
                                                 originalValue={selectedRequest.status}
-                                                styledOptions={(option) =>
-                                                    `block font-[Poppins] text-med ${
-                                                        option === 'Unassigned'
-                                                            ? 'font-semibold'
-                                                            : option === 'Assigned'
-                                                              ? 'font-semibold'
-                                                              : option === 'Working'
-                                                                ? 'font-semibold bg-blue-gray-900'
-                                                                : option === 'Done'
-                                                                  ? 'font-semibold'
-                                                                  : 'text-blue-gray-900'
-                                                    }`
-                                                }
+
                                             />
+
                                         </div>
+
                                     </>
                                 ) : (
                                     <>
+
                                         {/*Priority Normal*/}
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 "
+                                            className="text-xl font-semibold font-[Poppins] py-1  "
                                             style={{ color: '#003A96' }}
                                         >
                                             Priority:{' '}
                                         </h3>
                                         <ul className="list-disc ml-6 mb-3 mt-1">
-                                            <p
-                                                className={`block font-[Poppins] text-med font-semibold ${
-                                                    selectedRequest.priority === 'Low'
-                                                        ? 'text-green-600'
-                                                        : selectedRequest.priority === 'Medium'
-                                                          ? 'text-yellow-500'
-                                                          : selectedRequest.priority === 'High'
-                                                            ? 'text-red-500'
-                                                            : selectedRequest.priority ===
-                                                                'Emergency'
-                                                              ? 'text-red-700 '
-                                                              : 'text-blue-gray-900'
-                                                }`}
-                                            >
+                                            <p className={'text-[15pt]'}>
                                                 {selectedRequest.priority}
                                             </p>
                                         </ul>
 
                                         {/*Status Normal*/}
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 "
+                                            className="text-xl font-semibold font-[Poppins] py-1  "
                                             style={{ color: '#003A96' }}
                                         >
                                             Status:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <ul className="list-disc ml-6 mb-1 mt-1">
                                             <p
-                                                className={`block font-[Poppins] text-med ${
+                                                className={`block font-[Poppins] text-[15pt] '} ${
                                                     selectedRequest.status 
                                                 }`}
                                             >
@@ -621,31 +565,31 @@ export default function RequestListPage() {
                                     </>
                                 )}
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Name (Employee ID: #)*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1  "
                                     style={{ color: '#003A96' }}
                                 >
                                     Name:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.name} (Employee ID:{' '}
                                         {selectedRequest.employee_id})
                                     </p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Request Details*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Request Details:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.sanitation?.cleaningType && (
                                             <>
                                                 <span className="">Cleaning Type:</span>{' '}
@@ -754,16 +698,16 @@ export default function RequestListPage() {
                                     </p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Additional comments*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Additional Comments:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.additional_comments?.trim() ? (
                                             <p>{selectedRequest.additional_comments}</p>
                                         ) : (
@@ -772,41 +716,41 @@ export default function RequestListPage() {
                                     </p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Location*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Location:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>{selectedRequest.location}</p>
+                                    <p className={'text-[15pt]'}>{selectedRequest.location}</p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Department*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Department:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>{selectedRequest.department}</p>
+                                    <p className={'text-[15pt]'}>{selectedRequest.department}</p>
                                 </ul>
                                     </div>
-                                    <div>
+                                    <div className={"p-2 mx-auto  "}>
 
                                 {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Request Date:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {new Date(selectedRequest.request_date).toLocaleDateString(
                                             undefined,
                                             {
@@ -822,16 +766,16 @@ export default function RequestListPage() {
                                     </p>
                                 </ul>
                                     </div>
-<div>
+<div className={"p-2 mx-auto  "}>
                                 {/*Request ID*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 "
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
                                     style={{ color: '#003A96' }}
                                 >
                                     Request ID:{' '}
                                 </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>#{selectedRequest.request_id}</p>
+                                <ul className="list-disc  ml-6 mb-3 mt-1">
+                                    <p className={'text-[15pt]'}>#{selectedRequest.request_id}</p>
                                 </ul>
 </div>
                                 </div>

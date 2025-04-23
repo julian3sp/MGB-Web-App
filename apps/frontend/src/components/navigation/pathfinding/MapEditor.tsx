@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
+import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
 import {
     createPatriot22Overlays,
     updatePatriotPlace22,
@@ -63,6 +64,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
+        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406}
     };
 
     function setAlgoTypeWrapper(algo: string) {
@@ -124,6 +126,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (building === "20 Patriot Place") building = "pat20";
         else if (building === "22 Patriot Place") building = "pat22";
         else if (building === "MGB (Chestnut Hill)") building = "chestnut";
+        else if (building === "Faulkner") building = "aulkner";
 
         let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, 'normal', building, floor);
         markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, 'removed', building, floor)];
@@ -199,6 +202,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 createPatriot20Overlays(map);
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));
+            } else if (selectedHospital === 'Faulkner') {
+                createFaulknerOverlays(map);
             }
 
             const location = hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
@@ -267,7 +272,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
-                <div ref={mapRef} className="w-full h-full"></div>
+                <div ref={mapRef} className="w-full h-[95vh]"></div>
                 <MapEditorControls
                     map={map}
                     selectedHospital={selectedHospital}

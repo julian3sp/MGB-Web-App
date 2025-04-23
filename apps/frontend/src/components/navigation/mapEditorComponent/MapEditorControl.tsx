@@ -21,7 +21,7 @@ interface MapEditorControlsProps {
 }
 
 const hospitalsWithFloors = ["20 Patriot Place", "22 Patriot Place"];
-const hospitalsNoFloors = ["MGB (Chestnut Hill)"];
+const hospitalsNoFloors = ["MGB (Chestnut Hill)", "Faulkner"];
 
 const MapEditorControls: React.FC<MapEditorControlsProps> = ({
     map,

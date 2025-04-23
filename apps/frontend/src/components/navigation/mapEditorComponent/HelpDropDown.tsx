@@ -23,7 +23,7 @@ const HelpDropdown = () => {
       <div className="absolute bottom-24 right-1 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-600 cursor-pointer">
+            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-950 cursor-pointer">
               <CircleHelp className="w-6 h-6" />
             </button>
           </DropdownMenuTrigger>
@@ -53,7 +53,7 @@ const HelpDropdown = () => {
             <p className="mb-6">{modalContent}</p>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="w-full bg-[#003a96] text-white py-2 rounded-lg hover:bg-blue-600"
+              className="w-full bg-[#003a96] text-white py-2 rounded-lg hover:bg-blue-950"
             >
               Got it!
             </button>

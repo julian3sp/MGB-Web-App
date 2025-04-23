@@ -7,13 +7,14 @@ import {
     updatePatriotPlace22,
     Patriot22Overlays,
 } from '../../map/overlays/22PatriotOverlay';
-import {addNodeListener, createMarkers, drawAllEdges} from '../../map/overlays/createMarkers';
+import {addNodeListener, createMarkers} from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 import {Node, Edge} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
+import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
 
 interface MapEditorProps {
     onMapReady: (
@@ -233,7 +234,6 @@ interface MapEditorProps {
             edges: edgesRes.data.length
         });
 
-        console.log("Database fetched");
         staticMarkers.forEach(m => m.setMap(null));
         setStaticMarkers([]);
         edgePolylines.forEach(l => l.setMap(null));

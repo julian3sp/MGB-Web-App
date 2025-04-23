@@ -54,18 +54,22 @@ export class Graph {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
         this.edges = []
+        this.resetEditHistory();
 
-        const nodes: Node[] = nodesData.map((n) => ({
-          ...n,
-            id: n.id,
-          name: `node-${n.id}`,
-          edgeCost: 0,
-          totalCost: 0,
-          parent: undefined
-        }));
-
-        for (const node of nodes) {
+        for (const raw of nodesData) {
+            const node: Node = {
+                id: raw.id,
+                name: `node-${raw.id}`,
+                building: raw.building,
+                floor: raw.floor,
+                x: raw.x,
+                y: raw.y,
+                edgeCost: 0,
+                totalCost: 0,
+                parent: undefined,
+            };
             this.nodes.add(node);
+            this.adjacencyList.set(node, []);
         }
 
         const allEdges: Edge[] = (edgesData).map((e) => ({
@@ -81,6 +85,8 @@ export class Graph {
         console.log("Graph successfully populated")
         console.log("Node Count: ", this.nodes.size);
         console.log("Edge Count: ", this.edges.length);
+        console.log(this.edits)
+
     }
 
 
@@ -91,7 +97,7 @@ export class Graph {
             deletedEdges: [],
             addedEdges: [],
         }
-        console.log("Edit History Reset: ");
+        console.log("Edit History Reseted");
     }
 
     getEditHistory(): Edit{

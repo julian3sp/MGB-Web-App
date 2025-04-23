@@ -95,7 +95,7 @@ const DirectoryPage = () => {
                 />
                 <button
                     onClick={handleSubmit}
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"
                 >
                     Submit
                 </button>
@@ -107,7 +107,7 @@ const DirectoryPage = () => {
                 <button
                     onClick={downloadCSV}
                     disabled={isLoading}
-                    className="bg-green-600 text-white px-3 py-2 rounded mt-2 hover:bg-green-800"
+                    className="bg-[#003a96] hover:bg-blue-950 text-white px-3 py-2 rounded mt-2 font-[Poppins]"
                 >
                     Export CSV
                 </button>

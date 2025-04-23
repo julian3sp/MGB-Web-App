@@ -25,7 +25,6 @@ import {
 } from '../../ui/dropdown-menu.tsx';
 
 // resolve
-
 interface MapEditorProps {
     onMapReady: (
         map: google.maps.Map,
@@ -58,7 +57,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const addEdges = trpc.makeManyEdges.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
-
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
     const hospitalLocationMap = {
@@ -71,7 +69,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         window.sessionStorage.setItem("algoType", algo);
         setAlgoType(algo);
     }
-
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
@@ -84,7 +81,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             libraries: ['places'],
             language: 'en',
         });
-
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
         loader.load().then(() => {
@@ -166,7 +162,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
     const handleSubmit = async () => {
-        const edits = graph.getEditHistory();
+
+        const edits = graph.getEditHistory()
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);

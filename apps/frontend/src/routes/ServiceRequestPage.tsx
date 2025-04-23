@@ -6,13 +6,13 @@ import PageWrapper from "@/components/ui/PageWrapper.tsx";
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 
 export type serviceRequest = {
-    type: "Security" | "Language" | "Sanitation" | "AudioVisual" | "Transportation"
+    type: "Security" | "Language" | "Sanitation" | "AudioVisual" | "Transportation" | "MedicalDevice" | "Facilities";
     title: string;
 }
 function ServiceRequestPage() {
     const [activeTab, setActiveTab] = useState<serviceRequest>({
-        type: "Security",
-        title: "Security Request Form",
+        type: "Language",
+        title: "Language Interpreter Request Form",
     });
 
     return (

@@ -72,7 +72,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"} ${width || 'w-[396px]'} ${
+                        className={`w-full h-[48px] font-[Poppins] text-[14px] shadow font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"} ${width || 'w-[396px]'} ${
                             styledOptions ? styledOptions(value) : ''}`}
                         onClick={() => console.log("Dropdown pressed")}
                     >

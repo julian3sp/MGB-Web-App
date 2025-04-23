@@ -125,7 +125,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (!map) return;
 
         const marker = new google.maps.Marker({
-            position: { lat: 42.09236331125932, lng: -71.26640880069897 },
+            position: { lat: 42.30149071877142, lng: -71.12823221807406},
             map,
             draggable: true,
             title: "Drag me!"
@@ -166,27 +166,41 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
-    // Display all static graph nodes
     useEffect(() => {
-        if (showNodes) {
-            displayNodes();
+        if (!map) return;
+
+        // 1) clear out _all_ the old markers
+        staticMarkers.forEach(m => m.setMap(null));
+
+        // 2) if showNodes is on, re-draw
+        if (showNodes && selectedHospital) {
+            const floor = selectedFloor ?? 1;
+
+            // remap your building name to key exactly as Graph expects:
+            let buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+                ? "chestnut"
+                : selectedHospital === "20 Patriot Place"
+                    ? "pat20"
+                    : selectedHospital === "22 Patriot Place"
+                        ? "pat22"
+                        : selectedHospital; // e.g. "faulkner"
+
+            // generate the new markers:
+            const newMarkers = createMarkers(
+                map,
+                graph.getBuildingNodes(buildingKey, floor),
+                setNodeDetails,
+                'normal',
+                buildingKey,
+                floor
+            );
+
+            setStaticMarkers(newMarkers);
+        } else {
+            // hide mode: just drop our array to empty
+            setStaticMarkers([]);
         }
-    }, [showNodes, map, newNodeTracker]);
-
-      useEffect(() => {
-          // Prevents seeing other building nodes
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
-          console.log("Clear Markers after select")
-
-          if (showNodes) displayNodes();
-      }, [selectedHospital, selectedFloor, showNodes]);
-
-      // useEffect(() =>{
-      //     staticMarkers.forEach(m => m.setMap(null));
-      //     setStaticMarkers([]);
-      // }, [clearMarkers]);
-
+    }, [map, showNodes, showEdges, selectedHospital, selectedFloor]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;

@@ -8,13 +8,10 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
     };
 
     return (
-        <div className="pt-20 p-5">
-            <div className="flex items-center justify-between px-4 py-3 mb-4 rounded-lg bg-gray-200 border-b-2 border-gray-300 shadow-sm">
-                <span className="font-semibold text-gray-700 text-lg">Menu</span>
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7"></path>
-                </svg>
-            </div>
+        <div className=" p-5">
+            <h3 className="text-2xl font-bold mb-4 pt-2 font-[Poppins]"
+                style={{ color: '#003A96' }}>Menu:</h3>
+
             <SideBarButton
                 label={'Language Interpreter Service Form'}
                 onClick={() => handleFormRequest({
@@ -52,6 +49,22 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
                     title: "Audio/Visual Request Form",
                 })}
                 type="AudioVisual"
+            />
+            <SideBarButton
+                label={'Medical Device Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "MedicalDevice",
+                    title: "Medical Device Request Form",
+                })}
+                type="MedicalDevice"
+            />
+            <SideBarButton
+                label={'Facilities Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "Facilities",
+                    title: "Facilities Request Form",
+                })}
+                type="Facilities"
             />
         </div>
     );

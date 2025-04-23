@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import {createMGBOverlays, MGBOverlays} from './overlays/MGBOverlay';
 import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
+import { createFaulknerOverlays } from './overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
+import {createMarkers} from './overlays/createMarkers';
+import { drawAllEdges, drawPath} from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph';
 
@@ -58,8 +60,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   // Fetch graph data via TRPC
-  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
+  const { data: nodesData, isLoading: isNodesLoading} = trpc.getAllNodes.useQuery();
+  const { data: edgesData, isLoading: isEdgesLoading} = trpc.getAllEdges.useQuery();
 
   // Initialize Google Map (only once)
   useEffect(() => {
@@ -287,6 +289,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         } else if (selectedDestination.name === "22 Patriot Place") {
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
+        } else if (selectedDestination.name === "Faulkner") {
+          createFaulknerOverlays(map); 
         }
 
         // Center map on the selected destination

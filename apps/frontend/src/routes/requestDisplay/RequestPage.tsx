@@ -85,7 +85,8 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="min-h-screen font-[Poppins] pt-4"
+                className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
+                style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
                 <div className="flex gap-4 justify-between px-[16px] pb-2 pt-1 items-end">
                     <h1

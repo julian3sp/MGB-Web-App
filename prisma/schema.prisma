@@ -81,12 +81,13 @@ model Security {
 }
 
 model directory {
-  nodesId   Int    @id
+  id        Int    @id @default(autoincrement())
   name      String
   services  String
   location  String
   telephone String
   node      nodes  @relation(fields: [nodesId], references: [id])
+  nodesId   Int
 }
 
 model users {

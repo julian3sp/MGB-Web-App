@@ -4,7 +4,7 @@ import {graph} from "@/components/map/GraphObject.ts";
 
 export type Node = {
     name: string
-    id: number
+    id: number | undefined
     building: string
     floor: number
     x: number
@@ -54,22 +54,24 @@ export class Graph {
         this.nodes = new Set<Node>();
         this.adjacencyList = new Map<Node, Edge[]>();
         this.edges = []
+        this.resetEditHistory();
 
-        const nodes: Node[] = nodesData.map((n) => ({
-          ...n,
-            id: n.id,
-          name: `node-${n.id}`,
-          edgeCost: 0,
-          totalCost: 0,
-          parent: undefined
-        }));
-
-        // add them one by one
-        for (const node of nodes) {
+        for (const raw of nodesData) {
+            const node: Node = {
+                id: raw.id,
+                name: `node-${raw.id}`,
+                building: raw.building,
+                floor: raw.floor,
+                x: raw.x,
+                y: raw.y,
+                edgeCost: 0,
+                totalCost: 0,
+                parent: undefined,
+            };
             this.nodes.add(node);
+            this.adjacencyList.set(node, []);
         }
 
-        console.log(edgesData);
         const allEdges: Edge[] = (edgesData).map((e) => ({
             ...e,
             id: e.id,
@@ -77,14 +79,14 @@ export class Graph {
             targetId: this.getNode(e.targetId),
         }));
 
-        // sourceId: this.getNode(e.sourceId),
-        //
 
         this.addEdges(allEdges);
         this.resetEditHistory();
         console.log("Graph successfully populated")
-        // console.log(this.nodes)
-        // console.log(allEdges)
+        console.log("Node Count: ", this.nodes.size);
+        console.log("Edge Count: ", this.edges.length);
+        console.log(this.edits)
+
     }
 
 
@@ -95,6 +97,7 @@ export class Graph {
             deletedEdges: [],
             addedEdges: [],
         }
+        console.log("Edit History Reseted");
     }
 
     getEditHistory(): Edit{
@@ -105,7 +108,6 @@ export class Graph {
         this.nodes.add(node);
         if (!this.adjacencyList.has(node)) {
             this.adjacencyList.set(node, []);
-            // add to editor, but it will not be included when populated
             this.edits.addedNodes.push(node);
         }
     }
@@ -117,11 +119,20 @@ export class Graph {
             return;
         }
 
+        const addedIdx = this.edits.addedNodes.findIndex(n => n.id === id);
+        if (addedIdx !== -1) {
+            // remove from addedNodes
+            this.edits.addedNodes.splice(addedIdx, 1);
+            this.edits.addedEdges = this.edits.addedEdges.filter(
+                e => e.sourceId.id !== id && e.targetId.id !== id
+            );
+        }
+
         const keptEdges: Edge[] = [];
         for (const e of this.edges) {
             const connectedEdge = e.sourceId.id === id || e.targetId.id === id;
             if (connectedEdge) {
-                this.edits.deletedEdges.push(e.id);
+                this.deleteEdge(e.id);
             } else {
                 keptEdges.push(e);
             }
@@ -148,7 +159,10 @@ export class Graph {
         for (const n of this.nodes) {
             if (n.parent?.id === id) n.parent = undefined;
         }
-        this.edits.deletedNodes.push(id)
+
+        if (addedIdx === -1) {
+            this.edits.deletedNodes.push(id);
+        }
     }
 
     addEdge(edge: Edge): void {

@@ -42,7 +42,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
-    const [algoType, setAlgoType] = useState("A-Star");
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
@@ -115,10 +115,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     },
                 });
 
-                directionsRenderer.setMap(newMap);
-                onMapReady(newMap, directionsService, directionsRenderer);
-            }
-        }).catch(console.error);
+                    directionsRenderer.setMap(newMap);
+                    onMapReady(newMap, directionsService, directionsRenderer);
+
+                }
+            })
+            .catch(console.error);
     }, [onMapReady, apiKey]);
 
     useEffect(() => {
@@ -359,14 +361,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-
-                <button className="bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800">Choose Your Algorithm</button>
+                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-600 shadow-lg rounded p-3">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>

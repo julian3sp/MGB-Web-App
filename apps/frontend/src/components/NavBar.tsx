@@ -68,7 +68,7 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                         Export
                     </Link> : null }
                     </div>
-                    <LogInButton className="fixed right-0 text-sm text-black"/>
+                    <LogInButton className="fixed right-0 text-sm text-black" rerender={setAdmin}/>
                     <LogOutButton className="fixed right-0 text-sm text-black"/>
                 </div>
             </div>

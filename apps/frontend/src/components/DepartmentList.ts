@@ -230,14 +230,6 @@ const DepartmentList = [
     // },
 
     {
-        id: "radiology",
-        name: "Radiology",
-        specialties: ["Bone Density", "Breast Imaging/Mammography", "Ultrasound", "X-Ray"],
-        floor: ["5th Floor, Suite 560"],
-        phone: "(617) 732-9801",
-        building: "MGB (Chestnut Hill)"
-    },
-    {
         id: "mri-ct",
         name: "Radiology, MRI/CT Scan",
         specialties: ["CT Scan", "MRI", "X-Ray"],

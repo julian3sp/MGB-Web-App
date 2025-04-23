@@ -123,7 +123,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (!map) return;
 
         const marker = new google.maps.Marker({
-            position: {  lat: 42.32610671664074, lng: -71.14958629820883},
+            position: { lat: 42.09236331125932, lng: -71.26640880069897 },
             map,
             draggable: true,
             title: "Drag me!"
@@ -173,15 +173,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
           // Prevents seeing other building nodes
           staticMarkers.forEach(m => m.setMap(null));
           setStaticMarkers([]);
+          console.log("Clear Markers after select")
 
           if (showNodes) displayNodes();
+      }, [selectedHospital, selectedFloor, showNodes]);
 
-      }, [selectedHospital, selectedFloor]);
-
-      useEffect(() =>{
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
-      }, [clearMarkers]);
+      // useEffect(() =>{
+      //     staticMarkers.forEach(m => m.setMap(null));
+      //     setStaticMarkers([]);
+      // }, [clearMarkers]);
 
 
     function displayNodes(){
@@ -263,7 +263,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         edgePolylines.forEach(l => l.setMap(null));
         setEdgePolylines([]);
         graph.populate(nodesRes.data, edgesRes.data);
-        // setClearMarkers(!clearMarkers);
         if (showNodes) displayNodes();
         if (showEdges) {
             const lines = getEdgeLines();

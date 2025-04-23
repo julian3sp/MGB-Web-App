@@ -39,6 +39,7 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
+    "@radix-ui/react-slot": "^1.2.0",
     "@react-google-maps/api": "^2.20.6",
     "@react-three/drei": "^10.0.6",
     "@react-three/fiber": "^9.1.2",

@@ -1,5 +1,3 @@
-import {trpc} from "@/lib/trpc.ts";
-import {graph} from "@/components/map/GraphObject.ts";
 // import {CommitEdits} from "@/components/map/CommitEdits.tsx";
 
 export type Node = {

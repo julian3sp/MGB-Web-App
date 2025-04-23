@@ -1,16 +1,11 @@
-import faulknerFloor1 from '../../../../assets/FaulknerFloor1.png'
+import faulknerFloor1 from '../../../../assets/faulkner1_rotated.png'
 
 export interface FaulknerOverlays {
     floor1Overlay: google.maps.GroundOverlay;
 }
 
 export const createFaulknerOverlays = (map: google.maps.Map) => {
-    const coordinates: number[] = [
-        42.302361405241356, 
-        42.301006971479225, 
-        -71.12780533551847, 
-        -71.12937452284586, 
-    ]
+    const coordinates: number[] = [42.302586750337035 , 42.30041817429012 , -71.12689179398201 , -71.12971459155509]
 
     const bounds = {
         north: coordinates[0],

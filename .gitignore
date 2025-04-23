@@ -5,6 +5,7 @@
 **/.run
 **/.turbo
 **/dist
+**/.prisma
 
 out
 

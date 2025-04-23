@@ -206,7 +206,7 @@ export default function RequestListPage() {
                                                   ? 'Medical Device'
                                                   : res.request_type === 'Facilities'
                                                     ? 'Facilities'
-                                                    : 'N/A'}
+                                                    : 'N/A'}{' '}
                                     (Priority:{' '}
                                     <span
                                         className={
@@ -358,7 +358,7 @@ export default function RequestListPage() {
                                                       : selectedRequest.request_type ===
                                                           'Facilities'
                                                         ? 'Facilities'
-                                                        : 'N/A'}
+                                                        : 'N/A'}{' '}
                                         (Priority:{' '}
                                         <span
                                             className={
@@ -745,7 +745,7 @@ export default function RequestListPage() {
                                         {selectedRequest.medicalDevice?.operatorRequired && (
                                             <>
                                                 <span className="underline">Operator Required?</span>{' '}
-                                                {selectedRequest.medicalDevice.device}
+                                                {selectedRequest.medicalDevice.operatorRequired}
                                             </>
                                         )}
                                         {selectedRequest.facilities?.equipmentType && (

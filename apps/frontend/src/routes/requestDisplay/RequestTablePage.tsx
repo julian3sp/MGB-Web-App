@@ -361,7 +361,7 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 "
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                     >
                                         <td className="p-4 break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -393,7 +393,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words w-fit pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-0 pb-2">
                                             <p
                                             >
                                                 {res.priority}
@@ -656,6 +656,7 @@ export default function RequestTablePage() {
                                                         }
                                                     }}
                                                     tooltip={'Delete Service Request'}
+                                                    blue={true}
                                                 />
                                             </div>
                                         </td>

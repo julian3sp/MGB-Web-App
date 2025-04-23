@@ -46,10 +46,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
 
-  const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
-    const addNode = trpc.makeManyNodes.useMutation();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
@@ -121,9 +119,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }).catch(console.error);
     }, [onMapReady, apiKey]);
 
-    const getNodeMarkers = () => {
-        if (!selectedHospital || !map) return;
-        const floor = selectedFloor || 1;
     useEffect(() => {
         if (!map) return;
 
@@ -163,10 +158,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const floor = selectedFloor === null ? 1: selectedFloor;
         return drawAllEdges(map, graph.getBuildingEdges(building, floor));
     }
-
-    const handleToggleNodes = () => {
-        setShowNodes(prev => !prev);
-    };
 
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);

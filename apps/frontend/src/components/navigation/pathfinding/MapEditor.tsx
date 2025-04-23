@@ -59,7 +59,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
     const [newNodeTracker,  setNewNodeTracker]  = useState(false);
-    const [clearMarkers, setClearMarkers]  = useState<boolean>(false);
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -199,10 +198,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     ? "pat20"
                     : selectedHospital === "22 Patriot Place"
                         ? "pat22"
-                        : selectedHospital.toLowerCase();
+                        : selectedHospital;
 
-            const listener = addNodeListener(map, buildingKey, floor, marker => {
-                // Add the new marker to staticMarkers and toggle newNodeTracker
+            const listener = addNodeListener(map, buildingKey, floor, setNodeDetails, marker => {
                 setStaticMarkers(prev => [...prev, marker]);
                 setNewNodeTracker(prev => !prev);
             });
@@ -216,29 +214,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [map, selectedHospital, selectedFloor, showNodes, newNodeTracker]);
 
-
-    function newNodeListener(){
-        if (!map || !selectedHospital) return;
-
-        const floor = selectedFloor === null ? 1: selectedFloor;
-        console.log("Displaying")
-
-
-        const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
-            ? "chestnut"
-            : selectedHospital === "20 Patriot Place"
-                ? "pat20"
-                : selectedHospital === "22 Patriot Place"
-                    ? "pat22"
-                    : selectedHospital.toLowerCase();
-
-        const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
-            marker => {
-                setStaticMarkers(prev => [...prev, marker]);
-                setNewNodeTracker(prev => !prev);
-            });
-        return () => listener.remove();
-    }
 
     function displayNodes(){
         if (!map || !selectedHospital) return;
@@ -273,7 +248,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             const lines = getEdgeLines();
             if (lines) setEdgePolylines(lines);
         }
-    }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
+    }, [showEdges, selectedHospital, selectedFloor, map, newNodeTracker]);
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()

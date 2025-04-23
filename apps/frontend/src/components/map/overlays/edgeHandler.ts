@@ -27,9 +27,7 @@ export function drawAllEdges(
             // 1) remove it visually
             edgeLine.setMap(null);
 
-            // 2) remove it from your in-memory graph (and record edit)
             graph.deleteEdge(edge.id);
-
             console.log(`Edge ${edge.id} removed from graph`);
         });
 

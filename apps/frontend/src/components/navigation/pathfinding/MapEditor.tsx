@@ -122,6 +122,29 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
+    useEffect(() => {
+        if (!map) return;
+
+        const marker = new google.maps.Marker({
+            position: {  lat: 42.32610671664074, lng: -71.14958629820883},
+            map,
+            draggable: true,
+            title: "Drag me!"
+        });
+
+        const listener = marker.addListener("dragend", () => {
+            const pos = marker.getPosition();
+            if (pos) {
+                console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+            }
+        });
+
+        return () => {
+            listener.remove();
+            marker.setMap(null);
+        };
+    }, [map]);
+
     function getEdgeLines(){
         console.log("fetching lines")
         if(!selectedHospital || !map) return;

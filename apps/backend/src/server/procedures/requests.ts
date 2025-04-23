@@ -99,8 +99,8 @@ export const makeRequest = publicProcedure
                     create: input.medicalDevice,
                 },
                 facilities: {
-                    create: input.facilities
-                }
+                    create: input.facilities,
+                },
             },
         });
 

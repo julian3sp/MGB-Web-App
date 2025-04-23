@@ -1,15 +1,122 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// This is your Prisma schema file, learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  provider   = "prisma-client-js"
+  output     = "../.prisma/client"
+  engineType = "binary"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URL")
+}
+
+// Example table used in the express router example
+model employee {
+  id            String            @id
+  employee_name String
+  created_at    DateTime          @default(now())
+  requests      service_request[]
+}
+
+model service_request {
+  request_id          Int       @id @default(autoincrement())
+  name                String
+  employee_id         String
+  priority            String
+  location            String
+  department          String
+  status              String
+  request_type        String
+  request_date        DateTime  @default(now())
+  additional_comments String?
+  assigned_employee   String?
+  employee            employee? @relation(fields: [assigned_employee], references: [id])
+
+  sanitation     Sanitation?
+  language       Language?
+  audioVisual    AudioVisual?
+  security       Security?
+  transportation Transportation?
+}
+
+model Sanitation {
+  request_id      Int             @id @default(autoincrement())
+  cleaningType    String
+  contaminant     String?
+  sanitationId    Int             @unique
+  service_request service_request @relation(fields: [sanitationId], references: [request_id], onDelete: Cascade)
+}
+
+model Language {
+  request_id      Int             @id @default(autoincrement())
+  sourceLanguage  String
+  targetLanguage  String
+  languageId      Int             @unique
+  service_request service_request @relation(fields: [languageId], references: [request_id], onDelete: Cascade)
+}
+
+model Transportation {
+  request_id                Int             @id @default(autoincrement())
+  transportationType        String
+  transportationDestination String
+  transportationId          Int             @unique
+  service_request           service_request @relation(fields: [transportationId], references: [request_id], onDelete: Cascade)
+}
+
+model AudioVisual {
+  request_id           Int             @id @default(autoincrement())
+  accommodationType    String
+  accommodationDetails String?
+  audioVisualId        Int             @unique
+  service_request      service_request @relation(fields: [audioVisualId], references: [request_id], onDelete: Cascade)
+}
+
+model Security {
+  request_id      Int             @id @default(autoincrement())
+  accessZones     String
+  securityIssue   String
+  securityId      Int             @unique
+  service_request service_request @relation(fields: [securityId], references: [request_id], onDelete: Cascade)
+}
+
+model directory {
+  nodesId   Int    @id
+  name      String
+  services  String
+  location  String
+  telephone String
+  node      nodes  @relation(fields: [nodesId], references: [id])
+}
+
+model users {
+  first_name String
+  last_name  String
+  email      String @id
+  password   String
+}
+
+model nodes {
+  id        Int     @id @default(autoincrement())
+  building  String
+  floor     Int
+  name      String?
+  x         Float
+  y         Float
+  edgeCost  Int     @default(0)
+  totalCost Int     @default(0)
+
+  outgoingEdges edges[]     @relation("SourceEdges")
+  incomingEdges edges[]     @relation("TargetEdges")
+  directory     directory[]
+}
+
+model edges {
+  id       Int   @id @default(autoincrement())
+  sourceId Int
+  targetId Int
+  weight   Float
+
+  sourceNode nodes @relation("SourceEdges", fields: [sourceId], references: [id], onDelete: Cascade)
+  targetNode nodes @relation("TargetEdges", fields: [targetId], references: [id], onDelete: Cascade)
 }

@@ -88,7 +88,7 @@ export default function RequestPage() {
                 className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
-                <div className="flex gap-4 justify-between px-[16px] pb-2 pt-1 items-end">
+                <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
                     <h1
                         className="text-4xl font-bold font-[Poppins] text-left"
                         style={{ color: '#003A96' }}
@@ -116,13 +116,13 @@ export default function RequestPage() {
                             <div className="relative">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-2 border border-blue-950 border-2 rounded-lg text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-2 border border-blue-950 rounded-lg text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-[#003A96] rounded-lg shadow-lg p-4 pb-0 w-[450px]">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border-1 border-light-subtle rounded-lg shadow-lg p-4 pb-0 w-[450px]">
                                         <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests

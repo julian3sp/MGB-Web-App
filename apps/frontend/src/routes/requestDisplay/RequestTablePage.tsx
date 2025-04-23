@@ -155,7 +155,7 @@ export default function RequestTablePage() {
 
     //Table page
     return (
-        <div className="flex flex-1">
+        <div className="flex flex-1 ml-10 mr-10 mt-1">
             <div
                 className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
                 style={{
@@ -167,7 +167,7 @@ export default function RequestTablePage() {
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-[#003A96] max-h-9/10 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
@@ -361,7 +361,7 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 "
                                     >
                                         <td className="p-4 break-words max-w-[50px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -369,9 +369,9 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words max-w-[200px] pt-0 pb-2">
+                                        <td className="p-2 break-words max-w-[200px] pt-0 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
-                                                <i>
+                                                <p>
                                                     {res.request_type === 'Sanitation'
                                                         ? 'Sanitation'
                                                         : res.request_type === 'Transportation'
@@ -389,7 +389,7 @@ export default function RequestTablePage() {
                                                                       'Facilities'
                                                                     ? 'Facilities'
                                                                     : 'N/A'}
-                                                </i>
+                                                </p>
                                             </p>
                                         </td>
 
@@ -602,15 +602,7 @@ export default function RequestTablePage() {
                                         <td className="p-4 break-words w-fit pt-0 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
-                                                    res.status === 'Unassigned'
-                                                        ? 'text-gray-500'
-                                                        : res.status === 'Assigned'
-                                                          ? 'text-blue-600'
-                                                          : res.status === 'Working'
-                                                            ? 'text-amber-600'
-                                                            : res.status === 'Done'
-                                                              ? 'text-green-600'
-                                                              : 'text-blue-gray-900'
+                                                    res.status
                                                 }`}
                                             >
                                                 {res.status}

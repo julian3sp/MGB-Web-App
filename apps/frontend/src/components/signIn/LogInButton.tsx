@@ -28,7 +28,7 @@ export function LogInButton({className, rerender}: Props) {
     return (
         isLoading || !isAuthenticated && (
             <button
-                className={`group px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white font-[Poppins] ${className ?? ''}`}
+                className={`right-0 group px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white font-[Poppins] ${className ?? ''}`}
                 onClick={() => loginWithRedirect({})}>Log In
             </button>
         )

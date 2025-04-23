@@ -230,14 +230,6 @@ const DepartmentList = [
     // },
 
     {
-        id: "radiology",
-        name: "Radiology",
-        specialties: ["Bone Density", "Breast Imaging/Mammography", "Ultrasound", "X-Ray"],
-        floor: ["5th Floor, Suite 560"],
-        phone: "(617) 732-9801",
-        building: "MGB (Chestnut Hill)"
-    },
-    {
         id: "mri-ct",
         name: "Radiology, MRI/CT Scan",
         specialties: ["CT Scan", "MRI", "X-Ray"],
@@ -259,6 +251,103 @@ const DepartmentList = [
     //     floor: ["2nd Floor, Suite 200"],
     //     phone: "(617) 732-9525"
     // }
+
+    {
+        id: "admitting-registration",
+        name: "Admitting/Registration",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "audiology",
+        name: "Audiology",
+        specialties: ["Aud"],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "blood-drawing-lab",
+        name: "Blood Drawing Lab",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "cardiac-rehab",
+        name: "Cardiac Rehab",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "emergency-department",
+        name: "Emergency Department",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "gi-endoscopy",
+        name: "Endoscopy",
+        specialties: ["Endoscopy"],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "mri-ct",
+        name: "MRI/CT",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "pre-admittance-screening",
+        name: "Pre-Admittance Screening",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "pulmonary-lab",
+        name: "Pulmonary Lab",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "radiology",
+        name: "Radiology",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "special-testing",
+        name: "Special Testing",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    },
+    {
+        id: "vascular-lab",
+        name: "Vascular Lab",
+        specialties: [],
+        floor: ["1st Floor"],
+        phone: "",
+        building: "Faulkner"
+    }
 ];
 
 export default DepartmentList;

@@ -137,7 +137,7 @@ const MapComponent: React.FC = () => {
       const CNdepartmentMapping: Record<string, number> = {
         'Entrance': 3900,
         'Multi-Specialty Clinic': 3734,
-        'Radiology': 3059,
+        'Radiology, MRI/CT Scan': 3059,
         'MRI': 3113,
         'CT': 3136,
         'Laboratory': 3781
@@ -167,6 +167,20 @@ const MapComponent: React.FC = () => {
         'Lactation': 1817,
         'Vein Treatment': 1798
       };
+      const FaulknerMapping: Record<string, number> = {
+        'Admitting/Registration': 4059,
+        'Audiology': 4154,
+        'Blood Drawing Lab': 4163,
+        'Cardiac Rehab': 4181,
+        'Emergency Department': 4300,
+        'Endoscopy': 4344,
+        'MRI/CT': 4118,
+        'Pre-Admittance Screening': 4147,
+        'Pulmonary Lab': 4291,
+        'Radiology': 4108,
+        'Special Testing': 4316,
+        'Vascular Lab': 4354
+      };
 
       if(selectedPlace.name === null) {
         console.error("No location selected");
@@ -176,6 +190,8 @@ const MapComponent: React.FC = () => {
         return Pat20departmentMapping[department.name];
       } else if(selectedPlace.name === "22 Patriot Place"){
         return Pat22departmentMapping[department.name];
+      } else if(selectedPlace.name === "Faulkner"){
+        return FaulknerMapping[department.name];
       }
       console.log("Issues in finding dept node")
       return 0;

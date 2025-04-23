@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Check, ChevronDown } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -71,7 +70,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"}`}
+                        className={`w-full h-[48px] font-[Poppins] text-[14px] font-normal shadow justify-between ${value == "" && !open ? "text-gray-500" : "text-black"}`}
                     >
                         {value
                             ? options.find((option) => option === value)

@@ -249,7 +249,7 @@ export class Graph {
             building = "chestnut";
         }
 
-        console.log("Getting nodes building: ", building, " Floor:", floor);
+        // console.log("Getting nodes building: ", building, " Floor:", floor);
 
         return Array.from(this.nodes).filter(
             n => n.building === building && n.floor === floor

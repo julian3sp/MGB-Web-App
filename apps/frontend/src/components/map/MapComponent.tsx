@@ -303,7 +303,7 @@ const MapComponent: React.FC = () => {
 
           {/* Select Department dropdown */}
           <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
-          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
+          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name} />
         </div>}
                    scaling = {4}
                    absolute={false}>

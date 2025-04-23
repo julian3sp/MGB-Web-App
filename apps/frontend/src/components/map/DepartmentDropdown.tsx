@@ -6,24 +6,26 @@ interface Department {
   name: string;
   specialties: string[];
   floor: string[];
+  building: string;
   phone: string;
 }
 
 interface DepartmentDropdownProps {
+  building: string;
   onDepartmentSelected: (department: { name: string; floor: string[] }) => void;
   prefill?: string;
 }
 
-const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSelected, prefill = "" }) => {
+const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSelected, building}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (prefill) {
-      setSearchTerm(prefill);
+    if (building) {
+      setSearchTerm(building);
     }
-  }, [prefill]);
+  }, [building]);
 
   const filteredDepartments = DepartmentList.filter((department) =>
       department.name.toLowerCase().includes(searchTerm.toLowerCase())

@@ -122,7 +122,8 @@ const DepartmentList = [
         name: "Laboratory",
         specialties: ["Blood Work", "Lab Services"],
         floor: ["1st Floor, Suite 100"],
-        phone: "(617) 732-9841"
+        phone: "(617) 732-9841",
+        building: "chestnut"
     },
     {
         id: "multi-specialty",
@@ -135,8 +136,74 @@ const DepartmentList = [
             "Travel Medicine"
         ],
         floor: ["1st Floor, Suite 130"],
-        phone: "(617) 732-9500"
+        phone: "(617) 732-9500",
+        building: "chestnut"
     },
+    {
+        id: "blood-draw",
+        name: "Blood Draw / Phlebotomy",
+        specialties: [],
+        floor: ["1st Floor, Suite 130"],
+        phone: "(617) 732-0714",
+        building: "pat20"
+    },
+    {
+        id: "pharmacy",
+        name: "Pharmacy",
+        specialties: [],
+        floor: ["1st Floor, Suite 100"],
+        phone: "(617) 732-0694",
+        building: "pat20"
+    },
+    {
+        id: "radiology",
+        name: "Radiology",
+        specialties: [],
+        floor: ["1st Floor, Suite 110"],
+        phone: "(617) 732-0535",
+        building: "pat20"
+    },
+    {
+        id: "urgent-care",
+        name: "Urgent Care Center",
+        specialties: [],
+        floor: ["1st Floor, Suite 120"],
+        phone: "(617) 732-0817",
+        building: "pat20"
+    },
+    {
+        id: "urology",
+        name: "Urology",
+        specialties: [],
+        floor: ["1st Floor, Suite 150"],
+        phone: "(617) 732-0859",
+        building: "pat20"
+    },
+    {
+        id: "gynecology",
+        name: "Gynecology",
+        specialties: [],
+        floor: ["3rd Floor"],
+        phone: "(617) 732-1604",
+        building: "pat22"
+    },
+    {
+        id: "lactation",
+        name: "Lactation",
+        specialties: [],
+        floor: ["3rd Floor"],
+        phone: "(617) 732-1817",
+        building: "pat22"
+    },
+    {
+        id: "vein-treatment",
+        name: "Vein Treatment",
+        specialties: [],
+        floor: ["3rd Floor"],
+        phone: "(617) 732-1798",
+        building: "pat22"
+    },
+
     // {
     //     id: "integrative-health",
     //     name: "Osher Clinical Center for Integrative Health",
@@ -161,26 +228,29 @@ const DepartmentList = [
     //     floor: ["2nd Floor, Suite 204B"],
     //     phone: "(617) 732-9677"
     // },
-    // {
-    //     id: "pharmacy",
-    //     name: "Pharmacy",
-    //     specialties: ["Outpatient Pharmacy Services"],
-    //     floor: ["3rd Floor, Suite 317"],
-    //     phone: "(617) 732-9040"
-    // },
+    {
+        id: "pharmacy",
+        name: "Pharmacy",
+        specialties: ["Outpatient Pharmacy Services"],
+        floor: ["3rd Floor, Suite 317"],
+        phone: "(617) 732-9040",
+        building: "pat20"
+    },
     {
         id: "radiology",
         name: "Radiology",
         specialties: ["Bone Density", "Breast Imaging/Mammography", "Ultrasound", "X-Ray"],
         floor: ["5th Floor, Suite 560"],
-        phone: "(617) 732-9801"
+        phone: "(617) 732-9801",
+        building: "chestnut"
     },
     {
         id: "mri-ct",
         name: "Radiology, MRI/CT Scan",
         specialties: ["CT Scan", "MRI", "X-Ray"],
         floor: ["1st Floor, Suite 102B"],
-        phone: "(617) 732-9810"
+        phone: "(617) 732-9810",
+        building: "chestnut"
     },
     // {
     //     id: "rehabilitation",

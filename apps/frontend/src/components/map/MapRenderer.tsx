@@ -5,7 +5,7 @@ import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 import {createMarkers, drawAllEdges, drawPath} from './overlays/createMarkers';
 import HospitalViewControls from './HospitalViewControls';
-import Graph, {Edge, Node} from '../navigation/pathfinding/Graph'; 
+import Graph, {Edge, Node} from '../navigation/pathfinding/Graph';
 
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
@@ -19,19 +19,19 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: 3 | 4; 
+  selectedFloor?: 3 | 4;
   onFloorChange?: (floor: 3 | 4) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
 }
 
-const MapRenderer: React.FC<MapRendererProps> = ({ 
-  onMapReady, 
-  selectedDestination, 
-  onZoomChange, 
+const MapRenderer: React.FC<MapRendererProps> = ({
+  onMapReady,
+  selectedDestination,
+  onZoomChange,
   selectedFloor = 3,
   onFloorChange = () => {},
-  departmentNumber 
+  departmentNumber
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -49,11 +49,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
   const targetMarkerRef = useRef<google.maps.Marker | null>(null);
-  
+
   // Refs for overlay animations
   const parkingOpacityRef = useRef(1);
   const floorOpacityRef = useRef(0);
-  
+
   // Get Google Maps API key
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -67,16 +67,16 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       console.error("Google Maps API key is missing");
       return;
     }
-    
+
     if (map || !mapRef.current) return;
-    
+
     const loader = new Loader({
       apiKey,
       version: 'weekly',
       libraries: ['places'],
       language: 'en',
     });
-    
+
     loader.load()
       .then(() => {
         if (mapRef.current) {
@@ -89,9 +89,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
             zoomControl: true,
             disableDoubleClickZoom: true
           });
-          
+
           setMap(newMap);
-          
+
           const directionsService = new google.maps.DirectionsService();
           const directionsRenderer = new google.maps.DirectionsRenderer({
             map: newMap,
@@ -102,7 +102,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
               strokeWeight: 4,
             },
           });
-          
+
           directionsRenderer.setMap(newMap);
           onMapReady(newMap, directionsService, directionsRenderer);
         }
@@ -113,7 +113,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   // Toggle nodes visibility
   const toggleNodesHandler = () => {
     if (!map || isNodesLoading || !nodesData || !edgesData) return;
-    
+
     if (showNodes) {
       // Clear existing node markers
       nodeMarkers.forEach(marker => marker.setMap(null));
@@ -131,11 +131,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       setShowNodes(true);
     }
   };
-  
+
   // Toggle edges visibility
   const toggleEdgesHandler = () => {
     if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData) return;
-    
+
     if (showEdges) {
       // Clear existing edge polylines
       edgePolylines.forEach(polyline => polyline.setMap(null));
@@ -168,9 +168,18 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       graph.populate(nodesData, edgesData);
 
       // Fixed entrance node and target department node
-      const entrance = graph.getNode(941);
+
+      const entrances: { [building: string] : number;} = {
+        "MGB (Chestnut Hill)": 3900,
+        "20 Patriot Place": 1139,
+        "22 Patriot Place": 1952
+      }
+
+
+
+      const entrance = graph.getNode(entrances[selectedDestination.name]);
       const target = graph.getNode(departmentNumber);
-      
+
       if (!entrance || !target) {
         console.error('Either the entrance or department node is missing');
         return;
@@ -182,7 +191,18 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current = null;
       }
 
-      let pathNodes: Node[] = []
+      let pathNodes: Node[] = [
+          {
+              name: 'ahh',
+              id: 1,
+              building: 'CN',
+              floor: 1,
+              x: 1,
+              y: 1,
+              edgeCost: 1,
+              totalCost: 1,
+          },
+      ];
 
       // Compute and draw the new path
       if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
@@ -196,8 +216,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathNodes = graph.BFS(entrance, target)
       }
 
+      console.log("Path:", pathNodes)
       const newPolyline = drawPath(map, pathNodes);
       pathPolylineRef.current = newPolyline;
+
 
       // Clear existing markers
       if (startMarkerRef.current) {
@@ -208,7 +230,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         targetMarkerRef.current.setMap(null);
         targetMarkerRef.current = null;
       }
-      
+
       // Add new markers for start and destination
       startMarkerRef.current = new google.maps.Marker({
         position: { lat: entrance.x, lng: entrance.y },
@@ -216,7 +238,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         title: 'Start (Entrance)',
         icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
       });
-      
+
       targetMarkerRef.current = new google.maps.Marker({
         position: { lat: target.x, lng: target.y },
         map: map,
@@ -227,11 +249,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       console.error('Error in pathfinding:', error);
     }
   }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading]);
-  
+
   // Handle overlay updates based on selected destination
   useEffect(() => {
     if (!map) return;
-    
+
     // Clean up previous overlays
     const cleanupOverlays = () => {
       if (parkingOverlay) {
@@ -248,9 +270,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         setPatriot22Overlays(null);
       }
     };
-    
+
     cleanupOverlays();
-    
+
     // Set up new overlays based on destination
     if (selectedDestination) {
       try {
@@ -264,7 +286,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
         }
-        
+
         // Center map on the selected destination
         map.setCenter(selectedDestination.location);
         map.setZoom(18);
@@ -272,24 +294,24 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         console.error('Error setting up overlays:', error);
       }
     }
-    
+
     return cleanupOverlays;
   }, [selectedDestination, map]);
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {
     if (!map || !patriot22Overlays) return;
-    
+
     try {
       updatePatriotPlace22(patriot22Overlays, selectedFloor);
-      
+
       const patriotZoomListener = map.addListener('zoom_changed', () => {
         const zoom = map.getZoom();
         if (onZoomChange && zoom !== undefined) {
           onZoomChange(zoom);
         }
       });
-      
+
       return () => google.maps.event.removeListener(patriotZoomListener);
     } catch (error) {
       console.error('Error updating Patriot Place overlays:', error);
@@ -299,7 +321,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   // Handle MGB overlay opacity animations
   useEffect(() => {
     if (!map || !parkingOverlay || !floorOverlay) return;
-    
+
     const animateOverlayOpacity = (
       overlay: google.maps.GroundOverlay,
       opacityRef: MutableRefObject<number>,
@@ -311,13 +333,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const current = opacityRef.current;
       const delta = (target - current) / steps;
       let count = 0;
-      
+
       const interval = setInterval(() => {
         count++;
         const newOpacity = current + delta * count;
         overlay.setOpacity(newOpacity);
         opacityRef.current = newOpacity;
-        
+
         if (count >= steps) {
           clearInterval(interval);
           overlay.setOpacity(target);
@@ -325,13 +347,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         }
       }, stepTime);
     };
-    
+
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
       if (onZoomChange && zoom !== undefined) {
         onZoomChange(zoom);
       }
-      
+
       if (zoom && zoom >= 20) {
         animateOverlayOpacity(parkingOverlay, parkingOpacityRef, 0, 300);
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 1, 300);
@@ -340,32 +362,32 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         animateOverlayOpacity(floorOverlay, floorOpacityRef, 0, 300);
       }
     });
-    
+
     return () => google.maps.event.removeListener(zoomListener);
   }, [map, parkingOverlay, floorOverlay, onZoomChange]);
 
   // Handle path visibility based on zoom level
   useEffect(() => {
     if (!map) return;
-  
+
     const zoomListener = map.addListener('zoom_changed', () => {
       const zoom = map.getZoom();
-      
+
       if (zoom !== undefined && pathPolylineRef.current) {
         const isVisible = zoom >= 20;
-        
+
         pathPolylineRef.current.setVisible(isVisible);
-        
+
         if (startMarkerRef.current) {
           startMarkerRef.current.setVisible(isVisible);
         }
-        
+
         if (targetMarkerRef.current) {
           targetMarkerRef.current.setVisible(isVisible);
         }
       }
     });
-    
+
     return () => {
       google.maps.event.removeListener(zoomListener);
     };
@@ -379,7 +401,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   return (
     <div className="relative w-full h-[95vh]">
       <div ref={mapRef} className="w-full h-full"></div>
-      
+
       {/* {map && (
         <div className="absolute top-8 right-2 flex flex-col gap-2 z-50">
           <button
@@ -396,9 +418,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           </button>
         </div>
       )} */}
-      
+
       {/* Use the new HospitalViewControls component */}
-      <HospitalViewControls 
+      <HospitalViewControls
         map={map}
         selectedDestination={selectedDestination || null}
         selectedFloor={selectedFloor}

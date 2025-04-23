@@ -58,7 +58,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
-    const [newNodeTracker,  setNewNodeTracker]  = useState<boolean>(false);
+    const [newNodeTracker,  setNewNodeTracker]  = useState(false);
     const [clearMarkers, setClearMarkers]  = useState<boolean>(false);
 
     const hospitalLocationMap = {
@@ -123,28 +123,28 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    useEffect(() => {
-        if (!map) return;
-
-        const marker = new google.maps.Marker({
-            position: { lat: 42.30149071877142, lng: -71.12823221807406},
-            map,
-            draggable: true,
-            title: "Drag me!"
-        });
-
-        // const listener = marker.addListener("dragend", () => {
-        //     const pos = marker.getPosition();
-        //     if (pos) {
-        //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
-        //     }
-        // });
-
-        return () => {
-          //  listener.remove();
-            marker.setMap(null);
-        };
-    }, [map]);
+    // useEffect(() => {
+    //     if (!map) return;
+    //
+    //     const marker = new google.maps.Marker({
+    //         position: { lat: 42.30149071877142, lng: -71.12823221807406},
+    //         map,
+    //         draggable: true,
+    //         title: "Drag me!"
+    //     });
+    //
+    //     // const listener = marker.addListener("dragend", () => {
+    //     //     const pos = marker.getPosition();
+    //     //     if (pos) {
+    //     //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+    //     //     }
+    //     // });
+    //
+    //     return () => {
+    //       //  listener.remove();
+    //         marker.setMap(null);
+    //     };
+    // }, [map]);
 
     function getEdgeLines(){
         console.log("fetching lines")
@@ -168,48 +168,77 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
+
+
+    // Effect to clear and rerender markers when building or floor changes
     useEffect(() => {
         if (!map) return;
 
-        // 1) clear out _all_ the old markers
+        // Clear all existing markers
         staticMarkers.forEach(m => m.setMap(null));
+        setStaticMarkers([]);
+        console.log("Full clear");
 
-        // 2) if showNodes is on, re-draw
+        // Display nodes if showNodes is true and a building is selected
         if (showNodes && selectedHospital) {
-            const floor = selectedFloor ?? 1;
+            displayNodes();
+        }
+    }, [map, selectedHospital, selectedFloor, showNodes]);
 
-            // remap your building name to key exactly as Graph expects:
-            let buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+    useEffect(() => {
+        if (!map || !selectedHospital) return;
+
+        // Function to listen for new nodes
+        const newNodeListener = () => {
+            const floor = selectedFloor ?? 1;
+            console.log("Creating new node");
+
+            const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
                 ? "chestnut"
                 : selectedHospital === "20 Patriot Place"
                     ? "pat20"
                     : selectedHospital === "22 Patriot Place"
                         ? "pat22"
-                        : selectedHospital; // e.g. "faulkner"
+                        : selectedHospital.toLowerCase();
 
+            const listener = addNodeListener(map, buildingKey, floor, marker => {
+                // Add the new marker to staticMarkers and toggle newNodeTracker
+                setStaticMarkers(prev => [...prev, marker]);
+                setNewNodeTracker(prev => !prev);
+            });
 
-            const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
-                marker => {
-                    setStaticMarkers(markers => [...markers])
-                    setNewNodeTracker(!newNodeTracker)
-                });
-
-            // generate the new markers:
-            const newMarkers = createMarkers(
-                map,
-                graph.getBuildingNodes(buildingKey, floor),
-                setNodeDetails,
-                'normal',
-                buildingKey,
-                floor
-            );
-            // setStaticMarkers(newMarkers);
             return () => listener.remove();
-        } else {
-            // hide mode: just drop our array to empty
-            setStaticMarkers([]);
+        };
+
+        // Listen for new nodes if showNodes is true
+        if (showNodes) {
+            newNodeListener();
         }
-    }, [map, showNodes, showEdges, selectedHospital, selectedFloor]);
+    }, [map, selectedHospital, selectedFloor, showNodes, newNodeTracker]);
+
+
+    function newNodeListener(){
+        if (!map || !selectedHospital) return;
+
+        const floor = selectedFloor === null ? 1: selectedFloor;
+        console.log("Displaying")
+
+
+        const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+            ? "chestnut"
+            : selectedHospital === "20 Patriot Place"
+                ? "pat20"
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital.toLowerCase();
+
+        const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
+            marker => {
+                setStaticMarkers(prev => [...prev, marker]);
+                setNewNodeTracker(prev => !prev);
+            });
+        return () => listener.remove();
+    }
 
     function displayNodes(){
         if (!map || !selectedHospital) return;
@@ -217,38 +246,22 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log("Displaying")
 
-        let building = selectedHospital;
-        if (building === "20 Patriot Place"){
-            building = "pat20";
-        }
-        else if (building === "22 Patriot Place"){
-            building = "pat22";
-        }
-        else if (building === "MGB (Chestnut Hill)"){
-            building = "chestnut";
-        }
-
         const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
             ? "chestnut"
             : selectedHospital === "20 Patriot Place"
                 ? "pat20"
-                : "pat22";
-
-        const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
-            marker => {
-                setStaticMarkers(markers => [...markers])
-                setNewNodeTracker(!newNodeTracker)
-            });
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital.toLowerCase();
 
         const newStatics = createMarkers(map,
             graph.getBuildingNodes(selectedHospital, floor),
             setNodeDetails,
             'normal',
-            building,
+            buildingKey,
             floor
         );
         setStaticMarkers(newStatics);
-        return () => listener.remove();
     }
 
     useEffect(() => {

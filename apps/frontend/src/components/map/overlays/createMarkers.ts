@@ -10,13 +10,21 @@ export function createMarkers(
     building: string,
     floor: number,
 ) {
+    function calculateScaledSize(map, baseSize) {
+        const zoomLevel = map.getZoom();
+        const scaleFactor = 2 / (1 + (zoomLevel / 5)); // Example scaling factor
+        const scaledWidth = baseSize.width * scaleFactor;
+        const scaledHeight = baseSize.height * scaleFactor;
+        return new google.maps.Size(scaledWidth, scaledHeight);
+    }
     const markers: google.maps.Marker[] = [];
     const iconUrl =
         type === 'removed'
             ? 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png'
             : 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png';
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
-    const scaledSize = new google.maps.Size(15, 15); // Larger red dot
+    const scaledSize = new google.maps.Size(30, 30); // Larger red dot
+
 
     google.maps.event.addListener(map, 'dblclick', function (event) {
         const newMarker = new google.maps.Marker({
@@ -29,16 +37,6 @@ export function createMarkers(
                 scaledSize: scaledSize,
             },
         });
-        // setAddNode({
-        //     id: Date.now(), // or another unique value
-        //     name: '',
-        //     building: 'chestnut',
-        //     floor:  floor,
-        //     x: event.latLng.lat(),
-        //     y: event.latLng.lng(),
-        //     edgeCost: 0, // default value
-        //     totalCost: 0, // default value
-        // });
         graph.addNode({
             id: Date.now(), // or another unique value
             name: '',
@@ -49,6 +47,7 @@ export function createMarkers(
             edgeCost: 0, // default value
             totalCost: 0, // default value
         })
+
         markers.push(newMarker);
     });
     for (const node of nodes) {
@@ -68,7 +67,12 @@ export function createMarkers(
             },
             zIndex
         });
-
+        google.maps.event.addListener(map, 'zoom_changed', () => {
+            marker.setIcon({
+                url: 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png', // Replace with your icon URL
+                scaledSize: calculateScaledSize(map, new google.maps.Size(30, 30))
+            });
+        });
         marker.addListener('click', () => {
             setNodeDetails(node);
         });

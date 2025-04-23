@@ -31,7 +31,7 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling =
     const translateMargin = isSidebarOpen ? 0 : -1*(width ?? 256);
 
     return (
-        <div className="flex flex-1">
+        <div className="flex">
         <SideNav isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} width={width} absolute={absolute}>
 
             {contents}
@@ -40,7 +40,7 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling =
             animate={{ marginLeft: translateMargin}}
             initial={{marginLeft: translateMargin}}
             transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}
-            className="flex-1 min-h-screen"
+            className="flex-1"
         >
             {children}
         </motion.main>

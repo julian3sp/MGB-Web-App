@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
@@ -8,12 +7,13 @@ import {
     updatePatriotPlace22,
     Patriot22Overlays,
 } from '../../map/overlays/22PatriotOverlay';
-import {createMarkers, drawAllEdges} from '../../map/overlays/createMarkers';
+import { createMarkers, drawAllEdges } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Node, Edge} from './Graph';
-import {graph} from "../../map/GraphObject.ts"
+import { Node, Edge } from './Graph';
+import { graph } from "../../map/GraphObject.ts";
+import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,9 +22,9 @@ import {
     DropdownMenuTrigger,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem
-} from '../../ui/dropdown-menu.tsx'
-import { Button } from "@/components/ui/button"
+} from '../../ui/dropdown-menu.tsx';
 
+// resolve
 interface MapEditorProps {
     onMapReady: (
         map: google.maps.Map,
@@ -34,25 +34,25 @@ interface MapEditorProps {
 }
 
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
-  const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
-  const [showNodes, setShowNodes] = useState(false);
-  const [showEdges, setShowEdges] = useState(false);
-  const [algoType, setAlgoType] = useState("A-Star")
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
+    const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
+    const [isLoadingMap, setIsLoadingMap] = useState(true);
+    const [showNodes, setShowNodes] = useState(false);
+    const [showEdges, setShowEdges] = useState(false);
+    const [algoType, setAlgoType] = useState("A-Star");
+    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
 
-  const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-  const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-
-  const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number;} | null>(null);
-    const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-    const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
-    const addNode = trpc.makeManyNodes.useMutation();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
-    const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
-    const [nodesToAdd, setNodesToAdd] = useState<{id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([])
+    const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([]);
+    const [nodesToAdd, setNodesToAdd] = useState<{ id: number; name: string; building: string; floor: number; x: number; y: number; edgeCost: number; totalCost: number; }[]>([]);
+
+    const { data: nodesDataFromAPI, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
+    const { data: edgesDataFromAPI, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
@@ -64,7 +64,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
     };
-    function setAlgoTypeWrapper(algo: string){
+
+    function setAlgoTypeWrapper(algo: string) {
         window.sessionStorage.setItem("algoType", algo);
         setAlgoType(algo);
     }
@@ -82,107 +83,81 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         });
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
-        loader
-            .load()
-            .then(() => {
-                if (mapRef.current) {
-                    const newMap = new google.maps.Map(mapRef.current, {
-                        center: { lat: 42.3601, lng: -71.0589 },
-                        zoom: 12,
-                        fullscreenControl: true,
-                        mapTypeControl: false,
-                        streetViewControl: true,
-                        zoomControl: true,
-                        disableDoubleClickZoom: true,
-                    });
+        loader.load().then(() => {
+            if (mapRef.current) {
+                const newMap = new google.maps.Map(mapRef.current, {
+                    center: { lat: 42.3601, lng: -71.0589 },
+                    zoom: 12,
+                    fullscreenControl: true,
+                    mapTypeControl: false,
+                    disableDoubleClickZoom: true,
+                    streetViewControl: false,
+                    zoomControl: false,
+                    scaleControl: false,
+                });
 
-                    setMap(newMap);
+                setMap(newMap);
+                setIsLoadingMap(false);
 
-                    const directionsService = new google.maps.DirectionsService();
-                    const directionsRenderer = new google.maps.DirectionsRenderer({
-                        map: newMap,
-                        suppressMarkers: true,
-                        preserveViewport: false,
-                        polylineOptions: {
-                            strokeColor: '#1A73E8',
-                            strokeWeight: 4,
-                        },
-                    });
+                const directionsService = new google.maps.DirectionsService();
+                const directionsRenderer = new google.maps.DirectionsRenderer({
+                    map: newMap,
+                    suppressMarkers: true,
+                    preserveViewport: false,
+                    polylineOptions: {
+                        strokeColor: '#1A73E8',
+                        strokeWeight: 4,
+                    },
+                });
 
-                    directionsRenderer.setMap(newMap);
-                    onMapReady(newMap, directionsService, directionsRenderer);
-
-                }
-            })
-            .catch(console.error);
+                directionsRenderer.setMap(newMap);
+                onMapReady(newMap, directionsService, directionsRenderer);
+            }
+        }).catch(console.error);
     }, [onMapReady, apiKey]);
 
-    function getNodeMarkers(){
-        if(!selectedHospital || !map) return;
-        const floor = selectedFloor === null ? 1: selectedFloor;
-        console.log(graph.getBuildingNodes(selectedHospital, floor))
-
+    const getNodeMarkers = () => {
+        if (!selectedHospital || !map) return;
+        const floor = selectedFloor || 1;
         let building = selectedHospital;
-        if (building === "20 Patriot Place"){
-            building = "pat20";
-        }
-        else if (building === "22 Patriot Place"){
-            building = "pat22";
-        }
-        else if (building === "MGB (Chestnut Hill)"){
-            building = "chestnut";
-        }
+
+        if (building === "20 Patriot Place") building = "pat20";
+        else if (building === "22 Patriot Place") building = "pat22";
+        else if (building === "MGB (Chestnut Hill)") building = "chestnut";
 
         let markers = createMarkers(map, graph.getBuildingNodes(selectedHospital, floor), setNodeDetails, 'normal', building, floor);
-        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, 'removed', building, floor)]
+        markers = [...markers, ...createMarkers(map, nodesToRemove, setNodeDetails, 'removed', building, floor)];
         return markers;
-    }
-
-    function getEdgeLines(){
-        if(!selectedHospital || !map) return;
-        const floor = selectedFloor === null ? 1: selectedFloor;
-        return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
-    }
-
-    const handleToggleNodes = () => {
-        setShowNodes(prev => !prev);
     };
 
+    const getEdgeLines = () => {
+        if (!selectedHospital || !map) return;
+        const floor = selectedFloor || 1;
+        return drawAllEdges(map, graph.getBuildingEdges(selectedHospital, floor));
+    };
 
-    // Display nodes
+    const handleToggleNodes = () => setShowNodes(prev => !prev);
+    const handleToggleEdges = () => setShowEdges(prev => !prev);
+
     useEffect(() => {
         if (!map || !selectedHospital) return;
-
-        // Always clear
         nodeMarkers.forEach(m => m.setMap(null));
         setNodeMarkers([]);
 
         if (showNodes) {
             const markers = getNodeMarkers();
-            if (markers) {
-                setNodeMarkers(markers);
-            }
+            if (markers) setNodeMarkers(markers);
         }
     }, [showNodes, selectedHospital, selectedFloor, map, nodesToRemove]);
 
-
-    const handleToggleEdges = () => {
-        setShowEdges(prev => !prev);
-    };
-
-    // Display Edges
     useEffect(() => {
         if (!map || !selectedHospital) return;
-
-        // clear edges
         edgePolylines.forEach(poly => poly.setMap(null));
         setEdgePolylines([]);
 
         if (showEdges) {
             const lines = getEdgeLines();
-            if (lines) {
-                setEdgePolylines(lines);
-            }
+            if (lines) setEdgePolylines(lines);
         }
     }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
 
@@ -193,20 +168,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);
         await deleteEdges.mutateAsync(edits.deletedEdges);
-        console.log("edits committed");
-        // graph.commitEdits()
-        const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
-        const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
 
-        console.log(nodesDataFromAPI);
-        if (!nodesReady || !edgesReady) return;
+        if (!nodesDataFromAPI || isNodesLoading || !edgesDataFromAPI || isEdgesLoading) return;
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
-        console.log("Graph Repopulated")
-
-    }
-
-    const handleRemoveNode = (id: number) => {
-
     };
 
     const setNodeDetails = (node: Node) => {
@@ -221,6 +185,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             mgbOverlay.floorOverlay.setMap(null);
             setMgbOverlay(null);
         }
+
         if (patriot22Overlay) {
             patriot22Overlay.floor3Overlay.setMap(null);
             patriot22Overlay.floor4Overlay.setMap(null);
@@ -236,8 +201,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setPatriot22Overlay(createPatriot22Overlays(map));
             }
 
-            const location =
-                hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
+            const location = hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
             if (location) {
                 map.setZoom(19);
                 map.panTo(location);
@@ -264,41 +228,26 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 {nodeInfo && (
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">ID:</span> {nodeInfo.id}
-                        </p>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}
-                        </p>
-                        <p className="text-black text-lg">
-                            <span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}
-                        </p>
-                        <button
-                            className={
-                                'bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3 '
-                            }
-                            onClick={() => {
-                                setNodesToRemove(prev => [...prev, nodeInfo]);
-                            }}
-
-
-                        >
+                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
+                        <button className="bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
                             Remove Node
                         </button>
                     </div>
-
                 )}
 
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+
+                <button className="bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={handleSubmit}>
                     Submit Changes
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800}">Choose Your Algorithm</button>
+                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
@@ -310,13 +259,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
-                <div className="w-3/4 relative">
-                    <div ref={mapRef} className="w-full h-full"></div>
-                </div>
             </div>
 
             <div className="w-3/4 relative">
+                {isLoadingMap && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
                 <div ref={mapRef} className="w-full h-full"></div>
                 <MapEditorControls
                     map={map}
@@ -330,6 +280,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     onToggleNodes={handleToggleNodes}
                     onToggleEdges={handleToggleEdges}
                 />
+                <HelpDropdown />
             </div>
         </div>
     );

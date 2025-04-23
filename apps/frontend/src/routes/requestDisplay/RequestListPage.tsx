@@ -390,6 +390,7 @@ export default function RequestListPage() {
                                                             setEditMode(true);
                                                         }}
                                                         tooltip={'Edit Service Request'}
+                                                        blue={false}
                                                     />
                                                 </div>
                                             ) : (

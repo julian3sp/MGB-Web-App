@@ -42,7 +42,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
-    const [algoType, setAlgoType] = useState("A-Star");
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
@@ -115,28 +115,30 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     },
                 });
 
-                directionsRenderer.setMap(newMap);
-                onMapReady(newMap, directionsService, directionsRenderer);
-            }
-        }).catch(console.error);
+                    directionsRenderer.setMap(newMap);
+                    onMapReady(newMap, directionsService, directionsRenderer);
+
+                }
+            })
+            .catch(console.error);
     }, [onMapReady, apiKey]);
 
     useEffect(() => {
         if (!map) return;
 
         const marker = new google.maps.Marker({
-            position: {  lat: 42.32610671664074, lng: -71.14958629820883},
+            position: { lat: 42.30149071877142, lng: -71.12823221807406},
             map,
             draggable: true,
             title: "Drag me!"
         });
 
-        const listener = marker.addListener("dragend", () => {
-            const pos = marker.getPosition();
-            if (pos) {
-                console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
-            }
-        });
+        // const listener = marker.addListener("dragend", () => {
+        //     const pos = marker.getPosition();
+        //     if (pos) {
+        //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+        //     }
+        // });
 
         return () => {
             listener.remove();
@@ -166,27 +168,48 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
-    // Display all static graph nodes
     useEffect(() => {
-        if (showNodes) {
-            displayNodes();
+        if (!map) return;
+
+        // 1) clear out _all_ the old markers
+        staticMarkers.forEach(m => m.setMap(null));
+
+        // 2) if showNodes is on, re-draw
+        if (showNodes && selectedHospital) {
+            const floor = selectedFloor ?? 1;
+
+            // remap your building name to key exactly as Graph expects:
+            let buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+                ? "chestnut"
+                : selectedHospital === "20 Patriot Place"
+                    ? "pat20"
+                    : selectedHospital === "22 Patriot Place"
+                        ? "pat22"
+                        : selectedHospital; // e.g. "faulkner"
+
+
+            const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
+                marker => {
+                    setStaticMarkers(markers => [...markers])
+                    setNewNodeTracker(!newNodeTracker)
+                });
+
+            // generate the new markers:
+            const newMarkers = createMarkers(
+                map,
+                graph.getBuildingNodes(buildingKey, floor),
+                setNodeDetails,
+                'normal',
+                buildingKey,
+                floor
+            );
+            // setStaticMarkers(newMarkers);
+            return () => listener.remove();
+        } else {
+            // hide mode: just drop our array to empty
+            setStaticMarkers([]);
         }
-    }, [showNodes, map, newNodeTracker]);
-
-      useEffect(() => {
-          // Prevents seeing other building nodes
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
-
-          if (showNodes) displayNodes();
-
-      }, [selectedHospital, selectedFloor]);
-
-      useEffect(() =>{
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
-      }, [clearMarkers]);
-
+    }, [map, showNodes, showEdges, selectedHospital, selectedFloor, staticMarkers]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;
@@ -267,7 +290,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         edgePolylines.forEach(l => l.setMap(null));
         setEdgePolylines([]);
         graph.populate(nodesRes.data, edgesRes.data);
-        // setClearMarkers(!clearMarkers);
         if (showNodes) displayNodes();
         if (showEdges) {
             const lines = getEdgeLines();
@@ -346,14 +368,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-
-                <button className="bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800">Choose Your Algorithm</button>
+                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-600 shadow-lg rounded p-3">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>

@@ -32,46 +32,46 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                 <div className="flex">
                     <Link to="/directory" onClick={() => setTab("dir")}
                           className={tab === "dir" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white px-5 py-5 transition-all"}>
                         Directory
                     </Link>
                     <Link to="/navigation" onClick={() => setTab("navigation")}
                           className={tab === "navigation" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Navigation
                     </Link>
                     <div className="flex">
                         {isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
                           className={tab === "serv" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Services
                         </Link> : null}
                         {isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
                           className={tab === "reqP" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         View Requests
                         </Link> : null}
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/editor" onClick={() => setTab("editor")}
                           className={tab === "editor" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Map Editor
                         </Link> : null}
                     </div>
                     <div className="flex">
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/admin/directory" onClick={() => setTab("exp")}
                           className={tab === "exp" ?
-                              "text-sm bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-sm text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                         Export
                     </Link> : null }
                     </div>
-                    <LogInButton className="fixed right-0 text-sm text-black" rerender={setAdmin}/>
-                    <LogOutButton className="fixed right-0 text-sm text-black"/>
+                    <LogInButton className="fixed right-0 text-base text-black" rerender={setAdmin}/>
+                    <LogOutButton className="fixed right-0 text-base text-black"/>
                 </div>
             </div>
         </nav>

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import FileUploadCard from "../../ui/fileUploadCard"
-import { trpc } from "../../../lib/trpc"
 import {toast} from "sonner"
-import { Toaster } from "../../ui/sonner"
+import { Toaster } from '../../ui/sonner';
+import { trpc } from '@/lib/trpc';
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])

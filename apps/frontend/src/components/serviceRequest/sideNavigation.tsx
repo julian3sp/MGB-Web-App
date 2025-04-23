@@ -31,7 +31,7 @@ const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 
                     <div className="relative">
                         {/* Pulsing background effect*/}
                         <motion.div
-                            className="absolute inset-0 rounded-full bg-[#b1e3e4]"
+                            className="absolute inset-0 rounded-full bg-[#009ca6]"
                             animate={{
                                 scale: [1, 1.2, 1],
                                 opacity: [0.7, 0.4, 0.7]

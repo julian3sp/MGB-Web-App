@@ -45,7 +45,7 @@ export function createMarkers(
         marker.addListener('dblclick', () => {
            graph.deleteNode(node.id);
             const newMarker = new google.maps.Marker({
-                position: {lat: node.x, lng: node.y},
+                position: {lat: node.x-0.000002, lng: node.y},
                 map: map,
                 title: 'New Node',
                 zIndex: 9999,

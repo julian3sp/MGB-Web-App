@@ -20,16 +20,32 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSel
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedBuilding, setSelectedBuilding] = useState('')
+  const [sorted, setSorted] = useState<Department[]>([])
 
   useEffect(() => {
-    if (building) {
-      setSearchTerm(building);
-    }
+    if (searchTerm) {
+      setSearchTerm('')
+
   }, [building]);
 
-  const filteredDepartments = DepartmentList.filter((department) =>
-      department.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+  useEffect(() => {
+    setSorted(filterDepartments())
+  }, [building, searchTerm]);
+
+   function filterDepartments() : Department[]  {
+     console.log(building)
+     const buildList =  DepartmentList.filter((department) =>
+         department.building === building
+     )
+     if (searchTerm){
+       return buildList.filter((department) =>
+           department.name.toLowerCase().includes(searchTerm.toLowerCase()));
+     }
+     return buildList
+
+   }
 
   useEffect(() => {
     const exactMatch = DepartmentList.find(
@@ -66,7 +82,7 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSel
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
                   role="listbox"
               >
-                {filteredDepartments.map((department) => (
+                {sorted.map((department) => (
                     <li
                         key={department.id}
                         className="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-500 hover:bg-blue-50"
@@ -87,7 +103,7 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({ onDepartmentSel
                       )}
                     </li>
                 ))}
-                {filteredDepartments.length === 0 && (
+                {sorted.length === 0 && (
                     <li className="py-2 px-4 text-gray-400">No matches found</li>
                 )}
               </ul>

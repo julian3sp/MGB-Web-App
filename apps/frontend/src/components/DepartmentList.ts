@@ -123,7 +123,7 @@ const DepartmentList = [
         specialties: ["Blood Work", "Lab Services"],
         floor: ["1st Floor, Suite 100"],
         phone: "(617) 732-9841",
-        building: "chestnut"
+        building: "MGB (Chestnut Hill)"
     },
     {
         id: "multi-specialty",
@@ -137,7 +137,7 @@ const DepartmentList = [
         ],
         floor: ["1st Floor, Suite 130"],
         phone: "(617) 732-9500",
-        building: "chestnut"
+        building: "MGB (Chestnut Hill)"
     },
     {
         id: "blood-draw",
@@ -145,7 +145,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["1st Floor, Suite 130"],
         phone: "(617) 732-0714",
-        building: "pat20"
+        building: "20 Patriot Place"
     },
     {
         id: "pharmacy",
@@ -153,7 +153,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["1st Floor, Suite 100"],
         phone: "(617) 732-0694",
-        building: "pat20"
+        building: "20 Patriot Place"
     },
     {
         id: "radiology",
@@ -161,7 +161,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["1st Floor, Suite 110"],
         phone: "(617) 732-0535",
-        building: "pat20"
+        building: "20 Patriot Place"
     },
     {
         id: "urgent-care",
@@ -169,7 +169,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["1st Floor, Suite 120"],
         phone: "(617) 732-0817",
-        building: "pat20"
+        building: "20 Patriot Place"
     },
     {
         id: "urology",
@@ -177,7 +177,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["1st Floor, Suite 150"],
         phone: "(617) 732-0859",
-        building: "pat20"
+        building: "20 Patriot Place"
     },
     {
         id: "gynecology",
@@ -185,7 +185,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["3rd Floor"],
         phone: "(617) 732-1604",
-        building: "pat22"
+        building: "22 Patriot Place"
     },
     {
         id: "lactation",
@@ -193,7 +193,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["3rd Floor"],
         phone: "(617) 732-1817",
-        building: "pat22"
+        building: "22 Patriot Place"
     },
     {
         id: "vein-treatment",
@@ -201,7 +201,7 @@ const DepartmentList = [
         specialties: [],
         floor: ["3rd Floor"],
         phone: "(617) 732-1798",
-        building: "pat22"
+        building: "22 Patriot Place"
     },
 
     // {
@@ -228,21 +228,14 @@ const DepartmentList = [
     //     floor: ["2nd Floor, Suite 204B"],
     //     phone: "(617) 732-9677"
     // },
-    {
-        id: "pharmacy",
-        name: "Pharmacy",
-        specialties: ["Outpatient Pharmacy Services"],
-        floor: ["3rd Floor, Suite 317"],
-        phone: "(617) 732-9040",
-        building: "pat20"
-    },
+
     {
         id: "radiology",
         name: "Radiology",
         specialties: ["Bone Density", "Breast Imaging/Mammography", "Ultrasound", "X-Ray"],
         floor: ["5th Floor, Suite 560"],
         phone: "(617) 732-9801",
-        building: "chestnut"
+        building: "MGB (Chestnut Hill)"
     },
     {
         id: "mri-ct",
@@ -250,7 +243,7 @@ const DepartmentList = [
         specialties: ["CT Scan", "MRI", "X-Ray"],
         floor: ["1st Floor, Suite 102B"],
         phone: "(617) 732-9810",
-        building: "chestnut"
+        building: "MGB (Chestnut Hill)"
     },
     // {
     //     id: "rehabilitation",

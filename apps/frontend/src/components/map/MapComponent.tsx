@@ -144,10 +144,10 @@ const MapComponent: React.FC = () => {
       };
 
       const Pat20departmentMapping: Record<string, number> = {
-        'Blood Draw/Phlebotomy': 714,
+        'Blood Draw / Phlebotomy': 714,
         'Pharmacy': 694,
         'Radiology': 535,
-        'Urgent Care': 817,
+        'Urgent Care Center': 817,
         'Cardio Vascular Services': 859,
         'Urology': 859,
         'Main Entrance': 1139,
@@ -165,7 +165,7 @@ const MapComponent: React.FC = () => {
       const Pat22departmentMapping: Record<string, number> = {
         'Gynecology': 1604,
         'Lactation': 1817,
-        'Vein treatment': 1798
+        'Vein Treatment': 1798
       };
 
       if(selectedPlace.name === null) {

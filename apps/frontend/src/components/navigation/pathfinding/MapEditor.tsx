@@ -359,7 +359,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
                         <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
                         <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
+                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
                             Remove Node
                         </button>
                     </div>
@@ -368,13 +368,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-600 shadow-lg rounded p-3">Choose Your Algorithm</button>
+                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>

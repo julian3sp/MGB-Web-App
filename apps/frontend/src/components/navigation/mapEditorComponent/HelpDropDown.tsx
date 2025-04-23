@@ -1,0 +1,67 @@
+import React, { useState } from "react"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem
+} from "../../ui/dropdown-menu"
+import { CircleHelp } from "lucide-react"
+
+const HelpDropdown = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalContent, setModalContent] = useState("")
+
+  const handleItemClick = (instruction: string) => {
+    setModalContent(instruction)
+    setIsModalOpen(true)
+  }
+
+  return (
+    <>
+      <div className="absolute bottom-24 right-1 z-50">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-600">
+              <CircleHelp className="w-6 h-6" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel className="font-bold">Help & Instructions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleItemClick("To import nodes, drag and drop the file into the canvas.")}>
+              How to import nodes
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleItemClick("Use the overlay button to toggle layers on/off.")}>
+              How to toggle overlays
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleItemClick("Right-click a node and choose 'Remove'.")}>
+              How to remove a node
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleItemClick("Click 'Submit' in the top-right corner.")}>
+              Submit changes
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full">
+            <h2 className="text-lg font-semibold mb-4">Instruction</h2>
+            <p className="mb-6">{modalContent}</p>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="w-full bg-[#003a96] text-white py-2 rounded-lg hover:bg-blue-600"
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+export default HelpDropdown

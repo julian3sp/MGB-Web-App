@@ -13,6 +13,7 @@ import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 import {Node, Edge} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
+import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 
 interface MapEditorProps {
     onMapReady: (
@@ -76,9 +77,10 @@ interface MapEditorProps {
                         zoom: 12,
                         fullscreenControl: true,
                         mapTypeControl: false,
-                        streetViewControl: true,
-                        zoomControl: true,
                         disableDoubleClickZoom: true,
+                        streetViewControl: false, 
+                        zoomControl: false, 
+                        scaleControl: false,
                     });
 
                     setMap(newMap);
@@ -348,6 +350,8 @@ interface MapEditorProps {
                     onToggleNodes={handleToggleNodes}
                     onToggleEdges={handleToggleEdges}
                 />
+
+                <HelpDropdown />
             </div>
         </div>
     );

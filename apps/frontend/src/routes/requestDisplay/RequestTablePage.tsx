@@ -382,7 +382,13 @@ export default function RequestTablePage() {
                                                               ? 'Audio/Visual Accommodations'
                                                               : res.request_type === 'Language'
                                                                 ? 'Language Interpreter ️'
-                                                                : 'N/A'}
+                                                                : res.request_type ===
+                                                                    'MedicalDevice'
+                                                                  ? 'Medical Device'
+                                                                  : res.request_type ===
+                                                                      'Facilities'
+                                                                    ? 'Facilities'
+                                                                    : 'N/A'}
                                                 </i>
                                             </p>
                                         </td>
@@ -457,6 +463,26 @@ export default function RequestTablePage() {
                                                         </p>
                                                     </div>
                                                 )}
+                                                {res.medicalDevice?.device && (
+                                                    <div className="pl-4">
+                                                        <span className="underline w-45 pl-4">
+                                                            <ul>Medical Device:</ul>
+                                                        </span>
+                                                        <p className="pl-4 py-2">
+                                                            {res.medicalDevice.device}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {res.facilities?.maintenanceType && (
+                                                    <div className="pl-4">
+                                                        <span className="underline w-45 pl-4">
+                                                            <ul>Maintenance Type:</ul>
+                                                        </span>
+                                                        <p className="pl-4 py-2">
+                                                            {res.facilities.maintenanceType}
+                                                        </p>
+                                                    </div>
+                                                )}
                                                 {res.request_type === 'Sanitation' && (
                                                     <div className="pl-4">
                                                         <span className="underline w-45 pl-4">
@@ -512,6 +538,26 @@ export default function RequestTablePage() {
                                                         </span>
                                                         <p className="pl-4 py-2">
                                                             {res.security.securityIssue}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {res.medicalDevice?.operatorRequired && (
+                                                    <div className="pl-4">
+                                                        <span className="underline w-45 pl-4">
+                                                            <ul>Operator Required?</ul>
+                                                        </span>
+                                                        <p className="pl-4 py-2">
+                                                            {res.medicalDevice.operatorRequired}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                {res.facilities?.equipmentType && (
+                                                    <div className="pl-4">
+                                                        <span className="underline w-45 pl-4">
+                                                            <ul>Equipment Type:</ul>
+                                                        </span>
+                                                        <p className="pl-4 py-2">
+                                                            {res.facilities.equipmentType}
                                                         </p>
                                                     </div>
                                                 )}

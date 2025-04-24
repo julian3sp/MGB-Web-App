@@ -7,9 +7,10 @@ import Popup from "../components/ui/Popup.tsx";
 
 export function WelcomePage() {
     const [tab, setTab] = React.useState<string>("");
+    const [visible, setVisible] = React.useState(true);
     return (
         <div className="flex flex-col overflow-hidden -mt-10 p-10">
-            <Popup message="This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI"/>
+            <Popup message="This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI" visible={visible} setVisible={setVisible} />
             <ContainerScroll
                 titleComponent={
                     <>

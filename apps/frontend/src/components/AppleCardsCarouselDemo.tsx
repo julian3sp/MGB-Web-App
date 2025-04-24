@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 import navImage from "../../assets/lebron-dunk.jpg";
 import pathImage from "../../assets/lebron-poster.jpg";
@@ -51,13 +52,25 @@ const cardsData = [
 ];
 
 export function AppleCardsCarouselDemo() {
-  const cards = cardsData.map((card, i) => <Card key={i} card={card} index={i} />);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const inView = useInView(carouselRef, { amount: 0.5 }); // remove the trigger once to make it runs whenever came into sight
+
+  const cards = cardsData.map((card, i) => (
+    <Card key={i} card={card} index={i} />
+  ));
+
   return (
-    <div className="w-full py-20 bg-white">
-      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96]">
+    <div ref={carouselRef} className="w-full py-20 bg-white">
+      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] mb-8">
         Explore Our Features
       </h2>
-      <Carousel items={cards} />
+
+      {/*
+        Pass the `inView` flag down so the Carousel
+        only plays its internal animations when it scrolls into view.
+      */}
+      <Carousel items={cards} playAnimation={inView} />
     </div>
   );
 }

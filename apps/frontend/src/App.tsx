@@ -53,24 +53,24 @@ function App() {
                 <Router>
                     <div className='min-h-screen'>
 
-                    <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
-                    <Routes>
-                        <Route path="/navigation" element={<NavigationPage />} />
-                        <Route path="/" element={<WelcomePage />} />
-                        <Route path="/directory" element={<DepartmentDirectory />} />
-                        <Route path="/directory/*" element={<DepartmentDirectory />} />
-                        <Route path="/aboutus" element={<AboutUs />} />
-                        <Route element={<PrivateRoutes />}>
-                            <Route path="/services" element={<ServiceRequestPage />} />
-                            <Route path="/admin/directory" element={<DirectoryPage />} />
-                            <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
-                            <Route path="requests" element={<RequestPage />}>
-                                <Route index element={<Navigate to="table" replace />} />
-                                <Route path="table" element={<RequestTablePage />} />
-                                <Route path="list" element={<RequestListPage />} />
+                        <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
+                        <Routes>
+                            <Route path="/navigation" element={<NavigationPage />} />
+                            <Route path="/" element={<WelcomePage />} />
+                            <Route path="/directory" element={<DepartmentDirectory />} />
+                            <Route path="/directory/*" element={<DepartmentDirectory />} />
+                            <Route path="/aboutus" element={<AboutUs />} />
+                            <Route element={<PrivateRoutes />}>
+                                <Route path="/services" element={<ServiceRequestPage />} />
+                                <Route path="/admin/directory" element={<DirectoryPage />} />
+                                <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
+                                <Route path="requests" element={<RequestPage />}>
+                                    <Route index element={<Navigate to="table" replace />} />
+                                    <Route path="table" element={<RequestTablePage />} />
+                                    <Route path="list" element={<RequestListPage />} />
+                                </Route>
                             </Route>
-                        </Route>
-                    </Routes>
+                        </Routes>
                     </div>
 
                     <FooterBar />

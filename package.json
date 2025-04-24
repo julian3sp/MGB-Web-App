@@ -50,6 +50,7 @@
     "common": "workspace:*",
     "dotenv": "^16.5.0",
     "dotenv-cli": "^7.4.4",
+    "gsap": "^3.12.7",
     "lucide-react": "^0.503.0",
     "motion": "^12.6.3",
     "pathfinding": "^0.4.18",

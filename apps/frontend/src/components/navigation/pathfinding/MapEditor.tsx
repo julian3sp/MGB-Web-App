@@ -35,6 +35,8 @@ interface MapEditorProps {
     ) => void;
 }
 
+type GMapsListener = google.maps.MapsEventListener;
+
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -59,6 +61,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
     const [newNodeTracker,  setNewNodeTracker]  = useState(false);
+    const [edgeRefresh, setEdgeRefresh] = useState(0);
+
+    const nodeListenerRef = useRef<GMapsListener | null>(null);
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -157,8 +162,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
-        } else if (building === "Faulkner"){
-            building = "Faulkner";
         }
         const floor = selectedFloor === null ? 1: selectedFloor;
         return drawAllEdges(map, graph.getBuildingEdges(building, floor));
@@ -184,36 +187,35 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [map, selectedHospital, selectedFloor, showNodes]);
 
+
     useEffect(() => {
-        if (!map || !selectedHospital) return;
+        if (!map || !selectedHospital || !showNodes) return;
 
-        // Function to listen for new nodes
-        const newNodeListener = () => {
-            const floor = selectedFloor ?? 1;
-            console.log("Creating new node");
+        // detach any previous listener
+        nodeListenerRef.current?.remove();
 
-            const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
-                ? "chestnut"
-                : selectedHospital === "20 Patriot Place"
-                    ? "pat20"
-                    : selectedHospital === "22 Patriot Place"
-                        ? "pat22"
-                        : selectedHospital;
+        const floor  = selectedFloor ?? 1;
+        const buildingKey =
+            selectedHospital === "MGB (Chestnut Hill)" ? "chestnut" :
+                selectedHospital === "20 Patriot Place"   ? "pat20"   :
+                    selectedHospital === "22 Patriot Place"   ? "pat22"   :
+                        selectedHospital;
 
-            const listener = addNodeListener(map, buildingKey, floor, setNodeDetails, marker => {
-                setStaticMarkers(prev => [...prev, marker]);
-                setNewNodeTracker(prev => !prev);
-            });
+        // attach a single dbl-click listener
+        nodeListenerRef.current = addNodeListener(
+            map,
+            buildingKey,
+            floor,
+            setNodeDetails,
+            marker => setStaticMarkers(prev => [...prev, marker])
+        );
 
-            return () => listener.remove();
+        // cleanup when deps change or component unmounts
+        return () => {
+            nodeListenerRef.current?.remove();
+            nodeListenerRef.current = null;
         };
-
-        // Listen for new nodes if showNodes is true
-        if (showNodes) {
-            newNodeListener();
-        }
-    }, [map, selectedHospital, selectedFloor, showNodes, newNodeTracker]);
-
+    }, [map, selectedHospital, selectedFloor, showNodes]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;
@@ -230,13 +232,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     : selectedHospital.toLowerCase();
 
         const newStatics = createMarkers(map,
-            graph.getBuildingNodes(selectedHospital, floor),
+            graph.getBuildingNodes(buildingKey, floor),
             setNodeDetails,
             'normal',
-            buildingKey,
-            floor
-        );
+            () => setEdgeRefresh((v) => v + 1));
         setStaticMarkers(newStatics);
+
     }
 
     useEffect(() => {
@@ -248,7 +249,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             const lines = getEdgeLines();
             if (lines) setEdgePolylines(lines);
         }
-    }, [showEdges, selectedHospital, selectedFloor, map, newNodeTracker]);
+    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()

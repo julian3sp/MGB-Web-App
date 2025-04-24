@@ -259,7 +259,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'department') setAscending(!ascending);
                                             else {
@@ -363,13 +363,13 @@ export default function RequestTablePage() {
                                         key={res.request_id}
                                         className="even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                     >
-                                        <td className="p-4 break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
                                             </p>
                                         </td>
 
-                                        <td className="p-2 break-words max-w-[200px] pt-0 pb-2">
+                                        <td className="p-2 break-words max-w-[200px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900 ">
                                                 <p>
                                                     {res.request_type === 'Sanitation'
@@ -393,14 +393,14 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words w-fit pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-2 pb-2">
                                             <p
                                             >
                                                 {res.priority}
                                             </p>
                                         </td>
 
-                                        {/*<td className="p-4  break-words max-w-[225px] pt-0 pb-1">*/}
+                                        {/*<td className="p-4  break-words max-w-[225px] pt-2 pb-1">*/}
                                         {/*    <div className="font-[Poppins] text-med text-blue-gray-900 space-y-0">*/}
                                         {/*        {res.sanitation?.cleaningType && (*/}
                                         {/*            <div className="pl-4">*/}
@@ -554,25 +554,25 @@ export default function RequestTablePage() {
                                         {/*    /!*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 *!/*/}
                                         {/*</td>*/}
 
-                                        <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.location}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[130px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[130px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.department}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.name} ({res.employee_id})
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {new Date(res.request_date).toLocaleDateString(
                                                     undefined,
@@ -588,7 +588,7 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words w-fit pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-2 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
                                                     res.status
@@ -609,7 +609,7 @@ export default function RequestTablePage() {
                                         </td>
 
                                         <td
-                                            className="p-4 sticky right-0 z-9 w-fit py-2 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
+                                            className="p-4 sticky right-0 z-9 w-fit py-2 pb-1 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                             style={{
                                                 backgroundColor: 'inherit',
                                                 boxShadow: '-1px 0 0 #003A96',

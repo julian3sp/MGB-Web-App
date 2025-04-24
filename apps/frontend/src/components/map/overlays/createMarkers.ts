@@ -70,7 +70,7 @@ export function addNodeListener(
     building: string,
     floor: number,
     onNewMarker: (m: google.maps.Marker) => void): google.maps.MapsEventListener {
-    return map.addListener("dblclick", (event) => {
+    return google.maps.event.addListener(map, "dblclick", (event) => {
         const marker = new google.maps.Marker({
             position: event.latLng,
             map,
@@ -78,7 +78,7 @@ export function addNodeListener(
             zIndex: 1,
             icon: {
                 url: "https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png",
-                scaledSize: new google.maps.Size(1, 1),
+                scaledSize: new google.maps.Size(15, 15),
             },
         });
 

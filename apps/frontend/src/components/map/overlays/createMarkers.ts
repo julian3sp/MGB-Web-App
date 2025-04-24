@@ -63,18 +63,16 @@ function markerUI(marker: google.maps.Marker, node: Node, setNodeDetails: (node:
             node.x = newPos.lat();
             node.y = newPos.lng();
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
+            graph.editNode(node)
         }
     });
 }
-
 
 // function markerListener(markers: google.maps.Marker[]) {
 //     for (const marker in markers){
 //         markerUI(marker, )
 //     }
 // }
-
-
 
 export function addNodeListener(
     map: google.maps.Map,

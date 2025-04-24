@@ -112,6 +112,10 @@ export class Graph {
         }
     }
 
+    editNode(node: Node):void{
+        this.edits.addedNodes.push(node);
+    }
+
     deleteNode(id:number): void {
         const deletedNode = Array.from(this.nodes).find(n => n.id === id);
         if (!deletedNode){

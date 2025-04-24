@@ -54,6 +54,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
+    const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -167,8 +168,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
-
-
     // Effect to clear and rerender markers when building or floor changes
     useEffect(() => {
         if (!map) return;
@@ -253,6 +252,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
         console.log("Edits: ", edits.addedNodes);
+        await editNodes.mutateAsync(edits.addedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);

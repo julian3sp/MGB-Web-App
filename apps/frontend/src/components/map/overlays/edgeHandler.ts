@@ -37,6 +37,8 @@ export function drawAllEdges(
     return polylines;
 }
 
+
+
 export function drawPath(map: google.maps.Map, nodes: Node[]){
     // Initialize an array to hold coordinates (using LatLngLiteral for type-safety)
     const path: google.maps.LatLngLiteral[] = [];

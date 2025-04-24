@@ -7,7 +7,8 @@ export function createMarkers(
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
-    onNodeMove: () => void
+    onNodeMove: () => void,
+    onNodeClicked?: (n: Node, m: google.maps.Marker) => void
     ) {
     const markers: google.maps.Marker[] = [];
     const iconUrl =
@@ -35,7 +36,7 @@ export function createMarkers(
             zIndex
         });
 
-        markerUI(marker, node, setNodeDetails, onNodeMove)
+        markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
         markers.push(marker);
     }
 
@@ -43,7 +44,8 @@ export function createMarkers(
 }
 
 function markerUI(marker: google.maps.Marker, node: Node,
-                  setNodeDetails: (node: Node) => void, onNodeMove: () => void){
+                  setNodeDetails: (node: Node) => void, onNodeMove: () => void,
+                  onNodeClicked?: (n: Node, m: google.maps.Marker) => void){
     // Double click node to remove it temp
     marker.addListener('dblclick', () => {
         graph.deleteNode(node.id);
@@ -54,6 +56,7 @@ function markerUI(marker: google.maps.Marker, node: Node,
     // Get node Info
     marker.addListener('click', () => {
         setNodeDetails(node);
+        if (onNodeClicked) onNodeClicked(node, marker);
     });
 
     marker.addListener('dragend', () => {

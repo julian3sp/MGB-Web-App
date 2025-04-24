@@ -1,6 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover.tsx';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
-import DeleteIconBlue from '../../../assets/DeleteIconBlue.png';
+import DeleteIconBlue from '../../../assets/DeleteIcon.png';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { ServiceRequest } from '@/types';

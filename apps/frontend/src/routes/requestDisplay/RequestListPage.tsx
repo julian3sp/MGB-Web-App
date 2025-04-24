@@ -128,9 +128,7 @@ export default function RequestListPage() {
         <PageWrapper
             open={true}
             contents={
-                <nav
-                    className="w-full h-full bg-white border-1  border-light p-6 overflow-hidden shadow-lg"
-                >
+                <nav className="w-full h-300 bg-white border-1 overflow-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-yellow-500 hover:scrollbar-thumb-blue-700  border-light p-6 overflow-hidden shadow-lg">
                     <h3
                         className="text-2xl font-bold mb-4 font-[Poppins] text-center"
                         style={{ color: '#003A96' }}
@@ -170,10 +168,10 @@ export default function RequestListPage() {
                                         }
                                     }}
                                     className={
-                                        `w-full text-left block p-5 rounded border-1 border-light-subtle  ${
+                                        `w-full text-left block p-5  rounded-lg border-1 border-[#44A6A6]  ${
                                             selectedRequest?.request_id == res.request_id
-                                                ? 'text-white bg-[#003a96] font-semibold font-[Poppins] hover:border-b-5 border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
-                                                : 'text-gray-700 hover:bg-white hover:text-gray-700 border-b-0 hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
+                                                ? 'text-white bg-[#003a96]  font-[Poppins] hover:border-b-5 border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
+                                                : 'text-gray-700 hover:bg-white hover:text-gray-700 border-b-1 hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
                                         }` /* Put requests in rounded rectangle boxes*/
                                     }
                                     style={{
@@ -201,14 +199,7 @@ export default function RequestListPage() {
                                                   : res.request_type === 'Facilities'
                                                     ? 'Facilities'
                                                     : 'N/A'}{' '}
-                                    (Priority:{' '}
-                                    <span
-
-                                    >
-                                        {res.priority}
-                                    </span>
-                                    )
-
+                                    (Priority: <span>{res.priority}</span>)
                                 </button>
                             </ul>
                         ))
@@ -320,12 +311,10 @@ export default function RequestListPage() {
                         Request Details:
                     </h3>
                     {selectedRequest ? (
-                        <nav
-                            className="shadow-md rounded-sm min-h-screen text-blue-gray-900"
-                        >
-                            <div >
-                                <div className="flex justify-between mx-auto border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-[5px] rounded-tr-[5px] border-[#d9d9d9] mb-3 ">
-                                    <h2 className="text-xl  p-5 " style={{ color: 'white' }} >
+                        <nav className="shadow-md rounded-sm min-h-220 border-1 border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
+                            <div>
+                                <div className="flex justify-between border-b-5 border-b-[#44A6A6]  bg-[#003A96] rounded-tl-lg rounded-tr-lg border-[#d9d9d9] mb-3 ">
+                                    <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
                                             ? 'Sanitation'
@@ -344,19 +333,13 @@ export default function RequestListPage() {
                                                           'Facilities'
                                                         ? 'Facilities'
                                                         : 'N/A'}{' '}
-                                        (Priority:{' '}
-                                        <span
-
-                                        >
-                                            {selectedRequest.priority}
-                                        </span>
-                                        )
+                                        (Priority: <span>{selectedRequest.priority}</span>)
                                     </h2>
                                     {/*ReqID. Type (Priority)*/}
-                                    <div className="relative -top-[12px] flex gap-4 pl-4 pt-7 pr-3">
+                                    <div className="relative-top-[12px] flex gap-4 pl-4 pt-4  pr-3">
                                         <div className="h-[35px] flex items-center gap-4">
                                             {!editMode ? (
-                                                <div className="relative top-[4px]">
+                                                <div className="relative top-[4px] ">
                                                     <EditRequest
                                                         size={20}
                                                         onClick={() => {
@@ -430,363 +413,366 @@ export default function RequestListPage() {
                                             }}
                                             tooltip={'Delete Service Request'}
                                         />
-
                                     </div>
                                 </div>
-
-
-                                <div className={'columns-2 gap-5 h-full pl-5 pb-5  pr-5'}>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Request Type*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Request Type:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mt-1 mb-3 text-blue-gray-900">
-                                    <p>
-                                        <p className={'text-[15pt]'}>
-                                            {selectedRequest.request_type === 'Sanitation'
-                                                ? 'Sanitation'
-                                                : selectedRequest.request_type === 'Transportation'
-                                                  ? 'Transportation'
-                                                  : selectedRequest.request_type === 'Security'
-                                                    ? 'Security'
-                                                    : selectedRequest.request_type === 'AudioVisual'
-                                                      ? 'Audio/Visual Accommodations'
-                                                      : selectedRequest.request_type === 'Language'
-                                                        ? 'Language Interpreter'
+                                <div className="grid grid-cols-2 h-120 pl-5 pr-5 mb-10 mt-1">
+                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
+                                    <div className={'p-2 '}>
+                                        {/*Request Type*/}
+                                        <h3
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            style={{ color: '#003A96' }}
+                                        >
+                                            Request Type:{' '}
+                                        </h3>
+                                        <ul className="list-disc ml-6 mt-1 mb-3 text-blue-gray-900">
+                                            <p>
+                                                <p className={'text-[15pt]'}>
+                                                    {selectedRequest.request_type === 'Sanitation'
+                                                        ? 'Sanitation'
                                                         : selectedRequest.request_type ===
-                                                            'MedicalDevice'
-                                                          ? 'Medical Device'
-                                                          : selectedRequest.request_type ===
-                                                              'Facilities'
-                                                            ? 'Facilities'
-                                                            : 'N/A'}
-                                        </p>
-                                    </p>
-                                </ul>
+                                                        'Transportation'
+                                                            ? 'Transportation'
+                                                            : selectedRequest.request_type ===
+                                                            'Security'
+                                                                ? 'Security'
+                                                                : selectedRequest.request_type ===
+                                                                'AudioVisual'
+                                                                    ? 'Audio/Visual Accommodations'
+                                                                    : selectedRequest.request_type ===
+                                                                    'Language'
+                                                                        ? 'Language Interpreter'
+                                                                        : selectedRequest.request_type ===
+                                                                        'MedicalDevice'
+                                                                            ? 'Medical Device'
+                                                                            : selectedRequest.request_type ===
+                                                                            'Facilities'
+                                                                                ? 'Facilities'
+                                                                                : 'N/A'}
+                                                </p>
+                                            </p>
+                                        </ul>
                                     </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Render edit mode for priority status if true, else render normally*/}
-                                {editMode ? (
-                                    <>
+                                    <div className={'p-2   '}>
+                                        {/*Request ID*/}
                                         <h3
                                             className="text-xl font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
-                                            Priority:{' '}
+                                            Request ID:{' '}
                                         </h3>
-
-                                        {/*Priority Editing*/}
-                                        <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
-                                            <ServiceComponentDropdown
-                                                value={editPriority}
-                                                setState={setEditPriority}
-                                                width={'w-[175px]'}
-                                                options={[
-                                                    { value: 'Low', label: 'Low' },
-                                                    {
-                                                        value: 'Medium',
-                                                        label: 'Medium',
-                                                    },
-                                                    { value: 'High', label: 'High' },
-                                                    {
-                                                        value: 'Emergency',
-                                                        label: 'Emergency',
-                                                    },
-                                                ]}
-                                                placeholder={selectedRequest.priority}
-                                                originalValue={selectedRequest.priority}
-
-                                            />
-                                        </div>
-
+                                        <ul className="list-disc  ml-6 mb-3 mt-1">
+                                            <p className={'text-[15pt]'}>
+                                                #{selectedRequest.request_id}
+                                            </p>
+                                        </ul>
+                                    </div>
+                                    <div className={'p-2   '}>
+                                        {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                                         <h3
                                             className="text-xl font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
-                                            Status:{' '}
-                                        </h3>
-
-                                        {/*Status Editing*/}
-                                        <div className="flex flex-row row-2 gap-12 items-center mt-1 mb-3">
-                                            <ServiceComponentDropdown
-                                                value={editStatus}
-                                                setState={setEditStatus}
-                                                width={'w-[175px]'}
-                                                options={[
-                                                    'Unassigned',
-                                                    'Assigned',
-                                                    'Working',
-                                                    'Done',
-                                                ]}
-                                                placeholder={selectedRequest.status}
-                                                originalValue={selectedRequest.status}
-
-                                            />
-
-                                        </div>
-
-                                    </>
-                                ) : (
-                                    <>
-
-                                        {/*Priority Normal*/}
-                                        <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1  "
-                                            style={{ color: '#003A96' }}
-                                        >
-                                            Priority:{' '}
+                                            Request Date:{' '}
                                         </h3>
                                         <ul className="list-disc ml-6 mb-3 mt-1">
                                             <p className={'text-[15pt]'}>
-                                                {selectedRequest.priority}
+                                                {new Date(
+                                                    selectedRequest.request_date
+                                                ).toLocaleDateString(undefined, {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: 'numeric',
+                                                    second: 'numeric',
+                                                })}{' '}
+                                                (Request ID: {selectedRequest.request_id})
                                             </p>
                                         </ul>
+                                    </div>
+                                    {editMode ? (
+                                        <div >
+                                            {/* Priority Edit */}
+                                            <div>
+                                                <h3 className="text-xl font-semibold font-[Poppins] py-1" style={{ color: '#003A96' }}>
+                                                    Priority:
+                                                </h3>
+                                                <div className="flex flex-row gap-4 items-center mt-1 mb-3">
+                                                    <ServiceComponentDropdown
+                                                        value={editPriority}
+                                                        setState={setEditPriority}
+                                                        width={'w-[175px]'}
+                                                        options={[
+                                                            { value: 'Low', label: 'Low' },
+                                                            { value: 'Medium', label: 'Medium' },
+                                                            { value: 'High', label: 'High' },
+                                                            { value: 'Emergency', label: 'Emergency' },
+                                                        ]}
+                                                        placeholder={selectedRequest.priority}
+                                                        originalValue={selectedRequest.priority}
+                                                    />
+                                                </div>
+                                            </div>
 
-                                        {/*Status Normal*/}
+                                            {/* Status Edit */}
+                                            <div>
+                                                <h3 className="text-xl font-semibold font-[Poppins] py-1" style={{ color: '#003A96' }}>
+                                                    Status:
+                                                </h3>
+                                                <div className="flex flex-row gap-4 items-center mt-1 mb-3">
+                                                    <ServiceComponentDropdown
+                                                        value={editStatus}
+                                                        setState={setEditStatus}
+                                                        width={'w-[175px]'}
+                                                        options={['Unassigned', 'Assigned', 'Working', 'Done']}
+                                                        placeholder={selectedRequest.status}
+                                                        originalValue={selectedRequest.status}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Priority Display */}
+                                            <div>
+                                                <h3 className="text-xl font-semibold font-[Poppins] py-1 pl-2" style={{ color: '#003A96' }}>
+                                                    Priority:
+                                                </h3>
+                                                <ul className="list-disc ml-6 mb-3 mt-1 pl-2">
+                                                    <p className="text-[15pt]">{selectedRequest.priority}</p>
+                                                </ul>
+                                            </div>
+
+                                            {/* Status Display */}
+                                            <div>
+                                                <h3 className="text-xl font-semibold font-[Poppins] py-0 pl-2" style={{ color: '#003A96' }}>
+                                                    Status:
+                                                </h3>
+                                                <ul className="list-disc ml-6 mb-3 mt-1 pl-2">
+                                                    <p className="text-[15pt]">{selectedRequest.status}</p>
+                                                </ul>
+                                            </div>
+                                        </>
+                                    )}
+                                    </div>
+<div>
+                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
+                                    <div>
+                                            {/*Name (Employee ID: #)*/}
+                                            <h3
+                                                className="text-xl pl-2 font-semibold font-[Poppins] py-1  "
+                                                style={{ color: '#003A96' }}
+                                            >
+                                                Name:{' '}
+                                            </h3>
+                                            <ul className="list-disc ml-6 mb-3 mt-1">
+                                                <p className={'text-[15pt]'}>
+                                                    {selectedRequest.name} (Employee ID:{' '}
+                                                    {selectedRequest.employee_id})
+                                                </p>
+                                            </ul>
+                                        </div>
+                                    <div className={'p-2   '}>
+
+                                        {/*Location*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1  "
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
-                                            Status:{' '}
+                                            Location:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-1 mt-1">
-                                            <p
-                                                className={`block font-[Poppins] text-[15pt] '} ${
-                                                    selectedRequest.status 
-                                                }`}
-                                            >
-                                                {selectedRequest.status}
+                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                            <p className={'text-[15pt]'}>
+                                                {selectedRequest.location}
                                             </p>
                                         </ul>
-                                    </>
-                                )}
                                     </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Name (Employee ID: #)*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1  "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Name:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>
-                                        {selectedRequest.name} (Employee ID:{' '}
-                                        {selectedRequest.employee_id})
-                                    </p>
-                                </ul>
+                                    <div className={'p-2   '}>
+                                        {/*Department*/}
+                                        <h3
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            style={{ color: '#003A96' }}
+                                        >
+                                            Department:{' '}
+                                        </h3>
+                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                            <p className={'text-[15pt]'}>
+                                                {selectedRequest.department}
+                                            </p>
+                                        </ul>
                                     </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Request Details*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Request Details:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>
-                                        {selectedRequest.sanitation?.cleaningType && (
-                                            <>
-                                                <span className="">Cleaning Type:</span>{' '}
-                                                {selectedRequest.sanitation.cleaningType}{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.language?.targetLanguage && (
-                                            <>
-                                                <span className="">Target Language:</span>{' '}
-                                                {selectedRequest.language.targetLanguage}{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.audioVisual?.accommodationType && (
-                                            <>
-                                                <span className="">
-                                                    Accommodation Type:
-                                                </span>{' '}
-                                                {selectedRequest.audioVisual.accommodationType}{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.transportation?.transportationType && (
-                                            <>
-                                                <span className="">
-                                                    Transportation Type:
-                                                </span>{' '}
-                                                {
-                                                    selectedRequest.transportation
-                                                        .transportationType
-                                                }{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.security?.accessZones && (
-                                            <>
-                                                <span className="">Access Zones:</span>{' '}
-                                                {selectedRequest.security.accessZones}{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.medicalDevice?.device && (
-                                            <>
-                                                <span className="">Medical Device:</span>{' '}
-                                                {selectedRequest.medicalDevice.device}
-                                            </>
-                                        )}
-                                        {selectedRequest.facilities?.maintenanceType && (
-                                            <>
-                                                <span className="">Maintenance Type:</span>{' '}
-                                                {selectedRequest.facilities.maintenanceType}
-                                            </>
-                                        )}
-                                        <br />
-                                        {selectedRequest.request_type === 'Sanitation' && (
-                                            <>
-                                                <span className="">Contaminant:</span>{' '}
-                                                {selectedRequest.sanitation?.contaminant?.trim()
-                                                    ? selectedRequest.sanitation.contaminant
-                                                    : 'N/A'}
-                                            </>
-                                        )}
-                                        {selectedRequest.language?.sourceLanguage && (
-                                            <>
-                                                <span className="">Source Language:</span>{' '}
-                                                {selectedRequest.language.sourceLanguage}
-                                            </>
-                                        )}
-                                        {selectedRequest.request_type === 'AudioVisual' && (
-                                            <>
-                                                <span className="">
-                                                    Accommodation Details:
-                                                </span>{' '}
-                                                {selectedRequest.audioVisual?.accommodationDetails?.trim()
-                                                    ? selectedRequest.audioVisual
-                                                          .accommodationDetails
-                                                    : 'N/A'}
-                                            </>
-                                        )}
-                                        {selectedRequest.transportation
-                                            ?.transportationDestination && (
-                                            <>
-                                                <span className="">
-                                                    Transportation Destination:
-                                                </span>{' '}
-                                                {
-                                                    selectedRequest.transportation
-                                                        .transportationDestination
-                                                }{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.security?.securityIssue && (
-                                            <>
-                                                <span className="">Security Issue:</span>{' '}
-                                                {selectedRequest.security.securityIssue}{' '}
-                                            </>
-                                        )}
-                                        {selectedRequest.medicalDevice?.operatorRequired && (
-                                            <>
-                                                <span className="">Operator Required?</span>{' '}
-                                                {selectedRequest.medicalDevice.operatorRequired}
-                                            </>
-                                        )}
-                                        {selectedRequest.facilities?.equipmentType && (
-                                            <>
-                                                <span className="">Equipment Type:</span>{' '}
-                                                {selectedRequest.facilities.equipmentType}
-                                            </>
-                                        )}
-                                    </p>
-                                </ul>
                                     </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Additional comments*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Additional Comments:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>
-                                        {selectedRequest.additional_comments?.trim() ? (
-                                            <p>{selectedRequest.additional_comments}</p>
-                                        ) : (
-                                            'N/A'
-                                        )}
-                                    </p>
-                                </ul>
+                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
+                                        <div className={'p-2   '}>
+                                            {/*Request Details*/}
+                                            <h3
+                                                className="text-xl font-semibold font-[Poppins] py-1 "
+                                                style={{ color: '#003A96' }}
+                                            >
+                                                Request Details:{' '}
+                                            </h3>
+                                            <ul className="list-disc ml-6 mb-3 mt-1">
+                                                <p className={'text-[15pt]'}>
+                                                    {selectedRequest.sanitation?.cleaningType && (
+                                                        <>
+                                                            <span className="">Cleaning Type:</span>{' '}
+                                                            {
+                                                                selectedRequest.sanitation.cleaningType
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.language?.targetLanguage && (
+                                                        <>
+                                                            <span className="">Target Language:</span>{' '}
+                                                            {
+                                                                selectedRequest.language.targetLanguage
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.audioVisual?.accommodationType && (
+                                                        <>
+                                                        <span className="">
+                                                            Accommodation Type:
+                                                        </span>{' '}
+                                                            {
+                                                                selectedRequest.audioVisual
+                                                                    .accommodationType
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.transportation
+                                                        ?.transportationType && (
+                                                        <>
+                                                        <span className="">
+                                                            Transportation Type:
+                                                        </span>{' '}
+                                                            {
+                                                                selectedRequest.transportation
+                                                                    .transportationType
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.security?.accessZones && (
+                                                        <>
+                                                            <span className="">Access Zones:</span>{' '}
+                                                            {selectedRequest.security.accessZones}{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.medicalDevice?.device && (
+                                                        <>
+                                                            <span className="">Medical Device:</span>{' '}
+                                                            {selectedRequest.medicalDevice.device}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.facilities?.maintenanceType && (
+                                                        <>
+                                                            <span className="">Maintenance Type:</span>{' '}
+                                                            {selectedRequest.facilities.maintenanceType}
+                                                        </>
+                                                    )}
+                                                    <br />
+                                                    {selectedRequest.request_type === 'Sanitation' && (
+                                                        <>
+                                                            <span className="">Contaminant:</span>{' '}
+                                                            {selectedRequest.sanitation?.contaminant?.trim()
+                                                                ? selectedRequest.sanitation.contaminant
+                                                                : 'N/A'}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.language?.sourceLanguage && (
+                                                        <>
+                                                            <span className="">Source Language:</span>{' '}
+                                                            {selectedRequest.language.sourceLanguage}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.request_type === 'AudioVisual' && (
+                                                        <>
+                                                        <span className="">
+                                                            Accommodation Details:
+                                                        </span>{' '}
+                                                            {selectedRequest.audioVisual?.accommodationDetails?.trim()
+                                                                ? selectedRequest.audioVisual
+                                                                    .accommodationDetails
+                                                                : 'N/A'}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.transportation
+                                                        ?.transportationDestination && (
+                                                        <>
+                                                        <span className="">
+                                                            Transportation Destination:
+                                                        </span>{' '}
+                                                            {
+                                                                selectedRequest.transportation
+                                                                    .transportationDestination
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.security?.securityIssue && (
+                                                        <>
+                                                            <span className="">Security Issue:</span>{' '}
+                                                            {
+                                                                selectedRequest.security.securityIssue
+                                                            }{' '}
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.medicalDevice
+                                                        ?.operatorRequired && (
+                                                        <>
+                                                            <span className="">Operator Required?</span>{' '}
+                                                            {
+                                                                selectedRequest.medicalDevice
+                                                                    .operatorRequired
+                                                            }
+                                                        </>
+                                                    )}
+                                                    {selectedRequest.facilities?.equipmentType && (
+                                                        <>
+                                                            <span className="">Equipment Type:</span>{' '}
+                                                            {selectedRequest.facilities.equipmentType}
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Location*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Location:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>{selectedRequest.location}</p>
-                                </ul>
-                                    </div>
-                                    <div className={"p-2 mx-auto  "}>
-                                {/*Department*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Department:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>{selectedRequest.department}</p>
-                                </ul>
-                                    </div>
-                                    <div className={"p-2 mx-auto  "}>
-
-                                {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Request Date:{' '}
-                                </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>
-                                        {new Date(selectedRequest.request_date).toLocaleDateString(
-                                            undefined,
-                                            {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                                hour: 'numeric',
-                                                minute: 'numeric',
-                                                second: 'numeric',
-                                            }
-                                        )}{' '}
-                                        (Request ID: {selectedRequest.request_id})
-                                    </p>
-                                </ul>
-                                    </div>
-<div className={"p-2 mx-auto  "}>
-                                {/*Request ID*/}
-                                <h3
-                                    className="text-xl font-semibold font-[Poppins] py-1 "
-                                    style={{ color: '#003A96' }}
-                                >
-                                    Request ID:{' '}
-                                </h3>
-                                <ul className="list-disc  ml-6 mb-3 mt-1">
-                                    <p className={'text-[15pt]'}>#{selectedRequest.request_id}</p>
-                                </ul>
-</div>
                                 </div>
+
+
+
+
+
+                                </div>
+                                <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg ml-10 mr-10 mt-15 p-3 m-5'}>
+                                    {/*Additional comments*/}
+                                    <h3
+                                        className="text-xl font-semibold p-3 font-[Poppins] py-1 "
+                                        style={{ color: '#003A96' }}
+                                    >
+                                        Additional Comments:{' '}
+                                    </h3>
+                                    <div >
+                                    <ul className="list-disc ml-3 mb-3 mt-3">
+                                        <p className={'text-[15pt]'}>
+                                            {selectedRequest.additional_comments?.trim() ? (
+                                                <p>{selectedRequest.additional_comments}</p>
+                                            ) : (
+                                                'N/A'
+                                            )}
+                                        </p>
+                                    </ul>
+                                    </div>
+                                </div>
+
                             </div>
+
                         </nav>
                     ) : (
                         <>
                             {/*No service selected yet*/}
                             <nav
-                                className="border p-5 rounded-sm flex items-center shadow-md"
-                                style={{ borderColor: 'lightgrey' }}
+                                className="border p-5 py-[22px] border-1 border-[#44A6A6] rounded-lg flex items-center shadow-md"
                             >
                                 <p className="text-gray-700 font-[Poppins]">
                                     Select a service request to view details.

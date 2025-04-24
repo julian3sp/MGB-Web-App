@@ -26,6 +26,7 @@ type Edit = {
     deletedEdges: number[];
     addedNodes: Node[];
     addedEdges: Edge[];
+    editedNodes: Node[];
 }
 
 
@@ -96,6 +97,7 @@ export class Graph {
             addedNodes: [],
             deletedEdges: [],
             addedEdges: [],
+            editedNodes: [],
         }
         console.log("Edit History Reseted");
     }
@@ -112,8 +114,26 @@ export class Graph {
         }
     }
 
-    editNode(node: Node):void{
-        this.edits.addedNodes.push(node);
+    editNode(node: Node): void {
+        const isAdded = this.edits.addedNodes.some(n => n.id === node.id);
+
+        if (isAdded) {
+            // Update the node in addedNodes if it's already there
+            const n = this.edits.addedNodes.find(n => n.id === node.id);
+            if (n) {
+                n.x = node.x;
+                n.y = node.y;
+            }
+        } else {
+            // Either update existing edited node or push it in
+            const existing = this.edits.editedNodes.find(n => n.id === node.id);
+            if (existing) {
+                existing.x = node.x;
+                existing.y = node.y;
+            } else {
+                this.edits.editedNodes.push({ ...node });
+            }
+        }
     }
 
     deleteNode(id:number): void {

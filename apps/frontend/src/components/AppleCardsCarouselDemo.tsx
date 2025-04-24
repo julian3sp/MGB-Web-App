@@ -3,10 +3,10 @@
 import React, { useRef } from "react";
 import { useInView } from "framer-motion";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
-import navImage from "../../assets/lebron-dunk.jpg";
-import pathImage from "../../assets/lebron-poster.jpg";
-import editorImage from "../../assets/basketball.jpeg";
-import serviceImage from "../../assets/wongagile.png";
+import navImage from "../../assets/outsideMGB.jpg";
+import pathImage from "../../assets/insideMGB.png";
+import editorImage from "../../assets/phoneMap.jpeg";
+import serviceImage from "../../assets/service.jpeg";
 
 const cardsData = [
   {

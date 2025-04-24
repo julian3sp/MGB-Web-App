@@ -129,10 +129,14 @@ export const Carousel = ({ items, initialScroll = 0, playAnimation }: CarouselPr
                 variants={cardVariants} // animation variants
                 initial="hidden" 
                 animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
-                className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
-                whileHover={{scale: 1.05, boxShadow: "0px 8px 20px rgba(0,0,0,0.12)"}}
-                transition={{ type: "spring", stiffness: 120, damping: 20 }}
-                style={{ transformOrigin: "center center"}}
+                className="rounded-3xl"
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0px 8px 20px rgba(0,0,0,0.12)",
+                  zIndex: 10,
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                style={{ position: "relative"}}
               >
                 {item}
               </motion.div>
@@ -222,7 +226,7 @@ export const Card = ({
               className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
             >
               <button
-                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-black dark:bg-white"
+                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white"
                 onClick={handleClose}
               >
                 x

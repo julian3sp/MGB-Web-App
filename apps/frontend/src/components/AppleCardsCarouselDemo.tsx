@@ -62,7 +62,7 @@ export function AppleCardsCarouselDemo() {
 
   return (
     <div ref={carouselRef} className="w-full py-20 bg-white">
-      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] mb-8">
+      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] text-center">
         Explore Our Features
       </h2>
 

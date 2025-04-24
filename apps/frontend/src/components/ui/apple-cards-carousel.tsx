@@ -130,6 +130,9 @@ export const Carousel = ({ items, initialScroll = 0, playAnimation }: CarouselPr
                 initial="hidden" 
                 animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
                 className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
+                whileHover={{scale: 1.05, boxShadow: "0px 8px 20px rgba(0,0,0,0.12)"}}
+                transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                style={{ transformOrigin: "center center"}}
               >
                 {item}
               </motion.div>

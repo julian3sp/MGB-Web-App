@@ -140,7 +140,7 @@ export default function RequestListPage() {
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (
-                            <ul key={res.request_id} className="mb-4 group">
+                            <ul key={res.request_id} className="mb-4 text-[14pt] group">
                                 <button
                                     onClick={() => {
                                         if (!selectedRequest) {
@@ -435,7 +435,7 @@ export default function RequestListPage() {
                                 </div>
 
 
-                                <div className={'columns-2 gap-5 h-200 pl-5 pb-5  pr-5'}>
+                                <div className={'columns-2 gap-5 h-full pl-5 pb-5  pr-5'}>
                                     <div className={"p-2 mx-auto  "}>
                                 {/*Request Type*/}
                                 <h3

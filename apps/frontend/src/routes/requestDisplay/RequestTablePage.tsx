@@ -171,7 +171,7 @@ export default function RequestTablePage() {
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
-                            <thead className="bg-gray-200 sticky top-0 z-20 border-b-5 border-b-[#44A6A6]">
+                            <thead className="bg-[#003A96] sticky top-0 z-20 border-b-5 border-b-[#44A6A6]">
                                 <tr>
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
@@ -185,7 +185,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             ID {sortKey === 'request_id' && (ascending ? '↑' : '↓')}
                                         </h3>
@@ -204,7 +204,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins] break-words"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Request Type{' '}
                                             {sortKey === 'request_type' && (ascending ? '↑' : '↓')}
@@ -223,7 +223,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Priority{' '}
                                             {sortKey === 'priority' && (ascending ? '↑' : '↓')}
@@ -233,7 +233,7 @@ export default function RequestTablePage() {
                                     {/*<th className="p-4 border-b border-gray-300  break-words">*/}
                                     {/*    <h3*/}
                                     {/*        className="block text-lg font-semibold font-[Poppins]"*/}
-                                    {/*        style={{ color: '#003A96' }}*/}
+                                    {/*        style={{ color: '#ffffff' }}*/}
                                     {/*    >*/}
                                     {/*        Request Details*/}
                                     {/*    </h3>*/}
@@ -251,7 +251,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Location{' '}
                                             {sortKey === 'location' && (ascending ? '↑' : '↓')}
@@ -270,7 +270,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Department{' '}
                                             {sortKey === 'department' && (ascending ? '↑' : '↓')}
@@ -289,7 +289,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Name (ID){' '}
                                             {sortKey === 'name' && (ascending ? '↑' : '↓')}
@@ -309,7 +309,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Request Date{' '}
                                             {sortKey === 'request_date' && (ascending ? '↑' : '↓')}
@@ -328,7 +328,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Status {sortKey === 'status' && (ascending ? '↑' : '↓')}
                                         </h3>
@@ -337,20 +337,20 @@ export default function RequestTablePage() {
                                     <th className="p-4 border-b border-gray-300 break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Additional Comments
                                         </h3>
                                     </th>
                                     <th
-                                        className="p-4 border-b border-gray-300 sticky right-0 z-20 text-center bg-gray-200"
+                                        className="p-4 border-b border-gray-300 sticky right-0 z-20 text-center bg-[#003A96]"
                                         style={{
-                                            boxShadow: '-1px 0 0 #003A96',
+                                            boxShadow: '-1px 0 0 #ffffff',
                                         }}
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Manage
                                         </h3>
@@ -612,7 +612,7 @@ export default function RequestTablePage() {
                                             className="p-4 sticky right-0 z-9 w-fit py-2 pb-1 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                             style={{
                                                 backgroundColor: 'inherit',
-                                                boxShadow: '-1px 0 0 #003A96',
+                                                boxShadow: '-1px 0 0 #ffffff',
                                             }}
                                         >
                                             <div className="flex justify-center gap-2">

@@ -1,6 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover.tsx';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
-import DeleteIconBlue from '../../../assets/DeleteIcon.png';
+import DeleteIconBlue from '../../../assets/DeleteIconBlue.png';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { ServiceRequest } from '@/types';
@@ -10,9 +10,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip.tsx';
-import ExitButton from '@/components/ui/ExitButton.tsx';
-import EditIcon from "../../../assets/EditIcon.png";
-import EditIconWhite from "../../../assets/EditIconWhite.png";
 
 export default function DeleteRequest({
     size = 20,

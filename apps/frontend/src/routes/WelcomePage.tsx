@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import {motion} from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
@@ -74,7 +75,13 @@ export function WelcomePage() {
       </div>
 
       {/* centered text */}
-      <div className="w-full flex flex-col items-center justify-center py-12 px-4 text-center">
+      <motion.div  
+        className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.5 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
         <h1 className="text-4xl font-bold text-[#003a96]">
           Never get lost at
           <span className="block mt-2 text-7xl md:text-8xl font-extrabold">
@@ -82,10 +89,10 @@ export function WelcomePage() {
           </span>
         </h1>
         <p className="text-lg text-gray-700 max-w-2xl mt-4">
-          Our intuitive navigation system helps you find your destination within the hospital quickly and efficiently.
+          Our intuitive pathfinding algorithm helps you find your destination within the hospital quickly and efficiently.
           No more getting lost in complex hospital corridors!
         </p>
-      </div>
+      </motion.div>
 
       {/* carousel */}
       <AppleCardsCarouselDemo />

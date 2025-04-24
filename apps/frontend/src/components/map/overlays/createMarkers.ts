@@ -7,9 +7,9 @@ export function createMarkers(
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
-    building: string,
-    floor: number,
-) {
+    onNodeMove: () => void,
+    onNodeClicked?: (n: Node, m: google.maps.Marker) => void
+    ) {
     const markers: google.maps.Marker[] = [];
     const iconUrl =
         type === 'removed'
@@ -36,14 +36,16 @@ export function createMarkers(
             zIndex
         });
 
-        markerUI(marker, node, setNodeDetails)
+        markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
         markers.push(marker);
     }
 
     return markers;
 }
 
-function markerUI(marker: google.maps.Marker, node: Node, setNodeDetails: (node: Node) => void){
+function markerUI(marker: google.maps.Marker, node: Node,
+                  setNodeDetails: (node: Node) => void, onNodeMove: () => void,
+                  onNodeClicked?: (n: Node, m: google.maps.Marker) => void){
     // Double click node to remove it temp
     marker.addListener('dblclick', () => {
         graph.deleteNode(node.id);
@@ -54,6 +56,7 @@ function markerUI(marker: google.maps.Marker, node: Node, setNodeDetails: (node:
     // Get node Info
     marker.addListener('click', () => {
         setNodeDetails(node);
+        if (onNodeClicked) onNodeClicked(node, marker);
     });
 
     marker.addListener('dragend', () => {
@@ -65,21 +68,18 @@ function markerUI(marker: google.maps.Marker, node: Node, setNodeDetails: (node:
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
             graph.editNode(node)
         }
+        onNodeMove();
     });
 }
 
-// function markerListener(markers: google.maps.Marker[]) {
-//     for (const marker in markers){
-//         markerUI(marker, )
-//     }
-// }
 
 export function addNodeListener(
     map: google.maps.Map,
     building: string,
     floor: number,
     setNodeDetails: (node: Node) => void,
-    onNewMarker: (m: google.maps.Marker) => void): google.maps.MapsEventListener {
+    onNewMarker: (m: google.maps.Marker) => void,
+    onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
         const marker = new google.maps.Marker({
             position: event.latLng,
@@ -94,7 +94,7 @@ export function addNodeListener(
         const id = Date.now();
         graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
         console.log("New node added");
-        markerUI(marker, graph.getNode(id),  setNodeDetails);
+        markerUI(marker, graph.getNode(id),  setNodeDetails,  onNodeMove);
         onNewMarker(marker);
     });
 }

@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {
     className?: string;
-    rerender: (isAdmin: boolean) => void;
+    rerender: (userRole: string) => void;
 }
 
 export function LogOutButton({className, rerender}: Props) {
@@ -11,7 +11,7 @@ export function LogOutButton({className, rerender}: Props) {
 
     function handleLogOut() {
         if (isAuthenticated) {
-            rerender(false)
+            rerender("")
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
     }

@@ -19,11 +19,9 @@ import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
 
 function App() {
-    const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
-    const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
     const [queryClient] = useState(() => new QueryClient());
     const {isAuthenticated, isLoading} = useAuth0();
-    const [isAdmin, setAdmin] = React.useState<boolean>(false);
+    const [userRole, setUserRole] = React.useState<string>("Patient");
     const [trpcClient] = useState(() =>
         trpc.createClient({
             links: [
@@ -33,12 +31,6 @@ function App() {
             ],
         }),
     );
-
-    function signOut() {
-        localStorage.clear()
-        setLoginTag("Log In")
-        setIsSignedIn(false)
-    }
 
     const PrivateRoutes = () => {
         console.log(isAuthenticated);
@@ -53,7 +45,7 @@ function App() {
                 <Router>
                     <div className='min-h-screen'>
 
-                    <NavBar isAdmin={isAdmin} setAdmin={setAdmin} />
+                    <NavBar userRole={userRole} setUserRole={setUserRole} />
                     <Routes>
                         <Route path="/navigation" element={<NavigationPage />} />
                         <Route path="/" element={<WelcomePage />} />
@@ -66,8 +58,8 @@ function App() {
                             <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
                             <Route path="requests" element={<RequestPage />}>
                                 <Route index element={<Navigate to="table" replace />} />
-                                <Route path="table" element={<RequestTablePage />} />
-                                <Route path="list" element={<RequestListPage />} />
+                                <Route path="table" element={<RequestTablePage userRole={userRole}/>} />
+                                <Route path="list" element={<RequestListPage userRole={userRole}/>} />
                             </Route>
                         </Route>
                     </Routes>

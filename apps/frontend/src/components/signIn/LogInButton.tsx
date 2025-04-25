@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface Props {
     className?: string;
-    rerender: (isAdmin: boolean) => void;
+    rerender: (userRole: string) => void;
 }
 
 export function LogInButton({className, rerender}: Props) {
@@ -19,16 +19,16 @@ export function LogInButton({className, rerender}: Props) {
             };
 
             axios.request(options).then(function (response) {
-                if (response.data[0].name === "Admin") {
-                    console.log("Good")
-                    console.log(user.sub)
-                    rerender(true)
-
-                    rerender(true)
-                } else {
-                    rerender(false)
-                    console.log("Bad")
-                    rerender(false)
+                if (response.data.length === 0){
+                    console.log("Patient logged in")
+                    rerender("Patient")
+                }
+                else if (response.data[0].name === "Admin") {
+                    console.log("Admin logged in")
+                    rerender("Admin")
+                } else if (response.data[0].name === "Staff") {
+                    console.log("Staff logged in")
+                    rerender("Staff")
                 }
             }).catch(function (error) {
                 console.log("Error in checking roles:")

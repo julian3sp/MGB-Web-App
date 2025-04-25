@@ -8,12 +8,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 type Props = {
-    isAdmin: boolean
-    setAdmin: (newAd: boolean) => void
+    userRole: string
+    setUserRole: (newRole: string) => void
 }
 
 
-export default function NavBar({ isAdmin,  setAdmin }: Props) {
+export default function NavBar({ userRole,  setUserRole }: Props) {
     const [tab, setTab] = React.useState<string>("")
     const location = useLocation();
     const { isAuthenticated } = useAuth0();
@@ -53,19 +53,19 @@ export default function NavBar({ isAdmin,  setAdmin }: Props) {
                         Navigation
                     </Link>
                     <div className="flex">
-                        {isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
+                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/services" onClick={() => setTab("serv")}
                              className={tab === "serv" ?
                                  "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                                  "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                             Services
                         </Link> : null}
-                        {isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
+                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/requests" onClick={() => setTab("reqP")}
                              className={tab === "reqP" ?
                                  "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                                  "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                             View Requests
                         </Link> : null}
-                        {(isAuthenticated &&  isAdmin) ? <Link to="/editor" onClick={() => setTab("editor")}
+                        {(isAuthenticated &&  userRole === "Admin") ? <Link to="/editor" onClick={() => setTab("editor")}
                                className={tab === "editor" ?
                                    "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
                                    "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
@@ -73,7 +73,7 @@ export default function NavBar({ isAdmin,  setAdmin }: Props) {
                         </Link> : null}
                     </div>
                     <div className="flex">
-                        { (isAuthenticated && isAdmin) ?
+                        { (isAuthenticated && userRole === "Admin") ?
                             <Link to="/admin/directory" onClick={() => setTab("exp")}
                                   className={tab === "exp" ?
                                       "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
@@ -83,8 +83,8 @@ export default function NavBar({ isAdmin,  setAdmin }: Props) {
                     </div>
                 </div>
             </div>
-            <LogInButton className= "text-base text-black" rerender={setAdmin}/>
-            <LogOutButton className="text-base text-black" rerender={setAdmin}/>
+            <LogInButton className= "text-base text-black" rerender={setUserRole}/>
+            <LogOutButton className="text-base text-black" rerender={setUserRole}/>
         </nav>
     )
 }

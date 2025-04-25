@@ -8,7 +8,7 @@ import {createMarkers} from './overlays/createMarkers';
 import { drawAllEdges, drawPath} from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph';
-
+import {StrategyPathfind, PathContext, BFS, DFS, AStar} from "../navigation/pathfinding/StrategyPathfind.ts"
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 import { graph } from "./GraphObject.ts"
@@ -51,6 +51,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
   const targetMarkerRef = useRef<google.maps.Marker | null>(null);
+
+  const context = new PathContext();
 
   // Refs for overlay animations
   const parkingOpacityRef = useRef(1);
@@ -194,30 +196,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current = null;
       }
 
-      let pathNodes: Node[] = [
-          {
-              name: 'ahh',
-              id: 1,
-              building: 'CN',
-              floor: 1,
-              x: 1,
-              y: 1,
-              edgeCost: 1,
-              totalCost: 1,
-          },
-      ];
-
+      context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
       if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
         console.log("Using A-Star")
-        pathNodes = graph.aStar(entrance, target);
+        context.setStrategyPathfind(new AStar());
       } else if (window.sessionStorage.getItem("algoType") === "DFS"){
         console.log("Using DFS")
-        pathNodes = graph.DFS(entrance, target)
+        context.setStrategyPathfind(new DFS())
       } else if (window.sessionStorage.getItem("algoType") === "BFS"){
         console.log("Using BFS")
-        pathNodes = graph.BFS(entrance, target)
+        context.setStrategyPathfind(new BFS())
       }
+
+      const pathNodes = context.pathFind(graph, entrance, target)
 
       console.log("Path:", pathNodes)
       const newPolyline = drawPath(map, pathNodes);
@@ -291,7 +283,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
         } else if (selectedDestination.name === "Faulkner") {
-          createFaulknerOverlays(map); 
+          createFaulknerOverlays(map);
         }
 
         // Center map on the selected destination

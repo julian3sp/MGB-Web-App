@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { useInView } from "framer-motion";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
+import {motion} from "framer-motion";
 import allergy from '../../assets/department/allergy.jpg';
 import dermatology from '../../assets/department/dermatology.jpg';
 import endocrinology from '../../assets/department/endocrinology.jpg';
@@ -103,9 +104,17 @@ export function AppleCardsCarouselDemo({ offsetX = 0, offsetRight = 0 }: { offse
 
   return (
     <div ref={carouselRef} className="w-full py-20 bg-white">
-      <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] text-center">
-        Get to know our departments.
-      </h2>
+      <motion.div
+        className="w-full flex flex-col items-center justify-center px-4 text-center"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.5 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
+        <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] text-center">
+          Get to know our departments.
+        </h2>
+      </motion.div>
       <Carousel items={allItems} playAnimation={inView} offsetX={offsetX} offsetRight={offsetRight}/>
     </div>
   );

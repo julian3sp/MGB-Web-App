@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import {motion} from "framer-motion";
+import {motion, useAnimationControls} from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
@@ -23,12 +23,26 @@ export function WelcomePage() {
     return padding;
   };
   
-
   const updatePadding = () => {
     const padding = calculatePadding();
     setSidePadding(padding);
   };
   
+  const bannerControls = useAnimationControls();
+
+  useEffect(() => {
+    const sequence = async () => {
+      while (true) {
+        await bannerControls.start({
+          x: "-100vw",
+          transition: { duration: 13, ease: "linear" }
+        });
+        // Reset position instantly (no animation)
+        bannerControls.set({ x: "100vw" });
+      }
+    };
+    sequence();
+  }, [bannerControls]);
 
   useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
@@ -58,8 +72,18 @@ export function WelcomePage() {
 
   return (
     <div className="flex flex-col">
+      <div className="w-full bg-white overflow-hidden mb-5">
+        <motion.div
+          className="whitespace-nowrap text-[#003a96] text-center font-bold font-lg text-sm absolute"
+          animate={bannerControls}
+          initial={{ x: "100vw" }}
+          style={{ right: 0 }}
+        >
+          This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women's Hospital website.
+        </motion.div>
+      </div>
       {/* pinned section */}
-      <div ref={containerRef} className="min-h-screen">
+      <div ref={containerRef}>
         <div
           ref={wrapperRef}
           className="w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
@@ -78,7 +102,7 @@ export function WelcomePage() {
 
       {/* centered text */}
       <motion.div
-        className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
+        className="w-full flex flex-col items-center justify-center px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, amount: 0.5 }}

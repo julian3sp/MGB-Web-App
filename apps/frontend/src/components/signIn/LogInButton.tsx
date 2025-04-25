@@ -12,18 +12,6 @@ export function LogInButton({className, rerender}: Props) {
 
     useEffect(()=>{
         if(user) {
-            if (user.name === "Admin") {
-                console.log("Good")
-                console.log(user.sub)
-                rerender(true)
-                window.sessionStorage.setItem("isAdmin","true")
-                rerender(true)
-            } else {
-                rerender(false)
-                console.log("Bad")
-                window.sessionStorage.setItem("isAdmin","false")
-                rerender(false)
-            }
             const options = {
                 method: 'GET',
                 url: `https://dev-raqr6vlnie2us8gg.us.auth0.com/api/v2/users/${user.sub}/roles`,
@@ -31,11 +19,21 @@ export function LogInButton({className, rerender}: Props) {
             };
 
             axios.request(options).then(function (response) {
-                console.log(response.data);
+                if (response.data[0].name === "Admin") {
+                    console.log("Good")
+                    console.log(user.sub)
+                    rerender(true)
+
+                    rerender(true)
+                } else {
+                    rerender(false)
+                    console.log("Bad")
+                    rerender(false)
+                }
             }).catch(function (error) {
+                console.log("Error in checking roles:")
                 console.error(error);
             });
-
         }
         },
         [isAuthenticated]

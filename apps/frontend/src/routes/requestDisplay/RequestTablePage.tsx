@@ -361,7 +361,7 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100"
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-[#B8D9D9]"
                                     >
                                         <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">

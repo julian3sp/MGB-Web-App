@@ -71,11 +71,11 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
   };
 
   return (
-      <div className="relative w-[90%] mx-auto m-2">
+      <div className="relative w-[90%] mx-auto ">
         <div className="relative bg-white rounded-3xl shadow-lg transition-all duration-200">
           <input
               type="text"
-              className="w-full rounded-3xl py-2 pl-3 pr-10 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+              className="w-full rounded-3xl py-3 pl-3 pr-10 text-gray-700 shadow-sm font-[poppins] focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
               value={searchTerm}
               onFocus={() => setIsOpen(true)}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -86,12 +86,12 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
               <button
                   type="button"
                   onClick={handleClear}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  className="absolute right-3 font-[poppins] top-1/3 transform-translate-y-1 text-gray-400  hover:text-gray-600 focus:outline-none"
                   aria-label="Clear"
               >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
+                    className="h-5 w-5 "
                     viewBox="0 0 20 20"
                     fill="currentColor"
                 >
@@ -106,7 +106,7 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
 
           {isOpen && (
               <ul
-                  className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-3xl bg-white py-1 text-base shadow-xl sm:text-sm
+                  className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-3xl bg-white py-1 font-[poppins] text-base shadow-xl sm:text-sm
                [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
                   role="listbox"
               >

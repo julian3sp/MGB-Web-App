@@ -170,8 +170,8 @@ export default function RequestListPage() {
                                     className={
                                         `w-full text-left block p-5  rounded-lg border-1 border-[#44A6A6]  ${
                                             selectedRequest?.request_id == res.request_id
-                                                ? 'text-white bg-[#003a96]  font-[Poppins] hover:border-b-5 border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
-                                                : 'text-gray-700 hover:bg-white hover:text-gray-700 border-b-1 hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
+                                                ? 'text-white bg-[#003a96]  font-[Poppins] hover:border-b-5  border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
+                                                : 'text-gray-700 hover:text-gray-700 border-b-1 hover:bg-accent hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
                                         }` /* Put requests in rounded rectangle boxes*/
                                     }
                                     style={{
@@ -311,9 +311,9 @@ export default function RequestListPage() {
                         Request Details:
                     </h3>
                     {selectedRequest ? (
-                        <nav className="shadow-md rounded-sm min-h-220 border-1 border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
-                            <div>
-                                <div className="flex justify-between border-b-5 border-b-[#44A6A6]  bg-[#003A96] rounded-tl-lg rounded-tr-lg border-[#d9d9d9] mb-3 ">
+                        <nav className="shadow-md rounded-sm border-1 bg-white flex-1border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
+                            <div >
+                                <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-lg rounded-tr-lg border-[#d9d9d9] mb-3 ">
                                     <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
@@ -415,8 +415,8 @@ export default function RequestListPage() {
                                         />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 h-120 pl-5 pr-5 mb-10 mt-1">
-                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
+                                <div className="grid grid-cols-2 flex-1 pl-5 pr-5  ">
+                                    <div className={'border-1 border-[#D$D$D$] bg-[#fcfcfc] shadow-sm rounded-lg p-3 m-5 '}>
                                     <div className={'p-2 '}>
                                         {/*Request Type*/}
                                         <h3
@@ -425,7 +425,8 @@ export default function RequestListPage() {
                                         >
                                             Request Type:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mt-1 mb-3 text-blue-gray-900">
+                                        <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white shadow-sm '}>
+                                        <ul className="list-disc ml-4 mt-3 mb-3 text-blue-gray-900">
                                             <p>
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.request_type === 'Sanitation'
@@ -452,8 +453,9 @@ export default function RequestListPage() {
                                                 </p>
                                             </p>
                                         </ul>
+                                        </div>
                                     </div>
-                                    <div className={'p-2   '}>
+                                    <div className={'p-2 pt-4  '}>
                                         {/*Request ID*/}
                                         <h3
                                             className="text-xl font-semibold font-[Poppins] py-1 "
@@ -461,13 +463,15 @@ export default function RequestListPage() {
                                         >
                                             Request ID:{' '}
                                         </h3>
-                                        <ul className="list-disc  ml-6 mb-3 mt-1">
+                                        <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white shadow-sm '}>
+                                        <ul className="list-disc  ml-4 mb-3 mt-3">
                                             <p className={'text-[15pt]'}>
                                                 #{selectedRequest.request_id}
                                             </p>
                                         </ul>
+                                        </div>
                                     </div>
-                                    <div className={'p-2   '}>
+                                    <div className={'p-2 pt-4   '}>
                                         {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                                         <h3
                                             className="text-xl font-semibold font-[Poppins] py-1 "
@@ -475,7 +479,8 @@ export default function RequestListPage() {
                                         >
                                             Request Date:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white shadow-sm '}>
+                                        <ul className="list-disc ml-4 mb-3 mt-3">
                                             <p className={'text-[15pt]'}>
                                                 {new Date(
                                                     selectedRequest.request_date
@@ -490,12 +495,13 @@ export default function RequestListPage() {
                                                 (Request ID: {selectedRequest.request_id})
                                             </p>
                                         </ul>
+                                        </div>
                                     </div>
                                     {editMode ? (
-                                        <div >
+                                        <div className={'pt-2'}>
                                             {/* Priority Edit */}
                                             <div>
-                                                <h3 className="text-xl font-semibold font-[Poppins] py-1" style={{ color: '#003A96' }}>
+                                                <h3 className="text-xl font-semibold font-[Poppins]  ml-2 pt-3  " style={{ color: '#003A96' }}>
                                                     Priority:
                                                 </h3>
                                                 <div className="flex flex-row gap-4 items-center mt-1 mb-3">
@@ -516,11 +522,11 @@ export default function RequestListPage() {
                                             </div>
 
                                             {/* Status Edit */}
-                                            <div>
-                                                <h3 className="text-xl font-semibold font-[Poppins] py-1" style={{ color: '#003A96' }}>
+                                            <div className={'py-3'}>
+                                                <h3 className="text-xl font-semibold font-[Poppins] ml-2 pt-1" style={{ color: '#003A96' }}>
                                                     Status:
                                                 </h3>
-                                                <div className="flex flex-row gap-4 items-center mt-1 mb-3">
+                                                <div className="flex flex-row gap-4 items-center  mb-3">
                                                     <ServiceComponentDropdown
                                                         value={editStatus}
                                                         setState={setEditStatus}
@@ -535,43 +541,49 @@ export default function RequestListPage() {
                                     ) : (
                                         <>
                                             {/* Priority Display */}
-                                            <div>
+                                            <div className={'py-4'}>
                                                 <h3 className="text-xl font-semibold font-[Poppins] py-1 pl-2" style={{ color: '#003A96' }}>
                                                     Priority:
                                                 </h3>
-                                                <ul className="list-disc ml-6 mb-3 mt-1 pl-2">
+                                                <div className={'border-1 rounded-lg bg-white border-[#D$D$D$] shadow-sm ml-2 mr-2 '}>
+                                                <ul className="list-disc ml-4 mb-3 mt-3 ">
                                                     <p className="text-[15pt]">{selectedRequest.priority}</p>
                                                 </ul>
+                                                </div>
                                             </div>
 
                                             {/* Status Display */}
-                                            <div>
-                                                <h3 className="text-xl font-semibold font-[Poppins] py-0 pl-2" style={{ color: '#003A96' }}>
+                                            <div className={'py-3'}>
+                                                <h3 className="text-xl font-semibold font-[Poppins]  pl-2" style={{ color: '#003A96' }}>
                                                     Status:
                                                 </h3>
-                                                <ul className="list-disc ml-6 mb-3 mt-1 pl-2">
+                                                <div className={'border-1 rounded-lg bg-white border-[#D$D$D$] mb-2 shadow-sm ml-2 mr-2 '}>
+                                                <ul className="list-disc ml-4 mb-3 mt-3 ">
                                                     <p className="text-[15pt]">{selectedRequest.status}</p>
                                                 </ul>
+                                                </div>
                                             </div>
                                         </>
                                     )}
                                     </div>
 <div>
-                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
-                                    <div>
+                                    <div className={'border-1 border-[#D$D$D$] bg-[#fcfcfc] shadow-sm rounded-lg p-3 m-5'}>
+                                    <div className={'p-2'}>
                                             {/*Name (Employee ID: #)*/}
                                             <h3
-                                                className="text-xl pl-2 font-semibold font-[Poppins] py-1  "
+                                                className="text-xl  font-semibold font-[Poppins] py-1  "
                                                 style={{ color: '#003A96' }}
                                             >
                                                 Name:{' '}
                                             </h3>
-                                            <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <div className={'border-1 rounded-lg bg-white border-[#D$D$D$] mb-2 shadow-sm  mr-2 '}>
+                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.name} (Employee ID:{' '}
                                                     {selectedRequest.employee_id})
                                                 </p>
                                             </ul>
+                                        </div>
                                         </div>
                                     <div className={'p-2   '}>
 
@@ -582,11 +594,14 @@ export default function RequestListPage() {
                                         >
                                             Location:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <div className={'border-1 rounded-lg bg-white border-[#D$D$D$] mb-2 shadow-sm  mr-2 '}>
+
+                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
                                             <p className={'text-[15pt]'}>
                                                 {selectedRequest.location}
                                             </p>
                                         </ul>
+                                        </div>
                                     </div>
                                     <div className={'p-2   '}>
                                         {/*Department*/}
@@ -596,14 +611,17 @@ export default function RequestListPage() {
                                         >
                                             Department:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <div className={'border-1 rounded-lg bg-white border-[#D$D$D$] mb-2 shadow-sm  mr-2 '}>
+
+                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
                                             <p className={'text-[15pt]'}>
                                                 {selectedRequest.department}
                                             </p>
                                         </ul>
+                                        </div>
                                     </div>
                                     </div>
-                                    <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg p-3 m-5'}>
+                                    <div className={'border-1 border-[#D$D$D$] bg-[#fcfcfc] shadow-sm rounded-lg p-3 m-5'}>
                                         <div className={'p-2   '}>
                                             {/*Request Details*/}
                                             <h3
@@ -612,26 +630,26 @@ export default function RequestListPage() {
                                             >
                                                 Request Details:{' '}
                                             </h3>
-                                            <ul className="list-disc ml-6 mb-3 mt-1">
+                                            <ul className="list-disc  mb-3 mt-1">
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.sanitation?.cleaningType && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
                                                             <span className="">Cleaning Type:</span>{' '}
                                                             {
                                                                 selectedRequest.sanitation.cleaningType
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.language?.targetLanguage && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm  mr-2  p-3  '}>
                                                             <span className="">Target Language:</span>{' '}
                                                             {
                                                                 selectedRequest.language.targetLanguage
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.audioVisual?.accommodationType && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$] shadow-sm bg-white  mr-2 p-3  '}>
                                                         <span className="">
                                                             Accommodation Type:
                                                         </span>{' '}
@@ -639,11 +657,12 @@ export default function RequestListPage() {
                                                                 selectedRequest.audioVisual
                                                                     .accommodationType
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.transportation
                                                         ?.transportationType && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
                                                         <span className="">
                                                             Transportation Type:
                                                         </span>{' '}
@@ -651,43 +670,48 @@ export default function RequestListPage() {
                                                                 selectedRequest.transportation
                                                                     .transportationType
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.security?.accessZones && (
-                                                        <>
-                                                            <span className="">Access Zones:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$] shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Access Zones:</span>{' '}
                                                             {selectedRequest.security.accessZones}{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.medicalDevice?.device && (
-                                                        <>
-                                                            <span className="">Medical Device:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Medical Device:</span>{' '}
                                                             {selectedRequest.medicalDevice.device}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.facilities?.maintenanceType && (
-                                                        <>
-                                                            <span className="">Maintenance Type:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Maintenance Type:</span>{' '}
                                                             {selectedRequest.facilities.maintenanceType}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     <br />
                                                     {selectedRequest.request_type === 'Sanitation' && (
-                                                        <>
-                                                            <span className="">Contaminant:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]   shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Contaminant:</span>{' '}
                                                             {selectedRequest.sanitation?.contaminant?.trim()
                                                                 ? selectedRequest.sanitation.contaminant
                                                                 : 'N/A'}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.language?.sourceLanguage && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$] shadow-sm bg-white  mr-2 p-3  '}>
                                                             <span className="">Source Language:</span>{' '}
                                                             {selectedRequest.language.sourceLanguage}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.request_type === 'AudioVisual' && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
                                                         <span className="">
                                                             Accommodation Details:
                                                         </span>{' '}
@@ -695,11 +719,12 @@ export default function RequestListPage() {
                                                                 ? selectedRequest.audioVisual
                                                                     .accommodationDetails
                                                                 : 'N/A'}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.transportation
                                                         ?.transportationDestination && (
-                                                        <>
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
                                                         <span className="">
                                                             Transportation Destination:
                                                         </span>{' '}
@@ -707,31 +732,34 @@ export default function RequestListPage() {
                                                                 selectedRequest.transportation
                                                                     .transportationDestination
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.security?.securityIssue && (
-                                                        <>
-                                                            <span className="">Security Issue:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Security Issue:</span>{' '}
                                                             {
                                                                 selectedRequest.security.securityIssue
                                                             }{' '}
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.medicalDevice
                                                         ?.operatorRequired && (
-                                                        <>
-                                                            <span className="">Operator Required?</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Operator Required?</span>{' '}
                                                             {
                                                                 selectedRequest.medicalDevice
                                                                     .operatorRequired
                                                             }
-                                                        </>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.facilities?.equipmentType && (
-                                                        <>
-                                                            <span className="">Equipment Type:</span>{' '}
+                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+
+                                                        <span className="">Equipment Type:</span>{' '}
                                                             {selectedRequest.facilities.equipmentType}
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </p>
                                             </ul>
@@ -739,12 +767,8 @@ export default function RequestListPage() {
                                     </div>
                                 </div>
 
-
-
-
-
-                                </div>
-                                <div className={'border-1 border-[#44A6A6] shadow-sm rounded-lg ml-10 mr-10 mt-15 p-3 m-5'}>
+                                </div >
+                                <div className={'border-1 border-[#D$D$D$] bg-[#fcfcfc]  shadow-sm rounded-lg ml-10 mr-10 mb-10 mt-5 p-3 m-5'}>
                                     {/*Additional comments*/}
                                     <h3
                                         className="text-xl font-semibold p-3 font-[Poppins] py-1 "
@@ -753,7 +777,9 @@ export default function RequestListPage() {
                                         Additional Comments:{' '}
                                     </h3>
                                     <div >
-                                    <ul className="list-disc ml-3 mb-3 mt-3">
+                                    <ul className="list-disc ml-3 mb-10 mt-3">
+                                        <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white mb-2 shadow-sm  mr-2 p-3  '}>
+
                                         <p className={'text-[15pt]'}>
                                             {selectedRequest.additional_comments?.trim() ? (
                                                 <p>{selectedRequest.additional_comments}</p>
@@ -761,6 +787,7 @@ export default function RequestListPage() {
                                                 'N/A'
                                             )}
                                         </p>
+                                        </div>
                                     </ul>
                                     </div>
                                 </div>

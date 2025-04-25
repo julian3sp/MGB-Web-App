@@ -365,22 +365,45 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         <div className="flex h-[95vh]">
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
+                <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
+                    <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
+                    {nodeInfo ? (
+                        <>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">ID:</span> {nodeInfo.id}
+                            </p>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">Longitude:</span>{' '}
+                                {nodeInfo.x !== undefined && nodeInfo.x !== null ? nodeInfo.x.toFixed(6) : 'N/A'}
+                            </p>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">Latitude:</span>{' '}
+                                {nodeInfo.y !== undefined && nodeInfo.y !== null ? nodeInfo.y.toFixed(6) : 'N/A'}
+                            </p>
+                            <button
+                                className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3"
+                                onClick={() => setNodesToRemove((prev) => [...prev, nodeInfo])}
+                            >
+                                Remove Node
+                            </button>
+                        </>
+                    ) : (
+                        <div>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">ID:</span>
+                            </p>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">Longitude:</span>
+                            </p>
+                            <p className="text-black text-lg">
+                                <span className="font-bold">Latitude:</span>
+                            </p>
+                        </div>
+                    )}
 
-                {nodeInfo && (
-                    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
-                        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
-                            Remove Node
-                        </button>
-                    </div>
-                )}
-
-                <div className="w-full p-5 flex flex-col gap-4">
-                    <ImportAllNodesAndEdges />
                 </div>
+
+
                 <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>

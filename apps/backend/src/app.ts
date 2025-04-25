@@ -22,6 +22,7 @@ import {
 import {
     deleteAllNodes,
     deleteSelectedNodes,
+    editNodes,
     getAllNodes,
     getNode,
     makeManyNodes,
@@ -57,6 +58,7 @@ const appRouter = t.router({
     makeManyNodes: makeManyNodes,
     getNode: getNode,
     getAllNodes: getAllNodes,
+    editNodes: editNodes,
     deleteAllNodes: deleteAllNodes,
     deleteSelectedNodes: deleteSelectedNodes,
     makeEdge: makeEdge,

@@ -6,10 +6,11 @@ import {motion} from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
-
+import Popup from "../components/ui/Popup.tsx"
 gsap.registerPlugin(ScrollTrigger);
 
 export function WelcomePage() {
+    const [tab, setTab] = React.useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -39,8 +40,8 @@ export function WelcomePage() {
     // if (textRef.current) {
     //   gsap.from(textRef.current, {
     //     opacity: 0,
-    //     y: 20, 
-    //     duration: 1, 
+    //     y: 20,
+    //     duration: 1,
     //     ease: "power2.out",
     //     scrollTrigger: {
     //       trigger: textRef.current,
@@ -56,6 +57,7 @@ export function WelcomePage() {
 
   return (
     <div className="flex flex-col">
+        <Popup message="This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI" visible={visible} setVisible={setVisible} />
       {/* pinned section */}
       <div ref={containerRef} className="min-h-screen">
         <div
@@ -75,7 +77,7 @@ export function WelcomePage() {
       </div>
 
       {/* centered text */}
-      <motion.div  
+      <motion.div
         className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

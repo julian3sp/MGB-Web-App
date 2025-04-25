@@ -25,9 +25,25 @@ function InnerApp() {
     const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
     const navigate = useNavigate();
     const location = useLocation();
+    
+    // Track if this is the user's first visit to the site in this session
+    const [isFirstVisit, setIsFirstVisit] = React.useState(true);
+
+    // Effect to handle first visit - show waiting screen once
+    useEffect(() => {
+        // Check if this is the first page load
+        const hasVisited = sessionStorage.getItem('hasVisitedBefore');
+        
+        if (!hasVisited && isFirstVisit) {
+            // First visit - go to waiting screen
+            navigate('/waiting');
+            setIsFirstVisit(false);
+            // Mark that they've visited before during this session
+            sessionStorage.setItem('hasVisitedBefore', 'true');
+        }
+    }, [navigate, isFirstVisit]);
 
     const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-
     const inactive = 5 * 60 * 1000;
 
     const reset = () => {
@@ -45,7 +61,7 @@ function InnerApp() {
         const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
 
         events.forEach(event => window.addEventListener(event, reset)); // every event that restarts the timer
-        // any user interaction resets the inactivity timer
+        // any user interaction resets the inactivity
 
         reset(); // start the timer when the page loads
 
@@ -77,9 +93,8 @@ function InnerApp() {
             )}
             <Routes>
                 <Route path='/waiting' element={<WaitingScreen />} />
-                <Route path='/' element={<Navigate to="/waiting" replace />} />
+                <Route path='/' element={<WelcomePage />} />
                 <Route path="/navigation" element={<NavigationPage />} />
-                <Route path="/welcome" element={<WelcomePage />} />
                 <Route path="/directory" element={<DepartmentDirectory />} />
                 <Route path="/directory/*" element={<DepartmentDirectory />} />
                 <Route path="/aboutus" element={<AboutUs />} />

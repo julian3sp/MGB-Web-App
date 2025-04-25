@@ -14,7 +14,6 @@ import DirectoryPage from './routes/departmentDirectory/DirectoryPage.tsx';
 import RequestTablePage from './routes/requestDisplay/RequestTablePage.tsx'
 import {useAuth0} from "@auth0/auth0-react";
 import AboutUs from './routes/AboutUs.tsx';
-
 import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
@@ -23,7 +22,8 @@ function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
     const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
     const [queryClient] = useState(() => new QueryClient());
-    const {loginWithRedirect, isAuthenticated, isLoading} = useAuth0();
+    const {isAuthenticated, isLoading} = useAuth0();
+    const [isAdmin, setAdmin] = React.useState<boolean>(false);
     const [trpcClient] = useState(() =>
         trpc.createClient({
             links: [
@@ -53,24 +53,24 @@ function App() {
                 <Router>
                     <div className='min-h-screen'>
 
-                        <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
-                        <Routes>
-                            <Route path="/navigation" element={<NavigationPage />} />
-                            <Route path="/" element={<WelcomePage />} />
-                            <Route path="/directory" element={<DepartmentDirectory />} />
-                            <Route path="/directory/*" element={<DepartmentDirectory />} />
-                            <Route path="/aboutus" element={<AboutUs />} />
-                            <Route element={<PrivateRoutes />}>
-                                <Route path="/services" element={<ServiceRequestPage />} />
-                                <Route path="/admin/directory" element={<DirectoryPage />} />
-                                <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
-                                <Route path="requests" element={<RequestPage />}>
-                                    <Route index element={<Navigate to="table" replace />} />
-                                    <Route path="table" element={<RequestTablePage />} />
-                                    <Route path="list" element={<RequestListPage />} />
-                                </Route>
+                    <NavBar isAdmin={isAdmin} setAdmin={setAdmin} />
+                    <Routes>
+                        <Route path="/navigation" element={<NavigationPage />} />
+                        <Route path="/" element={<WelcomePage />} />
+                        <Route path="/directory" element={<DepartmentDirectory />} />
+                        <Route path="/directory/*" element={<DepartmentDirectory />} />
+                        <Route path="/aboutus" element={<AboutUs />} />
+                        <Route element={<PrivateRoutes />}>
+                            <Route path="/services" element={<ServiceRequestPage />} />
+                            <Route path="/admin/directory" element={<DirectoryPage />} />
+                            <Route path="/editor" element={<MapEditor onMapReady={() => {}}/>} />
+                            <Route path="requests" element={<RequestPage />}>
+                                <Route index element={<Navigate to="table" replace />} />
+                                <Route path="table" element={<RequestTablePage />} />
+                                <Route path="list" element={<RequestListPage />} />
                             </Route>
-                        </Routes>
+                        </Route>
+                    </Routes>
                     </div>
 
                     <FooterBar />

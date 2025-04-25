@@ -2,7 +2,7 @@ import {Edge, Node} from "@/components/navigation/pathfinding/Graph.ts";
 import {graph} from "@/components/map/GraphObject.ts";
 
 // Store animation state and current path references
-let currentAnimationState: { intervalId: number, progress: number } | null = null;
+let animationIntervalId: number | null = null;
 let currentBasePath: google.maps.Polyline | null = null;
 let currentGuidePath: google.maps.Polyline | null = null;
 
@@ -70,29 +70,30 @@ export function drawPath(map: google.maps.Map, nodes: Node[]): google.maps.Polyl
     });
     currentGuidePath.setMap(map);
 
-    // Start animation
-    animatePath(currentGuidePath, path);
+    // Start infinite animation
+    animatePathInfinite(currentGuidePath, path);
 
     return currentGuidePath;
 }
 
-function animatePath(
+function animatePathInfinite(
     line: google.maps.Polyline,
     fullPath: google.maps.LatLngLiteral[]
 ) {
     // Clear any existing animation
-    if (currentAnimationState) {
-        clearInterval(currentAnimationState.intervalId);
+    if (animationIntervalId !== null) {
+        clearInterval(animationIntervalId);
+        animationIntervalId = null;
     }
 
-    const duration = 3000; // 3 seconds for full animation
+    const duration = 2000; // 2 seconds for full animation
     const steps = 100;
     const stepTime = duration / steps;
     let step = 0;
 
-    const intervalId = window.setInterval(() => {
-        step = (step + 1) % (steps + 1); // Go slightly beyond to ensure completion
-        const progress = Math.min(1, step / steps); // Cap at 1
+    const animateStep = () => {
+        step = (step + 1) % (steps + 1); // Loop back after completion
+        const progress = step / steps;
 
         // Calculate how far along the full path we are
         const totalDistance = getPathLength(fullPath);
@@ -110,7 +111,9 @@ function animatePath(
             accumulatedDistance += segmentDistance;
             currentSegmentStart = fullPath[segmentIndex];
             segmentIndex++;
-            currentSegmentEnd = fullPath[segmentIndex];
+            if (segmentIndex < fullPath.length) {
+                currentSegmentEnd = fullPath[segmentIndex];
+            }
         }
 
         // Calculate position within current segment
@@ -129,20 +132,17 @@ function animatePath(
         animatedPath.push({ lat, lng });
 
         line.setPath(animatedPath);
+    };
 
-        // Store progress
-        currentAnimationState = { intervalId, progress };
-
-        // Clean up when animation completes
-        if (progress >= 1) {
-            clearInterval(intervalId);
-            currentAnimationState = null;
-        }
-    }, stepTime);
+    // Start the animation
+    animationIntervalId = window.setInterval(animateStep, stepTime);
+    
+    // Run first frame immediately
+    animateStep();
 }
 
 // Helper function to calculate distance between two points
-function getDistance(p1: google.maps.LatLngLiteral, p2: google.maps.LatLngLiteral) {
+function getDistance(p1: google.maps.LatLngLiteral, p2: google.maps.LatLngLiteral): number {
     const R = 6371e3; // Earth radius in meters
     const φ1 = p1.lat * Math.PI/180;
     const φ2 = p2.lat * Math.PI/180;
@@ -158,7 +158,7 @@ function getDistance(p1: google.maps.LatLngLiteral, p2: google.maps.LatLngLitera
 }
 
 // Helper function to calculate total path length
-function getPathLength(path: google.maps.LatLngLiteral[]) {
+function getPathLength(path: google.maps.LatLngLiteral[]): number {
     let length = 0;
     for (let i = 1; i < path.length; i++) {
         length += getDistance(path[i-1], path[i]);
@@ -167,9 +167,9 @@ function getPathLength(path: google.maps.LatLngLiteral[]) {
 }
 
 export function clearCurrentPath() {
-    if (currentAnimationState) {
-        clearInterval(currentAnimationState.intervalId);
-        currentAnimationState = null;
+    if (animationIntervalId !== null) {
+        clearInterval(animationIntervalId);
+        animationIntervalId = null;
     }
     if (currentBasePath) {
         currentBasePath.setMap(null);

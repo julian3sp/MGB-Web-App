@@ -171,7 +171,7 @@ export default function RequestListPage() {
                                         `w-full text-left block p-5  rounded-lg border-1 border-[#44A6A6]  ${
                                             selectedRequest?.request_id == res.request_id
                                                 ? 'text-white bg-[#003a96]  font-[Poppins] hover:border-b-5  border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
-                                                : 'text-gray-700 hover:text-gray-700 border-b-1 hover:bg-accent hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
+                                                : 'text-gray-700 hover:text-gray-700 border-b-1  hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
                                         }` /* Put requests in rounded rectangle boxes*/
                                     }
                                     style={{
@@ -311,7 +311,7 @@ export default function RequestListPage() {
                         Request Details:
                     </h3>
                     {selectedRequest ? (
-                        <nav className="shadow-md rounded-sm border-1 bg-white flex-1border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
+                        <nav className="shadow-md rounded-sm border-1 bg-white flex-1 border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
                             <div >
                                 <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-lg rounded-tr-lg border-[#d9d9d9] mb-3 ">
                                     <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
@@ -778,10 +778,10 @@ export default function RequestListPage() {
                                         Additional Comments:{' '}
                                     </h3>
                                     <div >
-                                    <ul className="list-disc ml-3 mb-10 mt-3">
+                                    <ul className="list-disc ml-2 mb-10 mt-3">
                                         <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white mb-2 shadow-sm  mr-2 p-3  '}>
 
-                                        <p className={'text-[15pt]'}>
+                                        <p className={'text-[15pt] ml-1'}>
                                             {selectedRequest.additional_comments?.trim() ? (
                                                 <p>{selectedRequest.additional_comments}</p>
                                             ) : (

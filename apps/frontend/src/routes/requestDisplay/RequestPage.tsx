@@ -90,9 +90,9 @@ export default function RequestPage() {
                 className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
-                <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
+                <div className="flex items-center gap-4 justify-between px-[16px] mt-1 pb-2 pt-1 items-end">
                     <h1
-                        className="text-4xl font-bold font-[Poppins]  text-left"
+                        className="text-4xl font-bold font-[Poppins] flex-start  "
                         style={{ color: '#003A96' }}
                     >
                         Service Requests:

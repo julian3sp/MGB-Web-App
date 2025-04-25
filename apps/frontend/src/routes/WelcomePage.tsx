@@ -31,20 +31,6 @@ export function WelcomePage() {
   const bannerControls = useAnimationControls();
 
   useEffect(() => {
-    const sequence = async () => {
-      while (true) {
-        await bannerControls.start({
-          x: "-100vw",
-          transition: { duration: 13, ease: "linear" }
-        });
-        // Reset position instantly (no animation)
-        bannerControls.set({ x: "100vw" });
-      }
-    };
-    sequence();
-  }, [bannerControls]);
-
-  useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
       scrollTrigger: { // animations will play as the user scroll
         trigger: containerRef.current, // the element that triggers the animation, when this element enters the viewport, the animation starts
@@ -72,16 +58,6 @@ export function WelcomePage() {
 
   return (
     <div className="flex flex-col">
-      <div className="w-full bg-white overflow-hidden mb-5">
-        <motion.div
-          className="whitespace-nowrap text-[#003a96] text-center font-bold font-lg text-sm absolute"
-          animate={bannerControls}
-          initial={{ x: "100vw" }}
-          style={{ right: 0 }}
-        >
-          This website is a term project exercise for WPI CS 3733 Software Engineering (Prof. Wong) and is not to be confused with the actual Brigham & Women's Hospital website.
-        </motion.div>
-      </div>
       {/* pinned section */}
       <div ref={containerRef}>
         <div

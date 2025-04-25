@@ -412,6 +412,7 @@ export default function RequestListPage() {
                                                 }
                                             }}
                                             tooltip={'Delete Service Request'}
+                                            blue={false}
                                         />
                                     </div>
                                 </div>

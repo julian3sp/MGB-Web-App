@@ -656,7 +656,6 @@ export default function RequestTablePage() {
                                                         }
                                                     }}
                                                     tooltip={'Delete Service Request'}
-                                                    blue={true}
                                                 />
                                             </div>
                                         </td>

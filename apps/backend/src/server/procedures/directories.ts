@@ -1,7 +1,6 @@
 import { publicProcedure } from '../trpc';
 import client from '../../bin/prisma-client';
 import { z } from 'zod';
-import { trpc } from '../trpc.ts';
 import { sleep } from 'react-query/types/core/utils';
 
 export const getDirectories = publicProcedure.query(async () => {
@@ -44,4 +43,9 @@ export const makeDirectories = publicProcedure
 export const deleteAllDirectories = publicProcedure.mutation(async () => {
     await client.directory.deleteMany();
     await client.$executeRaw`ALTER SEQUENCE "directory_id_seq" RESTART WITH 1`;
+});
+
+export const getAllNamesArray = publicProcedure.query(async () => {
+    const array_of_names = await client.directory.findMany({ select: { name: true } });
+    return array_of_names;
 });

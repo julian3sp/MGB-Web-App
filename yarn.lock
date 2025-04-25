@@ -5485,6 +5485,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.2.0"
     eslint-plugin-react-refresh: "npm:^0.4.19"
     framer-motion: "npm:^12.6.3"
+    gsap: "npm:^3.0.0"
     localforage: "npm:^1.10.0"
     lottie-web: "npm:^5.12.2"
     lucide-react: "npm:^0.503.0"
@@ -5736,6 +5737,13 @@ __metadata:
   version: 1.4.0
   resolution: "graphemer@npm:1.4.0"
   checksum: 10/6dd60dba97007b21e3a829fab3f771803cc1292977fe610e240ea72afd67e5690ac9eeaafc4a99710e78962e5936ab5a460787c2a1180f1cb0ccfac37d29f897
+  languageName: node
+  linkType: hard
+
+"gsap@npm:^3.0.0, gsap@npm:^3.12.7":
+  version: 3.12.7
+  resolution: "gsap@npm:3.12.7"
+  checksum: 10/60b1583c2482b753d179765a91e2f6fb3bb814e62a0c9710f02b842abc3cdc20604ab0b35da7e1ea3b0349f7df70bea1e4fddd4909631bde6a9b92632163812f
   languageName: node
   linkType: hard
 
@@ -7849,6 +7857,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-intersection-observer@npm:^9.16.0":
+  version: 9.16.0
+  resolution: "react-intersection-observer@npm:9.16.0"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10/ded14524d9311cfb9dd9e65eb04748d07a1868f8c40dd628bec8a8474d43ee2373604fdc1e6a7d468a8e2e680638e41b91048ab9669555d50217c5c0c51247e0
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1, react-is@npm:^16.3.2":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -8620,6 +8641,7 @@ __metadata:
     dotenv-cli: "npm:^7.4.4"
     eslint: "npm:^9.23.0"
     eslint-config-custom: "workspace:*"
+    gsap: "npm:^3.12.7"
     husky: "npm:^9.1.7"
     lucide-react: "npm:^0.503.0"
     motion: "npm:^12.6.3"
@@ -8628,6 +8650,7 @@ __metadata:
     prettier-config-custom: "workspace:*"
     react: "npm:latest"
     react-dom: "npm:latest"
+    react-intersection-observer: "npm:^9.16.0"
     tailwind-merge: "npm:^3.2.0"
     three: "npm:^0.175.0"
     ts-config-custom: "workspace:*"

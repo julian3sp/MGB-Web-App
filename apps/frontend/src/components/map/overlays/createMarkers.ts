@@ -28,10 +28,10 @@ export function createMarkers(
             position: coord,
             map: map,
             title: node.id.toString(),
-            draggable: true,
             icon: {
                 url: iconUrl,
                 scaledSize: scaledSize,
+
             },
             zIndex
         });

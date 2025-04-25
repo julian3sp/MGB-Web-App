@@ -10,7 +10,7 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({ map, selectedDestination })
     if (map && selectedDestination) {
       map.setCenter(selectedDestination.location);
       const currentZoom = map.getZoom() || 0;
-      map.setZoom(Math.min(currentZoom + 1, 20));
+      map.setZoom(Math.min(currentZoom + 5, 20));
     }
   };
 

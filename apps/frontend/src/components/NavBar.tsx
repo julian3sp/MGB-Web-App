@@ -84,7 +84,7 @@ export default function NavBar({ isAdmin,  setAdmin }: Props) {
                 </div>
             </div>
             <LogInButton className= "text-base text-black" rerender={setAdmin}/>
-            <LogOutButton className="text-base text-black"/>
+            <LogOutButton className="text-base text-black" rerender={setAdmin}/>
         </nav>
     )
 }

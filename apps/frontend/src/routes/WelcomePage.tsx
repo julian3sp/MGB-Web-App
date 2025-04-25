@@ -43,7 +43,7 @@ export function WelcomePage() {
       // shrink the height
       .to(wrapperRef.current, { height: "60vh", duration: 1 }, "<+=0.2");
 
-      updatePadding();
+    updatePadding();
 
     return () => ScrollTrigger.getAll().forEach(t => t.kill());
   }, []);

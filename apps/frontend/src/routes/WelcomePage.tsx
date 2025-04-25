@@ -50,7 +50,6 @@ export function WelcomePage() {
 
   return (
     <div className="flex flex-col">
-        <Popup message="This web application is strictly a CS3733-D25 Software Engineering class project for Prof. Wilson Wong at WPI" visible={visible} setVisible={setVisible} />
       {/* pinned section */}
       <div ref={containerRef} className="min-h-screen">
         <div

@@ -47,7 +47,7 @@ export function WelcomePage() {
     // shrink the wrapper
     tl.to(wrapperRef.current, { width: "85%", duration: 1 })
       // round the corners of the video
-      .to(videoRef.current, { borderRadius: "20px", duration: 0.5 }, "<")
+      .to(videoRef.current, { borderRadius: "50px", duration: 0.5 }, "<")
       // shrink the height
       .to(wrapperRef.current, { height: "60vh", duration: 1 }, "<+=0.2");
 

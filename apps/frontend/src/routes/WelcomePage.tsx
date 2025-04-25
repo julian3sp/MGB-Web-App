@@ -10,17 +10,25 @@ import Popup from "../components/ui/Popup.tsx"
 gsap.registerPlugin(ScrollTrigger);
 
 export function WelcomePage() {
-    const [tab, setTab] = React.useState<string>("");
+  const [tab, setTab] = React.useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [sidePadding, setSidePadding] = useState(0);
 
+  const calculatePadding = () => {
+    const viewportWidth = window.innerWidth; // get the width of the viewport
+    const wrapperWidth = viewportWidth * 0.85; // get the width of the wrapper
+    const padding = (viewportWidth - wrapperWidth) / 2; // calculate the padding for each side
+    return padding;
+  };
+  
+
   const updatePadding = () => {
-    if (!wrapperRef.current) return;
-    const leftPx = wrapperRef.current.getBoundingClientRect().left; // get the left position of the wrapper each frame
-    setSidePadding(leftPx); // store that in react state and apply it vid inline style around the carousel 
-  }
+    const padding = calculatePadding();
+    setSidePadding(padding);
+  };
+  
 
   useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
@@ -82,12 +90,13 @@ export function WelcomePage() {
             Mass General Brigham
           </span>
         </h1>
-        <p className="text-lg text-gray-700 max-w-2xl mt-4">
+        <p className="text-xl text-gray-700 max-w-3xl mt-4">
           Our intuitive pathfinding algorithm helps you find your destination within the hospital quickly and efficiently.
           No more getting lost in complex hospital corridors!
         </p>
       </motion.div>
-      <AppleCardsCarouselDemo/>
+      <AppleCardsCarouselDemo offsetX={sidePadding} offsetRight={sidePadding}/>
+      {/* initial state: carousel is offset left side padding */}
     </div>
   );
 }

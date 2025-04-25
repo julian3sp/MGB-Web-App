@@ -10,10 +10,12 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../../../hooks/use-outside-click";
 
-interface CarouselProps {
+interface CarouselProps { // update the props
   items: JSX.Element[];
   initialScroll?: number;
   playAnimation: boolean;
+  offsetX?: number;
+  offsetRight?: number;
 }
 
 type Card = {
@@ -46,7 +48,7 @@ const cardVariants = {
 };
 
 
-export const Carousel = ({ items, initialScroll = 0, playAnimation }: CarouselProps) => {
+export const Carousel = ({ items, initialScroll = 0, playAnimation, offsetX = 0, offsetRight = 0 }: CarouselProps) => {
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(true);
@@ -113,11 +115,14 @@ export const Carousel = ({ items, initialScroll = 0, playAnimation }: CarouselPr
           ></div>
 
           <div
-            className={cn(
-              "flex flex-row justify-start gap-4 pl-4",
-              "mx-auto",
-            )}
+            className="flex flex-row justify-start gap-4"
+            style={{
+              transform: `translateX(${offsetX}px)`,
+              transition: "transform 0.3s ease",
+              paddingRight: `${offsetRight}px`
+            }}
           >
+
             {items.map((item, index) => (
               <motion.div
                 key={"card" + index}
@@ -254,7 +259,7 @@ export const Card = ({
         {/* 2) Hover-GIF layer (initially hidden) */}
         <div
           className="absolute inset-0 bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{backgroundImage: `url(${card.hoverSrc})`}}
+          style={{ backgroundImage: `url(${card.hoverSrc})` }}
         />
 
         {/* 3) Dark overlay on hover */}

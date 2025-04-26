@@ -2,25 +2,34 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import {motion} from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
+import { Link } from "react-router-dom";
 import Popup from "../components/ui/Popup.tsx"
 gsap.registerPlugin(ScrollTrigger);
 
 export function WelcomePage() {
-    const [tab, setTab] = React.useState<string>("");
+  const [tab, setTab] = React.useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [sidePadding, setSidePadding] = useState(0);
 
+  const calculatePadding = () => {
+    const viewportWidth = window.innerWidth; // get the width of the viewport
+    const wrapperWidth = viewportWidth * 0.85; // get the width of the wrapper
+    const padding = (viewportWidth - wrapperWidth) / 2; // calculate the padding for each side
+    return padding;
+  };
+
   const updatePadding = () => {
-    if (!wrapperRef.current) return;
-    const leftPx = wrapperRef.current.getBoundingClientRect().left; // get the left position of the wrapper each frame
-    setSidePadding(leftPx); // store that in react state and apply it vid inline style around the carousel 
-  }
+    const padding = calculatePadding();
+    setSidePadding(padding);
+  };
+
+  const bannerControls = useAnimationControls();
 
   useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
@@ -31,7 +40,7 @@ export function WelcomePage() {
         pin: true, // pin the trigger element in place while the animation is playing
         scrub: 0.5, // smooth scrubbing, takes 0.5 seconds to catch up to the scroll position
         pinSpacing: false, // prevents the pinning element from adding extra space to the page
-        onUpdate: updatePadding, 
+        onUpdate: updatePadding,
         onRefresh: updatePadding, // update the padding when the page is resized
       }
     });
@@ -39,7 +48,7 @@ export function WelcomePage() {
     // shrink the wrapper
     tl.to(wrapperRef.current, { width: "85%", duration: 1 })
       // round the corners of the video
-      .to(videoRef.current, { borderRadius: "20px", duration: 0.5 }, "<")
+      .to(videoRef.current, { borderRadius: "50px", duration: 0.5 }, "<")
       // shrink the height
       .to(wrapperRef.current, { height: "60vh", duration: 1 }, "<+=0.2");
 
@@ -51,7 +60,7 @@ export function WelcomePage() {
   return (
     <div className="flex flex-col">
       {/* pinned section */}
-      <div ref={containerRef} className="min-h-screen">
+      <div ref={containerRef}>
         <div
           ref={wrapperRef}
           className="w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
@@ -70,7 +79,7 @@ export function WelcomePage() {
 
       {/* centered text */}
       <motion.div
-        className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
+        className="w-full flex flex-col items-center justify-center px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, amount: 0.5 }}
@@ -82,12 +91,17 @@ export function WelcomePage() {
             Mass General Brigham
           </span>
         </h1>
-        <p className="text-lg text-gray-700 max-w-2xl mt-4">
+        <p className="text-xl text-gray-700 max-w-3xl mt-4">
           Our intuitive pathfinding algorithm helps you find your destination within the hospital quickly and efficiently.
           No more getting lost in complex hospital corridors!
         </p>
+        <Link to="/navigation" className="w-[10%] h-15 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-3xl mt-5 flex items-center justify-center cursor-pointer z-10">
+          <span className="font-bold text-white text-xl">Try now!</span>
+        </Link>
+
       </motion.div>
-      <AppleCardsCarouselDemo/>
+      <AppleCardsCarouselDemo offsetX={sidePadding} offsetRight={sidePadding} />
+      {/* initial state: carousel is offset left side padding */}
     </div>
   );
 }

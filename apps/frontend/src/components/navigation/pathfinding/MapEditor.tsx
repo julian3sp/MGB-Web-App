@@ -37,6 +37,9 @@ interface MapEditorProps {
 
 type GMapsListener = google.maps.MapsEventListener;
 
+const markerLibRef = useRef<google.maps.MarkerLibrary | null>(null);
+
+
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -65,8 +68,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [edgeMode, setEdgeMode] = useState(false);      // on/off
     const [edgeStart, setEdgeStart] = useState<Node | null>(null);
     const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
-
     const nodeListenerRef = useRef<GMapsListener | null>(null);
+
+
+
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -93,20 +98,25 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             libraries: ['places'],
             language: 'en',
         });
+
+
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
-        loader.load().then(() => {
+        loader.load().then(async () => {
             if (mapRef.current) {
                 const newMap = new google.maps.Map(mapRef.current, {
-                    center: { lat: 42.3601, lng: -71.0589 },
+                    center: {lat: 42.3601, lng: -71.0589},
                     zoom: 12,
                     fullscreenControl: true,
                     mapTypeControl: false,
                     disableDoubleClickZoom: true,
-                        streetViewControl: false,
+                    streetViewControl: false,
                     zoomControl: false,
                     scaleControl: false,
                 });
+
+                const {AdvancedMarkerElement, PinElement }
+                    = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
                 setMap(newMap);
                 setIsLoadingMap(false);
@@ -122,11 +132,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     },
                 });
 
-                    directionsRenderer.setMap(newMap);
-                    onMapReady(newMap, directionsService, directionsRenderer);
+                directionsRenderer.setMap(newMap);
+                onMapReady(newMap, directionsService, directionsRenderer);
 
-                }
-            })
+            }
+        })
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
@@ -246,13 +256,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleEdgeClick = useCallback(
         (node: Node, marker: google.maps.Marker) => {
-            console.log("trigger")
+            console.log("Edge Mode", edgeMode)
             if (!edgeMode) return;
-            console.log("Edge mode");
             console.log("edge start: ", edgeStart);
             if (!edgeStart) {
                 setEdgeStart(node);
-
+                console.log("set start node")
                 // create the rubber-band
                 const line = new google.maps.Polyline({
                     map,
@@ -295,6 +304,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         },
         [edgeMode, edgeStart, rubberBand, map]
     );
+
+    useEffect(() => {
+        console.log("trigger", edgeMode);
+    }, [edgeMode]);
+
+
 
     useEffect(() => {
         if (!map || !selectedHospital) return;
@@ -420,11 +435,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <button
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
                     onClick={() => {
-                        setEdgeMode((m) => !m);
+                        setEdgeMode((prevState) => !prevState);
                         setEdgeStart(null);
                     }}
                 >
-                    {edgeMode ? "Exit Edge Mode" : "Add Edge"}
+                    {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
                 </button>
 
                 <DropdownMenu>

@@ -89,7 +89,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
             mapTypeControl: false,
             streetViewControl: true,
             zoomControl: true,
-            disableDoubleClickZoom: true
+            disableDoubleClickZoom: true,
+            mapId: "main_map"
           });
 
           setMap(newMap);

@@ -91,8 +91,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({
             mapTypeControl: false,
             streetViewControl: true,
             zoomControl: true,
-            disableDoubleClickZoom: true
+            disableDoubleClickZoom: true,
+            rotateControl: true, 
+            tilt: 45, 
+            heading: 0, 
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
           });
+
+          newMap.setTilt(45);
 
           setMap(newMap);
 
@@ -400,23 +406,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   return (
     <div className="relative w-full h-[95vh]">
       <div ref={mapRef} className="w-full h-full"></div>
-
-      {/* {map && (
-        <div className="absolute top-8 right-2 flex flex-col gap-2 z-50">
-          <button
-            onClick={toggleNodesHandler}
-            className="bg-[#003a96] text-white px-3 py-2 rounded shadow hover:bg-blue-600 focus:outline-none"
-          >
-            {showNodes ? 'Hide Nodes' : 'Show Nodes'}
-          </button>
-          <button
-            onClick={toggleEdgesHandler}
-            className="bg-[#003a96] text-white px-3 py-2 rounded shadow hover:bg-blue-600 focus:outline-none"
-          >
-            {showEdges ? 'Hide Edges' : 'Show Edges'}
-          </button>
-        </div>
-      )} */}
 
       {/* Use the new HospitalViewControls component */}
       <HospitalViewControls

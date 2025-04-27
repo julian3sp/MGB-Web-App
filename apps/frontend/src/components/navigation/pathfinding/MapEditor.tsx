@@ -37,7 +37,7 @@ interface MapEditorProps {
 
 type GMapsListener = google.maps.MapsEventListener;
 
-const markerLibRef = useRef<google.maps.MarkerLibrary | null>(null);
+// const markerLibRef = useRef<google.maps.MarkerLibrary | null>(null);
 
 
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {

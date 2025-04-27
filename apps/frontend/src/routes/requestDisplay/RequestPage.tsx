@@ -87,19 +87,17 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
-                style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
+                className=" min-h-screen flex flex-col  font-[Poppins]"
             >
-                <div className="flex items-center gap-4 justify-between px-[16px] mt-1 pb-2 pt-1 items-end">
+                <div className="flex items-center gap-4 bg-[#003A96] justify-between px-4  pb-3 items-end">
                     <h1
-                        className="text-4xl font-bold font-[Poppins] flex-start  "
-                        style={{ color: '#003A96' }}
+                        className="text-4xl text-white font-bold font-[Poppins] p-2 flex-start  "
                     >
                         Service Requests:
                     </h1>
 
                     <div className="flex items-end gap-10 z-100">
-                        <div className="flex flex-col items-center  mb-1">
+                        <div className="flex flex-col items-center">
 
                             <CustomSwitch
                             checked={currentView === 'list'}
@@ -114,11 +112,11 @@ export default function RequestPage() {
                             />
                         </div>
 
-                        <div ref={filterRef} className="flex flex-row mt-1 gap-4">
-                            <div className="relative py-[2px]">
+                        <div ref={filterRef} className="flex flex-row gap-4">
+                            <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[12px] border border-blue-950 rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>
@@ -330,7 +328,7 @@ export default function RequestPage() {
                         </div>
                     </div>
                 </div>
-                <div className="pt-1">
+                <div    >
                     <Outlet />
                 </div>
             </div>

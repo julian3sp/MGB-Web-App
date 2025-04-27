@@ -155,11 +155,11 @@ export default function RequestTablePage() {
 
     //Table page
     return (
-        <div className="flex flex-1 ml-10 mr-10 mt-1">
+        <div className="flex flex-1  mt-0">
             <div
                 className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
                 style={{
-                    borderTop: 'none',
+                    borderTop: '1px solid lightgrey',
                     borderBottom: 'none',
                     borderRight: 'none',
                     borderLeft: 'none',

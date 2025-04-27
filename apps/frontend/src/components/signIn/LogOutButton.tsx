@@ -1,13 +1,17 @@
 import React from 'react';
-import {Link} from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export function LogOutButton({className}: {className?: string}) {
+interface Props {
+    className?: string;
+    rerender: (userRole: string) => void;
+}
+
+export function LogOutButton({className, rerender}: Props) {
     const { logout, isAuthenticated } = useAuth0();
 
     function handleLogOut() {
         if (isAuthenticated) {
-            window.sessionStorage.setItem("isAdmin", "false");
+            rerender("")
             logout({ logoutParams: { returnTo: window.location.origin } });
         }
     }

@@ -9,6 +9,7 @@ import { drawAllEdges, drawPath } from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
 import { StrategyPathfind, PathContext, BFS, DFS, AStar } from "../navigation/pathfinding/StrategyPathfind.ts"
+import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 import { graph } from "./GraphObject.ts"
@@ -38,6 +39,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const algoType = trpc.getAlgoType.useQuery().data
   // For overlays
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
@@ -213,6 +215,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current = null;
       }
 
+
+
+
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
       if (!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star") {
@@ -222,8 +227,18 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         console.log("Using DFS")
         context.setStrategyPathfind(new DFS())
       } else if (window.sessionStorage.getItem("algoType") === "BFS") {
+//       if(algoType === "A-Star"){
+//         console.log("Using A-Star")
+//         context.setStrategyPathfind(new AStar());
+//       } else if (algoType === "DFS"){
+//         console.log("Using DFS")
+//         context.setStrategyPathfind(new DFS())
+//       } else if (algoType === "BFS"){
         console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
+      } else if (algoType === "Dijkstras"){
+        console.log("Using Dijkstra's")
+        context.setStrategyPathfind(new Dijkstras())
       }
 
       const pathNodes = context.pathFind(graph, entrance, target)

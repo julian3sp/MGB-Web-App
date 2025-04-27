@@ -96,19 +96,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
             const newMap = new google.maps.Map(mapRef.current!, {
               center: userLocation,
-              zoom: 17,
+              zoom: 18,
               fullscreenControl: true,
               mapTypeControl: false,
               streetViewControl: true,
               zoomControl: true,
               disableDoubleClickZoom: true,
-              rotateControl: true,
-              tilt: 45,
+              rotateControl: false,
               heading: 0,
               mapTypeId: google.maps.MapTypeId.ROADMAP,
+              gestureHandling: 'greedy',
+              mapId: 'ca6b761fac973d24'
             });
 
-            newMap.setTilt(45);
+            newMap.setHeading(0);
 
             setMap(newMap);
 
@@ -133,7 +134,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
               icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
             });
           },
-          (error) => {
+          (error) => { // render map using predefined location
             console.error("Error getting user location:", error);
 
             const fallbackCenter = { lat: 42.3601, lng: -71.0589 };
@@ -146,13 +147,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
               streetViewControl: true,
               zoomControl: true,
               disableDoubleClickZoom: true,
-              rotateControl: true,
-              tilt: 45,
+              rotateControl: false,
               heading: 0,
               mapTypeId: google.maps.MapTypeId.ROADMAP,
+              mapId: 'ca6b761fac973d24'
             });
-
-            newMap.setTilt(45);
 
             setMap(newMap);
 
@@ -200,9 +199,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         "Faulkner": 3995
       }
 
-
-
-      const entrance = graph.getNode(entrances[selectedDestination.name]);
+      const entrance = graph.getNode(entrances[selectedDestination!.name]);
       const target = graph.getNode(departmentNumber);
 
       if (!entrance || !target) {
@@ -387,19 +384,27 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   const rotateMap = (direction: 'left' | 'right') => {
     if (!map) return;
-
+  
+    const currentZoom = map.getZoom() || 0;
+  
+    if (currentZoom < 18) {
+      map.setZoom(18);
+    }
+  
     const amount = direction === 'left' ? 20 : -20;
     const currentHeading = map.getHeading() ?? 0;
-
-    if (map.getTilt() === 0) {
-      map.setTilt(45)
+    const newHeading = (currentHeading + amount) % 360;
+  
+    console.log("Rotating map from:", currentHeading, "to:", newHeading);
+  
+    map.setHeading(newHeading);
+  
+    const center = map.getCenter();
+    if (center) {
+      map.panTo(center);
     }
-
-    console.log("Rotating map from: ", currentHeading, " to: ", currentHeading + amount);
-    console.log("Map Tilt: ", map.getTilt())
-    map.setHeading(currentHeading + amount);
-  }
-
+  };
+  
   // Handle path visibility based on zoom level
   useEffect(() => {
     if (!map) return;

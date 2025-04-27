@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel
 } from '../ui/dropdown-menu';
 import ZoomControls from '../ZoomInAndOutButton';
-import RotateControl from '../RotateButton';
+import RotateControl from '../RotateButton'
 
 interface HospitalViewControlsProps {
   map: google.maps.Map | null;

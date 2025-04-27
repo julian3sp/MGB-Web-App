@@ -220,26 +220,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
-      if (!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star") {
+      if(algoType === "A-Star") {
         console.log("Using A-Star")
         context.setStrategyPathfind(new AStar());
-      } else if (window.sessionStorage.getItem("algoType") === "DFS") {
+      } else if (algoType === "DFS") {
         console.log("Using DFS")
         context.setStrategyPathfind(new DFS())
-      } else if (window.sessionStorage.getItem("algoType") === "BFS") {
-//       if(algoType === "A-Star"){
-//         console.log("Using A-Star")
-//         context.setStrategyPathfind(new AStar());
-//       } else if (algoType === "DFS"){
-//         console.log("Using DFS")
-//         context.setStrategyPathfind(new DFS())
-//       } else if (algoType === "BFS"){
+      } else if (algoType === "BFS") {
         console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
       } else if (algoType === "Dijkstras"){
         console.log("Using Dijkstra's")
         context.setStrategyPathfind(new Dijkstras())
       }
+
 
       const pathNodes = context.pathFind(graph, entrance, target)
 

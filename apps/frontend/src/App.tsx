@@ -5,6 +5,7 @@ import DepartmentDirectory from './routes/departmentDirectory/DepartmentDirector
 import ServiceRequestPage from './routes/ServiceRequestPage';
 import RequestListPage from './routes/requestDisplay/RequestListPage.tsx'
 import {WelcomePage} from './routes/WelcomePage';
+import {BryanDirectoryPage} from './routes/BryanDirectoryPage.tsx';
 import NavBar from './components/NavBar';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {httpBatchLink} from '@trpc/client';
@@ -57,6 +58,7 @@ function App() {
                         <Routes>
                             <Route path="/navigation" element={<NavigationPage />} />
                             <Route path="/" element={<WelcomePage />} />
+                            <Route path="/directoryPageBryan" element={<BryanDirectoryPage />} />
                             <Route path="/directory" element={<DepartmentDirectory />} />
                             <Route path="/directory/*" element={<DepartmentDirectory />} />
                             <Route path="/aboutus" element={<AboutUs />} />

@@ -126,17 +126,18 @@ export default function RequestListPage() {
 
     return (
 
-        <div className={'flex gap-x-4 bg-gradient-to-t from-blue-100 to-blue-300  '}>
 
-                <nav className=" h-300 bg-white   rounded-lg ml-5 m-5  border-lightgrey    shadow-lg">
-                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-b-5 border-b-[#44A6A6] rounded-tr-lg rounded-tl-lg '}>
+        <div className={'flex gap-x-4 bg-gradient-to-t  from-blue-100 to-g-blue-500   '}>
+            <PageWrapper  contents={
+                <nav className=" h-300 bg-white   rounded-3xl ml-5 m-5  border-lightgrey  shadow-lg">
+                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-b-5 border-b-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
                     <h3
                         className="text-xl  p-[8px]  font-[Poppins] text-white text-center"
                     >
                         Select a Request:
                     </h3>
                     </div>
-                    <div className={'overflow-y-auto overflow-style-none scrollbar-none bg-blue-50 pl-5 pr-5 pt-3 h-280'}>
+                    <div className={'overflow-y-auto overflow-style-none scrollbar-none bg-blue-50 rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-280'}>
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (
@@ -217,8 +218,8 @@ export default function RequestListPage() {
                         </nav>
                     )}
                     </div>
-                </nav>
-
+                </nav>} scaling = {3} open = {true} absolute = {true} x={-70} y={35} xOut={10}>
+            </PageWrapper>
             <nav className="min-h-screen flex flex-1 m-5 font-[Poppins]">
                 {swapMenu && pendingRequest && (
                     <div className="fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg shadow-lg p-6 w-[450px] border-[#003A96] border-1">
@@ -296,9 +297,9 @@ export default function RequestListPage() {
 
 
                     {selectedRequest ? (
-                        <nav className="shadow-xl rounded-sm  bg-blue-50 flex-1 border-[#44A6A6] rounded-tl-xl rounded-tr-xl rounded-xl text-blue-gray-900">
+                        <nav className="shadow-xl rounded-3xl  bg-blue-50 flex-1 border-[#44A6A6]  text-blue-gray-900">
                             <div className={''} >
-                                <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-lg rounded-tr-lg border-[#d9d9d9] mb-3 ">
+                                <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-3xl rounded-tr-3xl border-[#d9d9d9] mb-3 ">
                                     <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
@@ -787,6 +788,8 @@ export default function RequestListPage() {
                     )}{' '}
 
             </nav>
+
         </div>
+
     );
 }

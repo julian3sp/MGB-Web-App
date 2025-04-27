@@ -87,14 +87,17 @@ export default function RequestPage() {
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className=" min-h-screen flex flex-col  font-[Poppins]"
+                className=" min-h-screen flex flex-col bg-gradient-to-t  from-blue-100 to-[#003A96] bg-blue-300  font-[Poppins]"
             >
-                <div className="flex items-center gap-4 bg-[#003A96] justify-between px-4  pb-3 items-end">
-                    <h1
-                        className="text-4xl text-white font-bold font-[Poppins] p-2 flex-start  "
-                    >
-                        Service Requests:
-                    </h1>
+                <div>
+                <h1
+                    className="text-5xl text-white text-center pl-3 pt-5 font-bold font-[Poppins]  flex-start  "
+                >
+                    Service Requests
+                </h1>
+                </div>
+                <div className="gap-4 bg-blue-100 rounded-[100px] border-1 border-[#44A6A6] flex justify-end mt-5 mr-3 ml-3 px-4 pb-3 items-end">
+
 
                     <div className="flex items-end gap-10 z-100">
                         <div className="flex flex-col items-center">
@@ -116,7 +119,7 @@ export default function RequestPage() {
                             <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[10px] border-2 border-[#003A96] rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>

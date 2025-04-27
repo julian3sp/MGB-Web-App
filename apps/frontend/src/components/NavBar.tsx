@@ -47,7 +47,7 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     }, [location.pathname]);
 
     return (
-        <nav className="flex justify-between items-center border-b-[#44A6A6] border-b-3  bg-[#003a96] text-white ">
+        <nav className="flex justify-between items-center border-b-[#44A6A6] border-b-3  bg-[#003A96] text-white ">
             <div className="flex items-center space-x-4 ">
                 <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
                     <img src={logo} alt="Mass General Brigham Logo"  className="h-9"/>

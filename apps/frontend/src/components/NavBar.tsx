@@ -70,7 +70,7 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                         </Link> : null}
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/editor" onClick={() => setTab("editor")}
                                                                                                                        className={tab === "editor" ?
-                                                                                                                           "bg-[#003a96] font-[Poppins]  text-black  text-white  px-5 py-5" :
+                                                                                                                           "bg-[#003a96] font-[Poppins] bg-white text-black  px-5 py-5" :
                                                                                                                            "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
                             Map Editor
                         </Link> : null}

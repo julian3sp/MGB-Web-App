@@ -1,20 +1,14 @@
 import { trpc } from '../../lib/trpc.ts';
-import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
-import DepartmentList from '../../components/DepartmentList.ts';
-import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
 import EditRequest from '@/components/ui/EditRequest.tsx';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import { ServiceComponentDropdown } from '@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx';
-import FilterIcon from '../../../assets/FilterIcon.png';
 import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
-import ServiceFormSideBar from '@/components/serviceRequest/ServiceFormSideBar.tsx';
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
-import ServiceRequestPage from '@/routes/ServiceRequestPage.tsx';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -30,7 +24,7 @@ const end = digits.slice(6, 10);
 return `(${start}) ${middle}-${end}`;
 */
 
-export default function RequestListPage() {
+export default function RequestListPage({userRole}: {userRole:string}) {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
@@ -129,13 +123,7 @@ export default function RequestListPage() {
             open={true}
             contents={
                 <nav
-                    className="w-full h-full bg-white p-6 overflow-hidden"
-                    style={{
-                        borderTop: '2px solid #d9d9d9',
-                        borderBottom: 'none',
-                        borderRight: '2px solid #d9d9d9',
-                        borderLeft: 'none',
-                    }}
+                    className="w-full h-full bg-white border-1  border-light p-6 overflow-hidden shadow-lg"
                 >
                     <h3
                         className="text-2xl font-bold mb-4 font-[Poppins] text-center"
@@ -146,7 +134,7 @@ export default function RequestListPage() {
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (
-                            <ul key={res.request_id} className="mb-2">
+                            <ul key={res.request_id} className="mb-4 text-[14pt] group">
                                 <button
                                     onClick={() => {
                                         if (!selectedRequest) {
@@ -176,17 +164,17 @@ export default function RequestListPage() {
                                         }
                                     }}
                                     className={
-                                        `w-full text-left block p-5 border rounded ${
+                                        `w-full text-left block p-5 rounded border-1 border-light-subtle  ${
                                             selectedRequest?.request_id == res.request_id
-                                                ? 'border-2 text-blue-900 bg-slate-100 font-bold font-[Poppins]'
-                                                : 'text-gray-700 hover:bg-gray-100 font-[Poppins] shadow-lg'
+                                                ? 'text-white bg-[#003a96] font-semibold font-[Poppins] hover:border-b-5 border-b-5 border-b-[#44A6A6] border-[#44A6A6] shadow-md'
+                                                : 'text-gray-700 hover:bg-white hover:text-gray-700 border-b-0 hover:border-b-[5px] hover:border-b-[#44A6A6] transition-all duration-150 font-[Poppins] shadow-lg'
                                         }` /* Put requests in rounded rectangle boxes*/
                                     }
                                     style={{
                                         borderColor:
                                             selectedRequest?.request_id == res.request_id
-                                                ? '#005E64'
-                                                : '#003A96',
+                                                ? 'light-grey'
+                                                : 'light-grey',
                                         borderWidth: '1 px',
                                         borderStyle: 'solid',
                                     }}
@@ -209,27 +197,19 @@ export default function RequestListPage() {
                                                     : 'N/A'}{' '}
                                     (Priority:{' '}
                                     <span
-                                        className={
-                                            res.priority === 'Low'
-                                                ? 'text-green-600'
-                                                : res.priority === 'Medium'
-                                                  ? 'text-yellow-500'
-                                                  : res.priority === 'High'
-                                                    ? 'text-red-500'
-                                                    : res.priority === 'Emergency'
-                                                      ? 'text-red-700 underline'
-                                                      : 'text-gray-600'
-                                        }
+
                                     >
                                         {res.priority}
                                     </span>
                                     )
+
                                 </button>
                             </ul>
                         ))
                     ) : (
                         <nav
-                            className="border p-5 rounded-lg flex items-center"
+                            className="border p-5
+                             flex items-center"
                             style={{ borderColor: '#003A96' }}
                         >
                             <p className="text-gray-700 font-[Poppins]">
@@ -319,7 +299,7 @@ export default function RequestListPage() {
                 <div
                     className="h-auto flex-1 bg-white p-6 pl-5"
                     style={{
-                        borderTop: '2px solid #d9d9d9',
+                        borderTop: '1px solid lightgrey',
                         borderBottom: 'none',
                         borderRight: 'none',
                         borderLeft: 'none',
@@ -328,19 +308,18 @@ export default function RequestListPage() {
                     {' '}
                     {/*Border styling*/}
                     <h3
-                        className="text-2xl font-bold mb-4 font-[Poppins] text-center"
+                        className="text-2xl font-bold mb-4  font-[Poppins] text-center"
                         style={{ color: '#003A96' }}
                     >
                         Request Details:
                     </h3>
                     {selectedRequest ? (
                         <nav
-                            className=" border-[1px] border-gray shadow-lg p-6 pl-4 rounded-lg text-blue-gray-900"
-                            style={{ borderColor: '#003A96' }}
+                            className="shadow-md rounded-sm min-h-screen text-blue-gray-900"
                         >
-                            <div>
-                                <div className="flex justify-between mx-auto border-b border-[#d9d9d9] mb-3">
-                                    <h2 className="text-xl font-bold" style={{ color: '#003A96' }}>
+                            <div >
+                                <div className="flex justify-between mx-auto border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-[5px] rounded-tr-[5px] border-[#d9d9d9] mb-3 ">
+                                    <h2 className="text-xl  p-5 " style={{ color: 'white' }} >
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
                                             ? 'Sanitation'
@@ -361,24 +340,14 @@ export default function RequestListPage() {
                                                         : 'N/A'}{' '}
                                         (Priority:{' '}
                                         <span
-                                            className={
-                                                selectedRequest.priority === 'Low'
-                                                    ? 'text-green-600'
-                                                    : selectedRequest.priority === 'Medium'
-                                                      ? 'text-yellow-500'
-                                                      : selectedRequest.priority === 'High'
-                                                        ? 'text-red-500'
-                                                        : selectedRequest.priority === 'Emergency'
-                                                          ? 'text-red-700 underline'
-                                                          : 'text-gray-600'
-                                            }
+
                                         >
                                             {selectedRequest.priority}
                                         </span>
                                         )
                                     </h2>
                                     {/*ReqID. Type (Priority)*/}
-                                    <div className="relative -top-[12px] flex gap-4 pl-4 pt-2">
+                                    <div className="relative -top-[12px] flex gap-4 pl-4 pt-7 pr-3">
                                         <div className="h-[35px] flex items-center gap-4">
                                             {!editMode ? (
                                                 <div className="relative top-[4px]">
@@ -390,6 +359,7 @@ export default function RequestListPage() {
                                                             setEditMode(true);
                                                         }}
                                                         tooltip={'Edit Service Request'}
+                                                        blue={false}
                                                     />
                                                 </div>
                                             ) : (
@@ -442,8 +412,7 @@ export default function RequestListPage() {
                                             size={20}
                                             onClick={() => {
                                                 if (
-                                                    window.sessionStorage.getItem('isAdmin') ===
-                                                    'true'
+                                                    userRole === 'Admin'
                                                 ) {
                                                     console.log('Delete: ');
                                                     console.log(selectedRequest);
@@ -454,19 +423,23 @@ export default function RequestListPage() {
                                             }}
                                             tooltip={'Delete Service Request'}
                                         />
+
                                     </div>
                                 </div>
 
+
+                                <div className={'columns-2 gap-5 h-full pl-5 pb-5  pr-5'}>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Request Type*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Request Type:{' '}
                                 </h3>
-                                <ul className="list-disc ml-6 mt-1 mb-3 font-semibold text-blue-gray-900">
+                                <ul className="list-disc ml-6 mt-1 mb-3 text-blue-gray-900">
                                     <p>
-                                        <i>
+                                        <p className={'text-[15pt]'}>
                                             {selectedRequest.request_type === 'Sanitation'
                                                 ? 'Sanitation'
                                                 : selectedRequest.request_type === 'Transportation'
@@ -484,16 +457,17 @@ export default function RequestListPage() {
                                                               'Facilities'
                                                             ? 'Facilities'
                                                             : 'N/A'}
-                                        </i>
+                                        </p>
                                     </p>
                                 </ul>
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Render edit mode for priority status if true, else render normally*/}
                                 {editMode ? (
                                     <>
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                            style={{ color: '#005E64' }}
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            style={{ color: '#003A96' }}
                                         >
                                             Priority:{' '}
                                         </h3>
@@ -513,30 +487,18 @@ export default function RequestListPage() {
                                                     { value: 'High', label: 'High' },
                                                     {
                                                         value: 'Emergency',
-                                                        label: '🚨 Emergency 🚨',
+                                                        label: 'Emergency',
                                                     },
                                                 ]}
                                                 placeholder={selectedRequest.priority}
                                                 originalValue={selectedRequest.priority}
-                                                styledOptions={(option) =>
-                                                    `block font-[Poppins] text-med ${
-                                                        option === 'Low'
-                                                            ? 'text-green-600 font-semibold'
-                                                            : option === 'Medium'
-                                                              ? 'text-yellow-500 font-semibold'
-                                                              : option === 'High'
-                                                                ? 'text-red-500 font-semibold'
-                                                                : option === 'Emergency'
-                                                                  ? 'text-red-700 underline font-semibold'
-                                                                  : 'text-blue-gray-900'
-                                                    }`
-                                                }
+
                                             />
                                         </div>
 
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                            style={{ color: '#005E64' }}
+                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            style={{ color: '#003A96' }}
                                         >
                                             Status:{' '}
                                         </h3>
@@ -555,69 +517,39 @@ export default function RequestListPage() {
                                                 ]}
                                                 placeholder={selectedRequest.status}
                                                 originalValue={selectedRequest.status}
-                                                styledOptions={(option) =>
-                                                    `block font-[Poppins] text-med ${
-                                                        option === 'Unassigned'
-                                                            ? 'text-gray-500 font-semibold'
-                                                            : option === 'Assigned'
-                                                              ? 'text-blue-600 font-semibold'
-                                                              : option === 'Working'
-                                                                ? 'text-amber-600 font-semibold bg-blue-gray-900'
-                                                                : option === 'Done'
-                                                                  ? 'text-green-600 font-semibold'
-                                                                  : 'text-blue-gray-900'
-                                                    }`
-                                                }
+
                                             />
+
                                         </div>
+
                                     </>
                                 ) : (
                                     <>
+
                                         {/*Priority Normal*/}
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                            style={{ color: '#005E64' }}
+                                            className="text-xl font-semibold font-[Poppins] py-1  "
+                                            style={{ color: '#003A96' }}
                                         >
                                             Priority:{' '}
                                         </h3>
                                         <ul className="list-disc ml-6 mb-3 mt-1">
-                                            <p
-                                                className={`block font-[Poppins] text-med font-semibold ${
-                                                    selectedRequest.priority === 'Low'
-                                                        ? 'text-green-600'
-                                                        : selectedRequest.priority === 'Medium'
-                                                          ? 'text-yellow-500'
-                                                          : selectedRequest.priority === 'High'
-                                                            ? 'text-red-500'
-                                                            : selectedRequest.priority ===
-                                                                'Emergency'
-                                                              ? 'text-red-700 underline'
-                                                              : 'text-blue-gray-900'
-                                                }`}
-                                            >
+                                            <p className={'text-[15pt]'}>
                                                 {selectedRequest.priority}
                                             </p>
                                         </ul>
 
                                         {/*Status Normal*/}
                                         <h3
-                                            className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                            style={{ color: '#005E64' }}
+                                            className="text-xl font-semibold font-[Poppins] py-1  "
+                                            style={{ color: '#003A96' }}
                                         >
                                             Status:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-6 mb-3 mt-1">
+                                        <ul className="list-disc ml-6 mb-1 mt-1">
                                             <p
-                                                className={`block font-[Poppins] text-med ${
-                                                    selectedRequest.status === 'Unassigned'
-                                                        ? 'text-gray-500 font-semibold'
-                                                        : selectedRequest.status === 'Assigned'
-                                                          ? 'text-blue-600 font-semibold'
-                                                          : selectedRequest.status === 'Working'
-                                                            ? 'text-amber-600 font-semibold'
-                                                            : selectedRequest.status === 'Done'
-                                                              ? 'text-green-600 font-semibold'
-                                                              : 'text-blue-gray-900'
+                                                className={`block font-[Poppins] text-[15pt] '} ${
+                                                    selectedRequest.status 
                                                 }`}
                                             >
                                                 {selectedRequest.status}
@@ -625,45 +557,47 @@ export default function RequestListPage() {
                                         </ul>
                                     </>
                                 )}
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Name (Employee ID: #)*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1  "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Name:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.name} (Employee ID:{' '}
                                         {selectedRequest.employee_id})
                                     </p>
                                 </ul>
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Request Details*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Request Details:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.sanitation?.cleaningType && (
                                             <>
-                                                <span className="underline">Cleaning Type:</span>{' '}
+                                                <span className="">Cleaning Type:</span>{' '}
                                                 {selectedRequest.sanitation.cleaningType}{' '}
                                             </>
                                         )}
                                         {selectedRequest.language?.targetLanguage && (
                                             <>
-                                                <span className="underline">Target Language:</span>{' '}
+                                                <span className="">Target Language:</span>{' '}
                                                 {selectedRequest.language.targetLanguage}{' '}
                                             </>
                                         )}
                                         {selectedRequest.audioVisual?.accommodationType && (
                                             <>
-                                                <span className="underline">
+                                                <span className="">
                                                     Accommodation Type:
                                                 </span>{' '}
                                                 {selectedRequest.audioVisual.accommodationType}{' '}
@@ -671,7 +605,7 @@ export default function RequestListPage() {
                                         )}
                                         {selectedRequest.transportation?.transportationType && (
                                             <>
-                                                <span className="underline">
+                                                <span className="">
                                                     Transportation Type:
                                                 </span>{' '}
                                                 {
@@ -682,26 +616,26 @@ export default function RequestListPage() {
                                         )}
                                         {selectedRequest.security?.accessZones && (
                                             <>
-                                                <span className="underline">Access Zones:</span>{' '}
+                                                <span className="">Access Zones:</span>{' '}
                                                 {selectedRequest.security.accessZones}{' '}
                                             </>
                                         )}
                                         {selectedRequest.medicalDevice?.device && (
                                             <>
-                                                <span className="underline">Medical Device:</span>{' '}
+                                                <span className="">Medical Device:</span>{' '}
                                                 {selectedRequest.medicalDevice.device}
                                             </>
                                         )}
                                         {selectedRequest.facilities?.maintenanceType && (
                                             <>
-                                                <span className="underline">Maintenance Type:</span>{' '}
+                                                <span className="">Maintenance Type:</span>{' '}
                                                 {selectedRequest.facilities.maintenanceType}
                                             </>
                                         )}
                                         <br />
                                         {selectedRequest.request_type === 'Sanitation' && (
                                             <>
-                                                <span className="underline">Contaminant:</span>{' '}
+                                                <span className="">Contaminant:</span>{' '}
                                                 {selectedRequest.sanitation?.contaminant?.trim()
                                                     ? selectedRequest.sanitation.contaminant
                                                     : 'N/A'}
@@ -709,13 +643,13 @@ export default function RequestListPage() {
                                         )}
                                         {selectedRequest.language?.sourceLanguage && (
                                             <>
-                                                <span className="underline">Source Language:</span>{' '}
+                                                <span className="">Source Language:</span>{' '}
                                                 {selectedRequest.language.sourceLanguage}
                                             </>
                                         )}
                                         {selectedRequest.request_type === 'AudioVisual' && (
                                             <>
-                                                <span className="underline">
+                                                <span className="">
                                                     Accommodation Details:
                                                 </span>{' '}
                                                 {selectedRequest.audioVisual?.accommodationDetails?.trim()
@@ -727,7 +661,7 @@ export default function RequestListPage() {
                                         {selectedRequest.transportation
                                             ?.transportationDestination && (
                                             <>
-                                                <span className="underline">
+                                                <span className="">
                                                     Transportation Destination:
                                                 </span>{' '}
                                                 {
@@ -738,73 +672,78 @@ export default function RequestListPage() {
                                         )}
                                         {selectedRequest.security?.securityIssue && (
                                             <>
-                                                <span className="underline">Security Issue:</span>{' '}
+                                                <span className="">Security Issue:</span>{' '}
                                                 {selectedRequest.security.securityIssue}{' '}
                                             </>
                                         )}
                                         {selectedRequest.medicalDevice?.operatorRequired && (
                                             <>
-                                                <span className="underline">Operator Required?</span>{' '}
+                                                <span className="">Operator Required?</span>{' '}
                                                 {selectedRequest.medicalDevice.operatorRequired}
                                             </>
                                         )}
                                         {selectedRequest.facilities?.equipmentType && (
                                             <>
-                                                <span className="underline">Equipment Type:</span>{' '}
+                                                <span className="">Equipment Type:</span>{' '}
                                                 {selectedRequest.facilities.equipmentType}
                                             </>
                                         )}
                                     </p>
                                 </ul>
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Additional comments*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Additional Comments:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {selectedRequest.additional_comments?.trim() ? (
-                                            <i>{selectedRequest.additional_comments}</i>
+                                            <p>{selectedRequest.additional_comments}</p>
                                         ) : (
                                             'N/A'
                                         )}
                                     </p>
                                 </ul>
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Location*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Location:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>{selectedRequest.location}</p>
+                                    <p className={'text-[15pt]'}>{selectedRequest.location}</p>
                                 </ul>
-
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
                                 {/*Department*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Department:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>{selectedRequest.department}</p>
+                                    <p className={'text-[15pt]'}>{selectedRequest.department}</p>
                                 </ul>
+                                    </div>
+                                    <div className={"p-2 mx-auto  "}>
 
                                 {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Request Date:{' '}
                                 </h3>
                                 <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>
+                                    <p className={'text-[15pt]'}>
                                         {new Date(selectedRequest.request_date).toLocaleDateString(
                                             undefined,
                                             {
@@ -819,25 +758,28 @@ export default function RequestListPage() {
                                         (Request ID: {selectedRequest.request_id})
                                     </p>
                                 </ul>
-
+                                    </div>
+<div className={"p-2 mx-auto  "}>
                                 {/*Request ID*/}
                                 <h3
-                                    className="text-lg font-semibold font-[Poppins] py-1 underline"
-                                    style={{ color: '#005E64' }}
+                                    className="text-xl font-semibold font-[Poppins] py-1 "
+                                    style={{ color: '#003A96' }}
                                 >
                                     Request ID:{' '}
                                 </h3>
-                                <ul className="list-disc ml-6 mb-3 mt-1">
-                                    <p>#{selectedRequest.request_id}</p>
+                                <ul className="list-disc  ml-6 mb-3 mt-1">
+                                    <p className={'text-[15pt]'}>#{selectedRequest.request_id}</p>
                                 </ul>
+</div>
+                                </div>
                             </div>
                         </nav>
                     ) : (
                         <>
                             {/*No service selected yet*/}
                             <nav
-                                className="border p-5 rounded-lg flex items-center"
-                                style={{ borderColor: '#005E64' }}
+                                className="border p-5 rounded-sm flex items-center shadow-md"
+                                style={{ borderColor: 'lightgrey' }}
                             >
                                 <p className="text-gray-700 font-[Poppins]">
                                     Select a service request to view details.

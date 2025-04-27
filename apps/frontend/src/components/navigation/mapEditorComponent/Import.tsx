@@ -1,8 +1,8 @@
 import { useState } from "react"
 import FileUploadCard from "../../ui/fileUploadCard"
-import { trpc } from "../../../lib/trpc"
 import {toast} from "sonner"
-import { Toaster } from "../../ui/sonner"
+import { Toaster } from '../../ui/sonner';
+import { trpc } from '@/lib/trpc';
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
@@ -74,7 +74,7 @@ export default function ImportPage() {
       <FileUploadCard files={files} onFilesChange={setFiles} />
       <button
         onClick={handleImportFiles}
-        className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-600"
+        className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-950"
       >
         Import CSV
       </button>

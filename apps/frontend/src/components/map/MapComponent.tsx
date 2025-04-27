@@ -133,13 +133,71 @@ const MapComponent: React.FC = () => {
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);
 
-      const departmentMapping: Record<string, number> = {
-        'Multi-Specialty Clinic': 912,
-        'Radiology': 80,
-        'Radiology, MRI/CT Scan': 66
+    function getDeptNum():number {
+      const CNdepartmentMapping: Record<string, number> = {
+        'Entrance': 3900,
+        'Multi-Specialty Clinic': 3734,
+        'Radiology, MRI/CT Scan': 3059,
+        'MRI': 3113,
+        'CT': 3136,
+        'Laboratory': 3781
       };
 
-      const deptNum = departmentMapping[department.name];
+      const Pat20departmentMapping: Record<string, number> = {
+        'Blood Draw / Phlebotomy': 714,
+        'Pharmacy': 694,
+        'Radiology': 535,
+        'Urgent Care Center': 817,
+        'Cardio Vascular Services': 859,
+        'Urology': 859,
+        'Main Entrance': 1139,
+        'South Entrance': 1027,
+        'Main Staircase': 1055,
+        'Main Checkin': 697,
+        'Reception': 814,
+        'East Checkin': 979,
+        'East Checkin 2': 988,
+        'East Elevator': 1063,
+        'East Staircase': 1063,
+        'East Entrance': 813,
+        'North Staircase': 54
+      };
+      const Pat22departmentMapping: Record<string, number> = {
+        'Gynecology': 1604,
+        'Lactation': 1817,
+        'Vein Treatment': 1798
+      };
+      const FaulknerMapping: Record<string, number> = {
+        'Admitting/Registration': 4059,
+        'Audiology': 4154,
+        'Blood Drawing Lab': 4163,
+        'Cardiac Rehab': 4181,
+        'Emergency Department': 4300,
+        'Endoscopy': 4344,
+        'MRI/CT': 4118,
+        'Pre-Admittance Screening': 4147,
+        'Pulmonary Lab': 4291,
+        'Radiology': 4108,
+        'Special Testing': 4316,
+        'Vascular Lab': 4354
+      };
+
+      if(selectedPlace.name === null) {
+        console.error("No location selected");
+      }else if(selectedPlace.name === "MGB (Chestnut Hill)"){
+        return CNdepartmentMapping[department.name];
+      } else if(selectedPlace.name === "20 Patriot Place"){
+        return Pat20departmentMapping[department.name];
+      } else if(selectedPlace.name === "22 Patriot Place"){
+        return Pat22departmentMapping[department.name];
+      } else if(selectedPlace.name === "Faulkner"){
+        return FaulknerMapping[department.name];
+      }
+      console.log("Issues in finding dept node")
+      return 0;
+    }
+
+      const deptNum = getDeptNum();
       if (deptNum) {
         setDeptNumber(deptNum);
       } else {
@@ -281,9 +339,9 @@ const MapComponent: React.FC = () => {
       <PageWrapper open={true}
                    contents=
                        {
-        // put sidebar contents here:
-        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto">
-          <h2 className="font-bold text-center">Enter your location and destination</h2>
+        // put sidebar contents here:</p>
+        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}
               selectedPlace={selectedPlace}
@@ -303,7 +361,7 @@ const MapComponent: React.FC = () => {
 
           {/* Select Department dropdown */}
           <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
-          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
+          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name} />
         </div>}
                    scaling = {4}
                    absolute={false}>

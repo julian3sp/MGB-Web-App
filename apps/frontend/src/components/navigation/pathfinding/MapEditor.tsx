@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
@@ -35,6 +35,8 @@ interface MapEditorProps {
     ) => void;
 }
 
+type GMapsListener = google.maps.MapsEventListener;
+
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -42,7 +44,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
-    const [algoType, setAlgoType] = useState("A-Star");
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
@@ -54,12 +56,18 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
+    const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
-    const [newNodeTracker,  setNewNodeTracker]  = useState<boolean>(false);
-    const [clearMarkers, setClearMarkers]  = useState<boolean>(false);
+    const [newNodeTracker,  setNewNodeTracker]  = useState(false);
+    const [edgeRefresh, setEdgeRefresh] = useState(0);
+    const [edgeMode, setEdgeMode] = useState(false);      // on/off
+    const [edgeStart, setEdgeStart] = useState<Node | null>(null);
+    const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
+
+    const nodeListenerRef = useRef<GMapsListener | null>(null);
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -115,34 +123,36 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     },
                 });
 
-                directionsRenderer.setMap(newMap);
-                onMapReady(newMap, directionsService, directionsRenderer);
-            }
-        }).catch(console.error);
+                    directionsRenderer.setMap(newMap);
+                    onMapReady(newMap, directionsService, directionsRenderer);
+
+                }
+            })
+            .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    useEffect(() => {
-        if (!map) return;
-
-        const marker = new google.maps.Marker({
-            position: {  lat: 42.32610671664074, lng: -71.14958629820883},
-            map,
-            draggable: true,
-            title: "Drag me!"
-        });
-
-        const listener = marker.addListener("dragend", () => {
-            const pos = marker.getPosition();
-            if (pos) {
-                console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
-            }
-        });
-
-        return () => {
-            listener.remove();
-            marker.setMap(null);
-        };
-    }, [map]);
+    // useEffect(() => {
+    //     if (!map) return;
+    //
+    //     const marker = new google.maps.Marker({
+    //         position: { lat: 42.30149071877142, lng: -71.12823221807406},
+    //         map,
+    //         draggable: true,
+    //         title: "Drag me!"
+    //     });
+    //
+    //     // const listener = marker.addListener("dragend", () => {
+    //     //     const pos = marker.getPosition();
+    //     //     if (pos) {
+    //     //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
+    //     //     }
+    //     // });
+    //
+    //     return () => {
+    //       //  listener.remove();
+    //         marker.setMap(null);
+    //     };
+    // }, [map]);
 
     function getEdgeLines(){
         console.log("fetching lines")
@@ -156,8 +166,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
-        } else if (building === "Faulkner"){
-            building = "Faulkner";
         }
         const floor = selectedFloor === null ? 1: selectedFloor;
         return drawAllEdges(map, graph.getBuildingEdges(building, floor));
@@ -166,27 +174,50 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
-    // Display all static graph nodes
+    // Effect to clear and rerender markers when building or floor changes
     useEffect(() => {
-        if (showNodes) {
+        if (!map) return;
+
+        // Clear all existing markers
+        staticMarkers.forEach(m => m.setMap(null));
+        setStaticMarkers([]);
+        console.log("Full clear");
+
+        // Display nodes if showNodes is true and a building is selected
+        if (showNodes && selectedHospital) {
             displayNodes();
         }
-    }, [showNodes, map, newNodeTracker]);
+    }, [map, selectedHospital, selectedFloor, showNodes]);
 
-      useEffect(() => {
-          // Prevents seeing other building nodes
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
 
-          if (showNodes) displayNodes();
+    useEffect(() => {
+        if (!map || !selectedHospital || !showNodes) return;
 
-      }, [selectedHospital, selectedFloor]);
+        // detach any previous listener
+        nodeListenerRef.current?.remove();
 
-      useEffect(() =>{
-          staticMarkers.forEach(m => m.setMap(null));
-          setStaticMarkers([]);
-      }, [clearMarkers]);
+        const floor  = selectedFloor ?? 1;
+        const buildingKey =
+            selectedHospital === "MGB (Chestnut Hill)" ? "chestnut" :
+                selectedHospital === "20 Patriot Place"   ? "pat20"   :
+                    selectedHospital === "22 Patriot Place"   ? "pat22"   :
+                        selectedHospital;
 
+        // attach a single dbl-click listener
+        nodeListenerRef.current = addNodeListener(
+            map,
+            buildingKey,
+            floor,
+            setNodeDetails,
+            marker => setStaticMarkers(prev => [...prev, marker])
+        );
+
+        // cleanup when deps change or component unmounts
+        return () => {
+            nodeListenerRef.current?.remove();
+            nodeListenerRef.current = null;
+        };
+    }, [map, selectedHospital, selectedFloor, showNodes]);
 
     function displayNodes(){
         if (!map || !selectedHospital) return;
@@ -194,39 +225,75 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log("Displaying")
 
-        let building = selectedHospital;
-        if (building === "20 Patriot Place"){
-            building = "pat20";
-        }
-        else if (building === "22 Patriot Place"){
-            building = "pat22";
-        }
-        else if (building === "MGB (Chestnut Hill)"){
-            building = "chestnut";
-        }
-
         const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
             ? "chestnut"
             : selectedHospital === "20 Patriot Place"
                 ? "pat20"
-                : "pat22";
-
-        const listener = addNodeListener(map, buildingKey, selectedFloor ?? 1,
-            marker => {
-                setStaticMarkers(markers => [...markers])
-                setNewNodeTracker(!newNodeTracker)
-            });
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital.toLowerCase();
 
         const newStatics = createMarkers(map,
-            graph.getBuildingNodes(selectedHospital, floor),
+            graph.getBuildingNodes(buildingKey, floor),
             setNodeDetails,
             'normal',
-            building,
-            floor
-        );
+            () => setEdgeRefresh((v) => v + 1),
+            handleEdgeClick);
         setStaticMarkers(newStatics);
-        return () => listener.remove();
+
     }
+
+    const handleEdgeClick = useCallback(
+        (node: Node, marker: google.maps.Marker) => {
+            console.log("trigger")
+            if (!edgeMode) return;
+            console.log("Edge mode");
+            console.log("edge start: ", edgeStart);
+            if (!edgeStart) {
+                setEdgeStart(node);
+
+                // create the rubber-band
+                const line = new google.maps.Polyline({
+                    map,
+                    path: [marker.getPosition()!],
+                    geodesic: true,
+                    strokeColor: "#FF9800",
+                    strokeWeight: 4,
+                    icons: [{ icon: { path: "M 0,-1 0,1", strokeOpacity: 1 }, offset: "0", repeat: "8px" }],
+                });
+                setRubberBand(line);
+
+                // update rubber-band on mouse-move
+                const moveListener = map!.addListener("mousemove", (e) => {
+                    line.setPath([marker.getPosition()!, e.latLng]);});
+                (line as any).__moveListener = moveListener;
+            } else if (edgeStart.id !== node.id) {
+                graph.addEdge(edgeStart.id, node.id);   // your graph util
+                console.log("Edge ");
+
+                // draw permanent polyline
+                new google.maps.Polyline({
+                    map,
+                    path: [
+                        { lat: edgeStart.x, lng: edgeStart.y },
+                        { lat: node.x, lng: node.y },
+                    ],
+                    geodesic: true,
+                    strokeColor: "#1A73E8",
+                    strokeWeight: 4,
+                });
+
+                (rubberBand as any)?.__moveListener?.remove();
+                rubberBand?.setMap(null);
+                setEdgeStart(null);
+                setRubberBand(null);
+                setEdgeMode(false);
+                console.log("Edge created");
+                setEdgeRefresh(v => v + 1);
+            }
+        },
+        [edgeMode, edgeStart, rubberBand, map]
+    );
 
     useEffect(() => {
         if (!map || !selectedHospital) return;
@@ -237,11 +304,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             const lines = getEdgeLines();
             if (lines) setEdgePolylines(lines);
         }
-    }, [showEdges, selectedHospital, selectedFloor, map, nodesToRemove]);
+
+    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
         console.log("Edits: ", edits.addedNodes);
+        await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);
@@ -267,7 +336,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         edgePolylines.forEach(l => l.setMap(null));
         setEdgePolylines([]);
         graph.populate(nodesRes.data, edgesRes.data);
-        // setClearMarkers(!clearMarkers);
         if (showNodes) displayNodes();
         if (showEdges) {
             const lines = getEdgeLines();
@@ -337,7 +405,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
                         <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
                         <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
+                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
                             Remove Node
                         </button>
                     </div>
@@ -346,14 +414,22 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-
-                <button className="bg-[#003a96] w-[80%] mx-auto text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
+                </button>
+                <button
+                    className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
+                    onClick={() => {
+                        setEdgeMode((m) => !m);
+                        setEdgeStart(null);
+                    }}
+                >
+                    {edgeMode ? "Exit Edge Mode" : "Add Edge"}
                 </button>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-[#003a96] text-white px-4 py-2 rounded hover:bg-blue-800">Choose Your Algorithm</button>
+                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>

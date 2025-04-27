@@ -5,10 +5,10 @@ function DepartmentRoutes() {
     return (
         <Routes>
             <Route path="/" element={<nav
-                className="border p-5 rounded-lg flex items-center"
-                style={{ borderColor: '#005E64' }}
+                className="border p-5 rounded-sm flex shadow-md items-center"
+                style={{ borderColor: 'lightgrey' }}
             >
-                <p className="text-gray-700 font-[Poppins]">
+                <p className="text-gray-700 font-[Poppins] ">
                     Select a department to view details.
                 </p>
             </nav> } /> {/* Default message */}

@@ -15,22 +15,23 @@ export default function DepartmentPage() {
     /* Error handling */
     if (!department) {
         return (
-            <p className={'font-[Poppins]'}>
+            <p className={'font-[Poppins] '}>
                 <strong>Department not found</strong>
             </p>
         );
     }
 
     return (
-        <div className="border p-6 pl-4 rounded-lg text-blue-gray-900 ml-2 shadow-lg"
-             style={{ borderColor: '#003A96' }}>
-            <div className="flex justify-between mx-auto border-b border-[#d9d9d9] pb-2 mb-3">
-                <h2 className="text-xl font-bold font-[Poppins]" style={{ color: '#003A96' }}>
+        <div className="border-1  rounded-sm text-blue-gray-900 ml-2 shadow-md"
+             style={{ borderColor: 'lightgrey' }}>
+            <div className="flex justify-between mx-auto border-b  bg-[#003A96] rounded-tl-[5px] rounded-tr-[5px] border-[#d9d9d9] mb-3 p-5">
+                <h2 className="text-xl font-bold font-[Poppins]" style={{ color: '#ffffff' }}>
                     {department.data?.name}:{' '}
                 </h2>{' '}
                 {/*Header with department name*/}
             </div>
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64' }}>
+            <div className={'pl-4 pb-4'}>
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                 Specialties and Services:{' '}
             </h3>{' '}
             {/*Header for specialties and services*/}
@@ -42,7 +43,7 @@ export default function DepartmentPage() {
                 ))}{' '}
                 {/*Parse through specialties array and make each one a bullet point in a list*/}
             </ul>
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64' }}>
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                 Location:{' '}
             </h3>{' '}
             {/*Header for location (floor/suite)*/}
@@ -50,11 +51,12 @@ export default function DepartmentPage() {
                 <li className="text-gray-700 font-[Poppins]">{department.data?.location}</li>
                 {/*Parse through floor array and make each one a bullet point in a list (some departments have multiple locations)*/}
             </ul>
-            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#005E64' }}>
+            <h3 className="text-lg font-semibold font-[Poppins]" style={{ color: '#003A96' }}>
                 Telephone:{' '}
             </h3>
             {/*Header for phone number */}
             <p className="text-grey-700 font-[Poppins]">{department.data?.telephone}</p>
+            </div>
         </div>
     );
 }

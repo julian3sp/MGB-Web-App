@@ -50,7 +50,7 @@ const DepartmentDirectory = () => {
                      "to" line sets the URL to the correct department
                      */}
                                 {Directories.data?.map((dept) => (
-                                    <li key={dept.id} className="mb-2 shadow-lg">
+                                    <li key={dept.id} className="mb-2 shadow-md">
                                         <NavLink
                                             to={`/directory/${dept.id}`}
                                             className={
@@ -63,8 +63,8 @@ const DepartmentDirectory = () => {
                                             style={({ isActive }) => ({
                                                 borderColor:
                                                     isActive
-                                                        ? '#005E64'
-                                                        : '#003A96',
+                                                        ? 'lightgrey'
+                                                        : 'lightgrey',
                                                 borderWidth: '1 px',
                                                 borderStyle: 'solid',
                                             })}

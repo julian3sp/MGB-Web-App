@@ -20,8 +20,8 @@ interface MapEditorControlsProps {
     onToggleEdges: () => void;
 }
 
-const hospitalsWithFloors = ["20 Patriot Place", "22 Patriot Place"];
-const hospitalsNoFloors = ["MGB (Chestnut Hill)", "Faulkner"];
+const hospitalsWithFloors = ["22 Patriot Place"];
+const hospitalsNoFloors = ["MGB (Chestnut Hill)", "20 Patriot Place"];
 
 const MapEditorControls: React.FC<MapEditorControlsProps> = ({
     map,

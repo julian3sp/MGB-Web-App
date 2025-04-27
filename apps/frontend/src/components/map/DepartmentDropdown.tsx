@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import DepartmentList from '../DepartmentList';
+import React, { useEffect, useMemo, useState } from 'react';
+import Department_array from '../DepartmentList';//not needed anymore
+import { trpc } from '../../lib/trpc.ts'
 
 interface Department {
   id: string;
   name: string;
-  specialties: string[];
+  services: string[];
   floor: string[];
   building: string;
   phone: string;
@@ -20,10 +21,25 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
                                                                  onDepartmentSelected,
                                                                  building,
                                                                }) => {
+  const { data: departmentsRaw, isLoading } = trpc.getDirectories.useQuery();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sorted, setSorted] = useState<Department[]>([]);
+
+
+  const departments: Department[] = useMemo(() => {
+    if (!departmentsRaw) return [];
+    return departmentsRaw.map((dept) => ({
+      id: String(dept.id),
+      name: dept.name,
+      services: dept.services.split(','),
+      building: dept.location,
+      floor: [],
+      phone: dept.telephone,
+    }));
+  }, [departmentsRaw]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -33,22 +49,25 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
   }, [building]);
 
   useEffect(() => {
-    setSorted(filterDepartments());
-  }, [building, searchTerm]);
-
-  // if the user types exactly a department name, auto‐select it
-  useEffect(() => {
-    const exactMatch = DepartmentList.find(
-        (dept) => dept.name.toLowerCase() === searchTerm.toLowerCase()
-    );
-    if (exactMatch) {
-      setSelectedDepartment(exactMatch);
-      onDepartmentSelected({ name: exactMatch.name, floor: exactMatch.floor });
+    if (departments) {
+      setSorted(filterDepartments(departments));
     }
-  }, [searchTerm]);
+  }, [building, searchTerm, departments]);
 
-  function filterDepartments(): Department[] {
-    const buildList = DepartmentList.filter((d) => d.building === building);
+  useEffect(() => {
+    if (departments) {
+      const exactMatch = departments.find(
+          (dept) => dept.name.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (exactMatch) {
+        setSelectedDepartment(exactMatch);
+        onDepartmentSelected({ name: exactMatch.name, floor: exactMatch.floor });
+      }
+    }
+  }, [searchTerm, departments]);
+
+  function filterDepartments(departments: Department[]): Department[] {
+    const buildList = departments.filter((d) => d.building === building);
     if (searchTerm) {
       return buildList.filter((d) =>
           d.name.toLowerCase().includes(searchTerm.toLowerCase())

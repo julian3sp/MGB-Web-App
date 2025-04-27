@@ -14,13 +14,15 @@ interface HospitalViewControlsProps {
   selectedDestination: { name: string; location: { lat: number; lng: number } } | null;
   selectedFloor: 3 | 4;
   onFloorChange: (floor: 3 | 4) => void;
+  rotateMap: (direction: 'left' | 'right') => void;
 }
 
 const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
   map,
   selectedDestination,
   selectedFloor,
-  onFloorChange
+  onFloorChange,
+  rotateMap
 }) => {
   const isMGB = selectedDestination?.name === "MGB (Chestnut Hill)";
   const isPatriotPlace = selectedDestination?.name === "20 Patriot Place" || 
@@ -70,7 +72,7 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
       <div className="h-6 w-[1px] bg-gray-300 mx-4"></div>
 
       {/* Rotate controls */}
-      <RotateControl map={map} />
+      <RotateControl rotateMap={rotateMap} />
     </div>
   );
 };

@@ -42,8 +42,12 @@ export function createMarkers(
 function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
                   setNodeDetails: (node: Node) => void, onNodeMove: () => void,
                   onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void){
-    // Double click node to remove it temp
-    marker.addListener('dblclick', () => {
+    // Double click node to remove it
+    const content = marker.content as HTMLElement;
+
+    // Correct double click detection for AdvancedMarkerElement
+    content.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
         graph.deleteNode(node.id);
         console.log("remove node");
         marker.map = null;
@@ -56,11 +60,11 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
     });
 
     marker.addListener('dragend', () => {
-        const newPos = marker.position as google.maps.LatLng;
+        const newPos = marker.position;
         setNodeDetails(node);
         if (newPos) {
-            node.x = newPos.lat();
-            node.y = newPos.lng();
+            node.x = (newPos as google.maps.LatLngLiteral).lat;
+            node.y = (newPos as google.maps.LatLngLiteral).lng;
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
         }
         onNodeMove();

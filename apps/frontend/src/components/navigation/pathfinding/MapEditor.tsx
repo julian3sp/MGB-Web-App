@@ -214,13 +214,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         selectedHospital;
 
         // attach a single dbl-click listener
-        // nodeListenerRef.current = addNodeListener(
-        //     map,
-        //     buildingKey,
-        //     floor,
-        //     setNodeDetails,
-        //     marker => setStaticMarkers(prev => [...prev, marker])
-        // );
+        nodeListenerRef.current = addNodeListener(
+            map,
+            buildingKey,
+            floor,
+            setNodeDetails,
+            marker => setStaticMarkers(prev => [...prev, marker])
+        );
 
         // cleanup when deps change or component unmounts
         return () => {

@@ -32,7 +32,7 @@ export function createMarkers(
             zIndex
         });
 
-        // markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
+        markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
         markers.push(marker);
     }
 
@@ -75,16 +75,17 @@ export function addNodeListener(
     onNewMarker: (m: google.maps.marker.AdvancedMarkerElement) => void,
     onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
+        const id = Date.now();
+        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,
             title: "New Node",
             zIndex: 1,
-            content: defaultIcon,
+            content: nodeMarker(graph.neighborCount(id), "normal"),
         });
-        const id = Date.now();
-        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
         console.log("New node added");
+        // if (!node.id) continue;
         markerUI(marker, graph.getNode(id),  setNodeDetails,  onNodeMove);
         onNewMarker(marker);
     });

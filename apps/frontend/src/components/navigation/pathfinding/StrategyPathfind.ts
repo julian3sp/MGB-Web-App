@@ -1,98 +1,9 @@
 import {Node, Edge, Graph} from "./Graph.ts"
-import {node} from "prop-types";
 
 export interface StrategyPathfind{
     pathFind(graph:Graph, startNode: Node, targetNode: Node): Node[]
     getNeighbors(graph: Graph, node: Node): Edge[]
     reCreatePath(node: Node): Node[]
-}
-
-export class AStar implements StrategyPathfind {
-
-    getLowestCostNode(nodes: Node[]): Node {
-        /**
-         * Returns the lowest code node from a list of nodes
-         */
-        const costs: number[] = [];
-        for (const node of nodes) costs.push(node.totalCost);
-
-        return nodes[costs.indexOf(Math.min(...costs))];
-    }
-
-    heuristicCost(startNode: Node, targetNode: Node): number {
-        /**
-         * Calculate the heuristic cost for current node
-         */
-        return Math.sqrt(
-            Math.pow(targetNode.x - startNode.x, 2) + Math.pow(targetNode.y - startNode.y, 2)
-        );
-    }
-
-    reCreatePath(node: Node): Node[] {
-        /**
-         * Recreates the path given parent nodes of current node
-         */
-        const path: Node[] = [];
-        let currentNode: Node = node;
-        while (currentNode !== undefined) {
-            path.unshift(currentNode);
-            if (currentNode.parent === undefined) {
-                break;
-            } else {
-                currentNode = currentNode.parent;
-            }
-        }
-        return path;
-    }
-
-    pathFind = (graph:Graph, startNode: Node, targetNode: Node) =>{
-
-        const evaluate: Node[] = [startNode];
-        const finished: Node[] = [];
-
-        startNode.edgeCost = 0;
-        startNode.totalCost = this.heuristicCost(startNode, targetNode);
-        startNode.parent = undefined;
-
-        while (evaluate.length > 0) {
-            const currentNode: Node = this.getLowestCostNode(evaluate);
-
-            if (currentNode === targetNode) return this.reCreatePath(currentNode);
-
-            // Update evaluate and finished
-            const currentIndex: number = evaluate.indexOf(currentNode);
-            evaluate.splice(currentIndex, 1);
-            finished.push(currentNode);
-
-            const neighbors: Edge[] = this.getNeighbors(graph, currentNode); // Edges
-            for (const edge of neighbors) {
-                const neighbor: Node = edge.targetId;
-                //skip node if checked
-                if (finished.includes(edge.targetId)) continue;
-
-                // cost of moving to new node
-                const currentEdgeCost: number = neighbor.edgeCost + edge.weight;
-
-                // Check for new node
-                if (!evaluate.includes(neighbor)) {
-                    evaluate.push(neighbor);
-                }
-                // Check if current path is better
-                else if (currentEdgeCost >= neighbor.edgeCost) {
-                    continue;
-                }
-
-                neighbor.parent = currentNode;
-                neighbor.edgeCost = currentEdgeCost;
-                neighbor.totalCost = currentEdgeCost + this.heuristicCost(neighbor, targetNode);
-            }
-        }
-        return []; // No path found, should be impossible
-    }
-
-    getNeighbors(graph: Graph, node: Node): Edge[] {
-        return graph.adjacencyList.get(node) || [];
-    }
 }
 
 export class BFS implements StrategyPathfind {

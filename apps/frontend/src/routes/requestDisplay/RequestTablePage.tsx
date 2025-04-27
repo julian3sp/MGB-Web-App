@@ -38,7 +38,7 @@ const useClickOutside = (handler: () => void) => {
     return reference;
 };
 
-export default function RequestTablePage() {
+export default function RequestTablePage({userRole}:{userRole: string}) {
     const { filteredData, isLoading, error } = useRequestData();
     const deleteRequest = trpc.deleteRequest.useMutation();
     const handleDelete = (selectedRequest: ServiceRequest) => {
@@ -640,12 +640,10 @@ export default function RequestTablePage() {
                                                     size={20}
                                                     onClick={() => {
                                                         console.log(
-                                                            window.sessionStorage.getItem('isAdmin')
+                                                            userRole
                                                         );
                                                         if (
-                                                            window.sessionStorage.getItem(
-                                                                'isAdmin'
-                                                            ) === 'true'
+                                                            userRole === 'Admin'
                                                         ) {
                                                             console.log('Delete: ');
                                                             console.log(res);

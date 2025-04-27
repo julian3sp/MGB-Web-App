@@ -1,11 +1,7 @@
-import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from './RequestListPage.tsx';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
-import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import CustomSwitch from "@/components/ui/CustomSwitch.tsx";
 

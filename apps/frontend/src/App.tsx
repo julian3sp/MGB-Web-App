@@ -21,11 +21,10 @@ import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
 
 function InnerApp() {
     const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-    const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
-    const [isSignedIn, setIsSignedIn] = React.useState(localStorage.getItem("isSignedIn") === "true");
+    const [userRole, setUserRole] = React.useState<string>("Patient");
     const navigate = useNavigate();
     const location = useLocation();
-    
+
     // Track if this is the user's first visit to the site in this session
     const [isFirstVisit, setIsFirstVisit] = React.useState(true);
 
@@ -33,7 +32,7 @@ function InnerApp() {
     useEffect(() => {
         // Check if this is the first page load
         const hasVisited = sessionStorage.getItem('hasVisitedBefore');
-        
+
         if (!hasVisited && isFirstVisit) {
             // First visit - go to waiting screen
             navigate('/waiting');
@@ -54,7 +53,7 @@ function InnerApp() {
             if(location.pathname !== '/waiting') {
                 navigate('/waiting'); // if the user is not already on the waiting page, redirect them there
             }
-        }, inactive) // after 5 minutes of no activity 
+        }, inactive) // after 5 minutes of no activity
     }
 
     useEffect(() => {
@@ -73,23 +72,17 @@ function InnerApp() {
         }
     }, [location.pathname])
 
-    function signOut() {
-        localStorage.clear();
-        setLoginTag("Log In");
-        setIsSignedIn(false);
-    }
-
     const PrivateRoutes = () => {
         console.log(isAuthenticated);
         return (
-            isLoading || isAuthenticated ? <Outlet /> : <Navigate to='/' />
-        );
+            isLoading || isAuthenticated ? <Outlet/> : <Navigate to='/'/>
+        )
     }
 
     return (
         <div className='min-h-screen'>
             {location.pathname !== '/waiting' && (
-                <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
+                <NavBar userRole={userRole} setUserRole={setUserRole} />
             )}
             <Routes>
                 <Route path='/waiting' element={<WaitingScreen />} />
@@ -104,8 +97,8 @@ function InnerApp() {
                     <Route path="/editor" element={<MapEditor onMapReady={() => { }} />} />
                     <Route path="requests" element={<RequestPage />}>
                         <Route index element={<Navigate to="table" replace />} />
-                        <Route path="table" element={<RequestTablePage />} />
-                        <Route path="list" element={<RequestListPage />} />
+                        <Route path="table" element={<RequestTablePage userRole={userRole}/>} />
+                        <Route path="list" element={<RequestListPage userRole={userRole}/>} />
                     </Route>
                 </Route>
             </Routes>

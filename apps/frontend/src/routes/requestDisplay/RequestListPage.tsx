@@ -778,9 +778,9 @@ export default function RequestListPage() {
                         <>
                             {/*No service selected yet*/}
                             <nav
-                                className="border p-5 py-[22px] border-1 border-[#44A6A6] h-20 w-full bg-white rounded-lg flex items-center shadow-md"
+                                className="border p-5 py-[22px] border-1 border-[#44A6A6] h-20 w-full bg-white rounded-3xl flex items-center shadow-md"
                             >
-                                <p className="text-gray-700 font-[Poppins]">
+                                <p className="text-gray-700 text-[15pt] font-[Poppins]">
                                     Select a service request to view details.
                                 </p>
                             </nav>

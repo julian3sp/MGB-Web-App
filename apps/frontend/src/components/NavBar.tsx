@@ -36,6 +36,16 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
         }
     }, [location.pathname]);
 
+    useEffect(() => {
+        if (location.pathname.includes("/directory")) setTab("dir");
+        else if (location.pathname.includes("/navigation")) setTab("navigation");
+        else if (location.pathname.includes("/services")) setTab("serv");
+        else if (location.pathname.includes("/requests")) setTab("reqP");
+        else if (location.pathname.includes("/editor")) setTab("editor");
+        else if (location.pathname.includes("/admin/directory")) setTab("exp");
+        else setTab("");
+    }, [location.pathname]);
+
     return (
         <nav className="flex justify-between items-center border-b-[#44A6A6] border-b-3  bg-[#003a96] text-white ">
             <div className="flex items-center space-x-4 ">

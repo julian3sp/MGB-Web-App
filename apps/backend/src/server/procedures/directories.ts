@@ -46,6 +46,6 @@ export const deleteAllDirectories = publicProcedure.mutation(async () => {
 });
 
 export const getAllNamesArray = publicProcedure.query(async () => {
-    const array_of_names = await client.directory.findMany({ select: { name: true } });
+    const array_of_names = await client.directory.findMany({ select: { services: true } });
     return array_of_names;
 });

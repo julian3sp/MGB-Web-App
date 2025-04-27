@@ -1,4 +1,5 @@
-import EditIcon from '../../../assets/EditIconWhite.png';
+import EditIcon from '../../../assets/EditIcon.png';
+import EditIconWhite from '../../../assets/EditIconWhite.png';
 import {
     Tooltip,
     TooltipContent,
@@ -11,10 +12,12 @@ export default function EditRequest({
     size = 20,
     onClick,
     tooltip = 'Edit',
+    blue=true
 }: {
     size?: number;
     onClick: () => void;
     tooltip?: string;
+    blue? : boolean;
 }) {
     return (
         <TooltipProvider>
@@ -27,7 +30,7 @@ export default function EditRequest({
                         }}
                     >
                         <img
-                            src={EditIcon}
+                            src={blue ? EditIcon : EditIconWhite}
                             alt="Edit"
                             className={`fill-red-500`}
                             style={{ maxWidth: size }}

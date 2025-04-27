@@ -1,5 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover.tsx';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
+import DeleteIconBlue from '../../../assets/DeleteIconBlue.png';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { useState } from 'react';
 import { ServiceRequest } from '@/types';
@@ -10,6 +11,8 @@ import {
     TooltipTrigger,
 } from '@/components/ui/Tooltip.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
+import EditIcon from "../../../assets/EditIcon.png";
+import EditIconWhite from "../../../assets/EditIconWhite.png";
 
 export default function DeleteRequest({
     size = 20,
@@ -17,12 +20,14 @@ export default function DeleteRequest({
     tooltip = 'Delete',
     errorMessage = 'Error: Insufficient Permissions',
     successMessage = 'Request has been deleted',
+    blue = true,
 }: {
     size?: number;
     onClick: () => void;
     tooltip?: string;
     errorMessage?: string;
     successMessage?: string;
+    blue?: boolean;
 }) {
     const [showError, setShowError] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -35,7 +40,7 @@ export default function DeleteRequest({
                         <TooltipTrigger>
                             <div>
                                 <img
-                                    src={DeleteIcon}
+                                    src={blue ? DeleteIconBlue : DeleteIcon}
                                     alt="Delete"
                                     className={`fill-red-500`}
                                     style={{ maxWidth: size }}

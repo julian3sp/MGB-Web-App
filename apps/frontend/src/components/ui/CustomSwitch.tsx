@@ -5,12 +5,12 @@ type CustomSwitchProps = {
 
 export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchProps) {
     return (
-        <div className="flex border-[2px] border-[#003A96] rounded-full overflow-hidden w-fit text-sm font-medium cursor-pointer text-center">
+        <div className="flex border-[2px]   border-[#003A96] rounded-full overflow-hidden w-fit  text-md font-medium cursor-pointer text-center">
 
             {/* true */}
             <button
                 onClick={() => onCheckedChange(true)}
-                className={`px-4 py-1 transition-colors duration-200 w-20 ${
+                className={`px-4 py-3 transition-colors duration-200 w-30 ${
                     checked
                         ? "bg-white text-[#003A96]"
                         : "bg-[#003A96] text-white"
@@ -22,7 +22,7 @@ export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchP
             {/* false */}
             <button
                 onClick={() => onCheckedChange(false)}
-                className={`px-4 py-1 transition-colors duration-200 w-20 ${
+                className={`px-4 py-2 transition-colors duration-200 w-30 ${
                     !checked
                         ? "bg-white text-[#003A96]"
                         : "bg-[#003A96] text-white"

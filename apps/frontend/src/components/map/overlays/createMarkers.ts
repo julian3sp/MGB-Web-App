@@ -2,8 +2,8 @@ import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
 import { nodePin, highlightPin } from "./markerStyles.ts";
-const markerLib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-const pin = nodePin(markerLib);   // blue “N”
+// const markerLib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+// const pin = nodePin(markerLib);   // blue “N”
 
 export function createMarkers(
     map: google.maps.Map,
@@ -28,7 +28,7 @@ export function createMarkers(
             map: map,
             title: node.id.toString(),
             gmpDraggable: true,
-            content: pin,
+            // content: pin,
             zIndex
         });
 
@@ -80,7 +80,7 @@ export function addNodeListener(
             map,
             title: "New Node",
             zIndex: 1,
-            content: pin,
+            // content: pin,
         });
         const id = Date.now();
         graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });

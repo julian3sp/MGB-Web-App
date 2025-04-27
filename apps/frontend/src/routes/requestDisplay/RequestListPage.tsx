@@ -137,7 +137,7 @@ export default function RequestListPage() {
                         Select a Request:
                     </h3>
                     </div>
-                    <div className={'overflow-y-auto overflow-style-none scrollbar-none bg-blue-50 rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-280'}>
+                    <div className={'overflow-y-auto overscroll-contain  bg-blue-50 rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-280 scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 '} >
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (

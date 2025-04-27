@@ -5512,7 +5512,8 @@ __metadata:
     sonner: "npm:^2.0.3"
     tailwind-merge: "npm:^3.2.0"
     tailwind-scrollbar: "npm:^4.0.2"
-    tailwindcss: "npm:^4.0.17"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.160.0"
     trpc: "npm:^0.11.3"
     ts-config-custom: "workspace:*"
@@ -8672,6 +8673,9 @@ __metadata:
     react-dom: "npm:latest"
     react-intersection-observer: "npm:^9.16.0"
     tailwind-merge: "npm:^3.2.0"
+    tailwind-scrollbar: "npm:^4.0.2"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.175.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
@@ -8924,6 +8928,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tailwind-scrollbar-utilities@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "tailwind-scrollbar-utilities@npm:0.3.0"
+  checksum: 10/77368bd85da23e90547e0d23c49a434bd1925c54de51bc8ca0832ebd07ce6f1272edabcb1cd1ffb5f95354b704bf194ef40dc11b7091266b130124148029c347
+  languageName: node
+  linkType: hard
+
 "tailwind-scrollbar@npm:^4.0.2":
   version: 4.0.2
   resolution: "tailwind-scrollbar@npm:4.0.2"
@@ -8935,10 +8946,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.0.17, tailwindcss@npm:^4.0.17":
+"tailwindcss@npm:4.0.17":
   version: 4.0.17
   resolution: "tailwindcss@npm:4.0.17"
   checksum: 10/c4463f7df51c45252d540db7a7c9d06f386f944b9626e4953dba6274d93c69b9133a9c095918fd2164d3012755cfa2d57ef86b4f11a08b30070ee67d1da98265
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "tailwindcss@npm:4.1.4"
+  checksum: 10/632510378ca0c73fb4ebd88d365480eab66a8f043cdefe3885afd45eaf71b9b1449ecbb17ead1b513de936cc98748fa5dc1759c8d91d8cd89887fecffa10648e
   languageName: node
   linkType: hard
 

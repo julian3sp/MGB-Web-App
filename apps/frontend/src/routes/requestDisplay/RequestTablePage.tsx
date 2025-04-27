@@ -157,17 +157,11 @@ export default function RequestTablePage() {
     return (
         <div className="flex flex-1  mt-0">
             <div
-                className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
-                style={{
-                    borderTop: '1px solid lightgrey',
-                    borderBottom: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                }}
+                className="w-full  min-h-screen p-6 pl-4 pr-4 font-[Poppins]"
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">

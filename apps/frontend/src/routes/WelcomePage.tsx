@@ -8,6 +8,7 @@ import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
 import Popup from "../components/ui/Popup.tsx"
 gsap.registerPlugin(ScrollTrigger);
+import Assistant from "../components/ui/assistant.tsx"
 
 export function WelcomePage() {
     const [tab, setTab] = React.useState<string>("");
@@ -88,6 +89,7 @@ export function WelcomePage() {
         </p>
       </motion.div>
       <AppleCardsCarouselDemo/>
+      <Assistant/>
     </div>
   );
 }

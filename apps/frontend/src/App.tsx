@@ -18,6 +18,7 @@ import AboutUs from './routes/AboutUs.tsx';
 import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
+import Chatbot from 'react-chatbot-kit'
 
 function App() {
     const [loginTag, setLoginTag] = React.useState(localStorage.getItem("firstName") || "Log In");
@@ -52,7 +53,7 @@ function App() {
             <QueryClientProvider client={queryClient}>
                 <Router>
                     <div className='min-h-screen'>
-
+                        <Chatbot config={config} actionProvider={actionProvider} messageParser={MessageParser}/>
                         <NavBar loginTag={loginTag} isSignedIn={isSignedIn} signOut={signOut} />
                         <Routes>
                             <Route path="/navigation" element={<NavigationPage />} />

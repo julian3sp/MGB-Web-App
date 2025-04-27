@@ -1,7 +1,7 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
-import {nodeMarker, div} from "./markerStyles.ts";
+import {nodeMarker} from "./markerStyles.ts";
 
 
 export function createMarkers(
@@ -86,14 +86,13 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         });
 
 
-
         // Create a temporary polyline for each connected edge
         for (const edge of connectedEdges) {
             const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
             const line = new google.maps.Polyline({
                 path: [
-                    { lat: node.x, lng: node.y },
-                    { lat: otherNode.x, lng: otherNode.y }
+                    {lat: node.x, lng: node.y},
+                    {lat: otherNode.x, lng: otherNode.y}
                 ],
                 map: marker.map,
                 geodesic: true,
@@ -101,9 +100,9 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
                 strokeOpacity: 1.0,
                 strokeWeight: 5,
             });
-
             tempPolylines.push(line);
-
+        }
+    });
     // Get node Info
     marker.addListener('click', () => {
         setNodeDetails(node);
@@ -127,8 +126,11 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
             const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
 
             line.setPath([
-                { lat: pos.lat()+0.000002, lng: pos.lng() },
-                { lat: otherNode.x, lng: otherNode.y }
+                {
+                    lat: (pos as google.maps.LatLngLiteral).lat + 0.000002,
+                    lng: (pos as google.maps.LatLngLiteral).lng
+                },
+                {lat: otherNode.x, lng: otherNode.y}
             ]);
         }
     });
@@ -138,7 +140,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         const newPos = marker.position;
         setNodeDetails(node);
         if (newPos) {
-            node.x = (newPos as google.maps.LatLngLiteral).lat+0.000002;
+            node.x = (newPos as google.maps.LatLngLiteral).lat + 0.000002;
             node.y = (newPos as google.maps.LatLngLiteral).lng;
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
             graph.editNode(node);
@@ -152,9 +154,9 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
 
         // Call onNodeMove to update the final state
         onNodeMove();
+
     });
 }
-
 
 export function addNodeListener(
     map: google.maps.Map,
@@ -165,7 +167,16 @@ export function addNodeListener(
     onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
         const id = Date.now();
-        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
+        graph.addNode({
+            id: id,
+            name: '',
+            building,
+            floor,
+            x: event.latLng.lat(),
+            y: event.latLng.lng(),
+            edgeCost: 0,
+            totalCost: 0
+        });
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,
@@ -176,7 +187,7 @@ export function addNodeListener(
         });
         console.log("New node added");
         // if (!node.id) continue;
-        markerUI(marker, graph.getNode(id),  setNodeDetails,  onNodeMove);
+        markerUI(marker, graph.getNode(id), setNodeDetails, onNodeMove);
         onNewMarker(marker);
     });
 }

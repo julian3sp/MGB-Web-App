@@ -48,7 +48,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
-
+    const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
@@ -77,7 +77,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     };
 
     function setAlgoTypeWrapper(algo: string) {
-        window.sessionStorage.setItem("algoType", algo);
+        newAlgo.mutate({ algoType: algo })
         setAlgoType(algo);
     }
 

@@ -38,6 +38,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const algoType = trpc.getAlgoType.useQuery().data
   // For overlays
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
@@ -197,18 +198,21 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current = null;
       }
 
+
+
+
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
-      if(!window.sessionStorage.getItem("algoType") || window.sessionStorage.getItem("algoType") === "A-Star"){
+      if(algoType === "A-Star"){
         console.log("Using A-Star")
         context.setStrategyPathfind(new AStar());
-      } else if (window.sessionStorage.getItem("algoType") === "DFS"){
+      } else if (algoType === "DFS"){
         console.log("Using DFS")
         context.setStrategyPathfind(new DFS())
-      } else if (window.sessionStorage.getItem("algoType") === "BFS"){
+      } else if (algoType === "BFS"){
         console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
-      } else if (window.sessionStorage.getItem("algoType") === "Dijkstras"){
+      } else if (algoType === "Dijkstras"){
         console.log("Using Dijkstra's")
         context.setStrategyPathfind(new Dijkstras())
       }

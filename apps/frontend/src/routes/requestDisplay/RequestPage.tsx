@@ -7,8 +7,8 @@ import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
-import CustomSwitch from "@/components/ui/CustomSwitch.tsx";
-
+import PlusIcon from '../../../assets/PlusIcon.png';
+import CustomSwitch from '@/components/ui/CustomSwitch.tsx';
 
 //Handles closing the filter popup when you click outside the popup
 const useClickOutside = (handler: () => void) => {
@@ -78,6 +78,9 @@ export default function RequestPage() {
         setShowFilterPanel(!showFilterPanel);
     };
 
+    const handleNewRequestClick = () =>
+        navigate('/services');
+
     const filterRef = useClickOutside(() => {
         setShowFilterPanel(false);
     });
@@ -86,31 +89,26 @@ export default function RequestPage() {
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
-            <div
-                className=" min-h-screen flex flex-col  font-[Poppins]"
-            >
-                <div className="flex items-center gap-4 bg-[#003A96] justify-between px-4  pb-3 items-end">
-                    <h1
-                        className="text-4xl text-white font-bold font-[Poppins] p-2 flex-start  "
-                    >
+            <div className=" min-h-screen flex flex-col  font-[Poppins]">
+                <div className="flex items-center gap-4 bg-[#003A96] justify-between px-4 pb-3 items-end">
+                    <h1 className="text-4xl text-white font-bold font-[Poppins] p-2 flex-start  ">
                         Service Requests:
                     </h1>
 
                     <div className="flex items-end gap-10 z-100">
-                        <div className="flex flex-col items-center">
-
-                            <CustomSwitch
-                            checked={currentView === 'list'}
-                            onCheckedChange={() => {
-                                toggleActive();
-                                if (currentView === 'table') {
-                                    navigate('list');
-                                } else {
-                                    navigate('table');
-                                }
-                            }}
-                            />
-                        </div>
+                        <button
+                            onClick={handleNewRequestClick}
+                            className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-fit h-[56px]"
+                        >
+                            <div className={'container'}>
+                                <img
+                                    src={PlusIcon}
+                                    alt="(Plus icon)"
+                                    className="h-7 inline-flex filter invert w-[18px] h-[18px]"
+                                />
+                                <p className="inline-flex ml-1">New Request</p>
+                            </div>
+                        </button>
 
                         <div ref={filterRef} className="flex flex-row gap-4">
                             <div className="relative pt-3">
@@ -118,7 +116,14 @@ export default function RequestPage() {
                                     onClick={handleFilterClick}
                                     className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
-                                    <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
+                                    <div className={'container'}>
+                                        <img
+                                            src={FilterIcon}
+                                            alt="(Filter icon)"
+                                            className="h-7 inline-flex filter invert"
+                                        />{' '}
+                                        <p className="inline-flex ml-1">Filters</p>
+                                    </div>
                                 </button>
 
                                 {showFilterPanel && (
@@ -326,9 +331,22 @@ export default function RequestPage() {
                                 )}
                             </div>
                         </div>
+                        <div className="flex flex-col items-center">
+                            <CustomSwitch
+                                checked={currentView === 'list'}
+                                onCheckedChange={() => {
+                                    toggleActive();
+                                    if (currentView === 'table') {
+                                        navigate('list');
+                                    } else {
+                                        navigate('table');
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-                <div    >
+                <div>
                     <Outlet />
                 </div>
             </div>

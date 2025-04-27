@@ -7,23 +7,24 @@ import {
   DropdownMenuLabel
 } from '../ui/dropdown-menu';
 import ZoomControls from '../ZoomInAndOutButton';
+import RotateControl from '../RotateButton'
 
 interface HospitalViewControlsProps {
   map: google.maps.Map | null;
   selectedDestination: { name: string; location: { lat: number; lng: number } } | null;
   selectedFloor: 3 | 4;
   onFloorChange: (floor: 3 | 4) => void;
+  rotateMap: (direction: 'left' | 'right') => void;
 }
 
 const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
   map,
   selectedDestination,
   selectedFloor,
-  onFloorChange
+  onFloorChange,
+  rotateMap
 }) => {
-  // MGB doesn't have floors to select
   const isMGB = selectedDestination?.name === "MGB (Chestnut Hill)";
-  // Either Patriot Place location has floors
   const isPatriotPlace = selectedDestination?.name === "20 Patriot Place" || 
                           selectedDestination?.name === "22 Patriot Place";
   const isFaulkner = selectedDestination?.name === "Faulkner";
@@ -62,11 +63,16 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
           </div>
         )}
       </div>
-  
+
       <div className="h-6 w-[1px] bg-gray-300 mx-4"></div>
-  
+
       {/* Zoom controls */}
       <ZoomControls map={map} selectedDestination={selectedDestination} />
+
+      <div className="h-6 w-[1px] bg-gray-300 mx-4"></div>
+
+      {/* Rotate controls */}
+      <RotateControl rotateMap={rotateMap} />
     </div>
   );
 };

@@ -1,39 +1,34 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
+import {nodeMarker, div} from "./markerStyles.ts";
+
 
 export function createMarkers(
     map: google.maps.Map,
+    lib: google.maps.MarkerLibrary,
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
     onNodeMove: () => void,
-    onNodeClicked?: (n: Node, m: google.maps.Marker) => void
+    onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
     ) {
-    const markers: google.maps.Marker[] = [];
-    const iconUrl =
-        type === 'removed'
-            ? 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Basic_red_dot.png'
-            : 'https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png';
+    const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
-    const scaledSize = new google.maps.Size(15, 15); // Larger red dot
 
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
             lat: node.x-0.000002,
             lng: node.y,
         };
-
-        const marker = new google.maps.Marker({
+        if (!node.id) continue;
+        const marker = new google.maps.marker.AdvancedMarkerElement({
             position: coord,
             map: map,
             title: node.id.toString(),
-            draggable: true,
-            icon: {
-                url: iconUrl,
-                scaledSize: scaledSize,
-
-            },
+            gmpDraggable: true,
+            content: nodeMarker(graph.neighborCount(node.id), "normal"),
+            collisionBehavior: lib.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY,
             zIndex
         });
 
@@ -44,20 +39,32 @@ export function createMarkers(
     return markers;
 }
 
-function markerUI(marker: google.maps.Marker, node: Node,
+function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
                   setNodeDetails: (node: Node) => void, onNodeMove: () => void,
-                  onNodeClicked?: (n: Node, m: google.maps.Marker) => void) {
+                  onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void) {
 
-    // Double click node to remove it temp
-    marker.addListener('dblclick', () => {
+    // Double click node to remove it
+    const content = marker.content as HTMLElement;
+
+    // Correct double click detection for AdvancedMarkerElement
+    content.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
         const connectedEdges = graph.getAllEdges().filter(
             edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
         );
 
         graph.deleteNode(node.id); // delete node
-
         console.log("remove node");
-        marker.setMap(null); // delete node visually/ polyline
+        // Animate the marker "popping"
+        content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
+        content.style.transform = "scale(0)";
+        content.style.opacity = "0";
+
+        // After animation, delete from graph and hide marker
+        setTimeout(() => {
+            graph.deleteNode(node.id);
+            marker.map = null;
+        }, 500); // Match the transition time (300ms)
 
         connectedEdges.forEach(edge => {
             // You can delete the polyline by setting its map to null here
@@ -88,7 +95,7 @@ function markerUI(marker: google.maps.Marker, node: Node,
                     { lat: node.x, lng: node.y },
                     { lat: otherNode.x, lng: otherNode.y }
                 ],
-                map: marker.getMap(),
+                map: marker.map,
                 geodesic: true,
                 strokeColor: "#FF0000",
                 strokeOpacity: 1.0,
@@ -96,12 +103,16 @@ function markerUI(marker: google.maps.Marker, node: Node,
             });
 
             tempPolylines.push(line);
-        }
+
+    // Get node Info
+    marker.addListener('click', () => {
+        setNodeDetails(node);
+        if (onNodeClicked) onNodeClicked(node, marker);
     });
 
     // Update polylines during drag
     marker.addListener('drag', () => {
-        const pos = marker.getPosition();
+        const pos = marker.position;
         if (!pos) return;
 
         // Find all edges connected to this node
@@ -124,11 +135,11 @@ function markerUI(marker: google.maps.Marker, node: Node,
 
     // Clean up when drag ends
     marker.addListener('dragend', () => {
-        const newPos = marker.getPosition();
+        const newPos = marker.position;
         setNodeDetails(node);
         if (newPos) {
-            node.x = newPos.lat()+0.000002;
-            node.y = newPos.lng();
+            node.x = (newPos as google.maps.LatLngLiteral).lat+0.000002;
+            node.y = (newPos as google.maps.LatLngLiteral).lng;
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
             graph.editNode(node);
         }
@@ -150,23 +161,21 @@ export function addNodeListener(
     building: string,
     floor: number,
     setNodeDetails: (node: Node) => void,
-    onNewMarker: (m: google.maps.Marker) => void,
+    onNewMarker: (m: google.maps.marker.AdvancedMarkerElement) => void,
     onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
-        const marker = new google.maps.Marker({
+        const id = Date.now();
+        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
+        const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,
             title: "New Node",
             zIndex: 1,
-            draggable: true,
-            icon: {
-                url: "https://www.clker.com/cliparts/K/2/n/j/Q/i/blue-dot-md.png",
-                scaledSize: new google.maps.Size(15, 15),
-            },
+            gmpDraggable: true,
+            content: nodeMarker(graph.neighborCount(id), "normal"),
         });
-        const id = Date.now();
-        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
         console.log("New node added");
+        // if (!node.id) continue;
         markerUI(marker, graph.getNode(id),  setNodeDetails,  onNodeMove);
         onNewMarker(marker);
     });

@@ -37,6 +37,7 @@ interface MapEditorProps {
 
 type GMapsListener = google.maps.MapsEventListener;
 
+
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -67,8 +68,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [edgeMode, setEdgeMode] = useState(false);      // on/off
     const [edgeStart, setEdgeStart] = useState<Node | null>(null);
     const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
-
     const nodeListenerRef = useRef<GMapsListener | null>(null);
+    const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
+
+
 
     const hospitalLocationMap = {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
@@ -92,26 +95,33 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const loader = new Loader({
             apiKey,
             version: 'weekly',
-            libraries: ['places'],
+            libraries: ['places', "marker"],
             language: 'en',
         });
+
+
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
-        loader.load().then(() => {
+        loader.load().then(async () => {
             if (mapRef.current) {
                 const newMap = new google.maps.Map(mapRef.current, {
-                    center: { lat: 42.3601, lng: -71.0589 },
+                    center: {lat: 42.3601, lng: -71.0589},
                     zoom: 12,
                     fullscreenControl: true,
                     mapTypeControl: false,
                     disableDoubleClickZoom: true,
-                        streetViewControl: false,
+                    streetViewControl: false,
                     zoomControl: false,
                     scaleControl: false,
+                    mapId: 'ca6b761fac973d24'
                 });
 
                 setMap(newMap);
                 setIsLoadingMap(false);
+
+                const lib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+                setMarkerLib(lib);
+
 
                 const directionsService = new google.maps.DirectionsService();
                 const directionsRenderer = new google.maps.DirectionsRenderer({
@@ -124,11 +134,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     },
                 });
 
-                    directionsRenderer.setMap(newMap);
-                    onMapReady(newMap, directionsService, directionsRenderer);
+                directionsRenderer.setMap(newMap);
+                onMapReady(newMap, directionsService, directionsRenderer);
 
-                }
-            })
+            }
+        })
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
@@ -199,7 +209,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [map, selectedHospital, selectedFloor, showNodes]);
 
     function displayNodes(){
-        if (!map || !selectedHospital) return;
+        if (!map || !selectedHospital || !markerLib) return;
 
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log("Displaying")
@@ -212,7 +222,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     ? "pat22"
                     : selectedHospital.toLowerCase();
 
-        const newStatics = createMarkers(map,
+        const newStatics = createMarkers(map, markerLib,
             graph.getBuildingNodes(buildingKey, floor),
             setNodeDetails,
             'normal',
@@ -224,13 +234,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleEdgeClick = useCallback(
         (node: Node, marker: google.maps.Marker) => {
-            console.log("trigger")
+            console.log("Edge Mode", edgeMode)
             if (!edgeMode) return;
-            console.log("Edge mode");
             console.log("edge start: ", edgeStart);
             if (!edgeStart) {
                 setEdgeStart(node);
-
+                console.log("set start node")
                 // create the rubber-band
                 const line = new google.maps.Polyline({
                     map,
@@ -273,6 +282,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         },
         [edgeMode, edgeStart, rubberBand, map]
     );
+
+    useEffect(() => {
+        console.log("trigger", edgeMode);
+    }, [edgeMode]);
+
+
 
     useEffect(() => {
         if (!map || !selectedHospital) return;
@@ -400,11 +415,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <button
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
                     onClick={() => {
-                        setEdgeMode((m) => !m);
+                        setEdgeMode((prevState) => !prevState);
                         setEdgeStart(null);
                     }}
                 >
-                    {edgeMode ? "Exit Edge Mode" : "Add Edge"}
+                    {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
                 </button>
 
                 <DropdownMenu>

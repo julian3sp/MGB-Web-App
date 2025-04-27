@@ -129,7 +129,7 @@ export default function RequestListPage() {
 
         <div className={'flex gap-x-4 bg-gradient-to-t  from-blue-100 to-g-blue-500   '}>
             <PageWrapper  contents={
-                <nav className=" h-300 bg-white   rounded-3xl ml-5 m-5  border-lightgrey  shadow-lg">
+                <nav className=" h-300   rounded-4xl ml-5 m-5  border-lightgrey  shadow-lg">
                     <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-b-5 border-b-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
                     <h3
                         className="text-xl  p-[8px]  font-[Poppins] text-white text-center"
@@ -297,7 +297,7 @@ export default function RequestListPage() {
 
 
                     {selectedRequest ? (
-                        <nav className="shadow-xl rounded-3xl  bg-blue-50 flex-1 border-[#44A6A6]  text-blue-gray-900">
+                        <nav className="shadow-xl rounded-4xl  bg-blue-50 flex-1 border-[#44A6A6]  text-blue-gray-900">
                             <div className={''} >
                                 <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-3xl rounded-tr-3xl border-[#d9d9d9] mb-3 ">
                                     <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
@@ -412,7 +412,7 @@ export default function RequestListPage() {
                                         >
                                             Request Type:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-4 mt-3 mb-3 text-blue-gray-900">
+                                        <ul className="list-disc  mt-3 mb-3 text-blue-gray-900">
                                             <p>
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.request_type === 'Sanitation'
@@ -449,7 +449,7 @@ export default function RequestListPage() {
                                         >
                                             Request ID:{' '}
                                         </h3>
-                                        <ul className="list-disc  ml-4 mb-3 mt-3">
+                                        <ul className="list-disc  mb-3 mt-3">
                                             <p className={'text-[15pt]'}>
                                                 #{selectedRequest.request_id}
                                             </p>
@@ -464,7 +464,7 @@ export default function RequestListPage() {
                                         >
                                             Request Date:{' '}
                                         </h3>
-                                        <ul className="list-disc ml-4 mb-3 mt-3">
+                                        <ul className="list-disc  mb-3 mt-3">
                                             <p className={'text-[15pt]'}>
                                                 {new Date(
                                                     selectedRequest.request_date
@@ -529,7 +529,7 @@ export default function RequestListPage() {
                                                 <h3 className="text-xl font-semibold font-[Poppins] py-1 pl-2" style={{ color: '#003A96' }}>
                                                     Priority:
                                                 </h3>
-                                                <ul className="list-disc ml-4 mb-3 mt-3 ">
+                                                <ul className="list-disc ml-2 mb-3 mt-3 ">
                                                     <p className="text-[15pt]">{selectedRequest.priority}</p>
                                                 </ul>
                                             </div>
@@ -539,7 +539,7 @@ export default function RequestListPage() {
                                                 <h3 className="text-xl font-semibold font-[Poppins]  pl-2" style={{ color: '#003A96' }}>
                                                     Status:
                                                 </h3>
-                                                <ul className="list-disc ml-4 mb-3 mt-3 ">
+                                                <ul className="list-disc ml-2 mb-3 mt-3 ">
                                                     <p className="text-[15pt]">{selectedRequest.status}</p>
                                                 </ul>
                                             </div>
@@ -556,7 +556,7 @@ export default function RequestListPage() {
                                             >
                                                 Name:{' '}
                                             </h3>
-                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
+                                            <ul className="list-disc  mb-3 mt-3">
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.name} (Employee ID:{' '}
                                                     {selectedRequest.employee_id})
@@ -574,7 +574,7 @@ export default function RequestListPage() {
                                             Location:{' '}
                                         </h3>
 
-                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
+                                            <ul className="list-disc mb-3 mt-3 ">
                                             <p className={'text-[15pt]'}>
                                                 {selectedRequest.location}
                                             </p>
@@ -590,7 +590,7 @@ export default function RequestListPage() {
                                             Department:{' '}
                                         </h3>
 
-                                            <ul className="list-disc ml-2 mb-3 mt-3 pl-2">
+                                            <ul className="list-disc mb-3 mt-3 ">
                                             <p className={'text-[15pt]'}>
                                                 {selectedRequest.department}
                                             </p>
@@ -609,11 +609,15 @@ export default function RequestListPage() {
                                             <ul className="list-disc  mb-3 mt-1">
                                                 <p className={'text-[15pt]'}>
                                                     {selectedRequest.sanitation?.cleaningType && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={' '}>
                                                             <span className="">Cleaning Type:</span>{' '}
                                                             {
                                                                 selectedRequest.sanitation.cleaningType
                                                             }{' '}
+
+                                                        </div>
+                                                            <hr className={'mt-7'}/>
                                                         </div>
                                                     )}
                                                     {selectedRequest.language?.targetLanguage && (
@@ -624,11 +628,12 @@ export default function RequestListPage() {
                                                                 selectedRequest.language.targetLanguage
                                                             }{' '}
                                                         </div>
-                                                            <hr/>
+                                                            <hr className={'mt-7'}/>
                                                         </div>
                                                     )}
                                                     {selectedRequest.audioVisual?.accommodationType && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$] shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
                                                         <span className="">
                                                             Accommodation Type:
                                                         </span>{' '}
@@ -637,10 +642,13 @@ export default function RequestListPage() {
                                                                     .accommodationType
                                                             }{' '}
                                                         </div>
+                                                            <hr className={'mt-7'}/>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.transportation
                                                         ?.transportationType && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                            <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">
                                                             Transportation Type:
@@ -650,46 +658,68 @@ export default function RequestListPage() {
                                                                     .transportationType
                                                             }{' '}
                                                         </div>
+                                                                <hr className={'mt-7'}/>
+
+                                                            </div>
                                                     )}
                                                     {selectedRequest.security?.accessZones && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$] shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">Access Zones:</span>{' '}
                                                             {selectedRequest.security.accessZones}{' '}
                                                         </div>
+                                                            <hr className={'mt-7'}/>
+
+                                                        </div>
                                                     )}
                                                     {selectedRequest.medicalDevice?.device && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">Medical Device:</span>{' '}
                                                             {selectedRequest.medicalDevice.device}
                                                         </div>
+                                                            <hr className={'mt-7'}/>
+
+                                                        </div>
                                                     )}
                                                     {selectedRequest.facilities?.maintenanceType && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={' mr-2 p-3  '}>
 
                                                         <span className="">Maintenance Type:</span>{' '}
                                                             {selectedRequest.facilities.maintenanceType}
                                                         </div>
+                                                            <hr className={'mt-7'}/>
+
+                                                        </div>
                                                     )}
                                                     <br />
                                                     {selectedRequest.request_type === 'Sanitation' && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]   shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">Contaminant:</span>{' '}
                                                             {selectedRequest.sanitation?.contaminant?.trim()
                                                                 ? selectedRequest.sanitation.contaminant
                                                                 : 'N/A'}
                                                         </div>
+\
+                                                        </div>
                                                     )}
                                                     {selectedRequest.language?.sourceLanguage && (
+                                                        <div>
                                                         <div className={'  mr-2 p-3  '}>
                                                             <span className="">Source Language:</span>{' '}
                                                             {selectedRequest.language.sourceLanguage}
                                                         </div>
+
+                                                        </div>
                                                     )}
                                                     {selectedRequest.request_type === 'AudioVisual' && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">
                                                             Accommodation Details:
@@ -699,10 +729,13 @@ export default function RequestListPage() {
                                                                     .accommodationDetails
                                                                 : 'N/A'}
                                                         </div>
+
+                                                        </div>
                                                     )}
                                                     {selectedRequest.transportation
                                                         ?.transportationDestination && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                            <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">
                                                             Transportation Destination:
@@ -712,18 +745,23 @@ export default function RequestListPage() {
                                                                     .transportationDestination
                                                             }{' '}
                                                         </div>
+
+                                                            </div>
                                                     )}
                                                     {selectedRequest.security?.securityIssue && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">Security Issue:</span>{' '}
                                                             {
                                                                 selectedRequest.security.securityIssue
                                                             }{' '}
                                                         </div>
+                                                        </div>
                                                     )}
                                                     {selectedRequest.medicalDevice
                                                         ?.operatorRequired && (
+                                                            <div>
                                                         <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
 
                                                         <span className="">Operator Required?</span>{' '}
@@ -732,12 +770,17 @@ export default function RequestListPage() {
                                                                     .operatorRequired
                                                             }
                                                         </div>
+
+                                                            </div>
                                                     )}
                                                     {selectedRequest.facilities?.equipmentType && (
-                                                        <div className={'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '}>
+                                                        <div>
+                                                        <div className={'mr-2 p-3  '}>
 
                                                         <span className="">Equipment Type:</span>{' '}
                                                             {selectedRequest.facilities.equipmentType}
+                                                        </div>
+
                                                         </div>
                                                     )}
                                                 </p>
@@ -756,8 +799,8 @@ export default function RequestListPage() {
                                         Additional Comments:{' '}
                                     </h3>
                                     <div >
-                                    <ul className="list-disc ml-2 mb-10 mt-3">
-                                        <div className={'border-1 rounded-lg border-[#D$D$D$] bg-white mb-2 shadow-sm  mr-2 p-3  '}>
+                                    <ul className="list-disc ml-2 mb-10 ">
+                                        <div className={' mr-2 p-3  '}>
 
                                         <p className={'text-[15pt] ml-1'}>
                                             {selectedRequest.additional_comments?.trim() ? (

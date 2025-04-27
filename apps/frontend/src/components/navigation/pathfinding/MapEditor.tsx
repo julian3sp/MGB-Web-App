@@ -37,8 +37,6 @@ interface MapEditorProps {
 
 type GMapsListener = google.maps.MapsEventListener;
 
-// const markerLibRef = useRef<google.maps.MarkerLibrary | null>(null);
-
 
 const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const mapRef = useRef<HTMLDivElement>(null);
@@ -70,7 +68,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [edgeStart, setEdgeStart] = useState<Node | null>(null);
     const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
     const nodeListenerRef = useRef<GMapsListener | null>(null);
-
+    const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
 
 
 
@@ -96,7 +94,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const loader = new Loader({
             apiKey,
             version: 'weekly',
-            libraries: ['places'],
+            libraries: ['places', "marker"],
             language: 'en',
         });
 
@@ -117,11 +115,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     mapId: 'ca6b761fac973d24'
                 });
 
-                const {AdvancedMarkerElement, PinElement }
-                    = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-
                 setMap(newMap);
                 setIsLoadingMap(false);
+
+                const lib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+                setMarkerLib(lib);
+
 
                 const directionsService = new google.maps.DirectionsService();
                 const directionsRenderer = new google.maps.DirectionsRenderer({
@@ -231,7 +230,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [map, selectedHospital, selectedFloor, showNodes]);
 
     function displayNodes(){
-        if (!map || !selectedHospital) return;
+        if (!map || !selectedHospital || !markerLib) return;
 
         const floor = selectedFloor === null ? 1: selectedFloor;
         console.log("Displaying")
@@ -244,7 +243,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     ? "pat22"
                     : selectedHospital.toLowerCase();
 
-        const newStatics = createMarkers(map,
+        const newStatics = createMarkers(map, markerLib,
             graph.getBuildingNodes(buildingKey, floor),
             setNodeDetails,
             'normal',

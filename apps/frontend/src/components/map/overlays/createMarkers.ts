@@ -1,12 +1,12 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
-import { nodePin, highlightPin } from "./markerStyles.ts";
-// const markerLib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-// const pin = nodePin(markerLib);   // blue “N”
+import { nodePin } from "./markerStyles.ts";
+
 
 export function createMarkers(
     map: google.maps.Map,
+    lib: google.maps.MarkerLibrary,
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
@@ -16,6 +16,7 @@ export function createMarkers(
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
     const scaledSize = new google.maps.Size(10, 10);
+    const defaultIcon = nodePin(lib);
 
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
@@ -28,7 +29,7 @@ export function createMarkers(
             map: map,
             title: node.id.toString(),
             gmpDraggable: true,
-            // content: pin,
+            content: defaultIcon.element,
             zIndex
         });
 
@@ -80,7 +81,7 @@ export function addNodeListener(
             map,
             title: "New Node",
             zIndex: 1,
-            // content: pin,
+            content: defaultIcon,
         });
         const id = Date.now();
         graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });

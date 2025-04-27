@@ -1,6 +1,6 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
-// import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
 import {nodeMarker} from "./markerStyles.ts";
 
 
@@ -41,39 +41,120 @@ export function createMarkers(
 
 function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
                   setNodeDetails: (node: Node) => void, onNodeMove: () => void,
-                  onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void){
+                  onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void) {
+
     // Double click node to remove it
     const content = marker.content as HTMLElement;
+
+    // Correct double click detection for AdvancedMarkerElement
     content.addEventListener('dblclick', (e) => {
         e.stopPropagation();
-        graph.deleteNode(node.id);
+        const connectedEdges = graph.getAllEdges().filter(
+            edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
+        );
+
+        graph.deleteNode(node.id); // delete node
         console.log("remove node");
         // Animate the marker "popping"
         content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
         content.style.transform = "scale(0)";
         content.style.opacity = "0";
 
+        // After animation, delete from graph and hide marker
         setTimeout(() => {
             graph.deleteNode(node.id);
             marker.map = null;
         }, 500); // Match the transition time (300ms)
+
+        connectedEdges.forEach(edge => {
+            // You can delete the polyline by setting its map to null here
+            if (edge.polyline) edge.polyline.setMap(null);
+        });
     });
 
+    // Track all temporary polylines we create for this node
+    const tempPolylines: google.maps.Polyline[] = [];
+
+    marker.addListener('dragstart', () => {
+        const connectedEdges = graph.getAllEdges().filter(
+            edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
+        );
+        // Delete edges from the graph and from the map visually
+        connectedEdges.forEach(edge => {
+            // You can delete the polyline by setting its map to null here
+            if (edge.polyline) edge.polyline.setMap(null);
+        });
+
+
+        // Create a temporary polyline for each connected edge
+        for (const edge of connectedEdges) {
+            const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
+            const line = new google.maps.Polyline({
+                path: [
+                    {lat: node.x, lng: node.y},
+                    {lat: otherNode.x, lng: otherNode.y}
+                ],
+                map: marker.map,
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 5,
+            });
+            tempPolylines.push(line);
+        }
+    });
     // Get node Info
     marker.addListener('click', () => {
         setNodeDetails(node);
         if (onNodeClicked) onNodeClicked(node, marker);
     });
 
+    // Update polylines during drag
+    marker.addListener('drag', () => {
+        const pos = marker.position;
+        if (!pos) return;
+
+        // Find all edges connected to this node
+        const connectedEdges = graph.getAllEdges().filter(
+            edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
+        );
+
+        // Update each temporary polyline
+        for (let i = 0; i < connectedEdges.length && i < tempPolylines.length; i++) {
+            const edge = connectedEdges[i];
+            const line = tempPolylines[i];
+            const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
+
+            line.setPath([
+                {
+                    lat: (pos as google.maps.LatLngLiteral).lat + 0.000002,
+                    lng: (pos as google.maps.LatLngLiteral).lng
+                },
+                {lat: otherNode.x, lng: otherNode.y}
+            ]);
+        }
+    });
+
+    // Clean up when drag ends
     marker.addListener('dragend', () => {
         const newPos = marker.position;
         setNodeDetails(node);
         if (newPos) {
-            node.x = (newPos as google.maps.LatLngLiteral).lat;
+            node.x = (newPos as google.maps.LatLngLiteral).lat + 0.000002;
             node.y = (newPos as google.maps.LatLngLiteral).lng;
             console.log(`Updated node ${node.id} to new position: (${node.x}, ${node.y})`);
+            graph.editNode(node);
         }
+
+        // Remove temporary polylines
+        for (const line of tempPolylines) {
+            line.setMap(null);
+        }
+        tempPolylines.length = 0;
+
+        // Call onNodeMove to update the final state
         onNodeMove();
+
     });
 }
 
@@ -86,17 +167,27 @@ export function addNodeListener(
     onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
         const id = Date.now();
-        graph.addNode({ id: id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0 });
+        graph.addNode({
+            id: id,
+            name: '',
+            building,
+            floor,
+            x: event.latLng.lat(),
+            y: event.latLng.lng(),
+            edgeCost: 0,
+            totalCost: 0
+        });
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,
             title: "New Node",
             zIndex: 1,
+            gmpDraggable: true,
             content: nodeMarker(graph.neighborCount(id), "normal"),
         });
         console.log("New node added");
         // if (!node.id) continue;
-        markerUI(marker, graph.getNode(id),  setNodeDetails,  onNodeMove);
+        markerUI(marker, graph.getNode(id), setNodeDetails, onNodeMove);
         onNewMarker(marker);
     });
 }

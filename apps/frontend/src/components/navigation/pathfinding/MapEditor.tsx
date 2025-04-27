@@ -64,6 +64,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
     const [newNodeTracker,  setNewNodeTracker]  = useState(false);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
+    const [dragStart, setDragStart] = useState(false);
     const [edgeMode, setEdgeMode] = useState(false);      // on/off
     const [edgeStart, setEdgeStart] = useState<Node | null>(null);
     const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
@@ -141,31 +142,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    // useEffect(() => {
-    //     if (!map) return;
-    //
-    //     const marker = new google.maps.Marker({
-    //         position: { lat: 42.30149071877142, lng: -71.12823221807406},
-    //         map,
-    //         draggable: true,
-    //         title: "Drag me!"
-    //     });
-    //
-    //     // const listener = marker.addListener("dragend", () => {
-    //     //     const pos = marker.getPosition();
-    //     //     if (pos) {
-    //     //         console.log("Marker dropped at:", pos.lat().toFixed(6), pos.lng().toFixed(6));
-    //     //     }
-    //     // });
-    //
-    //     return () => {
-    //       //  listener.remove();
-    //         marker.setMap(null);
-    //     };
-    // }, [map]);
-
     function getEdgeLines(){
-        console.log("fetching lines")
+
+        console.log("fetching lines what the heck")
         if(!selectedHospital || !map) return;
         let building = selectedHospital;
         if (building === "20 Patriot Place"){
@@ -276,7 +255,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             if (lines) setEdgePolylines(lines);
         }
 
-    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
+    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh, dragStart]);
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
@@ -309,6 +288,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         graph.populate(nodesRes.data, edgesRes.data);
         if (showNodes) displayNodes();
         if (showEdges) {
+            console.log("how was this called?")
             const lines = getEdgeLines();
             if (lines) setEdgePolylines(lines);
         }

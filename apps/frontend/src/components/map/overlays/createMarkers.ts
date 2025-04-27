@@ -1,7 +1,7 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
-
-import {nodeMarker, div} from "./markerStyles.ts";
+// import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import {nodeMarker} from "./markerStyles.ts";
 
 
 export function createMarkers(
@@ -44,8 +44,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
                   onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void){
     // Double click node to remove it
     const content = marker.content as HTMLElement;
-
-    // Correct double click detection for AdvancedMarkerElement
     content.addEventListener('dblclick', (e) => {
         e.stopPropagation();
         graph.deleteNode(node.id);
@@ -55,7 +53,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         content.style.transform = "scale(0)";
         content.style.opacity = "0";
 
-        // After animation, delete from graph and hide marker
         setTimeout(() => {
             graph.deleteNode(node.id);
             marker.map = null;

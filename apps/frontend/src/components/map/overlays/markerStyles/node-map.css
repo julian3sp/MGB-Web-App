@@ -1,7 +1,7 @@
 /* ---------- NODE DOT ---------- */
 .node-dot {
-    width: 20px;              /* base size */
-    height: 20px;
+    width: 18px;              /* base size */
+    height: 18px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
     #2163ff 0%,      /* light core */

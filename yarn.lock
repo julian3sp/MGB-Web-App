@@ -720,7 +720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@googlemaps/markerclusterer@npm:2.5.3":
+"@googlemaps/markerclusterer@npm:2.5.3, @googlemaps/markerclusterer@npm:^2.5.3":
   version: 2.5.3
   resolution: "@googlemaps/markerclusterer@npm:2.5.3"
   dependencies:
@@ -5615,6 +5615,7 @@ __metadata:
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
     "@googlemaps/js-api-loader": "npm:^1.16.8"
+    "@googlemaps/markerclusterer": "npm:^2.5.3"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-alert-dialog": "npm:^1.1.8"
     "@radix-ui/react-dialog": "npm:^1.1.10"

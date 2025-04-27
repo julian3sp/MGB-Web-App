@@ -255,51 +255,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleEdgeClick = useCallback(
         (node: Node, marker: google.maps.Marker) => {
-            console.log("Edge Mode", edgeMode)
-            if (!edgeMode) return;
-            console.log("edge start: ", edgeStart);
-            if (!edgeStart) {
-                setEdgeStart(node);
-                console.log("set start node")
-                // create the rubber-band
-                const line = new google.maps.Polyline({
-                    map,
-                    path: [marker.getPosition()!],
-                    geodesic: true,
-                    strokeColor: "#FF9800",
-                    strokeWeight: 4,
-                    icons: [{ icon: { path: "M 0,-1 0,1", strokeOpacity: 1 }, offset: "0", repeat: "8px" }],
-                });
-                setRubberBand(line);
 
-                // update rubber-band on mouse-move
-                const moveListener = map!.addListener("mousemove", (e) => {
-                    line.setPath([marker.getPosition()!, e.latLng]);});
-                (line as any).__moveListener = moveListener;
-            } else if (edgeStart.id !== node.id) {
-                graph.addEdge(edgeStart.id, node.id);   // your graph util
-                console.log("Edge ");
-
-                // draw permanent polyline
-                new google.maps.Polyline({
-                    map,
-                    path: [
-                        { lat: edgeStart.x, lng: edgeStart.y },
-                        { lat: node.x, lng: node.y },
-                    ],
-                    geodesic: true,
-                    strokeColor: "#1A73E8",
-                    strokeWeight: 4,
-                });
-
-                (rubberBand as any)?.__moveListener?.remove();
-                rubberBand?.setMap(null);
-                setEdgeStart(null);
-                setRubberBand(null);
-                setEdgeMode(false);
-                console.log("Edge created");
-                setEdgeRefresh(v => v + 1);
-            }
         },
         [edgeMode, edgeStart, rubberBand, map]
     );

@@ -59,6 +59,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
+    const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -182,8 +183,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
-
-
 
     // Effect to clear and rerender markers when building or floor changes
     useEffect(() => {
@@ -326,6 +325,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
         console.log("Edits: ", edits.addedNodes);
+        await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);
@@ -420,7 +420,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
                         <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
                         <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-600 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
+                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
                             Remove Node
                         </button>
                     </div>
@@ -429,7 +429,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
                 <button
@@ -444,7 +444,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-600 shadow-lg rounded p-3">Choose Your Algorithm</button>
+                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>

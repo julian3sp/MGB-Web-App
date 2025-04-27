@@ -412,19 +412,6 @@ function RequestForm({ title, type }: requestFormProps) {
                                     placeholder={"Select Priority"}
                                     error={errors.priority}
                                     clearError={() => clearError('priority')}
-                                    styledOptions={(option) =>
-                                        ` ${
-                                            option === 'Low'
-                                                ? 'text-green-600 font-semibold hover:text-green-700'
-                                                : option === 'Medium'
-                                                    ? 'text-yellow-500 font-semibold hover:text-yellow-600'
-                                                    : option === 'High'
-                                                        ? 'text-red-500 font-semibold hover:text-red-600'
-                                                        : option === 'Emergency'
-                                                            ? 'text-red-700 underline font-semibold hover:text-red-800'
-                                                            : ''
-                                        }`
-                                    }
                                 />
                             </div>
 
@@ -438,19 +425,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     error={errors.status}
                                     options={["Unassigned", "Assigned", "Working", "Done"]}
                                     clearError={() => clearError('status')}
-                                    styledOptions={(option) =>
-                                        ` ${
-                                            option === 'Unassigned'
-                                                ? 'font-semibold'
-                                                : option === 'Assigned'
-                                                    ? 'text-blue-600 font-semibold hover:text-blue-700'
-                                                    : option === 'Working'
-                                                        ? 'text-amber-600 font-semibold hover:text-amber-700'
-                                                        : option === 'Done'
-                                                            ? 'text-green-600 font-semibold hover:text-green-700'
-                                                            : ''
-                                        }`
-                                    }
+
                                 />
                             </div>
 

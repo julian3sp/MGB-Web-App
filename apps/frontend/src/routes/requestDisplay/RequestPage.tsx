@@ -1,11 +1,7 @@
-import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from './RequestListPage.tsx';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
-import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import CustomSwitch from "@/components/ui/CustomSwitch.tsx";
 
@@ -58,6 +54,8 @@ export default function RequestPage() {
         { label: 'Audio/Visual', value: 'AudioVisual' },
         { label: 'Sanitation', value: 'Sanitation' },
         { label: 'Security', value: 'Security' },
+        { label: 'Medical Device', value: 'MedicalDevice' },
+        { label: 'Facilities', value: 'Facilities' },
     ];
 
     const { data, isLoading, error } = trpc.requestList.useQuery();
@@ -90,14 +88,14 @@ export default function RequestPage() {
             >
                 <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
                     <h1
-                        className="text-4xl font-bold font-[Poppins] text-left"
+                        className="text-4xl font-bold font-[Poppins]  text-left"
                         style={{ color: '#003A96' }}
                     >
                         Service Requests:
                     </h1>
 
-                    <div className="flex items-end gap-8 z-100">
-                        <div className="flex flex-col items-center mb-2">
+                    <div className="flex items-end gap-10 z-100">
+                        <div className="flex flex-col items-center  mb-1">
 
                             <CustomSwitch
                             checked={currentView === 'list'}
@@ -112,11 +110,11 @@ export default function RequestPage() {
                             />
                         </div>
 
-                        <div ref={filterRef} className="flex flex-row gap-4">
-                            <div className="relative">
+                        <div ref={filterRef} className="flex flex-row mt-1 gap-4">
+                            <div className="relative py-[2px]">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-2 border border-blue-950 rounded-lg text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[12px] border border-blue-950 rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
                                 </button>

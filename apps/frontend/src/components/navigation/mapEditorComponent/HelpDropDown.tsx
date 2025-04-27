@@ -23,23 +23,23 @@ const HelpDropdown = () => {
       <div className="absolute bottom-24 right-1 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-600 cursor-pointer">
+            <button className="bg-[#003a96] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-950 cursor-pointer">
               <CircleHelp className="w-6 h-6" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel className="font-bold">Help & Instructions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleItemClick("To import nodes, drag and drop the file into the canvas.")}>
+            <DropdownMenuItem onClick={() => handleItemClick("To import nodes, double left click on the screen.")}>
               How to import nodes
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleItemClick("Use the overlay button to toggle layers on/off.")}>
+            <DropdownMenuItem onClick={() => handleItemClick("Select a destination in the bottom bar to see the overlay.")}>
               How to toggle overlays
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleItemClick("Right-click a node and choose 'Remove'.")}>
+            <DropdownMenuItem onClick={() => handleItemClick("Double right-click on the node and it will turn red.")}>
               How to remove a node
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleItemClick("Click 'Submit' in the top-right corner.")}>
+            <DropdownMenuItem onClick={() => handleItemClick("Click 'Submit' in the side bar.")}>
               Submit changes
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -53,7 +53,7 @@ const HelpDropdown = () => {
             <p className="mb-6">{modalContent}</p>
             <button
               onClick={() => setIsModalOpen(false)}
-              className="w-full bg-[#003a96] text-white py-2 rounded-lg hover:bg-blue-600"
+              className="w-full bg-[#003a96] text-white py-2 rounded-lg hover:bg-blue-950"
             >
               Got it!
             </button>

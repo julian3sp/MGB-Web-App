@@ -43,6 +43,7 @@ export class Graph {
             addedNodes: [],
             deletedEdges: [],
             addedEdges: [],
+            editedNodes: [],
         }
     }
 
@@ -76,6 +77,9 @@ export class Graph {
             id: e.id,
             sourceId: this.getNode(e.sourceId),
             targetId: this.getNode(e.targetId),
+
+            // node = this.getNode(e.sourceId),
+            // this.nodesClass.push(new NodeClass(node.))
         }));
 
 
@@ -285,11 +289,17 @@ export class Graph {
             building = "chestnut";
         }
 
-        // console.log("Getting edges building: ", building, " Floor:", floor);
         return Array.from(this.edges).filter(
             edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
                 edge.targetId.building === building && edge.targetId.floor  === floor
         );
+    }
+
+     neighborCount(nodeID: number): number {
+         const node = this.getNode(nodeID);
+         if (!node) return 0;
+         const neighbors = this.adjacencyList.get(node);
+         return neighbors ? neighbors.length : 0;
     }
 
 }

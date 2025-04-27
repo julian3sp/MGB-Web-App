@@ -1,7 +1,7 @@
 import {graph} from "@/components/map/GraphObject.ts";
 import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
-import { nodePin } from "./markerStyles.ts";
+import {nodeMarker, div} from "./markerStyles.ts";
 
 
 export function createMarkers(
@@ -15,25 +15,24 @@ export function createMarkers(
     ) {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
-    const scaledSize = new google.maps.Size(10, 10);
-    const defaultIcon = nodePin(lib);
 
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
             lat: node.x-0.000002,
             lng: node.y,
         };
-
+        if (!node.id) continue;
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: coord,
             map: map,
             title: node.id.toString(),
             gmpDraggable: true,
-            content: defaultIcon.element,
+            content: nodeMarker(graph.neighborCount(node.id), "normal"),
+            collisionBehavior: lib.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY,
             zIndex
         });
 
-        markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
+        // markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
         markers.push(marker);
     }
 

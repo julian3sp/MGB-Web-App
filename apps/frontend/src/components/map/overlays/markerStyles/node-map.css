@@ -1,0 +1,81 @@
+/* ---------- NODE DOT ---------- */
+.node-dot {
+    width: 15px;              /* base size */
+    height: 15px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #2163ff 0%,      /* light core */
+    #00307c 45%,     /* navy midtone */
+    #001c4d 95%);    /* deep edge */
+    box-shadow:
+            0 0 0 1px #ffffffcc,    /* crisp white rim */
+            0 2px 4px rgba(0,0,0,.45);   /* soft lift */
+    transform: translateZ(0);      /* promote to own layer */
+    transition:
+            transform .14s cubic-bezier(.25,.46,.45,.94),
+            box-shadow .14s;
+}
+
+/* — hover / keyboard focus — */
+.node-dot:hover,
+.node-dot:focus-visible {
+    transform: scale(1.5);
+    box-shadow:
+            0 0 0 2px #ffffff,      /* thicker rim */
+            0 2px 6px rgba(0,0,0,.60);
+    outline: none;
+    cursor: pointer;
+}
+
+/* ---------- STATE RINGS ---------- */
+.node--start,
+.node--goal,
+.node--blocked {
+    position: relative;
+}
+.node--start::after,
+.node--goal::after,
+.node--blocked::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.node--start::after { border: 2px solid #2ecc71; }         /* green */
+.node--goal::after  { border: 2px solid #ffbf00; }         /* gold  */
+.node--blocked { background: #7e7e7e; }                    /* gray fill */
+.node--blocked::after { border: 2px solid #666; }
+
+/* ---------- DEGREE-BASED JUNCTION ---------- */
+.node--junction {
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #2163ff 0%,
+    #00307c 45%,
+    #001c4d 95%);
+    box-shadow:
+            0 0 0 1px #ffffffcc,
+            0 2px 4px rgba(0,0,0,.45),
+            0 0 10px rgba(33, 99, 255, 0.6); /* subtle blue glow */
+}
+
+.node--end{
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #ff4d4d 0%,    /* light red center */
+    #d92d20 45%,   /* bold red mid */
+    #7c1812 95%);  /* deep dark red edge */
+    box-shadow:
+            0 0 0 1px #ffffffcc,
+            0 2px 4px rgba(0,0,0,.45),
+            0 0 10px rgba(217, 45, 32, 0.6); /* soft red glow */
+}
+
+/* ---------- EDGE / POLYLINE ---------- */
+.edge-line {
+    stroke: #d92d20;          /* soft red */
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-opacity: .6;
+}

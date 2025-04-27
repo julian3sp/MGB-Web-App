@@ -94,9 +94,9 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
         <div className="relative bg-white rounded-3xl shadow-lg transition-all duration-200">
           <input
               type="text"
-              className="w-full rounded-3xl py-2 pl-3 pr-10 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+              className="w-full rounded-3xl py-3 pl-3 pr-10 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
               value={searchTerm}
-              onFocus={() => setIsOpen(true)}
+              onClick={() => setIsOpen((prev) => !prev)}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Select a department"
           />

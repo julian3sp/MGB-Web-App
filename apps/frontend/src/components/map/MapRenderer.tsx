@@ -8,7 +8,7 @@ import { createMarkers } from './overlays/createMarkers';
 import { drawAllEdges, drawPath } from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
-import { StrategyPathfind, PathContext, BFS, DFS, AStar } from "../navigation/pathfinding/StrategyPathfind.ts"
+import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfinding/StrategyPathfind.ts"
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 // TRPC hooks
 import { trpc } from "@/lib/trpc";

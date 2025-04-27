@@ -1,6 +1,6 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
 import {Link, useLocation} from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
 import {LogOutButton} from "./signIn/LogOutButton.tsx"
@@ -14,8 +14,17 @@ type Props = {
 
 
 export default function NavBar({ userRole,  setUserRole }: Props) {
-    const [tab, setTab] = React.useState<string>("")
     const location = useLocation();
+    const [tab, setTab] = React.useState<string>(() => {
+        const path = location.pathname;
+        if(path.startsWith("/directory")) return "dir"; 
+        if(path.startsWith("/navigation")) return "navigation";
+        if(path.startsWith("/services")) return "serv";
+        if(path.startsWith("/requests")) return "reqP";
+        if(path.startsWith("/editor")) return "editor";
+        if(path.startsWith("/admin/directory")) return "exp";
+        return "";
+    })
     const { isAuthenticated } = useAuth0();
 
     useEffect(() => {

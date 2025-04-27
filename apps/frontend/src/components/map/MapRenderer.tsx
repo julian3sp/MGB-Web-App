@@ -8,7 +8,8 @@ import {createMarkers} from './overlays/createMarkers';
 import { drawAllEdges, drawPath} from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
 import Graph, {Edge, Node} from '../navigation/pathfinding/Graph';
-import {StrategyPathfind, PathContext, BFS, DFS, AStar} from "../navigation/pathfinding/StrategyPathfind.ts"
+import { PathContext, BFS, DFS, } from "../navigation/pathfinding/StrategyPathfind.ts"
+import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 import { graph } from "./GraphObject.ts"
@@ -207,6 +208,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       } else if (window.sessionStorage.getItem("algoType") === "BFS"){
         console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
+      } else if (window.sessionStorage.getItem("algoType") === "Dijkstras"){
+        console.log("Using Dijkstra's")
+        context.setStrategyPathfind(new Dijkstras())
       }
 
       const pathNodes = context.pathFind(graph, entrance, target)

@@ -438,6 +438,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="Dijkstras">Dijkstra's</DropdownMenuRadioItem>
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

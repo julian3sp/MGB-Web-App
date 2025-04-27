@@ -50,7 +50,16 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         e.stopPropagation();
         graph.deleteNode(node.id);
         console.log("remove node");
-        marker.map = null;
+        // Animate the marker "popping"
+        content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
+        content.style.transform = "scale(0)";
+        content.style.opacity = "0";
+
+        // After animation, delete from graph and hide marker
+        setTimeout(() => {
+            graph.deleteNode(node.id);
+            marker.map = null;
+        }, 500); // Match the transition time (300ms)
     });
 
     // Get node Info

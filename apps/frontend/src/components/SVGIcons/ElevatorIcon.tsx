@@ -20,7 +20,7 @@ const ElevatorIcon: React.FC<ElevatorIconProps> = (
          className={className}>
 
         <path id="Imported Path"
-              fill={fill} fillRule={"evenodd"} stroke={stroke} stroke-width="1"
+              fill={fill} fillRule={"evenodd"} stroke={stroke} strokeWidth="1"
               d="M 272.22,0.00
            C 219.40,0.00 176.43,42.98 176.43,95.80
              176.43,95.80 176.43,704.20 176.43,704.20

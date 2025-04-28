@@ -72,7 +72,7 @@ function RequestForm({ title, type }: requestFormProps) {
         department: '',
         status: '',
         cleaningType: '',
-        sourceLanguage: '',
+            sourceLanguage: '',
         targetLanguage: '',
         accommodationType: '',
         accessZones: '',
@@ -348,7 +348,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         {/* Employee Information (Two-Column Grid) */}
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
-                                <InputHeader>Name:</InputHeader>
+                                <InputHeader>Name</InputHeader>
                                 <ErrorPopUp
                                     value={name}
                                     setState={setName}
@@ -359,7 +359,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             </div>
 
                             <div>
-                                <InputHeader>Employee ID:</InputHeader>
+                                <InputHeader>Employee ID</InputHeader>
                                 <ErrorPopUp
                                     value={employeeID}
                                     setState={(value) => {

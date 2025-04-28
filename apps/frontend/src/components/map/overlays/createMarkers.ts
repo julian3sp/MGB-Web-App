@@ -3,6 +3,7 @@ import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
 import {nodeMarker} from "./markerStyles.ts";
 
+let prevMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 
 export function createMarkers(
     map: google.maps.Map,
@@ -55,7 +56,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
 
         graph.deleteNode(node.id); // delete node
         console.log("remove node");
-        // Animate the marker "popping"
         content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
         content.style.transform = "scale(0)";
         content.style.opacity = "0";
@@ -104,10 +104,18 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
     });
     // Get node Info
-    marker.addListener('click', () => {
+    content.addEventListener('click', (e) => {
+        e.stopPropagation();
         setNodeDetails(node);
         if (onNodeClicked) onNodeClicked(node, marker);
-    });
+        content.classList.add("node-selected");
+        if (prevMarker && prevMarker.content) {
+            (prevMarker.content as HTMLElement).classList.remove("node-selected");
+        }
+        content.classList.add("node-selected");
+        prevMarker = marker;
+    })
+
 
     // Update polylines during drag
     marker.addListener('drag', () => {
@@ -152,7 +160,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
         tempPolylines.length = 0;
 
-        // Call onNodeMove to update the final state
         onNodeMove();
 
     });

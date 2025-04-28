@@ -46,16 +46,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [isLoadingMap, setIsLoadingMap] = useState(true);
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
-    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
     const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
-
+    const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
-    const [nodesToRemove, setNodesToRemove] = useState<{ id: string; x: number; y: number }[]>([])
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const editNodes = trpc.editNodes.useMutation();
@@ -63,14 +61,16 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
-    const [newNodeTracker,  setNewNodeTracker]  = useState(false);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
-    const [dragStart, setDragStart] = useState(false);
-    const [edgeMode, setEdgeMode] = useState(false);      // on/off
-    const [edgeStart, setEdgeStart] = useState<Node | null>(null);
-    const [rubberBand, setRubberBand] = useState<google.maps.Polyline | null>(null);
+    const [edgeMode, setEdgeMode] = useState(false);
+    const [ghostLine, setGhostLine] = useState<google.maps.Polyline | null>(null);
     const nodeListenerRef = useRef<GMapsListener | null>(null);
     const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
+    const startMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
+    const [startNode, setStartNode] = useState<Node| null>(null);
+    const startNodeRef = useRef<Node | null>(null);
+    const algoType = trpc.getAlgoType.useQuery().data
+    const [newAlgoType, setAlgoType] = useState(algoType);
 
 
 
@@ -82,7 +82,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     };
 
     function setAlgoTypeWrapper(algo: string) {
-        window.sessionStorage.setItem("algoType", algo);
+        newAlgo.mutate({ algoType: algo })
         setAlgoType(algo);
     }
 
@@ -177,7 +177,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (showNodes && selectedHospital) {
             displayNodes();
         }
-    }, [map, selectedHospital, selectedFloor, showNodes]);
+    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
 
     useEffect(() => {
@@ -202,12 +202,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             marker => setStaticMarkers(prev => [...prev, marker])
         );
 
-        // cleanup when deps change or component unmounts
         return () => {
             nodeListenerRef.current?.remove();
             nodeListenerRef.current = null;
         };
-    }, [map, selectedHospital, selectedFloor, showNodes]);
+    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
     function displayNodes(){
         if (!map || !selectedHospital || !markerLib) return;
@@ -233,60 +232,31 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     }
 
-    const handleEdgeClick = useCallback(
-        (node: Node, marker: google.maps.Marker) => {
-            console.log("Edge Mode", edgeMode)
-            if (!edgeMode) return;
-            console.log("edge start: ", edgeStart);
-            if (!edgeStart) {
-                setEdgeStart(node);
-                console.log("set start node")
-                // create the rubber-band
-                const line = new google.maps.Polyline({
-                    map,
-                    path: [marker.getPosition()!],
-                    geodesic: true,
-                    strokeColor: "#FF9800",
-                    strokeWeight: 4,
-                    icons: [{ icon: { path: "M 0,-1 0,1", strokeOpacity: 1 }, offset: "0", repeat: "8px" }],
-                });
-                setRubberBand(line);
+    function handleEdgeClick(node: Node, marker: google.maps.marker.AdvancedMarkerElement){
+        console.log("edge mode: ", edgeMode);
+        if (!edgeMode) return;
+        if (!startNodeRef.current) {
+            console.log("start node:", node.id)
+            setStartNode(node);
+            startNodeRef.current = node;
 
-                // update rubber-band on mouse-move
-                const moveListener = map!.addListener("mousemove", (e) => {
-                    line.setPath([marker.getPosition()!, e.latLng]);});
-                (line as any).__moveListener = moveListener;
-            } else if (edgeStart.id !== node.id) {
-                graph.addEdge(edgeStart.id, node.id);   // your graph util
-                console.log("Edge ");
+            // if(marker.content){
+            //     const markerStyle = marker.content as HTMLElement;
+            //     markerStyle.classList.add("node-selected");
+            // }
+        } else if (startNodeRef.current.id !== node.id) {
+            console.log("end node:", node.id);
+            // ADD WEIGHT TO EDGE
+            const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: 0}
+            graph.addEdge(edge);
 
-                // draw permanent polyline
-                new google.maps.Polyline({
-                    map,
-                    path: [
-                        { lat: edgeStart.x, lng: edgeStart.y },
-                        { lat: node.x, lng: node.y },
-                    ],
-                    geodesic: true,
-                    strokeColor: "#1A73E8",
-                    strokeWeight: 4,
-                });
-
-                (rubberBand as any)?.__moveListener?.remove();
-                rubberBand?.setMap(null);
-                setEdgeStart(null);
-                setRubberBand(null);
-                setEdgeMode(false);
-                console.log("Edge created");
-                setEdgeRefresh(v => v + 1);
-            }
-        },
-        [edgeMode, edgeStart, rubberBand, map]
-    );
-
-    useEffect(() => {
-        console.log("trigger", edgeMode);
-    }, [edgeMode]);
+            setStartNode(null);
+            startNodeRef.current = null;
+            console.log("end");
+            setEdgeRefresh((v) => v + 1);
+            // Add line Follower somewhere
+        }
+    }
 
 
 
@@ -300,11 +270,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             if (lines) setEdgePolylines(lines);
         }
 
-    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh, dragStart]);
+    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
-        console.log("Edits: ", edits.addedNodes);
+        console.log("Edits: ", edits.addedEdges);
         await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
@@ -417,7 +387,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
                     onClick={() => {
                         setEdgeMode((prevState) => !prevState);
-                        setEdgeStart(null);
+                        setShowEdges(true);
                     }}
                 >
                     {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
@@ -434,6 +404,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="Dijkstras">Dijkstra's</DropdownMenuRadioItem>
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -1,7 +1,7 @@
 /* ---------- NODE DOT ---------- */
 .node-dot {
-    width: 20px;              /* base size */
-    height: 20px;
+    width: 18px;              /* base size */
+    height: 18px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
     #2163ff 0%,      /* light core */
@@ -25,6 +25,20 @@
             0 2px 6px rgba(0,0,0,.60);
     outline: none;
     cursor: pointer;
+}
+@keyframes pulse-green {
+    0%   { transform: scale(1);   box-shadow: 0 0 0 2px #008000, 0 2px 4px rgba(0,0,0,.45); }
+    50%  { transform: scale(1.35); box-shadow: 0 0 0 4px #27ae60, 0 4px 8px rgba(0,0,0,.55); }
+    100% { transform: scale(1);   box-shadow: 0 0 0 2px #008000, 0 2px 4px rgba(0,0,0,.45); }
+}
+
+.node-selected {
+    animation: pulse-green 1.2s infinite ease-in-out;
+    /* ensure pulse sits on top of other styles */
+    transform-origin: center;
+    box-shadow: 0 0 0 3px #008000,
+                0 2px 4px rgba(0,0,0,.45) !important;
+    transition: none; /* override any hover transition you may have */
 }
 
 /* ---------- STATE RINGS ---------- */

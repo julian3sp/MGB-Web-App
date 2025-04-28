@@ -72,7 +72,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`w-full h-[48px] font-[Poppins] text-[14px] shadow font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"} ${width || 'w-[396px]'} ${
+                        className={`w-full h-[48px] font-[Poppins] text-[13pt] shadow font-normal justify-between ${value == "" && !open ? "text-gray-500" : "text-black"} ${width || 'w-[396px]'} ${
                             styledOptions ? styledOptions(value) : ''}`}
                         onClick={() => console.log("Dropdown pressed")}
                     >
@@ -82,7 +82,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         <ChevronDown className={`opacity-50" ${!open ? "text-gray-500" : "text-black"}`} />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[362px] max-h-[275px] p-0 font-[Poppins]">
+                <PopoverContent className="w-140 max-h-[275px] p-0 font-[Poppins]">
                     <Command>
                         <CommandList>
                             <CommandGroup>

@@ -5505,6 +5505,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.9"
     react-dom: "npm:^18.2.0"
+    react-minimal-pie-chart: "npm:^9.1.0"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^7.5.0"
     react-social-icons: "npm:^6.24.0"
@@ -7905,6 +7906,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-minimal-pie-chart@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "react-minimal-pie-chart@npm:9.1.0"
+  dependencies:
+    svg-partial-circle: "npm:^1.0.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+    react-dom: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10/de7e1b236a4e34b7e98aeb660f2fc0711a48ad1656eab857d3d53ae4b6aae038d0d83f04c863bedec7bea63266df31ce802615f400a7e9f1fe04baab92cc1d58
+  languageName: node
+  linkType: hard
+
 "react-query@npm:^3.39.3":
   version: 3.39.3
   resolution: "react-query@npm:3.39.3"
@@ -8918,6 +8931,13 @@ __metadata:
   peerDependencies:
     react: ">=17.0"
   checksum: 10/45a8bde7fb4192d8fe5504ebbad4206381d4312257a873179278f8ec8b713e58a30053fa03fd52f4281ee2ad3eb96608fc70d6189d28f6c5f9c563d67ca22903
+  languageName: node
+  linkType: hard
+
+"svg-partial-circle@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "svg-partial-circle@npm:1.0.0"
+  checksum: 10/df5b6c28b43963395f56b0e86062922092756ff86c8b539e7348d1ce47fe229f442cc764002be8ea288d28bd0d8146a4b5f53cb2a44e31f91f7400a2110da1d7
   languageName: node
   linkType: hard
 

@@ -25,7 +25,7 @@ export function ErrorPopUp({
         <div className="relative">
             {error && (
                 <div className="absolute bottom-full left-18 mb-2">
-                    <div className="bg-red-100 text-red-800 font-medium pr-5 pl-8 py-2 rounded text-sm relative border border-red-300 shadow-md">
+                    <div className="bg-red-100 text-red-800 font-medium pr-5 pl-8 py-2 rounded text-lg relative border border-red-300 shadow-md">
                         <svg
                             viewBox="0 0 24 24"
                             className="absolute top-2 left-1 text-red-800 w-5 h-5 sm:w-5 sm:h-5 mr-3"
@@ -65,7 +65,7 @@ export function ErrorPopUp({
                 minLength={minLength}
                 maxLength={maxLength}
                 {...(type && { type })}
-                className={`border-[1px] border-[#ececec] focus:bg-white shadow border-solid hover:bg-accent hover:text-black rounded-md py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
+                className={`border-[1px] border-[#ececec] focus:bg-white shadow border-solid hover:bg-accent hover:text-black rounded-md py-[5px] pr-[5px] pl-[15px] text-[13pt] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
                 value={value}
                 onChange={(e) => {
                     setState(e.target.value);

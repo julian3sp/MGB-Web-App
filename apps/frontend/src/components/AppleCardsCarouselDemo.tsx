@@ -91,8 +91,8 @@ export function AppleCardsCarouselDemo() {
   const showMoreItem = (
     <div key="show-more" className="flex items-center justify-center h-full">
       <Link to="/directory">
-        <div className="bg-[#003a96] rounded-full shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center p-6">
-          <span className="text-3xl text-white  ">→</span>
+        <div className=" rounded-[300px] shadow-lg hover:shadow-xl transition-all bg-[#003a96] flex flex-col items-center justify-center p-6">
+          <span className="text-3xl pb-1 text-white  ">→</span>
         </div>
       </Link>
     </div>
@@ -102,7 +102,7 @@ export function AppleCardsCarouselDemo() {
   const allItems = [...cardItems, showMoreItem];
 
   return (
-    <div ref={carouselRef} className="w-full py-20 bg-white">
+    <div ref={carouselRef} className="w-full  py-20 ">
       <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] text-center">
         Explore Our Departments
       </h2>

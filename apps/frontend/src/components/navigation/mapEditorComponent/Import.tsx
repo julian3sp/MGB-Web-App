@@ -3,6 +3,10 @@ import FileUploadCard from "../../ui/fileUploadCard"
 import {toast} from "sonner"
 import { Toaster } from '../../ui/sonner';
 import { trpc } from '@/lib/trpc';
+import { PieChart } from 'react-minimal-pie-chart';
+
+
+
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
@@ -71,6 +75,13 @@ export default function ImportPage() {
   return (
     <div className="p-4 max-w-md mx-auto space-y-4">
       <h1 className="text-lg font-bold text-center">Import CSV Files</h1>
+      <PieChart
+          data={[
+            { title: 'One', value: 10, color: '#E38627' },
+            { title: 'Two', value: 15, color: '#C13C37' },
+            { title: 'Three', value: 20, color: '#6A2135' },
+          ]}
+      />;
       <FileUploadCard files={files} onFilesChange={setFiles} />
       <button
         onClick={handleImportFiles}

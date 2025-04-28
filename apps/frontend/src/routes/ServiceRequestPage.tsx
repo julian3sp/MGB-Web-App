@@ -17,11 +17,11 @@ function ServiceRequestPage() {
 
     return (
         <PageWrapper open={true} contents={
-            <div className="border-r border-gray-300 h-full">
+            <div className="border-r border-[#44A6A6] bg-white h-full">
                 <ServiceFormSideBar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
-        } scaling = {5} absolute={false}>
-            <div className="relative flex-1 flex flex-col min-h-screen items-center justify-center p-10 pb-12 pt-12">
+        } scaling = {4} absolute={false} >
+            <div className="relative flex-1 bg-gradient-to-t  from-blue-100 to-[#003A96] flex flex-col min-h-screen items-center justify-center p-10 pb-12 pt-12">
                 <div>
                     <RequestForm title={activeTab.title} type={activeTab.type} />
                 </div>

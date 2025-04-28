@@ -331,11 +331,11 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center  text-sm"
+                    className="justify-center  text-xl"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className=" rounded-lg shadow-lg overflow-hidden w-200 bg-white flex flex-col gap-5">
+                    <div className=" rounded-lg shadow-lg overflow-hidden w-300  bg-white flex flex-col gap-5">
 
                         <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
                             {title}

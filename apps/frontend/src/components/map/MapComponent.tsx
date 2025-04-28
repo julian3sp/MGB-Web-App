@@ -340,8 +340,8 @@ const MapComponent: React.FC = () => {
                    contents=
                        {
         // put sidebar contents here:</p>
-        <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
-          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
+        <div className="h-[95vh] w-full p-5 border-r border-[#44A6A6] border-r-3 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold font-[Poppins] text-black text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}
               selectedPlace={selectedPlace}
@@ -360,7 +360,7 @@ const MapComponent: React.FC = () => {
           {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
           {/* Select Department dropdown */}
-          <h2 className="text-sm font-semibold pt-4 font-[poppins] self-center">Select a department</h2>
+          <h2 className="text-sm font-semibold pt-4 font-[poppins] text-black self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name} />
         </div>}
                    scaling = {4}

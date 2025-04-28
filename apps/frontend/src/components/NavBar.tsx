@@ -1,4 +1,4 @@
-import logo from "../../assets/MassGenWhite.svg";
+import logo from "../../assets/logo-icon-mass-general-brigham.png";
 import {Link, useLocation} from "react-router-dom";
 import React, { useEffect } from "react";
 import '../styles/mainStyles.css'
@@ -49,9 +49,13 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
     return (
         <nav className="flex justify-between items-center border-b-[#44A6A6] border-b-3  bg-[#003A96] text-white ">
             <div className="flex items-center space-x-4 ">
+
                 <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo"  className="h-9"/>
+                    <div className={'flex'}>
+                    <img src={logo} alt="Mass General Brigham Logo"  className="h-9"/> <h1 className={'font-[poppins] p-2'}>Mass General Brigham</h1>
+                    </div>
                 </Link>
+
                 <div className="flex">
                     <Link to="/directory" onClick={() => setTab("dir")}
                           className={tab === "dir" ?

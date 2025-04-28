@@ -31,7 +31,7 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling =
     };
 
     const width = useOneThirdWidth();
-    const translateMargin = isSidebarOpen ? 0 : -1*(width -20 ?? 256);
+    const translateMargin = isSidebarOpen ? 0 : -1*(width  ?? 256);
 
     return (
         <div className="flex">

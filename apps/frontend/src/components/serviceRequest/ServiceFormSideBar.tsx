@@ -8,7 +8,8 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
     };
 
     return (
-        <div className=" p-5">
+        <div className=" p-5 ">
+
             <h3 className="text-2xl font-bold mb-4 pt-2 font-[Poppins]"
                 style={{ color: '#003A96' }}>Menu:</h3>
 

@@ -49,12 +49,12 @@ export function WelcomePage() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-[linear-gradient(to_bottom,_#003A96_20%,_#bbdefb_60%)] ">
       {/* pinned section */}
-      <div ref={containerRef} className="min-h-screen">
+      <div ref={containerRef} className="min-h-screen  ">
         <div
           ref={wrapperRef}
-          className="w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
+          className="w-full h-screen mx-auto overflow-hidden  flex justify-center items-center"
         >
           <video
             ref={videoRef}
@@ -70,7 +70,7 @@ export function WelcomePage() {
 
       {/* centered text */}
       <motion.div
-        className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
+        className="w-full flex flex-col  items-center justify-center py-12 px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, amount: 0.5 }}

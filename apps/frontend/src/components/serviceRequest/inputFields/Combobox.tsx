@@ -56,6 +56,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                                         value={option}
                                         onSelect={(currentValue) => {
                                             setValue(currentValue === value ? "" : currentValue)
+                                            if (clearError) clearError()
                                             setOpen(false)
                                         }}
                                     >

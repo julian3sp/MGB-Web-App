@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
 
 type ProgressBarProps = {
     currentStep: number;
@@ -31,8 +32,12 @@ type ProgressBarProps = {
 export function ProgressBar(props: ProgressBarProps) {
     const [totalPercent, setTotalPercent] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
+    const [prevPercent, setPrevPercent] = useState(0);
 
     useEffect(() => {
+        // Store previous percent for animation
+        setPrevPercent(totalPercent);
+        
         let progress = 0;
 
         // Step 1: 2 fields (12.5% each, total 25%)
@@ -108,14 +113,83 @@ export function ProgressBar(props: ProgressBarProps) {
                 (props.cleaningType ? 25 : 0) :
                 props.type === "Security" ?
                     (props.accessZones ? 12.5 : 0) + (props.securityIssue ? 12.5 : 0) :
-                    // ... other type cases
-                    0)
+                    props.type === "Transportation" ?
+                        (props.transportationType ? 12.5 : 0) + (props.transportationDestination ? 12.5 : 0) :
+                        props.type === "AudioVisual" ?
+                            (props.accommodationType ? 25 : 0) :
+                            props.type === "MedicalDevice" ?
+                                (props.device ? 12.5 : 0) + (props.operatorRequired ? 12.5 : 0) :
+                                props.type === "Facilities" ?
+                                    (props.maintenanceType ? 12.5 : 0) + (props.equipmentType ? 12.5 : 0) :
+                                    0)
     ) : 0;
+
+    // Animation variants
+    const percentVariants = {
+        initial: { opacity: 0, y: -10 },
+        animate: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
+
+    const progressVariants = {
+        initial: { width: 0 },
+        animate: { 
+            width: `${(step1Progress / 25) * 25}%`,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
+    const step2ProgressVariants = {
+        initial: { width: 0 },
+        animate: { 
+            width: `${(step2Progress / 50) * 50}%`,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
+    const step3ProgressVariants = {
+        initial: { width: 0 },
+        animate: { 
+            width: `${(step3Progress / 25) * 25}%`,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
+    // Step indicator animations
+    const stepIndicatorVariants = {
+        inactive: { 
+            scale: 1,
+            backgroundColor: "#FFFFFF",
+            color: "#6B7280",
+            border: "2px solid #D1D5DB"
+        },
+        active: { 
+            scale: [1, 1.2, 1],
+            backgroundColor: "#003a96",
+            color: "#FFFFFF",
+            border: "2px solid #003a96",
+            transition: { duration: 0.5 }
+        },
+        complete: {
+            scale: [1, 1.2, 1],
+            backgroundColor: "#003a96",
+            color: "#FFFFFF",
+            border: "2px solid #003a96",
+            transition: { duration: 0.3 }
+        }
+    };
 
     return (
         <div className="w-full px-6 py-3">
             <div className="flex justify-between mb-1">
-                <p className="text-sm font-medium text-gray-700">{totalPercent}% Complete</p>
+                <motion.p 
+                    className="text-sm font-medium text-gray-700"
+                    key={totalPercent}
+                    variants={percentVariants}
+                    initial="initial"
+                    animate="animate"
+                >
+                    {totalPercent}% Complete
+                </motion.p>
             </div>
 
             {/* Progress Bar */}
@@ -124,87 +198,116 @@ export function ProgressBar(props: ProgressBarProps) {
                 <div className="absolute top-0 left-0 h-2 w-full bg-gray-200 rounded-full"></div>
 
                 {/* Step 1 Progress (25% width) */}
-                <div
+                <motion.div
                     className="absolute top-0 left-0 h-2 bg-[#003a96]"
+                    variants={progressVariants}
+                    initial="initial"
+                    animate="animate"
                     style={{
-                        width: `${(step1Progress / 25) * 25}%`,
                         borderTopLeftRadius: '4px',
                         borderBottomLeftRadius: step1Complete ? '0' : '4px'
                     }}
-                ></div>
+                ></motion.div>
 
-                {/* Step 2 Progress (50% width) - only visible if step 1 complete */}
                 {step1Complete && (
-                    <div
+                    <motion.div
                         className="absolute top-0 h-2 bg-[#003a96]"
+                        variants={step2ProgressVariants}
+                        initial="initial"
+                        animate="animate"
                         style={{
-                            width: `${(step2Progress / 50) * 50}%`,
                             left: '25%',
                             borderBottomLeftRadius: step2Complete ? '0' : '4px'
                         }}
-                    ></div>
+                    ></motion.div>
                 )}
 
-                {/* Step 3 Progress (25% width) - only visible if step 2 complete */}
                 {step2Complete && (
-                    <div
+                    <motion.div
                         className="absolute top-0 h-2 bg-[#003a96]"
+                        variants={step3ProgressVariants}
+                        initial="initial"
+                        animate="animate"
                         style={{
-                            width: `${(step3Progress / 25) * 25}%`,
                             left: '75%',
                             borderTopRightRadius: isComplete ? '4px' : '0',
                             borderBottomRightRadius: isComplete ? '4px' : '0'
                         }}
-                    ></div>
+                    ></motion.div>
                 )}
 
                 {/* Step Indicators */}
-                <div className="absolute top-0 left-0 w-full h-2">
+                <div className="absolute top-0 left-0 w-[98%] h-2">
                     {/* Step 1 at 0% */}
-                    <div
-                        className={`absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3
-                                    ${step1Complete ? 'bg-[#003a96] text-white' :
-                                step1Progress > 0 ? 'bg-[#003a96] text-white' :
-                                    'bg-white border-2 border-gray-300 text-gray-500'}`}
+                    <motion.div
+                        className="absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3"
                         style={{ left: '0%' }}
+                        variants={stepIndicatorVariants}
+                        initial="inactive"
+                        animate={step1Progress > 0 ? (step1Complete ? "complete" : "active") : "inactive"}
                     >
                         1
-                    </div>
+                    </motion.div>
 
                     {/* Step 2 at 25% */}
-                    <div
-                        className={`absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3
-                                    ${step2Complete ? 'bg-[#003a96] text-white' :
-                                step2Progress > 0 ? 'bg-[#003a96] text-white' :
-                                    'bg-white border-2 border-gray-300 text-gray-500'}`}
+                    <motion.div
+                        className="absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3"
                         style={{ left: '25%' }}
+                        variants={stepIndicatorVariants}
+                        initial="inactive"
+                        animate={step2Progress > 0 ? (step2Complete ? "complete" : "active") : "inactive"}
                     >
                         2
-                    </div>
+                    </motion.div>
 
                     {/* Step 3 at 75% */}
-                    <div
-                        className={`absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3
-                                    ${step3Complete ? 'bg-[#003a96] text-white' :
-                                step3Progress > 0 ? 'bg-[#003a96] text-white' :
-                                    'bg-white border-2 border-gray-300 text-gray-500'}`}
+                    <motion.div
+                        className="absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -ml-3"
                         style={{ left: '75%' }}
+                        variants={stepIndicatorVariants}
+                        initial="inactive"
+                        animate={step3Progress > 0 ? (step3Complete ? "complete" : "active") : "inactive"}
                     >
                         3
-                    </div>
+                    </motion.div>
 
                     {/* Complete (✓) at 100% */}
-                    <div
-                        className={`absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -mr-3
-                                    ${isComplete ? 'bg-[#003a96] text-white' :
-                                'bg-white border-2 border-gray-300 text-gray-500'}`}
+                    <motion.div
+                        className="absolute w-6 h-6 rounded-full flex items-center justify-center -mt-2 -mr-3"
                         style={{ left: '100%', transform: 'translateX(-50%)' }}
+                        variants={stepIndicatorVariants}
+                        initial="inactive"
+                        animate={isComplete ? "complete" : "inactive"}
+                        whileHover={isComplete ? { scale: 1.1 } : {}}
                     >
                         ✓
-                    </div>
-
+                    </motion.div>
                 </div>
             </div>
+
+            {isComplete && totalPercent > prevPercent && (
+                <motion.div 
+                    className="absolute top-0 left-0 w-full h-full pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 1.5 }}
+                >
+                    <div className="flex justify-center items-center h-full">
+                        <motion.div
+                            className="text-4xl"
+                            initial={{ scale: 0, rotate: 0 }}
+                            animate={{ 
+                                scale: [0, 1.5, 1], 
+                                rotate: [0, 15, -15, 0],
+                                y: [0, -20, 0]
+                            }}
+                            transition={{ duration: 1 }}
+                        >
+                            🎉
+                        </motion.div>
+                    </div>
+                </motion.div>
+            )}
         </div>
     );
 }

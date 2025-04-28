@@ -1,16 +1,8 @@
 import { FormEvent, useState } from 'react';
-import { AuthenticationError } from '@auth0/auth0-react';
-import { ServiceComponentDropdown } from "./inputFields/ServiceComponentDropdown.tsx";
-import { ErrorPopUp } from "./inputFields/ErrorPopUp.tsx";
-import { SRQDropdown } from "./inputFields/SRQDropdown.tsx";
-import { Combobox } from "./inputFields/Combobox.tsx";
-import TextArea from '../TextArea.tsx';
-import SubmitButton from '../SubmitButton.tsx';
-import { InputHeader } from '../signIn/InputHeader.tsx';
+
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
-import { languages } from "./data/languages.ts";
 import { ProgressBar } from './ProgressBar.tsx';
 import { FormSteps } from './FormSteps.tsx';
 import { FinalReview } from './FinalReview.tsx';
@@ -495,7 +487,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                 </button>
                             )}
                             {currentStep === 4 && (
-                                <button type="submit">
+                                <button type="submit" className='w-[10%] h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-3xl mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
                                     Submit
                                 </button>
                             )}

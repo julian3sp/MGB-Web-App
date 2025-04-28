@@ -100,7 +100,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             language: 'en',
         });
 
-
         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
 
         loader.load().then(async () => {
@@ -258,8 +257,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }
 
-
-
     useEffect(() => {
         if (!map || !selectedHospital) return;
         edgePolylines.forEach(poly => poly.setMap(null));
@@ -371,9 +368,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
                         <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
                         <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
-                            Remove Node
-                        </button>
+                        {/*<button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>*/}
+                        {/*    Remove Node*/}
+                        {/*</button>*/}
                     </div>
                 )}
 
@@ -410,26 +407,27 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 </DropdownMenu>
             </div>} scaling = {4} absolute = {true}>
 
-            <div>
+            <div className="flex-1 h-full">
                 {isLoadingMap && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
                         <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
-                <div ref={mapRef} className="flex-1 w-full h-screen
-                "></div>
-                <MapEditorControls
-                    map={map}
-                    selectedHospital={selectedHospital}
-                    selectedFloor={selectedFloor}
-                    onHospitalChange={setSelectedHospital}
-                    onFloorChange={setSelectedFloor}
-                    hospitalLocationMap={hospitalLocationMap}
-                    showNodes={showNodes}
-                    showEdges={showEdges}
-                    onToggleNodes={handleToggleNodes}
-                    onToggleEdges={handleToggleEdges}
-                />
+                <div ref={mapRef} className="w-full h-full"></div>
+                <div className="relative">
+                    <MapEditorControls
+                        map={map}
+                        selectedHospital={selectedHospital}
+                        selectedFloor={selectedFloor}
+                        onHospitalChange={setSelectedHospital}
+                        onFloorChange={setSelectedFloor}
+                        hospitalLocationMap={hospitalLocationMap}
+                        showNodes={showNodes}
+                        showEdges={showEdges}
+                        onToggleNodes={handleToggleNodes}
+                        onToggleEdges={handleToggleEdges}
+                    />
+                </div>
                 <HelpDropdown />
             </div>
             </PageWrapper>

@@ -69,4 +69,35 @@ export const flipCardsData = [
             </p>
         ),
     },
+
+    {
+        category: "Brigham & Women's Hospital Main Campus",
+        title: "Filter test (Brigham & Women's Hospital Main Campus)",
+        src: lebron1,
+        content: (
+            <p className="text-white">
+                test
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Filter test (Patriot Place)",
+        src: lebron1,
+        content: (
+            <p className="text-white">
+                test
+            </p>
+        ),
+    },
+    {
+        category: "Faulkner Hospital",
+        title: "Filter test (Faulkner Hospital)",
+        src: lebron1,
+        content: (
+            <p className="text-white">
+                test
+            </p>
+        ),
+    },
 ];

@@ -34,7 +34,6 @@ export const flipCardsData = [
                 <CardContent
                     location={"1st Floor, Suite 130"}
                     specialties={["Orthopedic Surgery", "Vascular Services", "Contact Dermatitis", "Occupational Dermatology Program", "Pain Medicine", "Travel Medicine"]}
-                    //Orthopedic surgery, Vascular surgery, Contact Dermatitis and Occupational Dermatology Program, Pain Medicine and Travel Medicine
                     phoneNumber={"(508)-259-7878"}
                 />
             </div>

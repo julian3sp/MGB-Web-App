@@ -85,8 +85,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setAlgoType(algo);
     }
 
-    // Start of map e
-    // ditor
+    // Start of map editor
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;

@@ -109,7 +109,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         e.stopPropagation();
         setNodeDetails(node);
         if (onNodeClicked) onNodeClicked(node, marker);
-        console.log("test")
         content.classList.add("node-selected");
         if (prevMarker && prevMarker.content) {
             (prevMarker.content as HTMLElement).classList.remove("node-selected");

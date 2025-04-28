@@ -1,5 +1,3 @@
-// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
-
 export type Node = {
     name: string
     id: number | undefined

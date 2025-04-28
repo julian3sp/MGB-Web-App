@@ -89,13 +89,13 @@ export default function RequestPage() {
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
-            <div className=" min-h-screen flex flex-col bg-blue-200   font-[Poppins]"
+            <div className=" min-h-screen flex flex-col bg-white   font-[Poppins]"
             >
 
-                <div className="gap-4  rounded-[100px]   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
+                <div className="gap-4  rounded-[100px] bg-[#003a96]   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
                     <div>
                         <h1
-                            className="text-5xl text-[#003a96] text-center pl-3 pt-5 font-bold font-[Poppins]  flex-start  "
+                            className="text-4xl text-white text-center p-1 font-bold font-[Poppins]  flex-start  "
                         >
                             Service Requests
                         </h1>

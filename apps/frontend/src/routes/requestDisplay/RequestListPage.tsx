@@ -130,14 +130,14 @@ export default function RequestListPage() {
         <div className={'flex gap-x-4  '}>
             <PageWrapper  contents={
                 <nav className=" h-300   rounded-4xl ml-5 m-5  border-lightgrey  shadow-lg">
-                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-1 border-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
+                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-1 border-b-5 border-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
                     <h3
                         className="text-xl  p-[8px]  font-[Poppins] text-white text-center"
                     >
                         Select a Request:
                     </h3>
                     </div>
-                    <div className={'overflow-y-auto overscroll-contain  bg-blue-50 rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-280 scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 '} >
+                    <div className={'overflow-y-auto overscroll-contain  bg-blue-100  rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-280 scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 '} >
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.map((res) => (
@@ -297,7 +297,7 @@ export default function RequestListPage() {
 
 
                     {selectedRequest ? (
-                        <nav className="shadow-xl rounded-4xl  bg-blue-50 flex-1 border-[#44A6A6]  text-blue-gray-900">
+                        <nav className="shadow-xl rounded-4xl  bg-blue-100 flex-1 border-[#44A6A6]  text-blue-gray-900">
                             <div className={''} >
                                 <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-3xl rounded-tr-3xl border-[#d9d9d9] mb-3 ">
                                     <h2 className="text-xl  p-5 " style={{ color: 'white' }}>

@@ -18,6 +18,7 @@ import WaitingScreen from './routes/WaitingScreen.tsx';
 import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
+import AdminPage from "./routes/adminPage/AdminPage.tsx";
 
 function InnerApp() {
     const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
@@ -95,6 +96,7 @@ function InnerApp() {
                     <Route path="/services" element={<ServiceRequestPage />} />
                     <Route path="/admin/directory" element={<DirectoryPage />} />
                     <Route path="/editor" element={<MapEditor onMapReady={() => { }} />} />
+                    <Route path="/admin" element={<AdminPage />} />
                     <Route path="requests" element={<RequestPage />}>
                         <Route index element={<Navigate to="table" replace />} />
                         <Route path="table" element={<RequestTablePage userRole={userRole}/>} />

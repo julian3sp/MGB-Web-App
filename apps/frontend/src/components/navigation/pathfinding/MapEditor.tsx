@@ -359,7 +359,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     return (
             <PageWrapper open={true} contents= {
-            <div className="w-full h-full p-5 border-r border-gray-300 flex flex-col gap-4">
+            <div className="w-full min-h-screen p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
                 <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                     <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>

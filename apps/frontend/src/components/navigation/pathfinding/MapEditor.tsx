@@ -386,6 +386,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
                     onClick={() => {
                         setEdgeMode((prevState) => !prevState);
+                        setShowEdges(true);
                     }}
                 >
                     {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}

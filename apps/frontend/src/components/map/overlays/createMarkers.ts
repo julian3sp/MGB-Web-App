@@ -56,7 +56,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
 
         graph.deleteNode(node.id); // delete node
         console.log("remove node");
-        // Animate the marker "popping"
         content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
         content.style.transform = "scale(0)";
         content.style.opacity = "0";
@@ -109,30 +108,14 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         e.stopPropagation();
         setNodeDetails(node);
         if (onNodeClicked) onNodeClicked(node, marker);
-        console.log("test")
         content.classList.add("node-selected");
         if (prevMarker && prevMarker.content) {
             (prevMarker.content as HTMLElement).classList.remove("node-selected");
         }
-
-        // 3. Add highlight to the *current* marker
         content.classList.add("node-selected");
-
-        // 4. Store current marker as the new previous one
         prevMarker = marker;
     })
 
-    // marker.addListener('click', () => {
-    //     setNodeDetails(node);
-    //     if (onNodeClicked) onNodeClicked(node, marker);
-    //     console.log("test")
-    //     if(marker.content) {
-    //         console.log("selected")
-    //         const markerStyle = marker.content as HTMLElement;
-    //         markerStyle.classList.add("node-selected");
-    //     }
-    //
-    //     });
 
     // Update polylines during drag
     marker.addListener('drag', () => {
@@ -177,7 +160,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
         tempPolylines.length = 0;
 
-        // Call onNodeMove to update the final state
         onNodeMove();
 
     });

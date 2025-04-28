@@ -66,6 +66,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [ghostLine, setGhostLine] = useState<google.maps.Polyline | null>(null);
     const nodeListenerRef = useRef<GMapsListener | null>(null);
     const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
+    const startMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
 
     const [startNode, setStartNode] = useState<Node| null>(null);
     const startNodeRef = useRef<Node | null>(null);
@@ -238,19 +239,22 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             console.log("start node:", node.id)
             setStartNode(node);
             startNodeRef.current = node;
-            if(marker.content) marker.content.classList.add("edge-start-highlight");
+
+            if(marker.content){
+                const markerStyle = marker.content as HTMLElement;
+                markerStyle.classList.add("node-selected");
+            }
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
             const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: 0}
             graph.addEdge(edge);
 
-            // clean up
-            marker?.content.classList.remove("edge-start-highlight");
             setStartNode(null);
             startNodeRef.current = null;
             console.log("end");
-            // if (ghostLine) { ghostLine.setMap(null); setGhostLine(null); }
+            setEdgeRefresh((v) => v + 1);
+            // Add line Follower some where
         }
     }
 

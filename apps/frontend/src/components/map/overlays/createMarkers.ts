@@ -3,6 +3,7 @@ import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
 
 import {nodeMarker} from "./markerStyles.ts";
 
+let prevMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 
 export function createMarkers(
     map: google.maps.Map,
@@ -104,10 +105,34 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
     });
     // Get node Info
-    marker.addListener('click', () => {
+    content.addEventListener('click', (e) => {
+        e.stopPropagation();
         setNodeDetails(node);
         if (onNodeClicked) onNodeClicked(node, marker);
-    });
+        console.log("test")
+        content.classList.add("node-selected");
+        if (prevMarker && prevMarker.content) {
+            (prevMarker.content as HTMLElement).classList.remove("node-selected");
+        }
+
+        // 3. Add highlight to the *current* marker
+        content.classList.add("node-selected");
+
+        // 4. Store current marker as the new previous one
+        prevMarker = marker;
+    })
+
+    // marker.addListener('click', () => {
+    //     setNodeDetails(node);
+    //     if (onNodeClicked) onNodeClicked(node, marker);
+    //     console.log("test")
+    //     if(marker.content) {
+    //         console.log("selected")
+    //         const markerStyle = marker.content as HTMLElement;
+    //         markerStyle.classList.add("node-selected");
+    //     }
+    //
+    //     });
 
     // Update polylines during drag
     marker.addListener('drag', () => {

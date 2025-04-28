@@ -20,20 +20,22 @@ function RequestButton({ label, onClick, type }: formRequestButton) {
             className={`
         group relative flex items-center w-full text-left mb-3 py-2.5 px-5 rounded-xl
         font-poppins font-semibold transition-all duration-300 ease-in-out
-        border-1 border-[#44A6A6] text-[13pt]
+         text-[13pt]
 
         /* Gray base with subtle gradient */
         bg-white
         text-[#003a96] shadow-md
 
         /* Subtle hover effect - slightly darker gray */
-        hover:bg-accent
+       
         hover:shadow-lg hover:translate-y-[-1px]
         hover:border-b-5
+        hover:border-b-[#44A6A6]
 
         /* Focus state - transforms to blue with inset shadow for indented look */
         focus:outline-none focus:ring-2 focus:ring-[#b1e3e4]/60
         focus:border-b-5
+        focus:border-[#44A6A6]
         focus:bg-gradient-to-br focus:from-[#003a96] focus:to-[#003a96]
         focus:text-[#e4eaf3] focus:shadow-inner focus:shadow-[#001e4d]/50
         active:shadow-inner active:shadow-[#001e4d]/50 active:translate-y-[1px]

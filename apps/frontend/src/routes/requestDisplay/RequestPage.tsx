@@ -92,10 +92,10 @@ export default function RequestPage() {
             <div className=" min-h-screen flex flex-col bg-white   font-[Poppins]"
             >
 
-                <div className="gap-4  rounded-[100px] bg-[#003a96]   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
+                <div className="gap-4  rounded-[100px] bg-white   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
                     <div>
                         <h1
-                            className="text-4xl text-white text-center p-1 font-bold font-[Poppins]  flex-start  "
+                            className="text-4xl text-[#003a96] text-center p-1 pl-5 font-bold font-[Poppins]  flex-start  "
                         >
                             Service Requests
                         </h1>
@@ -103,7 +103,7 @@ export default function RequestPage() {
                     <div className="flex items-end gap-10 z-100">
                         <button
                             onClick={handleNewRequestClick}
-                            className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-fit h-[50px]"
+                            className="px-4 py-[12px] border-2 border-[#44A6A6] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-fit h-[50px]"
                         >
                             <div className={'container'}>
                                 <img
@@ -119,7 +119,7 @@ export default function RequestPage() {
                             <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[10px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[10px] border-2 border-[#44A6A6] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-[130px]"
                                 >
                                     <div className={'container'}>
                                         <img

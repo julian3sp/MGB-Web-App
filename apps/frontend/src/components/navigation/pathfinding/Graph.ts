@@ -198,7 +198,6 @@ export class Graph {
         const targetId = edge.targetId;
         const weight = edge.weight;
 
-
         this.addNode(sourceId);
         this.addNode(targetId);
 

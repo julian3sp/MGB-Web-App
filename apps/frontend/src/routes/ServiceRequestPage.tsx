@@ -17,7 +17,7 @@ function ServiceRequestPage() {
 
     return (
         <PageWrapper open={true} contents={
-            <div className="border-r border-[#44A6A6] bg-white h-full">
+            <div className="border-r rounded-tr-3xl rounded-br-3xl border-[#44A6A6] bg-white h-full">
                 <ServiceFormSideBar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
         } scaling = {4} absolute={false} >

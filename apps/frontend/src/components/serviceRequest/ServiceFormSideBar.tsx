@@ -11,7 +11,7 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
         <div className=" p-5 ">
 
             <h3 className="text-2xl font-bold mb-4 pt-2 font-[Poppins]"
-                style={{ color: '#003A96' }}>Menu:</h3>
+                style={{ color: '#003a96' }}>Menu:</h3>
 
             <SideBarButton
                 label={'Language Interpreter Service Form'}

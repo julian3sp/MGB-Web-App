@@ -12,7 +12,7 @@ import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Node, Edge} from './Graph';
+import {Node, Edge, NodeType} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
@@ -25,8 +25,10 @@ import {
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem
 } from '../../ui/dropdown-menu.tsx';
+// import {NodeType} from ""
 
 import {WorldDistance} from "./worldCalculations.ts"
+import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 
 // resolve
 interface MapEditorProps {
@@ -50,7 +52,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [nodeInfo, setNodeInfo] = useState<{ id: string; name: string, x: number; y: number } | null>(null);
+    const [nodeInfo, setNodeInfo] = useState<{ id: string; name: string, x: number; y: number, nodeType: string} | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
@@ -68,7 +70,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [ghostLine, setGhostLine] = useState<google.maps.Polyline | null>(null);
     const nodeListenerRef = useRef<GMapsListener | null>(null);
     const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
-    const startMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
+    const [currentNodeType, setCurrentNodeType] = useState<string>("");
+
 
     const [startNode, setStartNode] = useState<Node| null>(null);
     const startNodeRef = useRef<Node | null>(null);
@@ -275,7 +278,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
-        console.log("Edits: ", edits.addedEdges);
+        console.log("Edits: ", edits);
         await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
@@ -312,7 +315,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
-        setNodeInfo({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, type: node.type});
+        setNodeInfo({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, nodeType: node.type});
     };
 
     useEffect(() => {
@@ -371,9 +374,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
                         <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.name}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.type}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {nodeInfo.nodeType}</p>
+                        <SRQDropdown
+                            value={currentNodeType}
+                            setValue={setCurrentNodeType}
+                            width={"w-full"}
+                            placeholder={"Select a node type"}
+                            options={Object.values(NodeType) as string[]}/>
+                        {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
+                        {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
                     </div>
                 )}
 

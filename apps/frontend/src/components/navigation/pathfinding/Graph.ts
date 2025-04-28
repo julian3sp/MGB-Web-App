@@ -1,13 +1,13 @@
 export enum NodeType {
-    Department = "department",
-    Elevator  = "elevator",
-    Stairwell = "stairwell",
-    Checkin = "checkin",
-    Entrance = "entrance",
-    ParkingLot = "parkingLot",
-    Hall = "hall",
-    Restroom = "restroom",
-    SkyBridge = "skyBridge",
+    Department = "Department",
+    Elevator  = "Elevator",
+    Stairwell = "Stairwell",
+    Checkin = "Checkin",
+    Entrance = "Entrance",
+    ParkingLot = "Parking Lot",
+    Hall = "Hall",
+    Restroom = "Restroom",
+    SkyBridge = "Sky Bridge",
 }
 
 export type Node = {
@@ -69,34 +69,37 @@ export class Graph {
         this.resetEditHistory();
 
         for (const raw of nodesData) {
-            let nodeType = NodeType.Hall;
+            let nodeType;
             switch (raw.type) {
-                case "department":
+                case "Department":
                     nodeType = NodeType.Department;
                     break;
-                case "elevator":
+                case "Elevator":
                     nodeType = NodeType.Elevator;
                     break;
-                case "stairwell":
+                case "Stairwell":
                     nodeType = NodeType.Stairwell;
                     break;
-                case "checkin":
+                case "Checkin":
                     nodeType = NodeType.Checkin;
                     break;
-                case "entrance":
+                case "Entrance":
                     nodeType = NodeType.Entrance;
                     break;
-                case "parkingLot":
+                case "Parking Lot":
                     nodeType = NodeType.ParkingLot;
                     break;
-                case "hall":
+                case "Hall":
                     nodeType = NodeType.Hall;
                     break;
-                case "restroom":
+                case "Restroom":
                     nodeType = NodeType.Restroom;
                     break;
-                case "skyBridge":
+                case "Sky Bridge":
                     nodeType = NodeType.SkyBridge;
+                    break;
+                default:
+                    nodeType = NodeType.Hall;
                     break;
             }
 
@@ -170,6 +173,7 @@ export class Graph {
             if (n) {
                 n.x = node.x;
                 n.y = node.y;
+                n.type = node.type;
             }
         } else {
             // Either update existing edited node or push it in
@@ -177,10 +181,12 @@ export class Graph {
             if (existing) {
                 existing.x = node.x;
                 existing.y = node.y;
+                existing.type = node.type
             } else {
                 this.edits.editedNodes.push({ ...node });
             }
         }
+        console.log(this.edits.editedNodes);
     }
 
     deleteNode(id:number): void {

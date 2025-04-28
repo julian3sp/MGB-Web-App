@@ -12,7 +12,7 @@ export const makeNode = publicProcedure
                 name: z.string(),
                 x: z.number(),
                 y: z.number(),
-                type: z.string()
+                type: z.string(),
             })
         )
     )
@@ -27,7 +27,7 @@ export const editNodes = publicProcedure
                 id: z.number(),
                 x: z.number(),
                 y: z.number(),
-                type: z.string()
+                type: z.string(),
             })
         )
     )
@@ -35,7 +35,7 @@ export const editNodes = publicProcedure
         for (const node of input) {
             await client.$executeRaw`
         UPDATE nodes 
-        SET x = ${node.x}, y = ${node.y} , ${node.type}
+        SET x = ${node.x}, y = ${node.y} , type = ${node.type}
         WHERE id = ${node.id}
         `;
         }
@@ -50,7 +50,7 @@ export const makeManyNodes = publicProcedure
                 name: z.string().nullable(),
                 x: z.number(),
                 y: z.number(),
-                type: z.string()
+                type: z.string(),
             })
         )
     )

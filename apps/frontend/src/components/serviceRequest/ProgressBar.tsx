@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 type ProgressBarProps = {
+    currentStep: number;
     // Step 1 fields (2 fields = 25% total)
     name: string;
     employeeID: string;

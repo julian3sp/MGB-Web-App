@@ -1,5 +1,3 @@
-// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
-
 export type Node = {
     name: string
     id: number | undefined
@@ -198,13 +196,16 @@ export class Graph {
         const targetId = edge.targetId;
         const weight = edge.weight;
 
+        if (!sourceId && !targetId) return;
         this.addNode(sourceId);
         this.addNode(targetId);
 
-        this.adjacencyList.get(sourceId)?.push({id: id, sourceId: sourceId, targetId: targetId, weight: weight });
+        this.adjacencyList
+            .get(sourceId)
+            ?.push({ id: id, sourceId: sourceId, targetId: targetId, weight: weight });
         this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
 
-        this.edits.addedEdges.push(edge);
+        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: 0});
         this.edges.push(edge)
     }
 

@@ -1,5 +1,3 @@
-// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
-
 export type Node = {
     name: string
     id: number | undefined
@@ -17,6 +15,7 @@ export type  Edge = {
     sourceId: Node
     targetId: Node;
     weight: number;
+    polyline?:google.maps.Polyline;
 }
 
 type Edit = {
@@ -43,6 +42,7 @@ export class Graph {
             addedNodes: [],
             deletedEdges: [],
             addedEdges: [],
+            editedNodes: [],
         }
     }
 
@@ -76,6 +76,9 @@ export class Graph {
             id: e.id,
             sourceId: this.getNode(e.sourceId),
             targetId: this.getNode(e.targetId),
+
+            // node = this.getNode(e.sourceId),
+            // this.nodesClass.push(new NodeClass(node.))
         }));
 
 
@@ -193,14 +196,16 @@ export class Graph {
         const targetId = edge.targetId;
         const weight = edge.weight;
 
-
+        if (!sourceId && !targetId) return;
         this.addNode(sourceId);
         this.addNode(targetId);
 
-        this.adjacencyList.get(sourceId)?.push({id: id, sourceId: sourceId, targetId: targetId, weight: weight });
+        this.adjacencyList
+            .get(sourceId)
+            ?.push({ id: id, sourceId: sourceId, targetId: targetId, weight: weight });
         this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
 
-        this.edits.addedEdges.push(edge);
+        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: 0});
         this.edges.push(edge)
     }
 
@@ -285,11 +290,17 @@ export class Graph {
             building = "chestnut";
         }
 
-        // console.log("Getting edges building: ", building, " Floor:", floor);
         return Array.from(this.edges).filter(
             edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
                 edge.targetId.building === building && edge.targetId.floor  === floor
         );
+    }
+
+     neighborCount(nodeID: number): number {
+         const node = this.getNode(nodeID);
+         if (!node) return 0;
+         const neighbors = this.adjacencyList.get(node);
+         return neighbors ? neighbors.length : 0;
     }
 
 }

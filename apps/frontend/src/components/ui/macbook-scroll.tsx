@@ -26,7 +26,7 @@ import { IconCaretDownFilled } from "@tabler/icons-react";
 import wongagile from "../../../assets/wongagile.png";
 import lebron from "../../../assets/lebron-poster.jpg";
 import aboutus from "../../../assets/aboutus.png";
-import aboutusResize from "../../../assets/aboutusResize.png";
+import aboutusResize from "../../../assets/aboutus.png";
 
 export const MacbookScroll = ({
   src,

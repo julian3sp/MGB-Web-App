@@ -72,7 +72,7 @@ function RequestForm({ title, type }: requestFormProps) {
         department: '',
         status: '',
         cleaningType: '',
-        sourceLanguage: '',
+            sourceLanguage: '',
         targetLanguage: '',
         accommodationType: '',
         accessZones: '',
@@ -335,7 +335,7 @@ function RequestForm({ title, type }: requestFormProps) {
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className=" rounded-lg shadow-lg overflow-hidden w-300  bg-white flex flex-col gap-5">
+                    <div className=" rounded-lg shadow-lg overflow-hidden w-300  bg-blue-200 flex flex-col gap-5">
 
                         <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
                             {title}
@@ -348,7 +348,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         {/* Employee Information (Two-Column Grid) */}
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
                             <div>
-                                <InputHeader>Name:</InputHeader>
+                                <InputHeader>Name</InputHeader>
                                 <ErrorPopUp
                                     value={name}
                                     setState={setName}
@@ -359,7 +359,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             </div>
 
                             <div>
-                                <InputHeader>Employee ID:</InputHeader>
+                                <InputHeader>Employee ID</InputHeader>
                                 <ErrorPopUp
                                     value={employeeID}
                                     setState={(value) => {

@@ -101,7 +101,7 @@ export const Listing = ({ items, initialScroll = 0, playAnimation }: CarouselPro
             value={{ onCardClose: handleCardClose, currentIndex }}
         >
             <div className="relative w-full">
-                <div
+                <div //wrapper of all pieces
                     className="flex w-full scroll-smooth py-10 overflow-x-scroll overscroll-x-auto [scrollbar-width:none] md:py-20"
                     ref={carouselRef}
                     onScroll={checkScrollability}
@@ -112,49 +112,33 @@ export const Listing = ({ items, initialScroll = 0, playAnimation }: CarouselPro
                         )}
                     ></div>
 
-                    <div
+                    <div // determines the shape (grid almost)
                         className={cn(
-                            "flex flex-wrap justify-start gap-8 pl-4",
+                            "flex flex-wrap justify-center gap-8 pl-4",
                             "mx-auto max-w-8xl",
                         )}
                     >
                         {items.map((item, index) => (
-                            <motion.div
-                                key={index}
-                                custom={index}               // passes index into the variant fn
-                                variants={cardVariants} // animation variants
-                                initial="hidden"
-                                animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
-                                className="rounded-3xl"
-                                whileHover={{
-                                    scale: 1.05,
-                                    boxShadow: "0px 8px 20px rgba(0,0,0,0.12)",
-                                    zIndex: 10,
-                                }}
-                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                style={{ position: "relative"}}
+                            <div // hover animation
+                                key={"card" + index}
+                                // custom={index}               // passes index into the variant fn
+                                // variants={cardVariants} // animation variants
+                                // initial="hidden"
+                                // animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
+                                className="relative rounded-3xl hover:scale-[1.05] hover:shadow-xl transition-all duration-300 z-10"
+                                // whileHover={{
+                                //     scale: 1.05,
+                                //     boxShadow: "0px 8px 20px rgba(0,0,0,0.12)",
+                                //     zIndex: 10,
+                                // }}
+                                // transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                // style={{ position: "relative"}}
                             >
                                 {item}
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
 
-                </div>
-                <div className="mr-10 flex justify-end gap-2">
-                    <button
-                        className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
-                        onClick={scrollLeft}
-                        disabled={!canScrollLeft}
-                    >
-                        ←
-                    </button>
-                    <button
-                        className="relative z-40 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 disabled:opacity-50"
-                        onClick={scrollRight}
-                        disabled={!canScrollRight}
-                    >
-                        →
-                    </button>
                 </div>
             </div>
         </CarouselContext.Provider>
@@ -201,12 +185,12 @@ export const Card = ({
         <>
             <AnimatePresence>
                 {open && (
-                    <div className="fixed inset-0 z-50 h-screen overflow-auto">
+                    <div className="absolute inset-0 z-50">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 h-full w-full bg-red-500 backdrop-blur-lg"
+                            className="absolute inset-0 h-full w-full backdrop-blur-xl rounded-3xl"
                         />
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -214,23 +198,23 @@ export const Card = ({
                             exit={{ opacity: 0 }}
                             ref={containerRef}
                             layoutId={layout ? `card-${card.title}` : undefined}
-                            className="relative z-[60] mx-auto my-10 max-h-[90v] max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
+                            className="relative z-[60] mx-auto my-10 max-h-[90v] max-w-5xl rounded-3xl p-4 font-sans md:p-10 dark:bg-neutral-900"
                         >
                             <button
-                                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white"
+                                className="absolute top-4 right-4 ml-auto flex h-8 w-8 font-[Poppins] items-center justify-center rounded-full bg-white hover:cursor-pointer"
                                 onClick={handleClose}
                             >
                                 x
                             </button>
                             <motion.p
                                 layoutId={layout ? `category-${card.title}` : undefined}
-                                className="text-base font-medium text-black dark:text-white"
+                                className="text-base font-medium text-white dark:text-white font-[Poppins]"
                             >
                                 {card.category}
                             </motion.p>
                             <motion.p
                                 layoutId={layout ? `title-${card.title}` : undefined}
-                                className="mt-4 text-2xl font-semibold text-neutral-700 md:text-5xl dark:text-white"
+                                className="mt-4 text-2xl font-[500] text-white md:text-5xl dark:text-white font-[Poppins]"
                             >
                                 {card.title}
                             </motion.p>
@@ -248,13 +232,13 @@ export const Card = ({
                 <div className="relative z-40 p-8">
                     <motion.p
                         layoutId={layout ? `category-${card.category}` : undefined}
-                        className="text-left font-sans text-sm font-medium text-white md:text-base"
+                        className="text-left font-[Poppins] text-sm font-medium text-white md:text-base"
                     >
                         {card.category}
                     </motion.p>
                     <motion.p
                         layoutId={layout ? `title-${card.title}` : undefined}
-                        className="mt-2 max-w-xs text-left font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl"
+                        className="mt-2 max-w-xs font-[Poppins] text-left text-xl font-[400] [text-wrap:balance] text-white md:text-3xl"
                     >
                         {card.title}
                     </motion.p>
@@ -265,7 +249,12 @@ export const Card = ({
                     className="absolute inset-0 z-10 h-full w-full object-cover"
                     loading="lazy"
                 />
+
             </motion.button>
         </>
     );
 };
+
+//<div className="relative z-50 w-full h-full">
+//                         <p>Hello Cathy</p>
+//                     </div>

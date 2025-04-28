@@ -3,74 +3,110 @@
 import React, { useRef } from "react";
 import { useInView } from "framer-motion";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
-import navImage from "../../assets/outsideMGB.jpg";
-import pathImage from "../../assets/insideMGB.png";
-import editorImage from "../../assets/phoneMap.jpeg";
-import serviceImage from "../../assets/service.jpeg";
+import allergy from '../../assets/department/allergy.jpg';
+import dermatology from '../../assets/department/dermatology.jpg';
+import endocrinology from '../../assets/department/endocrinology.jpg';
+import gastroenterology from '../../assets/department/gastroenterology.jpg';
+import kidney from '../../assets/department/kidney.jpeg';
+import veinTreatment from '../../assets/department/veinTreatment.jpeg';
+
+import { Link } from "react-router-dom";
 
 const cardsData = [
   {
-    category: "Navigation",
-    title: "Step-by-Step Directions",
-    src: navImage,
+    category: "Department",
+    title: "Vein Treatment",
+    src: veinTreatment,
     content: (
       <p className="text-gray-600">
-        Get crystal-clear directions to any department or facility in the hospital, floor by floor.
+        Minimally invasive procedures for varicose and spider veins to improve circulation.
       </p>
     ),
   },
   {
-    category: "Pathfinding",
-    title: "Smart Pathfinding",
-    src: pathImage,
+    category: "Department",
+    title: "Allergy",
+    src: allergy,
     content: (
       <p className="text-gray-600">
-        Our algorithm finds the fastest, wheelchair-accessible routes across buildings in real time.
+        Testing and treatment for seasonal, food, and environmental allergies.
       </p>
     ),
   },
   {
-    category: "Map Editor",
-    title: "Interactive Map Editor",
-    src: editorImage,
+    category: "Department",
+    title: "Dermatology",
+    src: dermatology,
     content: (
       <p className="text-gray-600">
-        Edit floor plans on the fly—add new wings, close corridors, or annotate points of interest.
+        Skin health services: acne, eczema, skin cancer screenings, and cosmetic dermatology.
       </p>
     ),
   },
   {
-    category: "Service Request",
-    title: "On-Demand Assistance",
-    src: serviceImage,
+    category: "Department",
+    title: "Endocrinology",
+    src: endocrinology,
     content: (
       <p className="text-gray-600">
-        Submit and track service requests—whether you need wheelchair help, staff escort, or equipment delivery.
+        Hormonal disorder management, including diabetes, thyroid, and adrenal conditions.
       </p>
     ),
   },
+  {
+    category: "Department",
+    title: "Gastroenterology",
+    src: gastroenterology,
+    content: (
+      <p className="text-gray-600">
+        Digestive system care: endoscopy, colonoscopy, and treatment of GI disorders.
+      </p>
+    ),
+  },
+  {
+    category: "Department",
+    title: "Kidney (Renal) Medicine",
+    src: kidney,
+    content: (
+      <p className="text-gray-600">
+        Care for kidney disease, dialysis coordination, and transplant evaluation.
+      </p>
+    ),
+  },
+
 ];
 
 export function AppleCardsCarouselDemo() {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(carouselRef, { amount: 0.5 });
 
-  const inView = useInView(carouselRef, { amount: 0.5 }); // remove the trigger once to make it runs whenever came into sight
-
-  const cards = cardsData.map((card, i) => (
-    <Card key={i} card={card} index={i} />
+  // Create all your regular card items
+  const cardItems = cardsData.map((card, i) => (
+    <div key={i}>
+      <Card card={card} index={i} />
+    </div>
   ));
+  
+  // Create a "Show More" button item that looks like a card
+  const showMoreItem = (
+    <div key="show-more" className="flex items-center justify-center h-full">
+      <Link to="/directory">
+        <div className="bg-[#003a96] rounded-full shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center p-6">
+          <span className="text-3xl text-white  ">→</span>
+        </div>
+      </Link>
+    </div>
+  );
+  
+  // Combine regular cards with the show more button
+  const allItems = [...cardItems, showMoreItem];
 
   return (
     <div ref={carouselRef} className="w-full py-20 bg-white">
       <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-[#003a96] text-center">
-        Explore Our Features
+        Explore Our Departments
       </h2>
-
-      {/*
-        Pass the `inView` flag down so the Carousel
-        only plays its internal animations when it scrolls into view.
-      */}
-      <Carousel items={cards} playAnimation={inView} />
+      <Carousel items={allItems} playAnimation={inView} />
     </div>
   );
 }

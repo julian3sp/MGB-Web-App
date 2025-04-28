@@ -19,13 +19,33 @@ export const makeNode = publicProcedure
         return client.nodes.createMany({ data: input });
     });
 
+export const editNodes = publicProcedure
+    .input(
+        z.array(
+            z.object({
+                id: z.number(),
+                x: z.number(),
+                y: z.number(),
+            })
+        )
+    )
+    .mutation(async ({ input }) => {
+        for (const node of input) {
+            await client.$executeRaw`
+        UPDATE nodes 
+        SET x = ${node.x}, y = ${node.y} 
+        WHERE id = ${node.id}
+        `;
+        }
+    });
+
 export const makeManyNodes = publicProcedure
     .input(
         z.array(
             z.object({
                 building: z.string(),
                 floor: z.number(),
-                name: z.string() || z.null(),
+                name: z.string().nullable(),
                 x: z.number(),
                 y: z.number(),
             })

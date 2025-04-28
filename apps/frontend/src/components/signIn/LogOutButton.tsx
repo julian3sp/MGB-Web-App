@@ -15,7 +15,7 @@ export function LogOutButton({className}: {className?: string}) {
     return (
         isAuthenticated && (
             <button
-                className={`right-0 group px-5 py-5 transition-all duration-150 ease-in-out hover:bg-[#003a96] hover:text-white font-[Poppins] ${className ?? ""}`}
+                className={`right-0 group px-5 py-5 transition-all duration-150 text-white ease-in-out hover:bg-white hover:text-black font-[Poppins] ${className ?? ""}`}
                 onClick={() => handleLogOut()}>Log Out
             </button>
 

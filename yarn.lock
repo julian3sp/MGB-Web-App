@@ -2820,6 +2820,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prismjs@npm:^1.26.0":
+  version: 1.26.5
+  resolution: "@types/prismjs@npm:1.26.5"
+  checksum: 10/617099479db9550119d0f84272dc79d64b2cf3e0d7a17167fe740d55fdf0f155697d935409464392d164e62080c2c88d649cf4bc4fdd30a87127337536657277
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*, @types/prop-types@npm:^15.7.12, @types/prop-types@npm:^15.7.5":
   version: 15.7.14
   resolution: "@types/prop-types@npm:15.7.14"
@@ -4163,7 +4170,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.1.1":
+"clsx@npm:^2.0.0, clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10/cdfb57fa6c7649bbff98d9028c2f0de2f91c86f551179541cf784b1cfdc1562dcb951955f46d54d930a3879931a980e32a46b598acaea274728dbe068deca919
@@ -5505,7 +5512,9 @@ __metadata:
     serve: "npm:^14.2.0"
     sonner: "npm:^2.0.3"
     tailwind-merge: "npm:^3.2.0"
-    tailwindcss: "npm:^4.0.17"
+    tailwind-scrollbar: "npm:^4.0.2"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.160.0"
     trpc: "npm:^0.11.3"
     ts-config-custom: "workspace:*"
@@ -7605,6 +7614,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prism-react-renderer@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "prism-react-renderer@npm:2.4.1"
+  dependencies:
+    "@types/prismjs": "npm:^1.26.0"
+    clsx: "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 10/f76ea89b8b18c477eb74e9ddda2571b5c4d21142731f6733160723aa03567b17df315d7db68ffb1122c199750ece65578ecacb488559229b26db5474d6aae55b
+  languageName: node
+  linkType: hard
+
 "prisma@npm:^6.6.0":
   version: 6.6.0
   resolution: "prisma@npm:6.6.0"
@@ -8664,6 +8685,9 @@ __metadata:
     react-dom: "npm:latest"
     react-intersection-observer: "npm:^9.16.0"
     tailwind-merge: "npm:^3.2.0"
+    tailwind-scrollbar: "npm:^4.0.2"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.175.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
@@ -8916,10 +8940,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.0.17, tailwindcss@npm:^4.0.17":
+"tailwind-scrollbar-utilities@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "tailwind-scrollbar-utilities@npm:0.3.0"
+  checksum: 10/77368bd85da23e90547e0d23c49a434bd1925c54de51bc8ca0832ebd07ce6f1272edabcb1cd1ffb5f95354b704bf194ef40dc11b7091266b130124148029c347
+  languageName: node
+  linkType: hard
+
+"tailwind-scrollbar@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "tailwind-scrollbar@npm:4.0.2"
+  dependencies:
+    prism-react-renderer: "npm:^2.4.1"
+  peerDependencies:
+    tailwindcss: 4.x
+  checksum: 10/ac67f84a478003938ec40f3007f88874b3a25db62b1e6b5a8a28bc20bf51027ea6ce074a8d37249eabbde4a4bb4b87ea310aade82c018845acd0eecc667f91df
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:4.0.17":
   version: 4.0.17
   resolution: "tailwindcss@npm:4.0.17"
   checksum: 10/c4463f7df51c45252d540db7a7c9d06f386f944b9626e4953dba6274d93c69b9133a9c095918fd2164d3012755cfa2d57ef86b4f11a08b30070ee67d1da98265
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "tailwindcss@npm:4.1.4"
+  checksum: 10/632510378ca0c73fb4ebd88d365480eab66a8f043cdefe3885afd45eaf71b9b1449ecbb17ead1b513de936cc98748fa5dc1759c8d91d8cd89887fecffa10648e
   languageName: node
   linkType: hard
 

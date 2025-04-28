@@ -1,4 +1,4 @@
-import logo from "../../assets/Mass-General-Brigham-Logo.png";
+import logo from "../../assets/MassGenWhite.svg";
 import {Link, useLocation} from "react-router-dom";
 import React, { useEffect } from "react";
 import '../styles/mainStyles.css'
@@ -36,42 +36,52 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
         }
     }, [location.pathname]);
 
+    useEffect(() => {
+        if (location.pathname.includes("/directory")) setTab("dir");
+        else if (location.pathname.includes("/navigation")) setTab("navigation");
+        else if (location.pathname.includes("/services")) setTab("serv");
+        else if (location.pathname.includes("/requests")) setTab("reqP");
+        else if (location.pathname.includes("/editor")) setTab("editor");
+        else if (location.pathname.includes("/admin/directory")) setTab("exp");
+        else setTab("");
+    }, [location.pathname]);
+
     return (
-        <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
-            <div className="flex items-center space-x-4">
+        <nav className="flex justify-between items-center border-b-[#44A6A6] border-b-3  bg-[#003A96] text-white ">
+            <div className="flex items-center space-x-4 ">
                 <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo"  className="h-6"/>
+                    <img src={logo} alt="Mass General Brigham Logo"  className="h-9"/>
                 </Link>
                 <div className="flex">
                     <Link to="/directory" onClick={() => setTab("dir")}
                           className={tab === "dir" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "bg-[#003a96] font-[Poppins] bg-white text-black  px-5 py-5" :
+                              "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black   px-5 py-5 transition-all"}>
                         Directory
                     </Link>
                     <Link to="/navigation" onClick={() => setTab("navigation")}
                           className={tab === "navigation" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                              "bg-[#003a96] font-[Poppins]  bg-white text-black    px-5 py-5" :
+                              "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black   px-5 py-5 transition-all"}>
                         Navigation
                     </Link>
                     <div className="flex">
                         {isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
                                                  className={tab === "serv" ?
-                                                     "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                     "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                                                     "bg-[#003a96] font-[Poppins]  bg-white text-black   px-5 py-5" :
+                                                     "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
                             Services
                         </Link> : null}
                         {isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
                                                  className={tab === "reqP" ?
-                                                     "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                     "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                                                     "bg-[#003a96] font-[Poppins]  bg-white text-black   px-5 py-5" :
+                                                     "text-base text-white hover:bg-[#003a96] font-[Poppins] hover:bg-white hover:text-black   px-5 py-5 transition-all"}>
                             View Requests
                         </Link> : null}
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/editor" onClick={() => setTab("editor")}
                                                                                                                        className={tab === "editor" ?
-                                                                                                                           "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                                                                                           "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                                                                                                                           "bg-[#003a96] font-[Poppins] bg-white text-black  px-5 py-5" :
+                                                                                                                           "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
                             Map Editor
                         </Link> : null}
                     </div>
@@ -79,8 +89,8 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ?
                             <Link to="/admin/directory" onClick={() => setTab("exp")}
                                   className={tab === "exp" ?
-                                      "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                      "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                                      "text-base bg-[#003a96] font-[Poppins]  bg-white text-black   px-5 py-5" :
+                                      "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
                                 Export
                             </Link> : null }
                     </div>

@@ -27,9 +27,7 @@ export function drawAllEdges(
             // 1) remove it visually
             edgeLine.setMap(null);
 
-            // 2) remove it from your in-memory graph (and record edit)
             graph.deleteEdge(edge.id);
-
             console.log(`Edge ${edge.id} removed from graph`);
         });
 
@@ -38,6 +36,8 @@ export function drawAllEdges(
     if(polylines.length === 0) console.log("edges not found");
     return polylines;
 }
+
+
 
 export function drawPath(map: google.maps.Map, nodes: Node[]){
     // Initialize an array to hold coordinates (using LatLngLiteral for type-safety)

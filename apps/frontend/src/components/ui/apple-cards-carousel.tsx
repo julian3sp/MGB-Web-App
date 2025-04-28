@@ -6,11 +6,6 @@ import React, {
   createContext,
   useContext,
 } from "react";
-import {
-  IconArrowNarrowLeft,
-  IconArrowNarrowRight,
-  IconX,
-} from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../../../hooks/use-outside-click";
@@ -26,6 +21,7 @@ type Card = {
   title: string;
   category: string;
   content: React.ReactNode;
+  hoverSrc: string;
 };
 
 export const CarouselContext = createContext<{
@@ -119,24 +115,17 @@ export const Carousel = ({ items, initialScroll = 0, playAnimation }: CarouselPr
           <div
             className={cn(
               "flex flex-row justify-start gap-4 pl-4",
-              "mx-auto max-w-7xl",
+              "mx-auto",
             )}
           >
             {items.map((item, index) => (
               <motion.div
-                key={index}
+                key={"card" + index}
                 custom={index}               // passes index into the variant fn
                 variants={cardVariants} // animation variants
-                initial="hidden" 
+                initial={{ opacity: 0, y: 20 }} // initial state
                 animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
                 className="rounded-3xl"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0px 8px 20px rgba(0,0,0,0.12)",
-                  zIndex: 10,
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                style={{ position: "relative"}}
               >
                 {item}
               </motion.div>
@@ -226,7 +215,7 @@ export const Card = ({
               className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
             >
               <button
-                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white cursor-pointer"
+                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-white"
                 onClick={handleClose}
               >
                 x
@@ -248,33 +237,70 @@ export const Card = ({
           </div>
         )}
       </AnimatePresence>
-      <motion.button
+      <motion.div
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[40rem] md:w-96 dark:bg-neutral-900 cursor-pointer"
+        className={cn(
+          "group relative cursor-pointer overflow-hidden rounded-3xl shadow-xl",
+          "h-80 w-56 md:h-[40rem] md:w-96"
+        )}
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
-        <div className="relative z-40 p-8">
-          <motion.p
-            layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-left font-sans text-sm font-medium text-white md:text-base"
-          >
-            {card.category}
-          </motion.p>
-          <motion.p
-            layoutId={layout ? `title-${card.title}` : undefined}
-            className="mt-2 max-w-xs text-left font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl"
-          >
-            {card.title}
-          </motion.p>
-        </div>
-        <img
-          src={card.src}
-          alt={card.title}
-          className="absolute inset-0 z-10 h-full w-full object-cover"
-          loading="lazy"
+        {/* 1) Static background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${card.src})` }}
         />
-      </motion.button>
+
+        {/* 2) Hover-GIF layer (initially hidden) */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{backgroundImage: `url(${card.hoverSrc})`}}
+        />
+
+        {/* 3) Dark overlay on hover */}
+        <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
+
+        {/* 4) Your text/content */}
+        <div className="relative z-10 flex flex-col justify-end h-full p-8">
+          <p className="text-sm font-medium text-white md:text-base">
+            {card.category}
+          </p>
+          <p className="mt-2 text-xl font-semibold text-white md:text-3xl">
+            {card.title}
+          </p>
+        </div>
+      </motion.div>
+
     </>
   );
 };
+
+export const BlurImage = ({
+  height,
+  width,
+  src,
+  className,
+  alt,
+  ...rest
+}: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  const [isLoading, setLoading] = useState(true);
+  return (
+    <img
+      className={cn(
+        "h-full w-full transition duration-300",
+        isLoading ? "blur-sm" : "blur-0",
+        className,
+      )}
+      onLoad={() => setLoading(false)}
+      src={src as string}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      alt={alt ? alt : "Background of a beautiful view"}
+      {...rest}
+    />
+  );
+};
+
+

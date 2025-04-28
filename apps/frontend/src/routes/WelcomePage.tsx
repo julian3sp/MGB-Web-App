@@ -1,20 +1,26 @@
 // WelcomePage.tsx
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import {motion} from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
-
+import Popup from "../components/ui/Popup.tsx"
 gsap.registerPlugin(ScrollTrigger);
 
 export function WelcomePage() {
+    const [tab, setTab] = React.useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [sidePadding, setSidePadding] = useState(0);
 
-  const textRef = useRef<HTMLDivElement>(null);
+  const updatePadding = () => {
+    if (!wrapperRef.current) return;
+    const leftPx = wrapperRef.current.getBoundingClientRect().left; // get the left position of the wrapper each frame
+    setSidePadding(leftPx); // store that in react state and apply it vid inline style around the carousel 
+  }
 
   useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
@@ -25,6 +31,8 @@ export function WelcomePage() {
         pin: true, // pin the trigger element in place while the animation is playing
         scrub: 0.5, // smooth scrubbing, takes 0.5 seconds to catch up to the scroll position
         pinSpacing: false, // prevents the pinning element from adding extra space to the page
+        onUpdate: updatePadding, 
+        onRefresh: updatePadding, // update the padding when the page is resized
       }
     });
 
@@ -35,21 +43,7 @@ export function WelcomePage() {
       // shrink the height
       .to(wrapperRef.current, { height: "60vh", duration: 1 }, "<+=0.2");
 
-    // text animation prototype
-    // if (textRef.current) {
-    //   gsap.from(textRef.current, {
-    //     opacity: 0,
-    //     y: 20, 
-    //     duration: 1, 
-    //     ease: "power2.out",
-    //     scrollTrigger: {
-    //       trigger: textRef.current,
-    //       start: "top 80%",
-    //       end: "top 30%",
-    //       toggleActions: "play none none reverse",
-    //     }
-    //   })
-    // }
+    updatePadding();
 
     return () => ScrollTrigger.getAll().forEach(t => t.kill());
   }, []);
@@ -75,7 +69,7 @@ export function WelcomePage() {
       </div>
 
       {/* centered text */}
-      <motion.div  
+      <motion.div
         className="w-full flex flex-col items-center justify-center py-12 px-4 text-center"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -93,9 +87,7 @@ export function WelcomePage() {
           No more getting lost in complex hospital corridors!
         </p>
       </motion.div>
-
-      {/* carousel */}
-      <AppleCardsCarouselDemo />
+      <AppleCardsCarouselDemo/>
     </div>
   );
 }

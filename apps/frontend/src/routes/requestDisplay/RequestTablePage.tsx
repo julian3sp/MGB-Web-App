@@ -155,19 +155,13 @@ export default function RequestTablePage() {
 
     //Table page
     return (
-        <div className="flex flex-1 ml-10 mr-10 mt-1">
+        <div className="flex flex-1  mt-0">
             <div
-                className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
-                style={{
-                    borderTop: 'none',
-                    borderBottom: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                }}
+                className="w-full  min-h-screen p-6 pl-4 pr-4 font-[Poppins]"
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
@@ -361,7 +355,7 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100"
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-[#B8D9D9]"
                                     >
                                         <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -656,7 +650,6 @@ export default function RequestTablePage() {
                                                         }
                                                     }}
                                                     tooltip={'Delete Service Request'}
-                                                    blue={true}
                                                 />
                                             </div>
                                         </td>

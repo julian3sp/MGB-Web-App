@@ -88,6 +88,12 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                                                                                                                            "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
                             Map Editor
                         </Link> : null}
+                        {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/admin" onClick={() => setTab("admin")}
+                                                                                                                       className={tab === "admin" ?
+                                                                                                                           "bg-[#003a96] font-[Poppins] bg-white text-black  px-5 py-5" :
+                                                                                                                           "text-base text-white hover:bg-[#003a96] font-[Poppins]  hover:bg-white hover:text-black  px-5 py-5 transition-all"}>
+                            Admin
+                        </Link> : null}
                     </div>
                     <div className="flex">
                         {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ?

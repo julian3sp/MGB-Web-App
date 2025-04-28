@@ -5,9 +5,8 @@ import testingImg from '../../assets/insideMGB.png';
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
 import serviceImage from "../../assets/service.jpeg";
-import { CardList } from "../components/department/CardList.tsx"
-import { CardListHeader } from "../components/department/CardListHeader.tsx"
-import { CardListItem } from "../components/department/CardListItem.tsx"
+import { CardContent } from "../components/department/CardContent.tsx";
+
 
 
 
@@ -18,19 +17,11 @@ export const flipCardsData = [
         src: radiologyImg,
         content: (
             <div>
-                <CardListHeader>Location:</CardListHeader>
-                <CardList>
-                    <CardListItem>1st Floor, Suite 100</CardListItem>
-                </CardList>
-                 <CardListHeader>Specialties and Services:</CardListHeader>
-                 <CardList>
-                     <CardListItem>
-                         Blood work
-                     </CardListItem>
-                     <CardListItem>
-                         Lab services
-                     </CardListItem>
-                 </CardList>
+                <CardContent
+                    location={"1st Floor, Suite 100"}
+                    specialties={["Blood Work", "Lab Services"]}
+                    phoneNumber={"(508)-259-7878"}
+                />
             </div>
         ),
     },
@@ -39,9 +30,14 @@ export const flipCardsData = [
         title: "Multi-Specialty Clinic",
         src: pathImage,
         content: (
-            <p className="text-white">
-                Our algorithm finds the fastest, wheelchair-accessible routes across buildings in real time.
-            </p>
+            <div>
+                <CardContent
+                    location={"1st Floor, Suite 130"}
+                    specialties={["Orthopedic Surgery", "Vascular Services", "Contact Dermatitis", "Occupational Dermatology Program", "Pain Medicine", "Travel Medicine"]}
+                    //Orthopedic surgery, Vascular surgery, Contact Dermatitis and Occupational Dermatology Program, Pain Medicine and Travel Medicine
+                    phoneNumber={"(508)-259-7878"}
+                />
+            </div>
         ),
     },
     {

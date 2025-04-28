@@ -121,18 +121,7 @@ export const Listing = ({ items, initialScroll = 0, playAnimation }: CarouselPro
                         {items.map((item, index) => (
                             <div // hover animation
                                 key={"card" + index}
-                                // custom={index}               // passes index into the variant fn
-                                // variants={cardVariants} // animation variants
-                                // initial="hidden"
-                                // animate={playAnimation ? "visible" : "hidden"} // trigger animation when visible
                                 className="relative rounded-3xl hover:scale-[1.05] hover:shadow-xl transition-all duration-300 z-10"
-                                // whileHover={{
-                                //     scale: 1.05,
-                                //     boxShadow: "0px 8px 20px rgba(0,0,0,0.12)",
-                                //     zIndex: 10,
-                                // }}
-                                // transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                // style={{ position: "relative"}}
                             >
                                 {item}
                             </div>
@@ -198,7 +187,7 @@ export const Card = ({
                             exit={{ opacity: 0 }}
                             ref={containerRef}
                             layoutId={layout ? `card-${card.title}` : undefined}
-                            className="relative z-[60] mx-auto my-10 max-h-[90v] max-w-5xl rounded-3xl p-4 font-sans md:p-10 dark:bg-neutral-900"
+                            className="relative z-[60] mx-auto my-10 max-h-[90v] max-w-5xl rounded-3xl p-4 md:p-10 dark:bg-neutral-900"
                         >
                             <button
                                 className="absolute top-4 right-4 ml-auto flex h-8 w-8 font-[Poppins] items-center justify-center rounded-full bg-white hover:cursor-pointer"
@@ -214,7 +203,7 @@ export const Card = ({
                             </motion.p>
                             <motion.p
                                 layoutId={layout ? `title-${card.title}` : undefined}
-                                className="mt-4 text-2xl font-[500] text-white md:text-5xl dark:text-white font-[Poppins]"
+                                className="mt-4 text-2xl font-[500] text-white md:text-[38px] font-medium dark:text-white font-[Poppins]"
                             >
                                 {card.title}
                             </motion.p>

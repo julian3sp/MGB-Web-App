@@ -240,10 +240,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setStartNode(node);
             startNodeRef.current = node;
 
-            if(marker.content){
-                const markerStyle = marker.content as HTMLElement;
-                markerStyle.classList.add("node-selected");
-            }
+            // if(marker.content){
+            //     const markerStyle = marker.content as HTMLElement;
+            //     markerStyle.classList.add("node-selected");
+            // }
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
@@ -254,7 +254,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             startNodeRef.current = null;
             console.log("end");
             setEdgeRefresh((v) => v + 1);
-            // Add line Follower some where
+            // Add line Follower somewhere
         }
     }
 
@@ -274,7 +274,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
-        console.log("Edits: ", edits.addedNodes);
+        console.log("Edits: ", edits.addedEdges);
         await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);

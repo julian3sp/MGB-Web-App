@@ -23,8 +23,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
     DropdownMenuRadioGroup,
-    DropdownMenuRadioItem
+    DropdownMenuRadioItem,
 } from '../../ui/dropdown-menu.tsx';
+import PageWrapper from '@/components/ui/PageWrapper.tsx';
 
 // resolve
 interface MapEditorProps {
@@ -390,8 +391,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
 
     return (
-        <div className="flex h-[95vh]">
-            <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
+            <PageWrapper open={true} contents= {
+            <div className="w-full h-full p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
                 {nodeInfo && (
@@ -436,15 +437,16 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
-            </div>
+            </div>} scaling = {4} absolute = {true}>
 
-            <div className="w-3/4 relative">
+            <div>
                 {isLoadingMap && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
                         <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
-                <div ref={mapRef} className="w-full h-[95vh]"></div>
+                <div ref={mapRef} className="flex-1 w-full h-screen
+                "></div>
                 <MapEditorControls
                     map={map}
                     selectedHospital={selectedHospital}
@@ -459,7 +461,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 />
                 <HelpDropdown />
             </div>
-        </div>
+            </PageWrapper>
     );
 };
 

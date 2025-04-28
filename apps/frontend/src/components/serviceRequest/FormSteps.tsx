@@ -58,52 +58,52 @@ type FormStepsProps = {
 
 
 export function FormSteps({
-    currentStep,
-    type,
-    name,
-    setName,
-    employeeID,
-    setEmployeeID,
-    location,
-    setLocation,
-    department,
-    setDepartment,
-    priority,
-    setPriority,
-    status,
-    setStatus,
-    sourceLanguage,
-    setSourceLanguage,
-    targetLanguage,
-    setTargetLanguage,
-    cleaningType,
-    setCleaningType,
-    contaminant,
-    setContaminant,
-    accessZones,
-    setAccessZones,
-    securityIssue,
-    setSecurityIssue,
-    transportationType,
-    setTransportationType,
-    transportationDestination,
-    setTransportationDestination,
-    accommodationType,
-    setAccommodationType,
-    accommodationDetails,
-    setAccommodationDetails,
-    device,
-    setDevice,
-    operatorRequired,
-    setOperatorRequired,
-    maintenanceType,
-    setMaintenanceType,
-    equipmentType,
-    setEquipmentType,
-    comments,
-    setComments,
-    errors,
-    clearError
+        currentStep,
+        type,
+        name,
+        setName,
+        employeeID,
+        setEmployeeID,
+        location,
+        setLocation,
+        department,
+        setDepartment,
+        priority,
+        setPriority,
+        status,
+        setStatus,
+        sourceLanguage,
+        setSourceLanguage,
+        targetLanguage,
+        setTargetLanguage,
+        cleaningType,
+        setCleaningType,
+        contaminant,
+        setContaminant,
+        accessZones,
+        setAccessZones,
+        securityIssue,
+        setSecurityIssue,
+        transportationType,
+        setTransportationType,
+        transportationDestination,
+        setTransportationDestination,
+        accommodationType,
+        setAccommodationType,
+        accommodationDetails,
+        setAccommodationDetails,
+        device,
+        setDevice,
+        operatorRequired,
+        setOperatorRequired,
+        maintenanceType,
+        setMaintenanceType,
+        equipmentType,
+        setEquipmentType,
+        comments,
+        setComments,
+        errors,
+        clearError
 }: FormStepsProps) {
     return (
         <motion.div
@@ -236,7 +236,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
 
                     {type === "Sanitation" ?
                         <>
@@ -262,7 +262,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
 
                     {type === "Security" ?
                         <>
@@ -304,7 +304,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
 
                     {type === "Transportation" ?
                         <>
@@ -336,7 +336,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
 
                     {type === "AudioVisual" ?
                         <>
@@ -363,7 +363,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
                     {type === "MedicalDevice" ?
                         <>
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
@@ -391,7 +391,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
                     {type === "Facilities" ?
                         <>
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
@@ -418,7 +418,7 @@ export function FormSteps({
                                 </div>
                             </div>
                         </>
-                        : null}
+                    : null}
 
                     <div className="ml-5 mr-5">
                         <InputHeader children={'Additional Comments:'} />

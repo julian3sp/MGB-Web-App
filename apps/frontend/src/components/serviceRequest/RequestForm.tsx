@@ -253,8 +253,8 @@ function RequestForm({ title, type }: requestFormProps) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.currentTarget; // This is the actual HTMLFormElement
-        const isValid = form.checkValidity(); // Now
+        const form = e.currentTarget; 
+        const isValid = form.checkValidity();
 
         if (Validate()) {
             console.log('submission error')
@@ -316,6 +316,7 @@ function RequestForm({ title, type }: requestFormProps) {
         });
 
         handleReset(e);
+        setCurrentStep(1); 
     };
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -461,8 +462,6 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
-                                errors={errors}
-                                clearError={clearError}
                             />
 
                         )}

@@ -11,6 +11,7 @@ import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
 import {languages} from "./data/languages.ts";
+import { ProgressBar } from './ProgressBar.tsx';
 
 type requestFormProps = {
     title: string;
@@ -340,6 +341,28 @@ function RequestForm({ title, type }: requestFormProps) {
                         <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
                             {title}
                         </h2>
+
+                        <ProgressBar 
+                            name={name}
+                            employeeID={employeeID}
+                            location={location}
+                            department={department}
+                            priority={priority}
+                            status={status}
+                            type={type}
+                            sourceLanguage={sourceLanguage}
+                            targetLanguage={targetLanguage}
+                            cleaningType={cleaningType}
+                            accessZones={accessZones}
+                            securityIssue={securityIssue}
+                            transportationType={transportationType}
+                            transportationDestination={transportationDestination}
+                            accommodationType={accommodationType}
+                            device={device}
+                            operatorRequired={operatorRequired}
+                            maintenanceType={maintenanceType}
+                            equipmentType={equipmentType}
+                        />
 
                         {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
                         {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}

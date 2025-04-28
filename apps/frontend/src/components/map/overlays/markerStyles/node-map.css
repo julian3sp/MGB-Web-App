@@ -86,10 +86,4 @@
             0 0 10px rgba(217, 45, 32, 0.6); /* soft red glow */
 }
 
-/* ---------- EDGE / POLYLINE ---------- */
-.edge-line {
-    stroke: #d92d20;          /* soft red */
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-opacity: .6;
-}
+

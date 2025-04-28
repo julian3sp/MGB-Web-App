@@ -1,3 +1,15 @@
+export enum NodeType {
+    Department = "department",
+    Elevator  = "elevator",
+    Stairwell = "stairwell",
+    Checkin = "checkin",
+    Entrance = "entrance",
+    ParkingLot = "parkingLot",
+    Hall = "hall",
+    Restroom = "restroom",
+    SkyBridge = "skyBridge",
+}
+
 export type Node = {
     name: string
     id: number | undefined
@@ -8,6 +20,7 @@ export type Node = {
     edgeCost: number
     totalCost: number
     parent?: Node;
+    type: NodeType;
 }
 
 export type  Edge = {
@@ -47,7 +60,7 @@ export class Graph {
     }
 
     populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
-                          edgeCost: number, totalCost: number, parent?: Node; }[],
+                          edgeCost: number, totalCost: number, parent?: Node; type: string}[],
              edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
         // Reinit
         this.nodes = new Set<Node>();
@@ -56,6 +69,37 @@ export class Graph {
         this.resetEditHistory();
 
         for (const raw of nodesData) {
+            let nodeType = NodeType.Hall;
+            switch (raw.type) {
+                case "department":
+                    nodeType = NodeType.Department;
+                    break;
+                case "elevator":
+                    nodeType = NodeType.Elevator;
+                    break;
+                case "stairwell":
+                    nodeType = NodeType.Stairwell;
+                    break;
+                case "checkin":
+                    nodeType = NodeType.Checkin;
+                    break;
+                case "entrance":
+                    nodeType = NodeType.Entrance;
+                    break;
+                case "parkingLot":
+                    nodeType = NodeType.ParkingLot;
+                    break;
+                case "hall":
+                    nodeType = NodeType.Hall;
+                    break;
+                case "restroom":
+                    nodeType = NodeType.Restroom;
+                    break;
+                case "skyBridge":
+                    nodeType = NodeType.SkyBridge;
+                    break;
+            }
+
             const node: Node = {
                 id: raw.id,
                 name: `node-${raw.id}`,
@@ -66,6 +110,8 @@ export class Graph {
                 edgeCost: 0,
                 totalCost: 0,
                 parent: undefined,
+                type: nodeType,
+
             };
             this.nodes.add(node);
             this.adjacencyList.set(node, []);

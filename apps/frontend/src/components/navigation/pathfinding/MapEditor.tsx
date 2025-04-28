@@ -26,6 +26,8 @@ import {
     DropdownMenuRadioItem
 } from '../../ui/dropdown-menu.tsx';
 
+import {WorldDistance} from "./worldCalculations.ts"
+
 // resolve
 interface MapEditorProps {
     onMapReady: (
@@ -48,7 +50,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [nodeInfo, setNodeInfo] = useState<{ id: string; x: number; y: number } | null>(null);
+    const [nodeInfo, setNodeInfo] = useState<{ id: string; name: string, x: number; y: number } | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
@@ -158,7 +160,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             building = "chestnut";
         }
         const floor = selectedFloor === null ? 1: selectedFloor;
-        return drawAllEdges(map, graph.getBuildingEdges(building, floor));
+        const edgeComponents = drawAllEdges(map, graph.getBuildingEdges(building, floor));
+        const allLayers: google.maps.Polyline[] = edgeComponents.flatMap(pack => pack.layers);
+        return allLayers;
     }
 
     const handleToggleNodes = () => setShowNodes(prev => !prev);
@@ -240,21 +244,18 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setStartNode(node);
             startNodeRef.current = node;
 
-            // if(marker.content){
-            //     const markerStyle = marker.content as HTMLElement;
-            //     markerStyle.classList.add("node-selected");
-            // }
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
-            const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: 0}
+            const w = WorldDistance(startNodeRef, node);
+            const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w}
             graph.addEdge(edge);
 
             setStartNode(null);
             startNodeRef.current = null;
             console.log("end");
             setEdgeRefresh((v) => v + 1);
-            // Add line Follower somewhere
+            // Add line Follower somewhere --- ------- - --
         }
     }
 
@@ -311,7 +312,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
-        setNodeInfo({ id: node.id.toString(), x: node.x, y: node.y });
+        setNodeInfo({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, type: node.type});
     };
 
     useEffect(() => {
@@ -369,11 +370,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.name}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.type}</p>
                         <p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>
                         <p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>
-                        <button className="bg-[#003a96] text-white hover:bg-blue-950 shadow-lg rounded p-3" onClick={() => setNodesToRemove(prev => [...prev, nodeInfo])}>
-                            Remove Node
-                        </button>
                     </div>
                 )}
 

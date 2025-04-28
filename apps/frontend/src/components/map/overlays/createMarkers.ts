@@ -1,5 +1,5 @@
 import {graph} from "@/components/map/GraphObject.ts";
-import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
+import {Node, NodeType} from "@/components/navigation/pathfinding/Graph.ts";
 
 import {nodeMarker} from "./markerStyles.ts";
 
@@ -182,7 +182,8 @@ export function addNodeListener(
             x: event.latLng.lat(),
             y: event.latLng.lng(),
             edgeCost: 0,
-            totalCost: 0
+            totalCost: 0,
+            type: NodeType.Hall
         });
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,

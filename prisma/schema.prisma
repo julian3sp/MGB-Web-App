@@ -107,6 +107,7 @@ model nodes {
   name      String?
   x         Float
   y         Float
+  type      String
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 

@@ -11,102 +11,55 @@ type formRequestButton = {
     label: string;
     onClick: () => void;
     type: string;
+    isActive: boolean;
 };
 
-function RequestButton({ label, onClick, type }: formRequestButton) {
+function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
     return (
         <button
             onClick={onClick}
             className={`
-        group relative flex items-center w-full text-left mb-3 py-2.5 px-5 rounded-xl
-        font-poppins font-semibold transition-all duration-300 ease-in-out
-         text-[13pt]
+    group relative flex items-center w-full text-left mb-3 py-5 px-5 rounded-xl
+    font-poppins font-semibold transition-all duration-100 ease-in-out
+    text-[13pt] border-[#44A6A6]
 
-        /* Gray base with subtle gradient */
-        bg-white
-        text-[#003a96] shadow-md
+    ${isActive ? 'bg-white text-[#003a96] border-b-0 shadow-inner shadow-[#001e4d]/50' :  'bg-[#003a96] hover:bg-white hover:text-[#003a96] border-b-5 border-b-[#44A6A6] text-white shadow-md'}
 
-        /* Subtle hover effect - slightly darker gray */
-       
-        hover:shadow-lg hover:translate-y-[-1px]
-        hover:border-b-5
-        hover:border-b-[#44A6A6]
-
-        /* Focus state - transforms to blue with inset shadow for indented look */
-        focus:outline-none focus:ring-2 focus:ring-[#b1e3e4]/60
-        focus:border-b-5
-        focus:border-[#44A6A6]
-        focus:bg-gradient-to-br focus:from-[#003a96] focus:to-[#003a96]
-        focus:text-[#e4eaf3] focus:shadow-inner focus:shadow-[#001e4d]/50
-        active:shadow-inner active:shadow-[#001e4d]/50 active:translate-y-[1px]
-      `}
+    
+    
+  `}
         >
-            {/* Overlay effect for hover state */}
-            <div className="absolute inset-0
-                            opacity-0 group-hover:opacity-10
-                            bg-[#003a96] mix-blend-overlay rounded-xl transition-opacity duration-300" />
+            {/* Overlay effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 bg-[#003a96] mix-blend-overlay rounded-xl transition-opacity duration-300" />
 
+            {/* Icon rendering */}
             {type === "AudioVisual" && (
-                <AudioIcon
-                    size={40}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[16px] ml-[1px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <AudioIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
             )}
             {type === "Transportation" && (
-                <AmbulanceIcon
-                    size={40}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[16px] ml-[1px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <AmbulanceIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
             )}
             {type === "Sanitation" && (
-                <CleaningIcon
-                    size={40}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[15px] ml-[0px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <CleaningIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[0px] text-inherit" />
             )}
             {type === "Language" && (
-                <LanguageIcon
-                    size={40}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[21px] ml-[2px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <LanguageIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[21px] ml-[2px] text-inherit" />
             )}
             {type === "Security" && (
-                <LockIcon
-                    size={37}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[12px] ml-[0px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <LockIcon size={37} stroke="currentColor" fill="currentColor" className="mr-[12px] ml-[0px] text-inherit" />
             )}
             {type === "MedicalDevice" && (
-                <MedicalIcon
-                    size={40}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[15px] ml-[2px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <MedicalIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[2px] text-inherit" />
             )}
             {type === "Facilities" && (
-                <ElevatorIcon
-                    size={38}
-                    stroke="currentColor"
-                    fill="currentColor"
-                    className="mr-[11px] ml-[0px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white"
-                />
+                <ElevatorIcon size={38} stroke="currentColor" fill="currentColor" className="mr-[11px] ml-[0px] text-inherit" />
             )}
-            <span className="ml-[0px] text-[#003a96] group-hover:text-[#002d78] group-focus:text-white">
-                {label}
-            </span>
+
+            {/* Label */}
+            <span className="ml-[0px] text-inherit">{label}</span>
         </button>
     );
 }
+
 
 export default RequestButton;

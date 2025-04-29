@@ -163,10 +163,10 @@ export function ProgressBar(props: ProgressBarProps) {
     };
 
     return (
-        <div className="flex items-start gap-10 p-6">
+        <div className="flex items-start gap-10 border-1 rounded-lg shadow-lg bg-white p-8 pl-2 ">
             {/* Vertical Progress Bar */}
-            <div className='flex flex-col items-center translate-x-15'>
-                <div className="relative h-85 w-8 bg-gray-200 rounded-full">
+            <div className='flex flex-col items-center translate-x-5'>
+                <div className="relative h-85 w-10 bg-gray-200 rounded-full">
                     <motion.div
                         className="absolute top-0 left-0 w-full bg-[#003a96] rounded-full"
                         variants={progressVariants}
@@ -177,7 +177,7 @@ export function ProgressBar(props: ProgressBarProps) {
             </div>
 
             {/* Fields List */}
-            <div className="flex-1 space-y-6 transform translate-x-20 transition-transform duration-300">
+            <div className="flex-1 space-y-6 transform translate-x-1 transition-transform duration-300">
             {/* Step 1 Fields */}
                 <div className="space-y-2">
                     <h3 className="font-semibold text-xl">Step 1: Basic Information</h3>

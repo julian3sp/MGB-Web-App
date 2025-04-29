@@ -142,10 +142,10 @@ export function FormSteps({
     }, [formValid]);
 
     return (
-        <div className="flex flex-col">
+        <div className="flex m-5 flex-col">
             <div 
                 ref={scrollContainerRef}
-                className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"
+                className="snap-y snap-mandatory overflow-y-auto h-80 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >   
                 {/* Step 1 */}
@@ -482,7 +482,7 @@ export function FormSteps({
                     {Array.from({ length: 3 }).map((_, index) => (
                         <div 
                             key={index}
-                            className={`w-3 h-3 rounded-full ${currentStep === index + 1 ? 'bg-blue-500' : 'bg-gray-300'}`}
+                            className={`w-3 h-3 rounded-full ${currentStep === index + 1 ? 'bg-[#003a96] ' : 'bg-gray-300'}`}
                         />
                     ))}
                 </div>

@@ -371,17 +371,17 @@ function RequestForm({ title, type }: requestFormProps) {
 
     return (
         <>
-            <div>
+            <div className={'mt-10'}>
                 <form
                     className="justify-center text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-[90vh] flex flex-col gap-5">
+                    <div className="w-[90vh] flex flex-col shadow-xl pb-5    rounded-xl bg-white border-2 gap-5">
 
-                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
-                            {title}
-                        </h2>
+                        {/*<h2 className="text-center py-5 text-[20px] font-[Poppins] border-b-5 border-b-[#44A6A6] text-lg font-semibold bg-[#003a96] text-white rounded-tr-lg rounded-tl-lg ">*/}
+                        {/*    {title}*/}
+                        {/*</h2>*/}
 
                         {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
                         {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
@@ -443,7 +443,7 @@ function RequestForm({ title, type }: requestFormProps) {
 
                         )}
 
-                        <div className="flex justify-center gap-6 mt-6">
+                        <div className="flex justify-center gap-6 ">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
                                     className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
@@ -469,6 +469,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             )}
                         </div>
                     </div>
+                    <div className={'pl-8'}>
                     <ProgressBar
                             currentStep={currentStep}
                             name={name}
@@ -491,6 +492,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             maintenanceType={maintenanceType}
                             equipmentType={equipmentType}
                         />
+                    </div>
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">

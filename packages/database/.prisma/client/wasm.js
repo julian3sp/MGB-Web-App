@@ -213,6 +213,7 @@ exports.Prisma.NodesScalarFieldEnum = {
   name: 'name',
   x: 'x',
   y: 'y',
+  type: 'type',
   edgeCost: 'edgeCost',
   totalCost: 'totalCost'
 };

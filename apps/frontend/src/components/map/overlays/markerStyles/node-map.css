@@ -1,12 +1,12 @@
 /* ---------- NODE DOT ---------- */
 .node-dot {
-    width: 18px;              /* base size */
-    height: 18px;
+    width: 10px;              /* base size */
+    height: 10px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
-    #2163ff 0%,      /* light core */
-    #00307c 45%,     /* navy midtone */
-    #001c4d 95%);    /* deep edge */
+    #ff4d4d 0%,    /* light red center */
+    #d92d20 45%,   /* bold red mid */
+    #7c1812 95%);  /* deep dark red edge */
     box-shadow:
             0 0 0 1px #ffffffcc,    /* crisp white rim */
             0 2px 4px rgba(0,0,0,.45);   /* soft lift */
@@ -58,11 +58,30 @@
 }
 .node--start::after { border: 2px solid #2ecc71; }         /* green */
 .node--goal::after  { border: 2px solid #ffbf00; }         /* gold  */
-.node--blocked { background: #7e7e7e; }                    /* gray fill */
-.node--blocked::after { border: 2px solid #666; }
+.node--blocked {
+    background: #7e7e7e;
+}                    /* gray fill */
+.node--blocked::after {
+    border: 2px solid #666;
+}
 
 /* ---------- DEGREE-BASED JUNCTION ---------- */
 .node--junction {
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #ff4d4d 0%,    /* light red center */
+    #d92d20 45%,   /* bold red mid */
+    #7c1812 95%);  /* deep dark red edge */
+
+    box-shadow:
+            0 0 0 1px #ffffffcc,
+            0 2px 4px rgba(0,0,0,.45),
+            0 0 10px rgba(33, 99, 255, 0.6); /* subtle blue glow */
+}
+
+.node--end{
+    width: 15px;              /* base size */
+    height: 15px;
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%,
     #2163ff 0%,
@@ -71,25 +90,14 @@
     box-shadow:
             0 0 0 1px #ffffffcc,
             0 2px 4px rgba(0,0,0,.45),
-            0 0 10px rgba(33, 99, 255, 0.6); /* subtle blue glow */
-}
-
-.node--end{
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%,
-    #ff4d4d 0%,    /* light red center */
-    #d92d20 45%,   /* bold red mid */
-    #7c1812 95%);  /* deep dark red edge */
-    box-shadow:
-            0 0 0 1px #ffffffcc,
-            0 2px 4px rgba(0,0,0,.45),
             0 0 10px rgba(217, 45, 32, 0.6); /* soft red glow */
 }
+/* ---------- Elevator  ---------- */
 
-/* ---------- EDGE / POLYLINE ---------- */
-.edge-line {
-    stroke: #d92d20;          /* soft red */
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-opacity: .6;
-}
+
+
+/* ---------- Sky Bridge  ---------- */
+
+
+
+/* ---------- Stairwell  ---------- */

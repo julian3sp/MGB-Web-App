@@ -8,7 +8,7 @@ type CreditCardProps = {
 function CreditCard({image, title, description, docs} : CreditCardProps) {
     return (
         <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
-            <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
+            <div className="flex justify-center h-56 m-2.5 overflow-hidden text-white rounded-md">
                 <img
                     src={image}
                     alt={title}

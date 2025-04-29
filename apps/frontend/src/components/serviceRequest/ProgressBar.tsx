@@ -177,8 +177,8 @@ export function ProgressBar(props: ProgressBarProps) {
             </div> */}
 
             {/* Fields List */}
-            <div className="flex-1 space-y-6 ml-10">
-                {/* Step 1 Fields */}
+            <div className="flex-1 space-y-6 transform translate-x-20 transition-transform duration-300">
+            {/* Step 1 Fields */}
                 <div className="space-y-2">
                     <h3 className="font-semibold text-xl">Step 1: Basic Information</h3>
                     <ul className="space-y-1">

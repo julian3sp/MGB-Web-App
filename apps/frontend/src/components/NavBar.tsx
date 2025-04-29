@@ -1,160 +1,214 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import '../styles/mainStyles.css'
-import {LogInButton} from "./signIn/LogInButton.tsx";
-import {LogOutButton} from "./signIn/LogOutButton.tsx"
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import '../styles/mainStyles.css';
+import { LogInButton } from "./signIn/LogInButton.tsx";
+import { LogOutButton } from "./signIn/LogOutButton.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import {is} from "@react-three/fiber/dist/declarations/src/core/utils";
-
 
 type Props = {
-    userRole: string
-    setUserRole: (newRole: string) => void
-}
+    userRole: string;
+    setUserRole: (newRole: string) => void;
+};
 
-const speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new speech();
-recognition.continuous = true;
-recognition.interimResults = true;
-recognition.start();
+type TabType = '' | 'dir' | 'navigation' | 'serv' | 'reqP' | 'editor' | 'exp';
 
-export default function NavBar({ userRole,  setUserRole }: Props) {
+export default function NavBar({ userRole, setUserRole }: Props) {
     const location = useLocation();
     const navigate = useNavigate();
+    const [voiceControls, setVoiceControls] = useState(false);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
+    const [isRecognitionSupported, setIsRecognitionSupported] = useState(false);
+    const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
-    const [tab, setTab] = React.useState<string>(() => {
+    const [tab, setTab] = useState<TabType>(() => {
         const path = location.pathname;
-        if(path.startsWith("/directory")) return "dir"; 
-        if(path.startsWith("/navigation")) return "navigation";
-        if(path.startsWith("/services")) return "serv";
-        if(path.startsWith("/requests")) return "reqP";
-        if(path.startsWith("/editor")) return "editor";
-        if(path.startsWith("/admin/directory")) return "exp";
+        if (path.startsWith("/directory")) return "dir";
+        if (path.startsWith("/navigation")) return "navigation";
+        if (path.startsWith("/services")) return "serv";
+        if (path.startsWith("/requests")) return "reqP";
+        if (path.startsWith("/editor")) return "editor";
+        if (path.startsWith("/admin/directory")) return "exp";
         return "";
-    })
-    const { isAuthenticated, logout, loginWithRedirect} = useAuth0();
+    });
 
+    // Initialize speech recognition
     useEffect(() => {
-    }, [isAuthenticated]);
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            setIsRecognitionSupported(true);
+            recognitionRef.current = new SpeechRecognition();
+            recognitionRef.current.continuous = true;
+            recognitionRef.current.interimResults = true;
+        }
 
-    const voiceCommands = () => {
-        recognition.onstart = () => {
-            console.log("Starting voice commands");
-        };
-
-        recognition.onresult = (e) => {
-            let current = e.resultIndex;
-            let transcript = e.results[current][0].transcript.trim();
-
-            if (transcript.toLowerCase().includes("navigation") ) {
-                navigate("/navigation");
-            } else if (transcript.toLowerCase().includes("home") ) {
-                navigate("/");
-            } else if (transcript.toLowerCase().includes("directory") || transcript.toLowerCase().includes("department")) {
-                navigate("/directory");
-            } else if (transcript.toLowerCase().includes("log") && transcript.toLowerCase().includes("out")) {
-                logout({ logoutParams: { returnTo: window.location.origin } })
-            } else if (transcript.toLowerCase().includes("log") && transcript.toLowerCase().includes("in")) {
-                loginWithRedirect({})
-            } else if (transcript.toLowerCase().includes("service") ) {
-                navigate("/services");
-            }
-        };
-
-        recognition.onerror = (event) => {
-            console.error("Speech recognition error", event.error);
-            // Restart recognition if an error occurs
-            setTimeout(() => {
-                recognition.start();
-            }, 100);
-        };
-
-        recognition.onend = () => {
-            console.log("Speech recognition ended, restarting...");
-            // Automatically restart when recognition ends
-            setTimeout(() => {
-                recognition.start();
-            }, 100);
-        };
-
-    };
-
-    useEffect(() => {
-        voiceCommands();
         return () => {
-            // Cleanup: stop recognition when component unmounts
-            recognition.stop();
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
         };
     }, []);
 
-    useEffect(() => {
-        if (location.pathname === "/navigation") {
-            const navbar = document.getElementById("navbar") as HTMLElement;
-            if (navbar) {
-                navbar.style.display = "none";
-            }
-            window.scrollTo(0, 65);
-        } else {
-            const navbar = document.getElementById("navbar") as HTMLElement;
-            if (navbar) {
-                navbar.style.display = "block";
-            }
+    // Handle voice commands
+    const handleVoiceCommand = useCallback((transcript: string) => {
+        const lowerTranscript = transcript.toLowerCase();
+
+        if (lowerTranscript.includes("navigation")) {
+            navigate("/navigation");
+        } else if (lowerTranscript.includes("home")) {
+            navigate("/");
+        } else if (lowerTranscript.includes("directory") || lowerTranscript.includes("department")) {
+            navigate("/directory");
+        } else if (lowerTranscript.includes("log out")) {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+        } else if (lowerTranscript.includes("log in")) {
+            loginWithRedirect({});
+        } else if (lowerTranscript.includes("service")) {
+            navigate("/services");
         }
-    }, [location.pathname]);
+    }, [navigate, logout, loginWithRedirect]);
+
+    // Set up recognition event handlers
+    useEffect(() => {
+        if (!recognitionRef.current) return;
+
+        const recognition = recognitionRef.current;
+
+        const handleResult = (e: SpeechRecognitionEvent) => {
+            const current = e.resultIndex;
+            const transcript = e.results[current][0].transcript.trim();
+            handleVoiceCommand(transcript);
+        };
+
+        const handleError = (event: SpeechRecognitionErrorEvent) => {
+            console.error("Speech recognition error", event.error);
+            if (voiceControls) {
+                setTimeout(() => recognition.start(), 500);
+            }
+        };
+
+        const handleEnd = () => {
+            if (voiceControls) {
+                setTimeout(() => recognition.start(), 100);
+            }
+        };
+
+        recognition.onresult = handleResult;
+        recognition.onerror = handleError;
+        recognition.onend = handleEnd;
+
+        return () => {
+            recognition.onresult = null;
+            recognition.onerror = null;
+            recognition.onend = null;
+        };
+    }, [voiceControls, handleVoiceCommand]);
+
+    // Toggle voice recognition
+    useEffect(() => {
+        if (!recognitionRef.current) return;
+
+        if (voiceControls) {
+            try {
+                recognitionRef.current.start();
+            } catch (error) {
+                console.error("Failed to start recognition:", error);
+            }
+        } else {
+            recognitionRef.current.stop();
+        }
+    }, [voiceControls]);
+
+
+    const handleVCToggle = () => {
+        if (!isRecognitionSupported) {
+            alert("Speech recognition is not supported in your browser");
+            return;
+        }
+        setVoiceControls(prev => !prev);
+    };
+
+    const getNavLinkClass = (tabName: TabType) =>
+        tab === tabName
+            ? "bg-[#003a96] font-[Poppins] text-white px-5 py-5"
+            : "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white px-5 py-5 transition-all";
 
     return (
-        <nav className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
+        <nav id="navbar" className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
-                <Link to={"/"} className={"ml-5"} onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo"  className="h-6"/>
+                <Link to="/" className="ml-5" onClick={() => setTab("")}>
+                    <img src={logo} alt="Mass General Brigham Logo" className="h-6" />
                 </Link>
                 <div className="flex">
-                    <Link to="/directory" onClick={() => setTab("dir")}
-                          className={tab === "dir" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                    <Link
+                        to="/directory"
+                        onClick={() => setTab("dir")}
+                        className={getNavLinkClass("dir")}
+                    >
                         Directory
                     </Link>
-                    <Link to="/navigation" onClick={() => setTab("navigation")}
-                          className={tab === "navigation" ?
-                              "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                              "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                    <Link
+                        to="/navigation"
+                        onClick={() => setTab("navigation")}
+                        className={getNavLinkClass("navigation")}
+                    >
                         Navigation
                     </Link>
-                    <div className="flex">
-                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/services" onClick={() => setTab("serv")}
-                             className={tab === "serv" ?
-                                 "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                 "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                            Services
-                        </Link> : null}
-                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/requests" onClick={() => setTab("reqP")}
-                             className={tab === "reqP" ?
-                                 "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                 "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                            View Requests
-                        </Link> : null}
-                        {(isAuthenticated &&  userRole === "Admin") ? <Link to="/editor" onClick={() => setTab("editor")}
-                               className={tab === "editor" ?
-                                   "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                   "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
-                            Map Editor
-                        </Link> : null}
-                    </div>
-                    <div className="flex">
-                        { (isAuthenticated && userRole === "Admin") ?
-                            <Link to="/admin/directory" onClick={() => setTab("exp")}
-                                  className={tab === "exp" ?
-                                      "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                      "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+
+                    {isAuthenticated && (userRole === "Staff" || userRole === "Admin") && (
+                        <>
+                            <Link
+                                to="/services"
+                                onClick={() => setTab("serv")}
+                                className={getNavLinkClass("serv")}
+                            >
+                                Services
+                            </Link>
+                            <Link
+                                to="/requests"
+                                onClick={() => setTab("reqP")}
+                                className={getNavLinkClass("reqP")}
+                            >
+                                View Requests
+                            </Link>
+                        </>
+                    )}
+
+                    {isAuthenticated && userRole === "Admin" && (
+                        <>
+                            <Link
+                                to="/editor"
+                                onClick={() => setTab("editor")}
+                                className={getNavLinkClass("editor")}
+                            >
+                                Map Editor
+                            </Link>
+                            <Link
+                                to="/admin/directory"
+                                onClick={() => setTab("exp")}
+                                className={getNavLinkClass("exp")}
+                            >
                                 Export
-                            </Link> : null }
-                    </div>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
-            <LogInButton className= "text-base text-black" rerender={setUserRole}/>
-            <LogOutButton className="text-base text-black" rerender={setUserRole}/>
+
+            <div className="flex items-center space-x-4 mr-5">
+                <LogInButton className="text-base text-black" rerender={setUserRole} />
+                <LogOutButton className="text-base text-black" rerender={setUserRole} />
+                {isRecognitionSupported && (
+                    <button
+                        className={`bg-[#003a96] font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3 ${
+                            voiceControls ? "ring-2 ring-blue-400" : ""
+                        }`}
+                        onClick={handleVCToggle}
+                    >
+                        {voiceControls ? "Voice Control ON" : "Voice Control OFF"}
+                    </button>
+                )}
+            </div>
         </nav>
-    )
+    );
 }

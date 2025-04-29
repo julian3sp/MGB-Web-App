@@ -1,5 +1,5 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
@@ -12,9 +12,15 @@ type Props = {
     setUserRole: (newRole: string) => void
 }
 
+const speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new speech();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.start();
 
 export default function NavBar({ userRole,  setUserRole }: Props) {
     const location = useLocation();
+    const navigate = useNavigate();
     const [tab, setTab] = React.useState<string>(() => {
         const path = location.pathname;
         if(path.startsWith("/directory")) return "dir"; 
@@ -25,7 +31,53 @@ export default function NavBar({ userRole,  setUserRole }: Props) {
         if(path.startsWith("/admin/directory")) return "exp";
         return "";
     })
-    const { isAuthenticated } = useAuth0();
+    const { isAuthenticated, logout } = useAuth0();
+
+    const voiceCommands = () => {
+        recognition.onstart = () => {
+            console.log("Starting voice commands");
+        };
+
+        recognition.onresult = (e) => {
+            let current = e.resultIndex;
+            let transcript = e.results[current][0].transcript.trim();
+
+            if (transcript.toLowerCase().includes("navigation") ) {
+                navigate("/navigation");
+            } else if (transcript.toLowerCase().includes("home") ) {
+                navigate("/");
+            } else if (transcript.toLowerCase().includes("directory") || transcript.toLowerCase().includes("department")) {
+                navigate("/directory");
+            } else if (transcript.toLowerCase().includes("home") ) {
+                navigate("/");
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+            // Restart recognition if an error occurs
+            setTimeout(() => {
+                recognition.start();
+            }, 100);
+        };
+
+        recognition.onend = () => {
+            console.log("Speech recognition ended, restarting...");
+            // Automatically restart when recognition ends
+            setTimeout(() => {
+                recognition.start();
+            }, 100);
+        };
+
+    };
+
+    useEffect(() => {
+        voiceCommands();
+        return () => {
+            // Cleanup: stop recognition when component unmounts
+            recognition.stop();
+        };
+    }, []);
 
     useEffect(() => {
         if (location.pathname === "/navigation") {

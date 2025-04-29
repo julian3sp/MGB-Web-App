@@ -2747,6 +2747,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/dom-speech-recognition@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "@types/dom-speech-recognition@npm:0.0.6"
+  checksum: 10/aeec95b643e807ba30f3370b0fea15f0108401183c379dc5837cda9f49089535cd0a164cca87394d13df319ce54e2d4e829f849bf92e9564bb3da7c47f51d3d8
+  languageName: node
+  linkType: hard
+
 "@types/draco3d@npm:^1.4.0":
   version: 1.4.10
   resolution: "@types/draco3d@npm:1.4.10"
@@ -5634,6 +5641,7 @@ __metadata:
     "@trpc/react-query": "npm:^11.0.3"
     "@trpc/server": "npm:^11.0.3"
     "@types/bootstrap": "npm:^5"
+    "@types/dom-speech-recognition": "npm:^0.0.6"
     "@types/node": "npm:^22.14.1"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"

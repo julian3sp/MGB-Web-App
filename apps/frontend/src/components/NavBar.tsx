@@ -197,8 +197,6 @@ export default function NavBar({ userRole, setUserRole }: Props) {
             </div>
 
             <div className="flex items-center space-x-4 mr-5">
-                <LogInButton className="text-base text-black" rerender={setUserRole} />
-                <LogOutButton className="text-base text-black" rerender={setUserRole} />
                 {isRecognitionSupported && (
                     <button
                         className={`bg-[#003a96] font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3 ${
@@ -209,6 +207,8 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                         {voiceControls ? "Voice Control ON" : "Voice Control OFF"}
                     </button>
                 )}
+                <LogInButton className="text-base text-black" rerender={setUserRole} />
+                <LogOutButton className="text-base text-black" rerender={setUserRole} />
             </div>
         </nav>
     );

@@ -17,7 +17,7 @@ export function AppleCardsListing() {
     ));
 
     return (
-        <div ref={carouselRef} className="w-full -mt-5 bg-white">
+        <div ref={carouselRef} className="w-full -mt-10 bg-white">
             {/*
         Pass the `inView` flag down so the Carousel
         only plays its internal animations when it scrolls into view.

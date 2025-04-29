@@ -72,7 +72,7 @@ export const flipCardsData = [
 
     {
         category: "Brigham & Women's Hospital Main Campus",
-        title: "Filter test (Brigham & Women's Hospital Main Campus)",
+        title: "Filter test 1",
         src: lebron1,
         content: (
             <p className="text-white">
@@ -82,7 +82,7 @@ export const flipCardsData = [
     },
     {
         category: "Patriot Place",
-        title: "Filter test (Patriot Place)",
+        title: "Filter test 2",
         src: lebron1,
         content: (
             <p className="text-white">
@@ -92,7 +92,7 @@ export const flipCardsData = [
     },
     {
         category: "Faulkner Hospital",
-        title: "Filter test (Faulkner Hospital)",
+        title: "Filter test 3",
         src: lebron1,
         content: (
             <p className="text-white">

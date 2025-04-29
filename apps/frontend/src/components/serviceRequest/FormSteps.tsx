@@ -464,7 +464,6 @@ export function FormSteps({
                                 </div>
                             </div>
                         ) : null}
-
                         <div className="px-6 mt-4">
                             <InputHeader children={'Additional Comments:'} />
                             <TextArea

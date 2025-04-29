@@ -4,12 +4,56 @@ import {toast} from "sonner"
 import { Toaster } from '../../ui/sonner';
 import { trpc } from '@/lib/trpc';
 import { PieChart } from 'react-minimal-pie-chart';
+import { Bar, BarChart } from "recharts"
+import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "../../ui/chart"
 
+const chartData = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
 
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig
 
+const serviceRequestConfig = {
+    number: {
+        label: "amount",
+        color: "#2563eb",
+    },
+} satisfies ChartConfig
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
+
+    const sanitationRequests = trpc.requestListOfType.useQuery({ type: 'Sanitation' });
+    const languageRequests = trpc.requestListOfType.useQuery({ type: 'Language' });
+    const securityRequests = trpc.requestListOfType.useQuery({ type: 'Security' });
+    const audioVisualRequests = trpc.requestListOfType.useQuery({ type: 'AudioVisual' });
+    const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
+    const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
+    const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
+
+    const serviceRequestData = [
+        { type: 'Sanitation', number: sanitationRequests.data?.length ?? 0 },
+        { type: 'Language', number: languageRequests.data?.length ?? 0 },
+        { type: 'Security', number: securityRequests.data?.length ?? 0 },
+        { type: 'AudioVisual', number: audioVisualRequests.data?.length ?? 0 },
+        { type: 'Transportation', number: transportationRequests.data?.length ?? 0 },
+        { type: 'MedicalDevice', number: medicalDeviceRequests.data?.length ?? 0 },
+        { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
+    ];
 
   const makeNode = trpc.makeNode.useMutation()
   const deleteNodes = trpc.deleteAllNodes.useMutation()
@@ -73,23 +117,41 @@ export default function ImportPage() {
   }
 
   return (
-    <div className="p-4 max-w-md mx-auto space-y-4">
-      <h1 className="text-lg font-bold text-center">Import CSV Files</h1>
-      <PieChart
-          data={[
-            { title: 'One', value: 10, color: '#E38627' },
-            { title: 'Two', value: 15, color: '#C13C37' },
-            { title: 'Three', value: 20, color: '#6A2135' },
-          ]}
-      />;
-      <FileUploadCard files={files} onFilesChange={setFiles} />
-      <button
-        onClick={handleImportFiles}
-        className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-950"
-      >
-        Import CSV
-      </button>
-      <Toaster />
-    </div>
-  )
+      <div className="p-4 max-w-md mx-auto space-y-4">
+          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+              <BarChart data={chartData}>
+                  <Bar dataKey="month" />
+                  <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+                  <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+              </BarChart>
+          </ChartContainer>
+
+          <ChartContainer config={serviceRequestConfig} className="min-h-[200px] w-full">
+              <BarChart data={serviceRequestData}>
+                  <Bar dataKey="style" />
+                  <Bar dataKey="number" fill="var(--color-number)" radius={4} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+              </BarChart>
+          </ChartContainer>
+
+          <h1 className="text-lg font-bold text-center">Import CSV Files</h1>
+          <PieChart
+              data={[
+                  { title: 'One', value: 10, color: '#E38627' },
+                  { title: 'Two', value: 15, color: '#C13C37' },
+                  { title: 'Three', value: 20, color: '#6A2135' },
+              ]}
+          />
+          ;
+          <FileUploadCard files={files} onFilesChange={setFiles} />
+          <button
+              onClick={handleImportFiles}
+              className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-950"
+          >
+              Import CSV
+          </button>
+          <Toaster />
+      </div>
+  );
 }

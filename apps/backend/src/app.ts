@@ -9,6 +9,7 @@ import {
     makeRequest,
     deleteRequest,
     updateRequest,
+    getRequestOfType,
 } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
@@ -45,6 +46,7 @@ const cors = require('cors');
 
 const appRouter = t.router({
     requestList: getRequests,
+    requestListOfType: getRequestOfType,
     createRequest: makeRequest,
     deleteRequest: deleteRequest,
     updateRequest: updateRequest,

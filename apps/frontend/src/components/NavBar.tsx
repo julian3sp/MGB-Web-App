@@ -5,6 +5,8 @@ import '../styles/mainStyles.css';
 import { LogInButton } from "./signIn/LogInButton.tsx";
 import { LogOutButton } from "./signIn/LogOutButton.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import microphone from "../../assets/voice/microphone-svgrepo-com.svg";
+import mute from "../../assets/voice/microphone-slash-svgrepo-com.svg";
 
 type Props = {
     userRole: string;
@@ -15,7 +17,7 @@ type Props = {
 export default function NavBar({ userRole, setUserRole }: Props) {
     const location = useLocation();
     const navigate = useNavigate();
-    const [voiceControls, setVoiceControls] = useState(false);
+    const [voiceControls, setVoiceControls] = useState(true);
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const [isRecognitionSupported, setIsRecognitionSupported] = useState(false);
     const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
@@ -67,6 +69,8 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         } else if (lowerTranscript.includes("service")) {
             navigate("/services");
             setTab("services");
+        } else if(lowerTranscript.includes("off")) {
+            setVoiceControls(false)
         }
     }, [navigate, logout, loginWithRedirect]);
 
@@ -138,7 +142,7 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         <nav id="navbar" className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
                 <Link to="/" className="ml-5" onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo" className="h-6" />
+                    <img src={logo} alt="Mass General Brigham Logo" className="h-8 w-auto" />
                 </Link>
                 <div className="flex">
                     <Link
@@ -197,19 +201,14 @@ export default function NavBar({ userRole, setUserRole }: Props) {
             </div>
 
             <div className="flex items-center space-x-4 mr-5">
-                {isRecognitionSupported && (
-                    <button
-                        className={`bg-[#003a96] font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3 ${
-                            voiceControls ? "ring-2 ring-blue-400" : ""
-                        }`}
-                        onClick={handleVCToggle}
-                    >
-                        {voiceControls ? "Voice Control ON" : "Voice Control OFF"}
-                    </button>
-                )}
+                {isRecognitionSupported && voiceControls ?
+                    <img src={microphone} alt={"Mute PNG"} className="h-6 w-6 cursor-pointer" onClick={handleVCToggle} /> :
+                    <img src={mute} alt={"Microphone PNG"} className="h-6 w-6 cursor-pointer" onClick={handleVCToggle} />
+                }
+
                 <LogInButton className="text-base text-black" rerender={setUserRole} />
                 <LogOutButton className="text-base text-black" rerender={setUserRole} />
             </div>
         </nav>
-    );
+    )
 }

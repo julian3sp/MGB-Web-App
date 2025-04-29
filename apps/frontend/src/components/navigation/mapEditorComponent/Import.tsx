@@ -26,7 +26,7 @@ export default function ImportPage() {
         const headers = lines[0].split(",")
 
         try {
-          if (headers.length >= 5) {
+          if (headers.length >= 6) {
             await deleteNodes.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")

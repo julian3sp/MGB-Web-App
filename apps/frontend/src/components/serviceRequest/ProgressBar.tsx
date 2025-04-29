@@ -165,16 +165,16 @@ export function ProgressBar(props: ProgressBarProps) {
     return (
         <div className="flex items-start gap-10 p-6">
             {/* Vertical Progress Bar */}
-            {/* <div className='flex flex-col items-center'>
-                <div className="relative h-79 w-8 bg-gray-200 rounded-full">
+            <div className='flex flex-col items-center translate-x-15'>
+                <div className="relative h-85 w-8 bg-gray-200 rounded-full">
                     <motion.div
-                        className="absolute bottom-0 left-0 w-full bg-[#003a96] rounded-full"
+                        className="absolute top-0 left-0 w-full bg-[#003a96] rounded-full"
                         variants={progressVariants}
                         initial="initial"
                         animate="animate"
                     ></motion.div>
                 </div>
-            </div> */}
+            </div>
 
             {/* Fields List */}
             <div className="flex-1 space-y-6 transform translate-x-20 transition-transform duration-300">

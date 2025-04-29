@@ -147,7 +147,7 @@ export function FormSteps({
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
+            >   
                 {/* Step 1 */}
                 <div className="snap-start w-full h-full flex flex-col">
                     <motion.div

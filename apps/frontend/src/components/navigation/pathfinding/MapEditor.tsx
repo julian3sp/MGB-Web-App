@@ -1,11 +1,11 @@
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-// import { AdvancedMarker, Pin}  from '@vis.gl/react-google-maps';
 import {
     APIProvider,
     Map as VisMap,
     AdvancedMarker,
     Pin,
-    useMap
+    useMap,
+    CollisionBehavior
 } from '@vis.gl/react-google-maps';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
@@ -29,7 +29,7 @@ import {
 
 // Import Library
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
-import {createMarkers} from "@/components/map/overlays/createMarkers.ts";
+import {renderMarkers} from "@/components/map/overlays/createMarkers.tsx";
 
 
 export default function MapEditor() {
@@ -303,18 +303,8 @@ export default function MapEditor() {
                     >
                         {/*Init nodes once API and Map is ready /*/}
                         <MapInitializer nodes={nodesDataFromAPI} edges={edgesDataFromAPI} />
-
-                        {graph.getAllNodes().map((n) => (
-                            <AdvancedMarker
-                                key={n.id}
-                                position={{ lat: n.x, lng: n.y }}
-                            >
-                                <Pin
-                                    borderColor="#000"
-                                    glyphColor="#fff"
-                                />
-                            </AdvancedMarker>
-                        ))}
+                        {/*<AdvancedMarker position={{lat: 42.09251897010014, lng: -71.26597724690318}} />*/}
+                        {showNodes && renderMarkers(graph.getAllNodes())}
                         <MapEditorControls
                             map={mapRef.current}
                             selectedHospital={selectedHospital}

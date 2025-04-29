@@ -32,6 +32,7 @@ const ImportNodes = () => {
                 name: string;
                 x: number;
                 y: number;
+                type: string;
             }[] = [];
 
             for (let i = 1; i < lines.length; i++) {
@@ -46,6 +47,7 @@ const ImportNodes = () => {
                     name: values[2].trim().replace(/"/g, ""),
                     x: Number(values[3].trim().replace(/"/g, "")),
                     y: Number(values[4].trim().replace(/"/g, "")),
+                    type: values[5].trim().replace(/"/g, "")
                 };
 
                 inputs.push(entry);

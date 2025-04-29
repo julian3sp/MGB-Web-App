@@ -1,18 +1,14 @@
-import React, {useState, useRef, useEffect, useCallback} from 'react';
-import { Loader } from '@googlemaps/js-api-loader';
-import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
-import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
-import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
-import {
-    createPatriot22Overlays,
-    updatePatriotPlace22,
-    Patriot22Overlays,
-} from '../../map/overlays/22PatriotOverlay';
-import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
+import React, {useEffect, useRef, useState} from 'react';
+import {Loader} from '@googlemaps/js-api-loader';
+import {createMGBOverlays, MGBOverlays} from '../../map/overlays/MGBOverlay';
+import {createPatriot20Overlays} from '../../map/overlays/20PatriotOverlay';
+import {createFaulknerOverlays} from '@/components/map/overlays/FaulknerOverlay.tsx';
+import {createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22,} from '../../map/overlays/22PatriotOverlay';
+import {addNodeListener, createMarkers} from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
-import { trpc } from '@/lib/trpc';
+import {trpc} from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Node, Edge, NodeType} from './Graph';
+import {Edge, Node, NodeType} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
@@ -20,13 +16,12 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
     DropdownMenuRadioGroup,
-    DropdownMenuRadioItem
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
 } from '../../ui/dropdown-menu.tsx';
 // import {NodeType} from ""
-
 import {WorldDistance} from "./worldCalculations.ts"
 import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 
@@ -52,7 +47,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [nodeInfo, setNodeInfo] = useState<{ id: string; name: string, x: number; y: number, nodeType: string} | null>(null);
+    const [selectedNode, setselectedNode] = useState< Node | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
@@ -186,6 +181,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
+    useEffect(() => {
+        // graph.getNode()
+    }, [currentNodeType]);
+
+
 
     useEffect(() => {
         if (!map || !selectedHospital || !showNodes) return;
@@ -231,7 +231,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
         const newStatics = createMarkers(map, markerLib,
             graph.getBuildingNodes(buildingKey, floor),
-            setNodeDetails,
+            setselectedNode,
             'normal',
             () => setEdgeRefresh((v) => v + 1),
             handleEdgeClick);
@@ -239,7 +239,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     }
 
-    function handleEdgeClick(node: Node, marker: google.maps.marker.AdvancedMarkerElement){
+    function handleEdgeClick(node: Node){
         console.log("edge mode: ", edgeMode);
         if (!edgeMode) return;
         if (!startNodeRef.current) {
@@ -250,11 +250,27 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
-            const w = WorldDistance(startNodeRef, node);
+            const w = WorldDistance(startNodeRef.current, node);
             const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w}
             graph.addEdge(edge);
-
             setStartNode(null);
+
+
+            if(startNodeRef.current.building !== node.building){
+                startNodeRef.current.type = NodeType.SkyBridge;
+                node.type = NodeType.SkyBridge;
+                graph.editNode(startNodeRef.current)
+                graph.editNode(node)
+                console.log("set nodes to sky bridge (default)")
+            }
+            else if (startNodeRef.current.building === node.building && startNodeRef.current.floor !== node.floor){
+                startNodeRef.current.type = NodeType.Elevator;
+                node.type = NodeType.Elevator;
+                graph.editNode(startNodeRef.current)
+                graph.editNode(node)
+                console.log("set nodes to elevator (default)")
+            }
+
             startNodeRef.current = null;
             console.log("end");
             setEdgeRefresh((v) => v + 1);
@@ -315,7 +331,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
-        setNodeInfo({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, nodeType: node.type});
+        setselectedNode({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, nodeType: node.type});
     };
 
     useEffect(() => {
@@ -369,12 +385,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
-                {nodeInfo && (
+                {selectedNode && (
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.name}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {nodeInfo.nodeType}</p>
+                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {selectedNode.id}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {selectedNode.name}</p>
+                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {selectedNode.type}</p>
                         <SRQDropdown
                             value={currentNodeType}
                             setValue={setCurrentNodeType}

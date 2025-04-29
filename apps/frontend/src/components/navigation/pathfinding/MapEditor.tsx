@@ -10,6 +10,7 @@ import {
 } from '../../map/overlays/22PatriotOverlay';
 import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
+import Export_CSV from '../mapEditorComponent/export';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 import {Node, Edge} from './Graph';
@@ -25,6 +26,9 @@ import {
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
 } from '../../ui/dropdown-menu.tsx';
+
+import { makeNode } from '../../../../../backend/src/server/procedures/nodes';
+
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
 
 // resolve
@@ -307,6 +311,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }
 
 
+
     const setNodeDetails = (node: Node) => {
         setNodeInfo({ id: node.id.toString(), x: node.x, y: node.y });
     };
@@ -377,8 +382,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
-                    Submit Changes
+                <div className="w-full p-5 flex flex-col gap-4">
+                    <Export_CSV />
+                </div>
+                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={Export_CSV}>
+                    Export CSV
                 </button>
                 <button
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '

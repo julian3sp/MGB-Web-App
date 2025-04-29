@@ -11,7 +11,6 @@ type Props = {
     setUserRole: (newRole: string) => void;
 };
 
-type TabType = '' | 'dir' | 'navigation' | 'serv' | 'reqP' | 'editor' | 'exp';
 
 export default function NavBar({ userRole, setUserRole }: Props) {
     const location = useLocation();
@@ -21,18 +20,18 @@ export default function NavBar({ userRole, setUserRole }: Props) {
     const [isRecognitionSupported, setIsRecognitionSupported] = useState(false);
     const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
-    const [tab, setTab] = useState<TabType>(() => {
+    const [tab, setTab] = useState<string>(() => {
         const path = location.pathname;
-        if (path.startsWith("/directory")) return "dir";
+        if (path.startsWith("/directory")) return "directory";
         if (path.startsWith("/navigation")) return "navigation";
-        if (path.startsWith("/services")) return "serv";
-        if (path.startsWith("/requests")) return "reqP";
+        if (path.startsWith("/services")) return "services";
+        if (path.startsWith("/requests")) return "requests";
         if (path.startsWith("/editor")) return "editor";
-        if (path.startsWith("/admin/directory")) return "exp";
+        if (path.startsWith("/admin/directory")) return "admin/directory";
         return "";
     });
 
-    // Initialize speech recognition
+
     useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
@@ -49,26 +48,28 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         };
     }, []);
 
-    // Handle voice commands
     const handleVoiceCommand = useCallback((transcript: string) => {
         const lowerTranscript = transcript.toLowerCase();
 
         if (lowerTranscript.includes("navigation")) {
             navigate("/navigation");
+            setTab("navigation");
         } else if (lowerTranscript.includes("home")) {
             navigate("/");
+            setTab("home");
         } else if (lowerTranscript.includes("directory") || lowerTranscript.includes("department")) {
             navigate("/directory");
+            setTab("directory");
         } else if (lowerTranscript.includes("log out")) {
             logout({ logoutParams: { returnTo: window.location.origin } });
         } else if (lowerTranscript.includes("log in")) {
             loginWithRedirect({});
         } else if (lowerTranscript.includes("service")) {
             navigate("/services");
+            setTab("services");
         }
     }, [navigate, logout, loginWithRedirect]);
 
-    // Set up recognition event handlers
     useEffect(() => {
         if (!recognitionRef.current) return;
 
@@ -128,7 +129,7 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         setVoiceControls(prev => !prev);
     };
 
-    const getNavLinkClass = (tabName: TabType) =>
+    const getNavLinkClass = (tabName: string) =>
         tab === tabName
             ? "bg-[#003a96] font-[Poppins] text-white px-5 py-5"
             : "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white px-5 py-5 transition-all";
@@ -142,8 +143,8 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                 <div className="flex">
                     <Link
                         to="/directory"
-                        onClick={() => setTab("dir")}
-                        className={getNavLinkClass("dir")}
+                        onClick={() => setTab("directory")}
+                        className={getNavLinkClass("directory")}
                     >
                         Directory
                     </Link>
@@ -159,15 +160,15 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                         <>
                             <Link
                                 to="/services"
-                                onClick={() => setTab("serv")}
-                                className={getNavLinkClass("serv")}
+                                onClick={() => setTab("services")}
+                                className={getNavLinkClass("services")}
                             >
                                 Services
                             </Link>
                             <Link
                                 to="/requests"
-                                onClick={() => setTab("reqP")}
-                                className={getNavLinkClass("reqP")}
+                                onClick={() => setTab("requests")}
+                                className={getNavLinkClass("requests")}
                             >
                                 View Requests
                             </Link>
@@ -185,8 +186,8 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                             </Link>
                             <Link
                                 to="/admin/directory"
-                                onClick={() => setTab("exp")}
-                                className={getNavLinkClass("exp")}
+                                onClick={() => setTab("admin/directory")}
+                                className={getNavLinkClass("admin/directory")}
                             >
                                 Export
                             </Link>

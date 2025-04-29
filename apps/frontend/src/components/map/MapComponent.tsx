@@ -137,7 +137,7 @@ const MapComponent: React.FC = () => {
       const CNdepartmentMapping: Record<string, number> = {
         'Entrance': 3900,
         'Multi-Specialty Clinic': 3734,
-        'Radiology, MRI/CT Scan': 3059,
+        'Radiology': 3059,
         'MRI': 3113,
         'CT': 3136,
         'Laboratory': 3781

@@ -80,7 +80,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     const loader = new Loader({
       apiKey,
       version: 'weekly',
-      libraries: ['places'],
+      libraries: ['places', 'marker'],
       language: 'en',
     });
 

@@ -19,7 +19,7 @@ export function ErrorPopUp({
     minLength?: number;
     maxLength?: number;
     error?: string;
-    clearError?: ()=>void;
+    clearError?: () => void;
 }) {
     return (
         <div className="relative flex flex-col">

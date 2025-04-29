@@ -5,6 +5,7 @@ import '../styles/mainStyles.css';
 import { LogInButton } from "./signIn/LogInButton.tsx";
 import { LogOutButton } from "./signIn/LogOutButton.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import {trpc} from "../lib/trpc.ts";
 
 type Props = {
     userRole: string;
@@ -48,6 +49,9 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         };
     }, []);
 
+    const {data: directories} = trpc.getAllNamesArray.useQuery()
+    const {voiceSearchTerm: setVoiceSearchTerm} = useState('')
+
     const handleVoiceCommand = useCallback((transcript: string) => {
         const lowerTranscript = transcript.toLowerCase();
 
@@ -67,8 +71,17 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         } else if (lowerTranscript.includes("service")) {
             navigate("/services");
             setTab("services");
+        }else if (location.pathname ==" /navigation" && directories){
+                const matched = directories.find(dir =>
+                    lowerTranscript.includes(dir.services.toLowerCase())
+                )
+                if(matched){
+                    setVoiceSearchTerm(matched);
+                }
+
         }
     }, [navigate, logout, loginWithRedirect]);
+
 
     useEffect(() => {
         if (!recognitionRef.current) return;

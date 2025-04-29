@@ -1,6 +1,6 @@
 import logo from "../../assets/Mass-General-Brigham-Logo.png";
 import {Link, useLocation} from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
 import {LogOutButton} from "./signIn/LogOutButton.tsx"
@@ -8,18 +8,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 type Props = {
-    loginTag: string
-    isSignedIn: boolean
-    signOut: () => void
+    userRole: string
+    setUserRole: (newRole: string) => void
 }
 
 
-export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
-    const [tab, setTab] = React.useState<string>("")
+export default function NavBar({ userRole,  setUserRole }: Props) {
     const location = useLocation();
-    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-    const isLoginPage = location.pathname === "/signIn" || location.pathname === "/createAcc";
-    const [isAdmin, setAdmin] = React.useState<boolean>(false);
+    const [tab, setTab] = React.useState<string>(() => {
+        const path = location.pathname;
+        if(path.startsWith("/directory")) return "dir"; 
+        if(path.startsWith("/navigation")) return "navigation";
+        if(path.startsWith("/services")) return "serv";
+        if(path.startsWith("/requests")) return "reqP";
+        if(path.startsWith("/editor")) return "editor";
+        if(path.startsWith("/admin/directory")) return "exp";
+        return "";
+    })
+    const { isAuthenticated } = useAuth0();
 
     useEffect(() => {
         if (location.pathname === "/navigation") {
@@ -56,27 +62,27 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                         Navigation
                     </Link>
                     <div className="flex">
-                        {isAuthenticated ? <Link to="/services" onClick={() => setTab("serv")}
-                                                 className={tab === "serv" ?
-                                                     "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                     "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/services" onClick={() => setTab("serv")}
+                             className={tab === "serv" ?
+                                 "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                                 "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                             Services
                         </Link> : null}
-                        {isAuthenticated ? <Link to="/requests" onClick={() => setTab("reqP")}
-                                                 className={tab === "reqP" ?
-                                                     "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                     "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        {isAuthenticated && (userRole === "Staff" || userRole === "Admin") ? <Link to="/requests" onClick={() => setTab("reqP")}
+                             className={tab === "reqP" ?
+                                 "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                                 "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                             View Requests
                         </Link> : null}
-                        {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ? <Link to="/editor" onClick={() => setTab("editor")}
-                                                                                                                       className={tab === "editor" ?
-                                                                                                                           "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
-                                                                                                                           "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
+                        {(isAuthenticated &&  userRole === "Admin") ? <Link to="/editor" onClick={() => setTab("editor")}
+                               className={tab === "editor" ?
+                                   "bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
+                                   "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white  px-5 py-5 transition-all"}>
                             Map Editor
                         </Link> : null}
                     </div>
                     <div className="flex">
-                        {isAdmin || (isAuthenticated && (window.sessionStorage.getItem("isAdmin") === "true")) ?
+                        { (isAuthenticated && userRole === "Admin") ?
                             <Link to="/admin/directory" onClick={() => setTab("exp")}
                                   className={tab === "exp" ?
                                       "text-base bg-[#003a96] font-[Poppins] text-white  px-5 py-5" :
@@ -86,8 +92,8 @@ export default function NavBar({loginTag, isSignedIn, signOut}: Props) {
                     </div>
                 </div>
             </div>
-            <LogInButton className= "text-base text-black" rerender={setAdmin}/>
-            <LogOutButton className="text-base text-black"/>
+            <LogInButton className= "text-base text-black" rerender={setUserRole}/>
+            <LogOutButton className="text-base text-black" rerender={setUserRole}/>
         </nav>
     )
 }

@@ -40,6 +40,11 @@ model service_request {
   transportation Transportation?
 }
 
+model AlgoType {
+  id       Int    @id @default(1)
+  algoType String @default("A-Star")
+}
+
 model Sanitation {
   request_id      Int             @id @default(autoincrement())
   cleaningType    String

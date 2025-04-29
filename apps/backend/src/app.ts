@@ -17,6 +17,7 @@ import {
     deleteAllDirectories,
     getDirectories,
     getUniqueDirectories,
+    getAllNamesArray,
     makeDirectories,
 } from './server/procedures/directories.ts';
 import {
@@ -35,6 +36,7 @@ import {
     makeEdge,
     makeManyEdges,
 } from './server/procedures/edges.ts';
+import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -51,6 +53,7 @@ const appRouter = t.router({
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,
+    getAllNamesArray: getAllNamesArray,
     getDirectories: getDirectories,
     getUniqueDirectory: getUniqueDirectories,
     deleteAllDirectories: deleteAllDirectories,
@@ -66,6 +69,8 @@ const appRouter = t.router({
     getAllEdges: getAllEdges,
     deleteAllEdges: deleteAllEdges,
     deleteSelectedEdges: deleteSelectedEdges,
+    getAlgoType: getAlgoType,
+    setAlgoType: setAlgoType,
 });
 
 const app: Express = express(); // Set up the backend

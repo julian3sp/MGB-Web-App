@@ -28,19 +28,20 @@ export default function ImportPage() {
       reader.onload = async () => {
         const text = reader.result as string
         const lines = text.split("\n").filter(Boolean)
-        const headers = lines[0].split(";")
+        const headers = lines[0].split(",")
 
         try {
-          if (headers.length >= 5) {
+          if (headers.length >= 6) {
             await deleteNodes.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
-              const values = line.split(";")
+              const values = line.split(",")
               return {
                 building: values[0]?.trim().replace(/"/g, ""),
                 floor: Number(values[1]?.trim().replace(/"/g, "")),
                 name: values[2]?.trim().replace(/"/g, ""),
                 x: Number(values[3]?.trim().replace(/"/g, "")),
                 y: Number(values[4]?.trim().replace(/"/g, "")),
+                type: values[5]?.trim().replace(/"/g, ""),
               }
             })
             console.log(inputs)
@@ -49,7 +50,7 @@ export default function ImportPage() {
           } else if (headers.length === 3) {
             await deleteEdges.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
-              const values = line.split(";")
+              const values = line.split(",")
               return {
                 sourceId: Number(values[0]?.trim().replace(/"/g, "")),
                 targetId: Number(values[1]?.trim().replace(/"/g, "")),

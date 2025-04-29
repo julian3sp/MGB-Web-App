@@ -1,11 +1,11 @@
 import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { InputHeader } from "../signIn/InputHeader";
-import { ErrorPopUp } from "./inputFields/ErrorPopUp";
-import { SRQDropdown } from "./inputFields/SRQDropdown";
-import { Combobox } from "./inputFields/Combobox";
-import { languages } from "./data/languages";
-import TextArea from "../TextArea";
+import { InputHeader } from "../../signIn/InputHeader";
+import { ErrorPopUp } from "../inputFields/ErrorPopUp";
+import { SRQDropdown } from "../inputFields/SRQDropdown";
+import { Combobox } from "../inputFields/Combobox";
+import { languages } from "../data/languages";
+import TextArea from "../../TextArea";
 
 type FormStepsProps = {
     currentStep: number;
@@ -142,7 +142,7 @@ export function FormSteps({
     }, [formValid]);
 
     return (
-        <div className="flex m-5 flex-col">
+        <div className="flex m-5 border-1 p-5 bg-white rounded-lg shadow-lg flex-col">
             <div 
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-80 scroll-smooth"

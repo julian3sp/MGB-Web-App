@@ -15135,6 +15135,7 @@ export namespace Prisma {
     name: string | null
     x: number | null
     y: number | null
+    type: string | null
     edgeCost: number | null
     totalCost: number | null
   }
@@ -15146,6 +15147,7 @@ export namespace Prisma {
     name: string | null
     x: number | null
     y: number | null
+    type: string | null
     edgeCost: number | null
     totalCost: number | null
   }
@@ -15157,6 +15159,7 @@ export namespace Prisma {
     name: number
     x: number
     y: number
+    type: number
     edgeCost: number
     totalCost: number
     _all: number
@@ -15188,6 +15191,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
   }
@@ -15199,6 +15203,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
   }
@@ -15210,6 +15215,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
     _all?: true
@@ -15308,6 +15314,7 @@ export namespace Prisma {
     name: string | null
     x: number
     y: number
+    type: string
     edgeCost: number
     totalCost: number
     _count: NodesCountAggregateOutputType | null
@@ -15338,6 +15345,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
     outgoingEdges?: boolean | nodes$outgoingEdgesArgs<ExtArgs>
@@ -15352,6 +15360,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }, ExtArgs["result"]["nodes"]>
@@ -15363,6 +15372,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }, ExtArgs["result"]["nodes"]>
@@ -15374,11 +15384,12 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }
 
-  export type nodesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "building" | "floor" | "name" | "x" | "y" | "edgeCost" | "totalCost", ExtArgs["result"]["nodes"]>
+  export type nodesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "building" | "floor" | "name" | "x" | "y" | "type" | "edgeCost" | "totalCost", ExtArgs["result"]["nodes"]>
   export type nodesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     outgoingEdges?: boolean | nodes$outgoingEdgesArgs<ExtArgs>
     incomingEdges?: boolean | nodes$incomingEdgesArgs<ExtArgs>
@@ -15400,6 +15411,7 @@ export namespace Prisma {
       name: string | null
       x: number
       y: number
+      type: string
       edgeCost: number
       totalCost: number
     }, ExtArgs["result"]["nodes"]>
@@ -15833,6 +15845,7 @@ export namespace Prisma {
     readonly name: FieldRef<"nodes", 'String'>
     readonly x: FieldRef<"nodes", 'Float'>
     readonly y: FieldRef<"nodes", 'Float'>
+    readonly type: FieldRef<"nodes", 'String'>
     readonly edgeCost: FieldRef<"nodes", 'Int'>
     readonly totalCost: FieldRef<"nodes", 'Int'>
   }
@@ -17534,6 +17547,7 @@ export namespace Prisma {
     name: 'name',
     x: 'x',
     y: 'y',
+    type: 'type',
     edgeCost: 'edgeCost',
     totalCost: 'totalCost'
   };
@@ -18306,6 +18320,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"nodes"> | string | null
     x?: FloatFilter<"nodes"> | number
     y?: FloatFilter<"nodes"> | number
+    type?: StringFilter<"nodes"> | string
     edgeCost?: IntFilter<"nodes"> | number
     totalCost?: IntFilter<"nodes"> | number
     outgoingEdges?: EdgesListRelationFilter
@@ -18319,6 +18334,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
     outgoingEdges?: edgesOrderByRelationAggregateInput
@@ -18335,6 +18351,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"nodes"> | string | null
     x?: FloatFilter<"nodes"> | number
     y?: FloatFilter<"nodes"> | number
+    type?: StringFilter<"nodes"> | string
     edgeCost?: IntFilter<"nodes"> | number
     totalCost?: IntFilter<"nodes"> | number
     outgoingEdges?: EdgesListRelationFilter
@@ -18348,6 +18365,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
     _count?: nodesCountOrderByAggregateInput
@@ -18367,6 +18385,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"nodes"> | string | null
     x?: FloatWithAggregatesFilter<"nodes"> | number
     y?: FloatWithAggregatesFilter<"nodes"> | number
+    type?: StringWithAggregatesFilter<"nodes"> | string
     edgeCost?: IntWithAggregatesFilter<"nodes"> | number
     totalCost?: IntWithAggregatesFilter<"nodes"> | number
   }
@@ -19052,6 +19071,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesCreateNestedManyWithoutSourceNodeInput
@@ -19065,6 +19085,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesUncheckedCreateNestedManyWithoutSourceNodeInput
@@ -19077,6 +19098,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUpdateManyWithoutSourceNodeNestedInput
@@ -19090,6 +19112,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUncheckedUpdateManyWithoutSourceNodeNestedInput
@@ -19103,6 +19126,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
   }
@@ -19113,6 +19137,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
   }
@@ -19124,6 +19149,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
   }
@@ -19739,6 +19765,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -19759,6 +19786,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -19770,6 +19798,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -21647,6 +21676,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     incomingEdges?: edgesCreateNestedManyWithoutTargetNodeInput
@@ -21659,6 +21689,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     incomingEdges?: edgesUncheckedCreateNestedManyWithoutTargetNodeInput
@@ -21675,6 +21706,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesCreateNestedManyWithoutSourceNodeInput
@@ -21687,6 +21719,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesUncheckedCreateNestedManyWithoutSourceNodeInput
@@ -21714,6 +21747,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     incomingEdges?: edgesUpdateManyWithoutTargetNodeNestedInput
@@ -21726,6 +21760,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     incomingEdges?: edgesUncheckedUpdateManyWithoutTargetNodeNestedInput
@@ -21748,6 +21783,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUpdateManyWithoutSourceNodeNestedInput
@@ -21760,6 +21796,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUncheckedUpdateManyWithoutSourceNodeNestedInput

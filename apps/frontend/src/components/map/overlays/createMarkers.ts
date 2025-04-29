@@ -1,5 +1,5 @@
 import {graph} from "@/components/map/GraphObject.ts";
-import {Node, Edge} from "@/components/navigation/pathfinding/Graph.ts";
+import {Node, NodeType} from "@/components/navigation/pathfinding/Graph.ts";
 
 import {nodeMarker} from "./markerStyles.ts";
 
@@ -12,7 +12,7 @@ export function createMarkers(
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
     onNodeMove: () => void,
-    onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
+    setSelectedNode?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
     ) {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
@@ -33,7 +33,7 @@ export function createMarkers(
             zIndex
         });
 
-        markerUI(marker, node, setNodeDetails, onNodeMove, onNodeClicked);
+        markerUI(marker, node, setNodeDetails, onNodeMove, setSelectedNode);
         markers.push(marker);
     }
 
@@ -41,7 +41,7 @@ export function createMarkers(
 }
 
 function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
-                  setNodeDetails: (node: Node) => void, onNodeMove: () => void,
+                  setSelectedNode: (node: Node) => void, onNodeMove: () => void,
                   onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void) {
 
     // Double click node to remove it
@@ -106,7 +106,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
     // Get node Info
     content.addEventListener('click', (e) => {
         e.stopPropagation();
-        setNodeDetails(node);
+        setSelectedNode(node);
         if (onNodeClicked) onNodeClicked(node, marker);
         content.classList.add("node-selected");
         if (prevMarker && prevMarker.content) {
@@ -146,7 +146,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
     // Clean up when drag ends
     marker.addListener('dragend', () => {
         const newPos = marker.position;
-        setNodeDetails(node);
+        setSelectedNode(node);
         if (newPos) {
             node.x = (newPos as google.maps.LatLngLiteral).lat + 0.000002;
             node.y = (newPos as google.maps.LatLngLiteral).lng;
@@ -182,7 +182,8 @@ export function addNodeListener(
             x: event.latLng.lat(),
             y: event.latLng.lng(),
             edgeCost: 0,
-            totalCost: 0
+            totalCost: 0,
+            type: NodeType.Hall
         });
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,

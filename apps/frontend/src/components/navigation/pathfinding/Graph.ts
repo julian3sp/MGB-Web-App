@@ -186,7 +186,7 @@ export class Graph {
                 this.edits.editedNodes.push({ ...node });
             }
         }
-        console.log(this.edits.editedNodes);
+        // console.log(this.edits.editedNodes);
     }
 
     deleteNode(id:number): void {

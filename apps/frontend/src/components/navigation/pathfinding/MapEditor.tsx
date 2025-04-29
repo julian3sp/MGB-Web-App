@@ -1,4 +1,12 @@
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+// import { AdvancedMarker, Pin}  from '@vis.gl/react-google-maps';
+import {
+    APIProvider,
+    Map as VisMap,
+    AdvancedMarker,
+    Pin,
+    useMap
+} from '@vis.gl/react-google-maps';
 import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
 import {Node, Edge, NodeType} from './Graph';
@@ -21,6 +29,7 @@ import {
 
 // Import Library
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
+import {createMarkers} from "@/components/map/overlays/createMarkers.ts";
 
 
 export default function MapEditor() {
@@ -30,6 +39,7 @@ export default function MapEditor() {
     const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
+    const [graphPopulated, setGraphPopulated] = useState<boolean>(false);
 
     //------------ Map controller --------------------//
     const mapRef = useRef<google.maps.Map|null>(null);
@@ -38,6 +48,10 @@ export default function MapEditor() {
     const [showNodes, setShowNodes] = useState(false);
     const [showEdges, setShowEdges] = useState(false);
     const [edgeMode, setEdgeMode] = useState(false);
+    const markerLibRef = useRef<google.maps.MarkerLibrary|null>(null);
+
+    // Store Node info
+    const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
     //Stores all markers and edges
     const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
@@ -52,6 +66,21 @@ export default function MapEditor() {
         edgesRef.current.forEach(l => l.setMap(null));
         edgesRef.current = [];
     }
+
+    // useEffect(() => {
+    //     if (!mapRef.current || !markerLibRef.current || !showNodes) return;
+    //
+    //     // clear old
+    //     markersRef.current.forEach(m => m.map = null);
+    //     markersRef.current = [];
+    //
+    //     markersRef.current = createMarkers(mapRef.current, markerLibRef.current, graph.getAllNodes(), setSelectedNode)
+    //
+    //     return () => {
+    //         markersRef.current.forEach(m => m.map = null);
+    //         markersRef.current = [];
+    //     };
+    // }, [mapRef.current, markerLibRef.current, showNodes]);
 
 
 
@@ -119,14 +148,56 @@ export default function MapEditor() {
     });
 
     if (loadError) return <p>Error loading Maps</p>;
-    if (!isLoaded) return <p>loaded Maps</p>;
+    if (!isLoaded){
+        return <div className="flex h-[95vh]">
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                </div>;
+    }
+
 
     function handleMapReady(map: google.maps.Map) {
         const dirSvc  = new google.maps.DirectionsService();
         const dirRndr = new google.maps.DirectionsRenderer({ map });
         setIsLoadingMap(false);
+        console.log("loading something?")
         mapRef.current = map;
+
+        // Load Advance Marker Lib
+        google.maps.importLibrary('marker')
+            .then((lib) => { markerLibRef.current = lib as google.maps.MarkerLibrary; })
+            .catch(console.error);
+        console.log("loading something?")
+        if(!isNodesLoading && !isEdgesLoading) graph.populate(nodesDataFromAPI, edgesDataFromAPI);
     }
+
+    function MapInitializer({ nodes, edges }) {
+        const map = useMap();  // gets the google.maps.Map once the Map is mounted
+
+        useEffect(() => {
+            if (!map || !nodes || !edges || graphPopulated) return;
+            graph.populate(nodes, edges);
+            setGraphPopulated(true)
+        }, [map]);
+
+        return null;
+    }
+
+    // useEffect(() => {
+    //     if (mapRef.current     &&     // map has loaded
+    //         nodesDataFromAPI   &&     // nodes are in
+    //         edgesDataFromAPI             // edges are in
+    //     ) {
+    //         console.log("False")
+    //         graph.populate(nodesDataFromAPI, edgesDataFromAPI);
+    //     }
+    // }, [
+    //     mapRef.current,
+    //     nodesDataFromAPI,
+    //     edgesDataFromAPI,
+    // ]);
+
 
     return (
         <div className="flex h-[95vh]">
@@ -201,35 +272,66 @@ export default function MapEditor() {
             {/*  Start of Google Maps Component */}
             <div className="w-3/4 relative">
 
-                {/* Loading screen */}
-                {isLoadingMap && (
+                 {/*Loading screen */}
+                {(!isLoaded) && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
                         <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
 
-                <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '95vh' }}
-                    center={{ lat: 42.3261, lng: -71.1496 }}
-                    zoom={19}
-                    onLoad={handleMapReady}
-                    options={{ disableDoubleClickZoom: true, mapId: 'ca6b761fac973d24' }}>
-                    <MapEditorControls
-                        map={mapRef.current}
-                        selectedHospital={selectedHospital}
-                        selectedFloor={selectedFloor}
-                        onHospitalChange={setSelectedHospital}
-                        onFloorChange={setSelectedFloor}
-                        hospitalLocationMap={hospitalLocationMap}
-                        showNodes={showNodes}
-                        showEdges={showEdges}
-                        onToggleNodes={handleToggleNodes}
-                        onToggleEdges={handleToggleEdges}/>
-                    <HelpDropdown />
-                    // {/* children */}
-                </GoogleMap>
-            </div>
+
+                {/* ERROR BANNER */}
+                {loadError && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-red-100">
+                        <p>Error loading Google Maps</p>
+                    </div>
+                )}
+                {/*    Start of Google Maps Component */}
+                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+                    <VisMap
+                        defaultCenter={{ lat: 42.3261, lng: -71.1496 }}
+                        defaultZoom={19}
+                        mapId="ca6b761fac973d24"
+                        onLoad={handleMapReady}
+                        options={{
+                            disableDoubleClickZoom: true,
+                            mapTypeControl: false,
+                            streetViewControl: false,
+                            zoomControl: false,
+                            scaleControl: false,
+                        }}
+                    >
+                        {/*Init nodes once API and Map is ready /*/}
+                        <MapInitializer nodes={nodesDataFromAPI} edges={edgesDataFromAPI} />
+
+                        {graph.getAllNodes().map((n) => (
+                            <AdvancedMarker
+                                key={n.id}
+                                position={{ lat: n.x, lng: n.y }}
+                            >
+                                <Pin
+                                    borderColor="#000"
+                                    glyphColor="#fff"
+                                />
+                            </AdvancedMarker>
+                        ))}
+                        <MapEditorControls
+                            map={mapRef.current}
+                            selectedHospital={selectedHospital}
+                            selectedFloor={selectedFloor}
+                            onHospitalChange={setSelectedHospital}
+                            onFloorChange={setSelectedFloor}
+                            hospitalLocationMap={hospitalLocationMap}
+                            showNodes={showNodes}
+                            showEdges={showEdges}
+                            onToggleNodes={handleToggleNodes}
+                            onToggleEdges={handleToggleEdges}
+                        />
+                        <HelpDropdown />
+                    </VisMap>
+                </APIProvider>
         {/*    End of Google Maps Component */}
+            </div>
         </div>
     );
 }

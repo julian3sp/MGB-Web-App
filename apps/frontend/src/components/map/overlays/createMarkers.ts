@@ -10,12 +10,11 @@ export function createMarkers(
     lib: google.maps.MarkerLibrary,
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
-    type: 'normal' | 'removed' = 'normal',
-    onNodeMove: () => void,
+    // onNodeMove: () => void,
     setSelectedNode?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
     ) {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
-    const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
+    const zIndex = 9999;
 
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
@@ -33,7 +32,7 @@ export function createMarkers(
             zIndex
         });
 
-        markerUI(marker, node, setNodeDetails, onNodeMove, setSelectedNode);
+        markerUI(marker, node, setNodeDetails, setSelectedNode);
         markers.push(marker);
     }
 
@@ -41,7 +40,7 @@ export function createMarkers(
 }
 
 function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
-                  setSelectedNode: (node: Node) => void, onNodeMove: () => void,
+                  setSelectedNode: (node: Node) => void,
                   onNodeClicked?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void) {
 
     // Double click node to remove it
@@ -160,7 +159,6 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
         tempPolylines.length = 0;
 
-        onNodeMove();
 
     });
 }

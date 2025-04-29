@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import {trpc} from "@/lib/trpc.ts";
 import ImportCSV from "../../components/ImportDept.tsx";
 import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
+import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart.tsx";
+import { PieChart } from 'react-minimal-pie-chart';
+import {Bar, BarChart, CartesianGrid, Cell, Legend, XAxis, YAxis} from "recharts"
 
 
 const DirectoryPage = () => {
@@ -16,6 +19,48 @@ const DirectoryPage = () => {
     const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
     const addDirectory = trpc.makeDirectory.useMutation();
+    const sanitationRequests = trpc.requestListOfType.useQuery({ type: 'Sanitation' });
+    const languageRequests = trpc.requestListOfType.useQuery({ type: 'Language' });
+    const securityRequests = trpc.requestListOfType.useQuery({ type: 'Security' });
+    const audioVisualRequests = trpc.requestListOfType.useQuery({ type: 'AudioVisual' });
+    const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
+    const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
+    const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
+    const chartData = [
+        { month: "January", desktop: 186, mobile: 80 },
+        { month: "February", desktop: 305, mobile: 200 },
+        { month: "March", desktop: 237, mobile: 120 },
+        { month: "April", desktop: 73, mobile: 190 },
+        { month: "May", desktop: 209, mobile: 130 },
+        { month: "June", desktop: 214, mobile: 140 },
+    ]
+
+    const chartConfig = {
+        desktop: {
+            label: "Desktop",
+            color: "#2563eb",
+        },
+        mobile: {
+            label: "Mobile",
+            color: "#60a5fa",
+        },
+    } satisfies ChartConfig
+
+    const serviceRequestConfig = {
+        number: {
+            label: "amount",
+            color: "#2563eb",
+        },
+    } satisfies ChartConfig
+    const serviceRequestData = [
+        { type: 'Sanitation', number: sanitationRequests.data?.length ?? 0 },
+        { type: 'Language', number: languageRequests.data?.length ?? 0 },
+        { type: 'Security', number: securityRequests.data?.length ?? 0 },
+        { type: 'AudioVisual', number: audioVisualRequests.data?.length ?? 0 },
+        { type: 'Transportation', number: transportationRequests.data?.length ?? 0 },
+        { type: 'MedicalDevice', number: medicalDeviceRequests.data?.length ?? 0 },
+        { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
+    ];
 
     const downloadCSV = () => {
         if (!directories || directories.length === 0) {
@@ -101,6 +146,78 @@ const DirectoryPage = () => {
                     Submit
                 </button>
             </div>
+            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+                <BarChart data={chartData}>
+                    <Bar dataKey="month" />
+                    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+                    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                </BarChart>
+            </ChartContainer>
+
+            <ChartContainer
+                config={serviceRequestConfig}
+                className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
+            >
+                <BarChart data={serviceRequestData} margin={{ top: 20, right: 30, left: 20, bottom: 70 }}>
+                    <XAxis
+                        dataKey="type"
+                        tickLine={false}
+                        tickMargin={18}
+                        axisLine={false}
+                        angle={-45}
+                        textAnchor="end"
+                        height={65}
+                        tick={{ fontSize: 13, fontWeight: 500, fill: "var(--color-foreground)" }}
+                    />
+                    <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={10}
+                        tick={{ fill: "var(--color-foreground)" }}
+                    />
+                    <CartesianGrid vertical={false} strokeDasharray="4" opacity={0.15} />
+                    <Bar
+                        dataKey="style"
+                        radius={[6, 6, 0, 0]}
+                        fill="rgba(124, 58, 237, 0.7)"
+                        stroke="rgba(124, 58, 237, 0.9)"
+                        strokeWidth={1}
+                    />
+                    <Bar
+                        dataKey="number"
+                        radius={[6, 6, 0, 0]}
+                        strokeWidth={1}
+                    >
+                        {serviceRequestData.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={[
+                                    "rgba(59, 130, 246, 0.8)",
+                                    "rgba(16, 185, 129, 0.8)",
+                                    "rgba(245, 158, 11, 0.8)",
+                                    "rgba(217, 70, 239, 0.8)",
+                                    "rgba(6, 182, 212, 0.8)",
+                                    "rgba(244, 63, 94, 0.8)",
+                                ][index % 6]}
+                                stroke={[
+                                    "rgba(59, 130, 246, 1)",
+                                    "rgba(16, 185, 129, 1)",
+                                    "rgba(245, 158, 11, 1)",
+                                    "rgba(217, 70, 239, 1)",
+                                    "rgba(6, 182, 212, 1)",
+                                    "rgba(244, 63, 94, 1)",
+                                ][index % 6]}
+                            />
+                        ))}
+                    </Bar>
+                    <ChartTooltip
+                        content={<ChartTooltipContent />}
+                        cursor={{ fill: "var(--color-primary)", opacity: 0.05 }}
+                    />
+                </BarChart>
+            </ChartContainer>
+
             <div className="w-full p-5 flex flex-col gap-4">
                 <ImportAllNodesAndEdges />
             </div>

@@ -95,7 +95,7 @@ export default function RequestPage() {
                 <div className="gap-4  rounded-[100px] bg-white   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
                     <div>
                         <h1
-                            className="text-4xl text-[#003a96] text-center p-1 pl-5 font-bold font-[Poppins]  flex-start  "
+                            className="text-5xl text-[#003a96] text-center p-1 pl-0 font-bold font-[Poppins]  flex-start  "
                         >
                             Service Requests
                         </h1>

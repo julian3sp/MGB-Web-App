@@ -24,7 +24,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
     setValue: (value: string) => void;
     placeholder: string;
     error?: string;
-    clearError?: ()=>void;
+    clearError?: () => void;
 }) {
     const [open, setOpen] = React.useState(false)
 
@@ -56,6 +56,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                                         value={option}
                                         onSelect={(currentValue) => {
                                             setValue(currentValue === value ? "" : currentValue)
+                                            if (clearError) clearError()
                                             setOpen(false)
                                         }}
                                     >

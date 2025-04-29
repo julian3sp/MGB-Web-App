@@ -82,7 +82,7 @@ export function SRQDropdown({options, value, setValue, error, clearError, placeh
                         <ChevronDown className={`opacity-50" ${!open ? "text-gray-500" : "text-black"}`} />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-140 bg-white max-h-[275px] p-0 font-[Poppins]">
+                <PopoverContent className="w-98 bg-white max-h-[275px] p-0 font-[Poppins]">
                     <Command>
                         <CommandList>
                             <CommandGroup>

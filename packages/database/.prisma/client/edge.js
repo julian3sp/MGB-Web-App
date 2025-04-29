@@ -239,6 +239,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
+
       "value": "C:\\Users\\jccoo\\WebstormProjects\\team-f\\packages\\database\\.prisma\\client",
       "fromEnvVar": null
     },
@@ -253,7 +254,10 @@ const config = {
       }
     ],
     "previewFeatures": [],
+
+
     "sourceFilePath": "C:\\Users\\jccoo\\WebstormProjects\\team-f\\packages\\database\\prisma\\schema.prisma",
+
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

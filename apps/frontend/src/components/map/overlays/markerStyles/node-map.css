@@ -1,0 +1,95 @@
+/* ---------- NODE DOT ---------- */
+.node-dot {
+    width: 18px;              /* base size */
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #2163ff 0%,      /* light core */
+    #00307c 45%,     /* navy midtone */
+    #001c4d 95%);    /* deep edge */
+    box-shadow:
+            0 0 0 1px #ffffffcc,    /* crisp white rim */
+            0 2px 4px rgba(0,0,0,.45);   /* soft lift */
+    transform: translateZ(0);      /* promote to own layer */
+    transition:
+            transform .14s cubic-bezier(.25,.46,.45,.94),
+            box-shadow .14s;
+}
+
+/* — hover / keyboard focus — */
+.node-dot:hover,
+.node-dot:focus-visible {
+    transform: scale(1.5);
+    box-shadow:
+            0 0 0 2px #ffffff,      /* thicker rim */
+            0 2px 6px rgba(0,0,0,.60);
+    outline: none;
+    cursor: pointer;
+}
+@keyframes pulse-green {
+    0%   { transform: scale(1);   box-shadow: 0 0 0 2px #008000, 0 2px 4px rgba(0,0,0,.45); }
+    50%  { transform: scale(1.35); box-shadow: 0 0 0 4px #27ae60, 0 4px 8px rgba(0,0,0,.55); }
+    100% { transform: scale(1);   box-shadow: 0 0 0 2px #008000, 0 2px 4px rgba(0,0,0,.45); }
+}
+
+.node-selected {
+    animation: pulse-green 1.2s infinite ease-in-out;
+    /* ensure pulse sits on top of other styles */
+    transform-origin: center;
+    box-shadow: 0 0 0 3px #008000,
+                0 2px 4px rgba(0,0,0,.45) !important;
+    transition: none; /* override any hover transition you may have */
+}
+
+/* ---------- STATE RINGS ---------- */
+.node--start,
+.node--goal,
+.node--blocked {
+    position: relative;
+}
+.node--start::after,
+.node--goal::after,
+.node--blocked::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.node--start::after { border: 2px solid #2ecc71; }         /* green */
+.node--goal::after  { border: 2px solid #ffbf00; }         /* gold  */
+.node--blocked { background: #7e7e7e; }                    /* gray fill */
+.node--blocked::after { border: 2px solid #666; }
+
+/* ---------- DEGREE-BASED JUNCTION ---------- */
+.node--junction {
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #2163ff 0%,
+    #00307c 45%,
+    #001c4d 95%);
+    box-shadow:
+            0 0 0 1px #ffffffcc,
+            0 2px 4px rgba(0,0,0,.45),
+            0 0 10px rgba(33, 99, 255, 0.6); /* subtle blue glow */
+}
+
+.node--end{
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+    #ff4d4d 0%,    /* light red center */
+    #d92d20 45%,   /* bold red mid */
+    #7c1812 95%);  /* deep dark red edge */
+    box-shadow:
+            0 0 0 1px #ffffffcc,
+            0 2px 4px rgba(0,0,0,.45),
+            0 0 10px rgba(217, 45, 32, 0.6); /* soft red glow */
+}
+
+/* ---------- EDGE / POLYLINE ---------- */
+.edge-line {
+    stroke: #d92d20;          /* soft red */
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-opacity: .6;
+}

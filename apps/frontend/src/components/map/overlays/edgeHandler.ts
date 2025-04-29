@@ -10,6 +10,7 @@ export function drawAllEdges(
     map: google.maps.Map,
     edges: Edge[]
 ): google.maps.Polyline[] {
+
     const polylines: google.maps.Polyline[] = [];
 
     for (const edge of edges) {
@@ -33,8 +34,12 @@ export function drawAllEdges(
             console.log(`Edge ${edge.id} removed from graph`);
         });
 
+        edgeLine.setMap(map);
+        edge.polyline = edgeLine;
+
         polylines.push(edgeLine);
     }
+
     
     if(polylines.length === 0) console.log("edges not found");
     return polylines;

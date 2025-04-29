@@ -720,7 +720,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@googlemaps/markerclusterer@npm:2.5.3":
+"@googlemaps/markerclusterer@npm:2.5.3, @googlemaps/markerclusterer@npm:^2.5.3":
   version: 2.5.3
   resolution: "@googlemaps/markerclusterer@npm:2.5.3"
   dependencies:
@@ -5615,6 +5615,7 @@ __metadata:
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
     "@googlemaps/js-api-loader": "npm:^1.16.8"
+    "@googlemaps/markerclusterer": "npm:^2.5.3"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-alert-dialog": "npm:^1.1.8"
     "@radix-ui/react-dialog": "npm:^1.1.10"
@@ -5655,7 +5656,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.2.0"
     eslint-plugin-react-refresh: "npm:^0.4.19"
     framer-motion: "npm:^12.6.3"
-    gsap: "npm:^3.0.0"
+    gsap: "npm:^3.12.7"
     localforage: "npm:^1.10.0"
     lottie-web: "npm:^5.12.2"
     lucide-react: "npm:^0.503.0"
@@ -5910,7 +5911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gsap@npm:^3.0.0, gsap@npm:^3.12.7":
+"gsap@npm:^3.12.7":
   version: 3.12.7
   resolution: "gsap@npm:3.12.7"
   checksum: 10/60b1583c2482b753d179765a91e2f6fb3bb814e62a0c9710f02b842abc3cdc20604ab0b35da7e1ea3b0349f7df70bea1e4fddd4909631bde6a9b92632163812f

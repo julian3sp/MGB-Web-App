@@ -1,11 +1,11 @@
 import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { InputHeader } from "../signIn/InputHeader";
-import { ErrorPopUp } from "./inputFields/ErrorPopUp";
-import { SRQDropdown } from "./inputFields/SRQDropdown";
-import { Combobox } from "./inputFields/Combobox";
-import { languages } from "./data/languages";
-import TextArea from "../TextArea";
+import { InputHeader } from "../../signIn/InputHeader";
+import { ErrorPopUp } from "../inputFields/ErrorPopUp";
+import { SRQDropdown } from "../inputFields/SRQDropdown";
+import { Combobox } from "../inputFields/Combobox";
+import { languages } from "../data/languages";
+import TextArea from "../../TextArea";
 
 type FormStepsProps = {
     currentStep: number;

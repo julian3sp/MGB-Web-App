@@ -1,9 +1,9 @@
-import { InputHeader } from "../signIn/InputHeader";
-import { ErrorPopUp } from "./inputFields/ErrorPopUp";
-import { SRQDropdown } from "./inputFields/SRQDropdown";
-import { Combobox } from "./inputFields/Combobox";
-import TextArea from "../TextArea";
-import { languages } from "./data/languages";
+import { InputHeader } from "../../signIn/InputHeader";
+import { ErrorPopUp } from "../inputFields/ErrorPopUp";
+import { SRQDropdown } from "../inputFields/SRQDropdown";
+import { Combobox } from "../inputFields/Combobox";
+import TextArea from "../../TextArea";
+import { languages } from "../data/languages";
 
 type FinalReviewProps = {
     name: string;

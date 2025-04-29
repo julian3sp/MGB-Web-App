@@ -3,9 +3,10 @@ import { FormEvent, useState } from 'react';
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
-import { ProgressBar } from './ProgressBar.tsx';
-import { FormSteps } from './FormSteps.tsx';
-import { FinalReview } from './FinalReview.tsx';
+import { ProgressBar } from './ServiceRequest/ProgressBar.tsx';
+import { FormSteps } from './ServiceRequest/FormSteps.tsx'
+import { FinalReview } from './ServiceRequest/FinalReview.tsx';
+import { motion } from 'framer-motion';
 
 type requestFormProps = {
     title: string;
@@ -253,7 +254,7 @@ function RequestForm({ title, type }: requestFormProps) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.currentTarget; 
+        const form = e.currentTarget;
         const isValid = form.checkValidity();
 
         if (Validate()) {
@@ -316,7 +317,7 @@ function RequestForm({ title, type }: requestFormProps) {
         });
 
         handleReset(e);
-        setCurrentStep(1); 
+        setCurrentStep(1);
     };
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -378,10 +379,18 @@ function RequestForm({ title, type }: requestFormProps) {
                     onReset={handleReset}
                 >
                     <div className="w-[90vh] flex flex-col gap-5">
-
-                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
-                            {title}
-                        </h2>
+                        <motion.div
+                            key="step1"
+                            initial={{ y: 100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -100, opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="flex-grow"
+                        >
+                            <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
+                                {title}
+                            </h2>
+                        </motion.div>
 
                         {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
                         {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
@@ -446,7 +455,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         <div className="flex justify-center gap-6 mt-6">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
-                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
+                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Back
                                 </button>
@@ -470,27 +479,27 @@ function RequestForm({ title, type }: requestFormProps) {
                         </div>
                     </div>
                     <ProgressBar
-                            currentStep={currentStep}
-                            name={name}
-                            employeeID={employeeID}
-                            location={location}
-                            department={department}
-                            priority={priority}
-                            status={status}
-                            type={type}
-                            sourceLanguage={sourceLanguage}
-                            targetLanguage={targetLanguage}
-                            cleaningType={cleaningType}
-                            accessZones={accessZones}
-                            securityIssue={securityIssue}
-                            transportationType={transportationType}
-                            transportationDestination={transportationDestination}
-                            accommodationType={accommodationType}
-                            device={device}
-                            operatorRequired={operatorRequired}
-                            maintenanceType={maintenanceType}
-                            equipmentType={equipmentType}
-                        />
+                        currentStep={currentStep}
+                        name={name}
+                        employeeID={employeeID}
+                        location={location}
+                        department={department}
+                        priority={priority}
+                        status={status}
+                        type={type}
+                        sourceLanguage={sourceLanguage}
+                        targetLanguage={targetLanguage}
+                        cleaningType={cleaningType}
+                        accessZones={accessZones}
+                        securityIssue={securityIssue}
+                        transportationType={transportationType}
+                        transportationDestination={transportationDestination}
+                        accommodationType={accommodationType}
+                        device={device}
+                        operatorRequired={operatorRequired}
+                        maintenanceType={maintenanceType}
+                        equipmentType={equipmentType}
+                    />
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">

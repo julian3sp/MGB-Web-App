@@ -127,7 +127,7 @@ export default function RequestListPage() {
     return (
 
 
-        <div className={'flex gap-x-4  '}>
+        <div className={'flex gap-x-10  '}>
             <PageWrapper  contents={
                 <nav className=" h-220   rounded-4xl ml-5 m-5    shadow-lg">
                     <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-1 border-b-5  border-[#44A6A6] border-b-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>

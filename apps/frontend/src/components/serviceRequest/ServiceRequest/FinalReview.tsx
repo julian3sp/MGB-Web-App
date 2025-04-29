@@ -4,6 +4,7 @@ import { SRQDropdown } from "../inputFields/SRQDropdown";
 import { Combobox } from "../inputFields/Combobox";
 import TextArea from "../../TextArea";
 import { languages } from "../data/languages";
+import {trpc} from "@/lib/trpc.ts";
 
 type FinalReviewProps = {
     name: string;
@@ -97,6 +98,16 @@ export function FinalReview({
     setComments,
 
 }: FinalReviewProps) {
+
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
+    //CSV handles location names differently
+    const locationMap: Record<string, string[]> = {
+        'Chestnut Hill': ['MGB (Chestnut Hill)'],
+        'Patriot Place': ['20 Patriot Place', '22 Patriot Place'],
+        'Faulkner Hospital': ['Faulkner'],
+        "Brigham & Women's Hospital Main Campus": ['MGB Main'], //None in CSV yet, assuming this would be format used
+    };
+
     return (
         <>
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
@@ -131,7 +142,10 @@ export function FinalReview({
                     <InputHeader>Location</InputHeader>
                     <SRQDropdown
                         value={location}
-                        setValue={setLocation}
+                        setValue={(loc) => {
+                            setLocation(loc);
+                            setDepartment(""); // Clear previous department
+                        }}
                         placeholder="Select Location"
                         width="w-full"
                         options={["Brigham & Women's Hospital Main Campus", "Chestnut Hill", "Faulkner Hospital", "Patriot Place"]}
@@ -143,10 +157,19 @@ export function FinalReview({
                     <SRQDropdown
                         value={department}
                         setValue={setDepartment}
-                        placeholder="Select Department"
                         width="w-full"
-                        options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
-
+                        placeholder={
+                            location ? 'Select Department' : 'Select a location first'
+                        }
+                        options={
+                            location
+                                ? departmentsRaw
+                                ?.filter((dept) =>
+                                    locationMap[location]?.includes(dept.location)
+                                )
+                                .map((dept) => dept.name) || []
+                                : []
+                        }
                     />
                 </div>
 

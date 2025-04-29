@@ -142,7 +142,7 @@ export function FormSteps({
         }
     }, [formValid]);
 
-    const { data: departmentsRaw, isLoading } = trpc.getDirectories.useQuery();
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
 
     //CSV handles location names differently
     const locationMap: Record<string, string[]> = {

@@ -36,6 +36,9 @@ type Props = {
 
         const handleDisable = () => {
             setDisableVoice(prev => !prev);
+            if(disableVoice){
+                recognition.start()
+            }
             console.log("disableVoice:", !disableVoice);
         }
 

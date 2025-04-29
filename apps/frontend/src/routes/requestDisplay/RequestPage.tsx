@@ -78,6 +78,8 @@ export default function RequestPage() {
         setShowFilterPanel(false);
     });
 
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
+
     return (
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
@@ -120,8 +122,8 @@ export default function RequestPage() {
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border-1 border-light-subtle rounded-lg shadow-lg p-4 pb-0 w-[450px]">
-                                        <div className="w-full inline-flex items-center justify-between">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-light-subtle rounded-lg shadow-lg p-4 pb-0 w-[450px] max-h-[450px] overflow-y-auto">
+                                    <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests
                                             </h3>
@@ -288,34 +290,22 @@ export default function RequestPage() {
                                         <div className="mb-4">
                                             <p className="font-semibold mb-2">Department:</p>
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                                                {[
-                                                    'Laboratory',
-                                                    'Multi-Specialty Clinic',
-                                                    'Radiology',
-                                                    'Radiology, MRI/CT Scan',
-                                                ].map((dep) => (
-                                                    <label
-                                                        key={dep}
-                                                        className="flex items-start text-sm"
-                                                    >
+                                                {[...new Set(departmentsRaw?.map((dep) => dep.name))].map((depName) => (
+                                                    <label key={depName} className="flex items-start text-sm">
                                                         <input
                                                             type="checkbox"
-                                                            checked={filters.department.includes(
-                                                                dep
-                                                            )}
+                                                            checked={filters.department.includes(depName)}
                                                             onChange={(e) => {
                                                                 setFilters((prev) => ({
                                                                     ...prev,
                                                                     department: e.target.checked
-                                                                        ? [...prev.department, dep]
-                                                                        : prev.department.filter(
-                                                                              (item) => item !== dep
-                                                                          ),
+                                                                        ? [...prev.department, depName]
+                                                                        : prev.department.filter((item) => item !== depName),
                                                                 }));
                                                             }}
                                                             className="mt-[2px] mr-2"
                                                         />
-                                                        {dep}
+                                                        {depName}
                                                     </label>
                                                 ))}
                                             </div>

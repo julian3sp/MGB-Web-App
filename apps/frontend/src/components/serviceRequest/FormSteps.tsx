@@ -52,8 +52,6 @@ type FormStepsProps = {
     setEquipmentType: (value: string) => void;
     comments: string;
     setComments: (value: string) => void;
-    onNext: () => void;
-    onBack: () => void;
     errors: any;
     clearError: (field: string) => void;
     formValid: boolean;
@@ -104,8 +102,6 @@ export function FormSteps({
         setEquipmentType,
         comments,
         setComments,
-        onNext,
-        onBack,
         errors,
         clearError,
         formValid

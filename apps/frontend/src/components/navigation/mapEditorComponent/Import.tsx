@@ -4,7 +4,7 @@ import {toast} from "sonner"
 import { Toaster } from '../../ui/sonner';
 import { trpc } from '@/lib/trpc';
 import { PieChart } from 'react-minimal-pie-chart';
-import { Bar, BarChart } from "recharts"
+import {Bar, BarChart, CartesianGrid, Cell, Legend, XAxis, YAxis} from "recharts"
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "../../ui/chart"
 
 const chartData = [
@@ -127,23 +127,70 @@ export default function ImportPage() {
               </BarChart>
           </ChartContainer>
 
-          <ChartContainer config={serviceRequestConfig} className="min-h-[200px] w-full">
-              <BarChart data={serviceRequestData}>
-                  <Bar dataKey="style" />
-                  <Bar dataKey="number" fill="var(--color-number)" radius={4} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+          <ChartContainer
+              config={serviceRequestConfig}
+              className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
+          >
+              <BarChart data={serviceRequestData} margin={{ top: 20, right: 30, left: 20, bottom: 70 }}>
+                  <XAxis
+                      dataKey="type"
+                      tickLine={false}
+                      tickMargin={18}
+                      axisLine={false}
+                      angle={-45}
+                      textAnchor="end"
+                      height={65}
+                      tick={{ fontSize: 13, fontWeight: 500, fill: "var(--color-foreground)" }}
+                  />
+                  <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={10}
+                      tick={{ fill: "var(--color-foreground)" }}
+                  />
+                  <CartesianGrid vertical={false} strokeDasharray="4" opacity={0.15} />
+                  <Bar
+                      dataKey="style"
+                      radius={[6, 6, 0, 0]}
+                      fill="rgba(124, 58, 237, 0.7)"
+                      stroke="rgba(124, 58, 237, 0.9)"
+                      strokeWidth={1}
+                  />
+                  <Bar
+                      dataKey="number"
+                      radius={[6, 6, 0, 0]}
+                      strokeWidth={1}
+                  >
+                      {serviceRequestData.map((entry, index) => (
+                          <Cell
+                              key={`cell-${index}`}
+                              fill={[
+                                  "rgba(59, 130, 246, 0.8)",
+                                  "rgba(16, 185, 129, 0.8)",
+                                  "rgba(245, 158, 11, 0.8)",
+                                  "rgba(217, 70, 239, 0.8)",
+                                  "rgba(6, 182, 212, 0.8)",
+                                  "rgba(244, 63, 94, 0.8)",
+                              ][index % 6]}
+                              stroke={[
+                                  "rgba(59, 130, 246, 1)",
+                                  "rgba(16, 185, 129, 1)",
+                                  "rgba(245, 158, 11, 1)",
+                                  "rgba(217, 70, 239, 1)",
+                                  "rgba(6, 182, 212, 1)",
+                                  "rgba(244, 63, 94, 1)",
+                              ][index % 6]}
+                          />
+                      ))}
+                  </Bar>
+                  <ChartTooltip
+                      content={<ChartTooltipContent />}
+                      cursor={{ fill: "var(--color-primary)", opacity: 0.05 }}
+                  />
               </BarChart>
           </ChartContainer>
 
           <h1 className="text-lg font-bold text-center">Import CSV Files</h1>
-          <PieChart
-              data={[
-                  { title: 'One', value: 10, color: '#E38627' },
-                  { title: 'Two', value: 15, color: '#C13C37' },
-                  { title: 'Three', value: 20, color: '#6A2135' },
-              ]}
-          />
-          ;
           <FileUploadCard files={files} onFilesChange={setFiles} />
           <button
               onClick={handleImportFiles}

@@ -373,38 +373,15 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center  text-sm"
+                    className="justify-center text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className=" rounded-lg shadow-lg overflow-hidden w-[90vh] bg-white flex flex-col gap-5">
+                    <div className="w-[90vh] flex flex-col gap-5">
 
-                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
+                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
                             {title}
                         </h2>
-
-                        <ProgressBar
-                            currentStep={currentStep}
-                            name={name}
-                            employeeID={employeeID}
-                            location={location}
-                            department={department}
-                            priority={priority}
-                            status={status}
-                            type={type}
-                            sourceLanguage={sourceLanguage}
-                            targetLanguage={targetLanguage}
-                            cleaningType={cleaningType}
-                            accessZones={accessZones}
-                            securityIssue={securityIssue}
-                            transportationType={transportationType}
-                            transportationDestination={transportationDestination}
-                            accommodationType={accommodationType}
-                            device={device}
-                            operatorRequired={operatorRequired}
-                            maintenanceType={maintenanceType}
-                            equipmentType={equipmentType}
-                        />
 
                         {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
                         {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
@@ -466,10 +443,10 @@ function RequestForm({ title, type }: requestFormProps) {
 
                         )}
 
-                        <div className="flex justify-center gap-6 mb-6">
+                        <div className="flex justify-center gap-6 mt-6">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
-                                    className='w-[10%] h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-3xl mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
+                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
                                 >
                                     Back
                                 </button>
@@ -480,18 +457,40 @@ function RequestForm({ title, type }: requestFormProps) {
                                     if (!validateCurrentStep()) return;
                                     setCurrentStep(currentStep + 1);
                                 }}
-                                    className='w-[10%] h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-3xl mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
+                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Next
                                 </button>
                             )}
                             {currentStep === 4 && (
-                                <button type="submit" className='w-[10%] h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-3xl mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
+                                <button type="submit" className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
                                     Submit
                                 </button>
                             )}
                         </div>
                     </div>
+                    <ProgressBar
+                            currentStep={currentStep}
+                            name={name}
+                            employeeID={employeeID}
+                            location={location}
+                            department={department}
+                            priority={priority}
+                            status={status}
+                            type={type}
+                            sourceLanguage={sourceLanguage}
+                            targetLanguage={targetLanguage}
+                            cleaningType={cleaningType}
+                            accessZones={accessZones}
+                            securityIssue={securityIssue}
+                            transportationType={transportationType}
+                            transportationDestination={transportationDestination}
+                            accommodationType={accommodationType}
+                            device={device}
+                            operatorRequired={operatorRequired}
+                            maintenanceType={maintenanceType}
+                            equipmentType={equipmentType}
+                        />
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">

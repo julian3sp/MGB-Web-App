@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { InputHeader } from "../signIn/InputHeader";
 import { ErrorPopUp } from "./inputFields/ErrorPopUp";
@@ -51,11 +52,12 @@ type FormStepsProps = {
     setEquipmentType: (value: string) => void;
     comments: string;
     setComments: (value: string) => void;
-
+    onNext: () => void;
+    onBack: () => void;
     errors: any;
     clearError: (field: string) => void;
+    formValid: boolean;
 };
-
 
 export function FormSteps({
         currentStep,
@@ -102,118 +104,176 @@ export function FormSteps({
         setEquipmentType,
         comments,
         setComments,
+        onNext,
+        onBack,
         errors,
-        clearError
+        clearError,
+        formValid
 }: FormStepsProps) {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    
+    // Control scroll to the current step
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            const children = scrollContainerRef.current.children;
+            if (children[currentStep - 1]) {
+                children[currentStep - 1].scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            }
+        }
+    }, [currentStep]);
+
+    // Prevent scrolling when form is not valid
+    const handleWheel = (e: WheelEvent) => {
+        if (!formValid) {
+            e.preventDefault();
+        }
+    };
+
+    // Set up event listeners to prevent scrolling when form is invalid
+    useEffect(() => {
+        const scrollContainer = scrollContainerRef.current;
+        if (scrollContainer) {
+            scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+            
+            return () => {
+                scrollContainer.removeEventListener('wheel', handleWheel);
+            };
+        }
+    }, [formValid]);
+
     return (
-        <motion.div
-            key={currentStep}
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -300, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
-            {currentStep === 1 && (
-                <>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+        <div className="flex flex-col">
+            <div 
+                ref={scrollContainerRef}
+                className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+                {/* Step 1 */}
+                <div className="snap-start w-full h-full flex flex-col">
+                    <motion.div
+                        key="step1"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -100, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex-grow"
+                    >
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
+                            <div>
+                                <InputHeader>Name</InputHeader>
+                                <ErrorPopUp
+                                    value={name}
+                                    setState={setName}
+                                    placeholder="Name"
+                                    width="w-full"
+                                    error={errors.name}
+                                    clearError={() => clearError('name')} />
+                            </div>
 
-                        <div>
-                            <InputHeader>Name</InputHeader>
-                            <ErrorPopUp
-                                value={name}
-                                setState={setName}
-                                placeholder="Name"
-                                width="w-full"
-                                error={errors.name}
-                                clearError={() => clearError('name')} />
+                            <div>
+                                <InputHeader>Employee ID</InputHeader>
+                                <ErrorPopUp
+                                    value={employeeID}
+                                    setState={(value) => {
+                                        if (/^\d*$/.test(value)) {
+                                            setEmployeeID(value);
+                                        }
+                                    }}
+                                    maxLength={9}
+                                    placeholder="Employee ID"
+                                    width="w-full"
+                                    error={errors.employeeID}
+                                    clearError={() => clearError('employeeID')} />
+                            </div>
                         </div>
+                    </motion.div>
+                </div>
 
-                        <div>
-                            <InputHeader>Employee ID</InputHeader>
-                            <ErrorPopUp
-                                value={employeeID}
-                                setState={(value) => {
-                                    if (/^\d*$/.test(value)) {
-                                        setEmployeeID(value);
-                                    }
-                                }}
-                                maxLength={9}
-                                placeholder="Employee ID"
-                                width="w-full"
-                                error={errors.employeeID}
-                                clearError={() => clearError('employeeID')} />
+                {/* Step 2 */}
+                <div className="snap-start w-full h-full flex flex-col">
+                    <motion.div
+                        key="step2"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -100, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex-grow"
+                    >
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
+                            <div>
+                                <InputHeader>Location</InputHeader>
+                                <SRQDropdown
+                                    value={location}
+                                    setValue={setLocation}
+                                    placeholder={"Select Location"}
+                                    width={"w-full"}
+                                    error={errors.location}
+                                    options={["Brigham & Women's Hospital Main Campus",
+                                        "Chestnut Hill",
+                                        "Faulkner Hospital",
+                                        "Patriot Place"]}
+                                    clearError={() => clearError('location')}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Department</InputHeader>
+                                <SRQDropdown
+                                    value={department}
+                                    setValue={setDepartment}
+                                    width={"w-full"}
+                                    placeholder={"Select Department"}
+                                    error={errors.department}
+                                    options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
+                                    clearError={() => clearError('department')}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Priority</InputHeader>
+                                <SRQDropdown
+                                    value={priority}
+                                    setValue={setPriority}
+                                    width={"w-full"}
+                                    options={["Low", "Medium", "High", "Emergency"]}
+                                    placeholder={"Select Priority"}
+                                    error={errors.priority}
+                                    clearError={() => clearError('priority')}
+                                />
+                            </div>
+
+                            <div>
+                                <InputHeader>Status</InputHeader>
+                                <SRQDropdown
+                                    value={status}
+                                    setValue={setStatus}
+                                    placeholder={"Select Status"}
+                                    width={"w-full"}
+                                    error={errors.status}
+                                    options={["Unassigned", "Assigned", "Working", "Done"]}
+                                    clearError={() => clearError('status')}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
+                    </motion.div>
+                </div>
 
-            {currentStep === 2 && (
-                <>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
-                        <div>
-                            <InputHeader>Location</InputHeader>
-                            <SRQDropdown
-                                value={location}
-                                setValue={setLocation}
-                                placeholder={"Select Location"}
-                                width={"w-full"}
-                                error={errors.location}
-                                options={["Brigham & Women's Hospital Main Campus",
-                                    "Chestnut Hill",
-                                    "Faulkner Hospital",
-                                    "Patriot Place"]}
-                                clearError={() => clearError('location')}
-                            />
-                        </div>
-
-                        <div>
-                            <InputHeader>Department</InputHeader>
-                            <SRQDropdown
-                                value={department}
-                                setValue={setDepartment}
-                                width={"w-full"}
-                                placeholder={"Select Department"}
-                                error={errors.department}
-                                options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
-                                clearError={() => clearError('department')}
-                            />
-                        </div>
-
-                        <div>
-                            <InputHeader>Priority</InputHeader>
-                            <SRQDropdown
-                                value={priority}
-                                setValue={setPriority}
-                                width={"w-full"}
-                                options={["Low", "Medium", "High", "Emergency"]}
-                                placeholder={"Select Priority"}
-                                error={errors.priority}
-                                clearError={() => clearError('priority')}
-                            />
-                        </div>
-
-                        <div>
-                            <InputHeader>Status</InputHeader>
-                            <SRQDropdown
-                                value={status}
-                                setValue={setStatus}
-                                placeholder={"Select Status"}
-                                width={"w-full"}
-                                error={errors.status}
-                                options={["Unassigned", "Assigned", "Working", "Done"]}
-                                clearError={() => clearError('status')}
-
-                            />
-                        </div>
-                    </div>
-                </>
-            )}
-
-            {currentStep === 3 && (
-                <>
-                    {type === "Language" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                {/* Step 3 */}
+                <div className="snap-start w-full h-full flex flex-col">
+                    <motion.div
+                        key="step3"
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -100, opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex-grow"
+                    >
+                        {type === "Language" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Source Language (Patient)</InputHeader>
                                     <Combobox
@@ -235,12 +295,10 @@ export function FormSteps({
                                         placeholder={"Select a Language"} />
                                 </div>
                             </div>
-                        </>
-                    : null}
+                        ) : null}
 
-                    {type === "Sanitation" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        {type === "Sanitation" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Cleaning Needed</InputHeader>
                                     <SRQDropdown
@@ -261,12 +319,10 @@ export function FormSteps({
                                         width="w-full" />
                                 </div>
                             </div>
-                        </>
-                    : null}
+                        ) : null}
 
-                    {type === "Security" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        {type === "Security" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Security Needed</InputHeader>
                                     <SRQDropdown
@@ -303,12 +359,10 @@ export function FormSteps({
                                         clearError={() => clearError('securityIssue')} />
                                 </div>
                             </div>
-                        </>
-                    : null}
+                        ) : null}
 
-                    {type === "Transportation" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        {type === "Transportation" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Transportation Type</InputHeader>
                                     <SRQDropdown
@@ -335,12 +389,10 @@ export function FormSteps({
                                         clearError={() => clearError('transportationDestination')} />
                                 </div>
                             </div>
-                        </>
-                    : null}
+                        ) : null}
 
-                    {type === "AudioVisual" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        {type === "AudioVisual" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Accommodation Type</InputHeader>
                                     <SRQDropdown
@@ -362,11 +414,10 @@ export function FormSteps({
                                     />
                                 </div>
                             </div>
-                        </>
-                    : null}
-                    {type === "MedicalDevice" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        ) : null}
+                        
+                        {type === "MedicalDevice" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Medical Device</InputHeader>
                                     <SRQDropdown
@@ -390,11 +441,10 @@ export function FormSteps({
                                         clearError={() => clearError('operatorRequired')} />
                                 </div>
                             </div>
-                        </>
-                    : null}
-                    {type === "Facilities" ?
-                        <>
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+                        ) : null}
+                        
+                        {type === "Facilities" ? (
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Maintenance Type</InputHeader>
                                     <SRQDropdown
@@ -417,19 +467,31 @@ export function FormSteps({
                                         clearError={() => clearError('equipmentType')} />
                                 </div>
                             </div>
-                        </>
-                    : null}
+                        ) : null}
 
-                    <div className="ml-5 mr-5">
-                        <InputHeader children={'Additional Comments:'} />
-                        <TextArea
-                            placeholder="Additional Comments..."
-                            value={comments}
-                            setState={setComments}
+                        <div className="px-6 mt-4">
+                            <InputHeader children={'Additional Comments:'} />
+                            <TextArea
+                                placeholder="Additional Comments..."
+                                value={comments}
+                                setState={setComments}
+                            />
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-center px-6 mt-4">
+                <div className="flex space-x-2">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <div 
+                            key={index}
+                            className={`w-3 h-3 rounded-full ${currentStep === index + 1 ? 'bg-blue-500' : 'bg-gray-300'}`}
                         />
-                    </div>
-                </>
-            )}
-        </motion.div>
-    )
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 }

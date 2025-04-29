@@ -38,7 +38,7 @@ type Props = {
             setDisableVoice(prev => !prev);
             if(disableVoice){
                 recognition.start()
-            }
+            } else{recognition.stop()}
             console.log("disableVoice:", !disableVoice);
         }
 
@@ -147,7 +147,7 @@ type Props = {
                         </Link> : null}
                         <button onClick={handleDisable}
                                 className="text-black bg-white hover:bg-[#003a96] hover:text-white font-[Poppins] px-5 py-5 transition-all ">
-                            Enable Voice
+                            Disable Voice
                         </button>
 
                     </div>

@@ -23,7 +23,10 @@ import {
 } from '../../ui/dropdown-menu.tsx';
 // import {NodeType} from ""
 import {WorldDistance} from "./worldCalculations.ts"
-import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
+import { SRQDropdown } from '@/components/serviceRequest/inputFields/SRQDropdown.tsx';
+import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
+import { PictureCorners } from '../mapEditorComponent/PictureCorners.tsx';
+import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessorPanel.tsx";
 
 // resolve
 interface MapEditorProps {
@@ -380,60 +383,187 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
     }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
 
+    //------------ Image Processor States ---------//
+    // MODE  ───────────────────────────────────────────────
+    const [mode, setMode] = useState<'edit' | 'image'>('edit');
+
+    // IMAGE-PROCESSOR STATE ──────────────────────────────
+    const [imgFile, setImgFile] = useState<File | null>(null);
+    const [pixelCorners, setPixelCorners] = useState<[number, number][]>([]);
+    const [worldCorners, setWorldCorners] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
+    const [imgOverlay, setImgOverlay] = useState<google.maps.GroundOverlay | null>(null);
+
+    async function sendToFastApi() {
+        if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
+            return alert('Need all four image + map points!');
+        }
+
+        const form = new FormData();
+
+        // 1) The **exact** key “file”
+        form.append('file', imgFile);
+
+        // 2) sourcePoints (pixel coords)
+        form.append(
+            'sourcePoints',
+            JSON.stringify(pixelCorners)
+        );
+
+        // 3) targetPoints (world coords)
+        form.append(
+            'targetPoints',
+            JSON.stringify(
+                worldCorners.map(m => {
+                    const pos = m.position!;
+                    console.log(pos);
+                    return [pos.lat, pos.lng];
+                })
+            )
+        );
+
+        // 4) name  — give your image/map a short identifier
+        form.append('name', 'test');  // you can make this dynamic
+
+        // 5) building
+        form.append('building', selectedHospital || '');
+
+        // 6) floor  (convert to string)
+        form.append('floor', "1");
+
+        alert('Calculating ');
+        const res = await fetch('http://localhost:3001/image-api/generate-new-map', {
+            method: 'POST',
+            body: form,
+        });
+
+        if (!res.ok) {
+            // log the error payload to see exactly what FastAPI complains about
+            console.error('Error response:', await res.text());
+            return alert(`Failed: ${res.status}`);
+        }
+        const blob = await res.blob(); // ZIP containing nodes.csv + edges.csv
+        // forward to backend DB (one example: upload via tRPC)
+        const buf = await blob.arrayBuffer();
+        // await trpc.importCsv.mutate({ bytes: new Uint8Array(buf) }); // write a tiny procedure
+        console.log(buf)
+        alert('Graph imported!');
+        // cleanup
+        setMode('edit');
+        imgOverlay?.setMap(null);
+        worldCorners.forEach(m => m.position(null));
+        setImgFile(null);
+        setPixelCorners([]);
+        setWorldCorners([]);
+        setImgOverlay(null);
+    }
+
+    function placeOverlay() {
+        if (!map || !imgFile) return;
+
+        // 1) compute initial bounds around center
+        const centre = map.getCenter()!;
+        const bounds = new google.maps.LatLngBounds(
+            { lat: centre.lat() - 0.0005, lng: centre.lng() - 0.0005 },
+            { lat: centre.lat() + 0.0005, lng: centre.lng() + 0.0005 },
+        );
+
+        // 2) create the overlay
+        const url = URL.createObjectURL(imgFile);
+        const overlay = new google.maps.GroundOverlay(url, bounds, { opacity: 0.6 });
+        overlay.setMap(map);
+        setImgOverlay(overlay);
+
+        worldCorners.forEach(m => m.position(null));
+        const newMarkers: google.maps.marker.AdvancedMarkerElement[] = [];
+
+        // get current bounds
+        const b = overlay.getBounds();
+        if (!b) return;
+
+        const ne = b.getNorthEast();
+        const sw = b.getSouthWest();
+        const nw = new google.maps.LatLng(ne.lat(), sw.lng());
+        const se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+        // order them Top-Left (NW), Top-Right (NE), Bottom-Right (SE), Bottom-Left (SW)
+        const corners = [nw, ne, se, sw];
+
+        corners.forEach((pos, idx) => {
+            const m = new google.maps.marker.AdvancedMarkerElement({
+                position: pos,
+                map,
+                title: `${idx + 1}`,
+                gmpDraggable: true
+            });
+            newMarkers.push(m);
+        });
+
+        setWorldCorners(newMarkers);
+
+        // // 3) double-click handler to drop corner markers
+        // overlay.addListener('dblclick', () => {
+        //     // clear old markers
+        //
+        // });
+
+        // // 4) retain your drag-to-move logic
+        // overlay.addListener('mousedown', e => {
+        //     const start = e.latLng!;
+        //     const listener = map.addListener('mousemove', m => {
+        //         const dx = m.latLng!.lat() - start.lat();
+        //         const dy = m.latLng!.lng() - start.lng();
+        //         const sw = bounds.getSouthWest();
+        //         const ne = bounds.getNorthEast();
+        //         const newBounds = new google.maps.LatLngBounds(
+        //             { lat: sw.lat() + dx, lng: sw.lng() + dy },
+        //             { lat: ne.lat() + dx, lng: ne.lng() + dy },
+        //         );
+        //         overlay.setOptions({ bounds: newBounds });
+        //     });
+        //     map.addListener('mouseup', () => google.maps.event.removeListener(listener));
+        // });
+    }
+
     return (
         <div className="flex h-[95vh]">
-            <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
-                <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
-                {selectedNode && (
-                    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
-                        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {selectedNode.id}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {selectedNode.name}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {selectedNode.type}</p>
-                        <SRQDropdown
-                            value={currentNodeType}
-                            setValue={setCurrentNodeType}
-                            width={"w-full"}
-                            placeholder={"Select a node type"}
-                            options={Object.values(NodeType) as string[]}/>
-                        {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
-                        {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
-                    </div>
-                )}
+            {/*Start of Side bar */}
+            <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4 min-h-0 overflow-y-auto gap-4">
 
-                <div className="w-full p-5 flex flex-col gap-4">
-                    <ImportAllNodesAndEdges />
-                </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
-                    Submit Changes
-                </button>
                 <button
-                    className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
-                    onClick={() => {
-                        setEdgeMode((prevState) => !prevState);
-                        setShowEdges(true);
-                    }}
+                    className="bg-[#0076CE] text-white font-[poppins] shadow rounded p-3 mb-4"
+                    onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
                 >
-                    {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
+                    {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
                 </button>
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value={algoType} onValueChange={setAlgoTypeWrapper}>
-                            <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="Dijkstras">Dijkstra's</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                {mode === 'edit' ?
+                    <EditorPanel
+                        selectedNode={selectedNode}
+                        currentNodeType={currentNodeType}
+                        setCurrentNodeType={setCurrentNodeType}
+                        handleSubmit={handleSubmit}
+                        edgeMode={edgeMode}
+                        setEdgeMode={setEdgeMode}
+                        setShowEdges={setShowEdges}
+                        algoType={algoType}
+                        setAlgoTypeWrapper={setAlgoTypeWrapper}
+                    />
+                    :
+                    <ImageProcessorPanel
+                        imgFile={imgFile}
+                        setImgFile={setImgFile}
+                        pixelCorners={pixelCorners}
+                        setPixelCorners={setPixelCorners}
+                        imgOverlay={imgOverlay}
+                        placeOverlay={placeOverlay}
+                        worldCorners={worldCorners}
+                        sendToFastApi={sendToFastApi}
+                    />
+                }
+
             </div>
+            {/*End of side bar*/}
 
             <div className="w-3/4 relative">
                 {isLoadingMap && (

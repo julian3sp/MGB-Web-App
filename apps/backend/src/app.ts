@@ -80,6 +80,21 @@ app.use('/trpc', (req, res, next) => {
     next();
 });
 
+//------ Python Fetcher------------//
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
+const PYTHON_URL = process.env.PYTHON_URL ?? 'http://localhost:8000';
+
+app.use(
+    '/image-api',
+    createProxyMiddleware({
+        target: process.env.PYTHON_URL || PYTHON_URL,
+        changeOrigin: true,
+        pathRewrite: { '^/image-api': '' }, // remove the prefix before forwarding
+        // logger: logger,
+    })
+);
+
 app.use(
     '/trpc',
     trpcExpress.createExpressMiddleware({

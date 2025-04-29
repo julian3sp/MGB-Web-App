@@ -1,296 +1,76 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Loader} from '@googlemaps/js-api-loader';
-import {createMGBOverlays, MGBOverlays} from '../../map/overlays/MGBOverlay';
-import {createPatriot20Overlays} from '../../map/overlays/20PatriotOverlay';
-import {createFaulknerOverlays} from '@/components/map/overlays/FaulknerOverlay.tsx';
-import {createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22,} from '../../map/overlays/22PatriotOverlay';
-import {addNodeListener, createMarkers} from '../../map/overlays/createMarkers';
-import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
-import {trpc} from '@/lib/trpc';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Edge, Node, NodeType} from './Graph';
+import {Node, Edge, NodeType} from './Graph';
 import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
-import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
+const libraries = ['places', 'marker'] as const;
+import React, {useState, useRef, useEffect, useCallback} from 'react';
+import {hospitalLocationMap} from "@/components/map/hospitalLocations.ts";
+
+// Import Dropdown Menu for path type
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem
 } from '../../ui/dropdown-menu.tsx';
-// import {NodeType} from ""
-import {WorldDistance} from "./worldCalculations.ts"
-import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 
-// resolve
-interface MapEditorProps {
-    onMapReady: (
-        map: google.maps.Map,
-        directionsService: google.maps.DirectionsService,
-        directionsRenderer: google.maps.DirectionsRenderer
-    ) => void;
-}
-
-type GMapsListener = google.maps.MapsEventListener;
+// Import Library
+import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 
 
-const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
-    const mapRef = useRef<HTMLDivElement>(null);
-    const [map, setMap] = useState<google.maps.Map | null>(null);
-    const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
-    const [isLoadingMap, setIsLoadingMap] = useState(true);
-    const [showNodes, setShowNodes] = useState(false);
-    const [showEdges, setShowEdges] = useState(false);
-    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
-    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [selectedNode, setselectedNode] = useState< Node | null>(null);
-    const newAlgo = trpc.setAlgoType.useMutation();
-    const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
-    const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
-    const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
-    const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
+export default function MapEditor() {
+    //------------ trpc edit history --------------------//
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-    const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
-    const [edgeRefresh, setEdgeRefresh] = useState(0);
+
+    //------------ Map controller --------------------//
+    const mapRef = useRef<google.maps.Map|null>(null);
+    const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const [showNodes, setShowNodes] = useState(false);
+    const [showEdges, setShowEdges] = useState(false);
     const [edgeMode, setEdgeMode] = useState(false);
-    const [ghostLine, setGhostLine] = useState<google.maps.Polyline | null>(null);
-    const nodeListenerRef = useRef<GMapsListener | null>(null);
-    const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
-    const [currentNodeType, setCurrentNodeType] = useState<string>("");
+
+    //Stores all markers and edges
+    const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
+    const edgesRef   = useRef<google.maps.Polyline[]>([]);
+
+    // Clear helpers
+    function clearMarkers() {
+        markersRef.current.forEach(m => m.position(null));
+        markersRef.current = [];
+    }
+    function clearEdges() {
+        edgesRef.current.forEach(l => l.setMap(null));
+        edgesRef.current = [];
+    }
 
 
-    const [startNode, setStartNode] = useState<Node| null>(null);
-    const startNodeRef = useRef<Node | null>(null);
 
 
-
-    const hospitalLocationMap = {
-        'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
-        '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
-        '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
-        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406}
-    };
-
+    //-------------Algo Type-----------------//
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
+    const newAlgo = trpc.setAlgoType.useMutation();
     function setAlgoTypeWrapper(algo: string) {
         newAlgo.mutate({ algoType: algo })
         setAlgoType(algo);
     }
 
-    // Start of map e
-    // ditor
-    useEffect(() => {
-        const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
-        const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
-
-        if (!apiKey || map || !mapRef.current || !nodesReady || !edgesReady) return;
-
-        const loader = new Loader({
-            apiKey,
-            version: 'weekly',
-            libraries: ['places', "marker"],
-            language: 'en',
-        });
-
-
-        graph.populate(nodesDataFromAPI, edgesDataFromAPI);
-
-        loader.load().then(async () => {
-            if (mapRef.current) {
-                const newMap = new google.maps.Map(mapRef.current, {
-                    center: {lat: 42.3601, lng: -71.0589},
-                    zoom: 12,
-                    fullscreenControl: true,
-                    mapTypeControl: false,
-                    disableDoubleClickZoom: true,
-                    streetViewControl: false,
-                    zoomControl: false,
-                    scaleControl: false,
-                    mapId: 'ca6b761fac973d24'
-                });
-
-                setMap(newMap);
-                setIsLoadingMap(false);
-
-                const lib = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-                setMarkerLib(lib);
-
-
-                const directionsService = new google.maps.DirectionsService();
-                const directionsRenderer = new google.maps.DirectionsRenderer({
-                    map: newMap,
-                    suppressMarkers: true,
-                    preserveViewport: false,
-                    polylineOptions: {
-                        strokeColor: '#1A73E8',
-                        strokeWeight: 4,
-                    },
-                });
-
-                directionsRenderer.setMap(newMap);
-                onMapReady(newMap, directionsService, directionsRenderer);
-
-            }
-        })
-            .catch(console.error);
-    }, [onMapReady, apiKey]);
-
-    function getEdgeLines(){
-
-        console.log("fetching lines what the heck")
-        if(!selectedHospital || !map) return;
-        let building = selectedHospital;
-        if (building === "20 Patriot Place"){
-            building = "pat20";
-        }
-        else if (building === "22 Patriot Place"){
-            building = "pat22";
-        }
-        else if (building === "MGB (Chestnut Hill)"){
-            building = "chestnut";
-        }
-        const floor = selectedFloor === null ? 1: selectedFloor;
-        const edgeComponents = drawAllEdges(map, graph.getBuildingEdges(building, floor));
-        const allLayers: google.maps.Polyline[] = edgeComponents.flatMap(pack => pack.layers);
-        return allLayers;
-    }
-
+    //----- Control showing nodes and edges ---------//
     const handleToggleNodes = () => setShowNodes(prev => !prev);
     const handleToggleEdges = () => setShowEdges(prev => !prev);
 
-    // Effect to clear and rerender markers when building or floor changes
-    useEffect(() => {
-        if (!map) return;
-
-        // Clear all existing markers
-        staticMarkers.forEach(m => m.setMap(null));
-        setStaticMarkers([]);
-        console.log("Full clear");
-
-        // Display nodes if showNodes is true and a building is selected
-        if (showNodes && selectedHospital) {
-            displayNodes();
-        }
-    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
-
-    useEffect(() => {
-        // graph.getNode()
-    }, [currentNodeType]);
-
-
-
-    useEffect(() => {
-        if (!map || !selectedHospital || !showNodes) return;
-
-        // detach any previous listener
-        nodeListenerRef.current?.remove();
-
-        const floor  = selectedFloor ?? 1;
-        const buildingKey =
-            selectedHospital === "MGB (Chestnut Hill)" ? "chestnut" :
-                selectedHospital === "20 Patriot Place"   ? "pat20"   :
-                    selectedHospital === "22 Patriot Place"   ? "pat22"   :
-                        selectedHospital;
-
-        // attach a single dbl-click listener
-        nodeListenerRef.current = addNodeListener(
-            map,
-            buildingKey,
-            floor,
-            setNodeDetails,
-            marker => setStaticMarkers(prev => [...prev, marker])
-        );
-
-        return () => {
-            nodeListenerRef.current?.remove();
-            nodeListenerRef.current = null;
-        };
-    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
-
-    function displayNodes(){
-        if (!map || !selectedHospital || !markerLib) return;
-
-        const floor = selectedFloor === null ? 1: selectedFloor;
-        console.log("Displaying")
-
-        const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
-            ? "chestnut"
-            : selectedHospital === "20 Patriot Place"
-                ? "pat20"
-                : selectedHospital === "22 Patriot Place"
-                    ? "pat22"
-                    : selectedHospital.toLowerCase();
-
-        const newStatics = createMarkers(map, markerLib,
-            graph.getBuildingNodes(buildingKey, floor),
-            setselectedNode,
-            'normal',
-            () => setEdgeRefresh((v) => v + 1),
-            handleEdgeClick);
-        setStaticMarkers(newStatics);
-
-    }
-
-    function handleEdgeClick(node: Node){
-        console.log("edge mode: ", edgeMode);
-        if (!edgeMode) return;
-        if (!startNodeRef.current) {
-            console.log("start node:", node.id)
-            setStartNode(node);
-            startNodeRef.current = node;
-
-        } else if (startNodeRef.current.id !== node.id) {
-            console.log("end node:", node.id);
-            // ADD WEIGHT TO EDGE
-            const w = WorldDistance(startNodeRef.current, node);
-            const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w}
-            graph.addEdge(edge);
-            setStartNode(null);
-
-
-            if(startNodeRef.current.building !== node.building){
-                startNodeRef.current.type = NodeType.SkyBridge;
-                node.type = NodeType.SkyBridge;
-                graph.editNode(startNodeRef.current)
-                graph.editNode(node)
-                console.log("set nodes to sky bridge (default)")
-            }
-            else if (startNodeRef.current.building === node.building && startNodeRef.current.floor !== node.floor){
-                startNodeRef.current.type = NodeType.Elevator;
-                node.type = NodeType.Elevator;
-                graph.editNode(startNodeRef.current)
-                graph.editNode(node)
-                console.log("set nodes to elevator (default)")
-            }
-
-            startNodeRef.current = null;
-            console.log("end");
-            setEdgeRefresh((v) => v + 1);
-            // Add line Follower somewhere --- ------- - --
-        }
-    }
-
-
-
-    useEffect(() => {
-        if (!map || !selectedHospital) return;
-        edgePolylines.forEach(poly => poly.setMap(null));
-        setEdgePolylines([]);
-
-        if (showEdges) {
-            const lines = getEdgeLines();
-            if (lines) setEdgePolylines(lines);
-        }
-
-    }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
+    //------------- Handle Submitting Edits -------------//
+    const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
+    const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
 
     const handleSubmit = async () => {
         const edits = graph.getEditHistory()
@@ -316,98 +96,74 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             edges: edgesRes.data.length
         });
 
-        staticMarkers.forEach(m => m.setMap(null));
-        setStaticMarkers([]);
-        edgePolylines.forEach(l => l.setMap(null));
-        setEdgePolylines([]);
-        graph.populate(nodesRes.data, edgesRes.data);
-        if (showNodes) displayNodes();
-        if (showEdges) {
-            console.log("how was this called?")
-            const lines = getEdgeLines();
-            if (lines) setEdgePolylines(lines);
-        }
+        // staticMarkers.forEach(m => m.setMap(null));
+        // setStaticMarkers([]);
+        // edgePolylines.forEach(l => l.setMap(null));
+        // setEdgePolylines([]);
+        // graph.populate(nodesRes.data, edgesRes.data);
+        // if (showNodes) displayNodes();
+        // if (showEdges) {
+        //     console.log("how was this called?")
+        //     const lines = getEdgeLines();
+        //     if (lines) setEdgePolylines(lines);
+        // }
     }
 
+    //----------- Map Loaders *This needs to be placed last --------------------//
+    const [isLoadingMap, setIsLoadingMap] = useState(true);
 
-    const setNodeDetails = (node: Node) => {
-        setselectedNode({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, nodeType: node.type});
-    };
+    const { isLoaded, loadError } = useJsApiLoader({
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        libraries,
+        id: 'gmap-script', // unique script id
+    });
 
-    useEffect(() => {
-        if (!map || !selectedHospital) return;
+    if (loadError) return <p>Error loading Maps</p>;
+    if (!isLoaded) return <p>loaded Maps</p>;
 
-        if (mgbOverlay) {
-            mgbOverlay.parkingOverlay.setMap(null);
-            mgbOverlay.floorOverlay.setMap(null);
-            setMgbOverlay(null);
-        }
-
-        if (patriot22Overlay) {
-            patriot22Overlay.floor3Overlay.setMap(null);
-            patriot22Overlay.floor4Overlay.setMap(null);
-            setPatriot22Overlay(null);
-        }
-
-        try {
-            if (selectedHospital === 'MGB (Chestnut Hill)') {
-                setMgbOverlay(createMGBOverlays(map));
-            } else if (selectedHospital === '20 Patriot Place') {
-                createPatriot20Overlays(map);
-            } else if (selectedHospital === '22 Patriot Place') {
-                setPatriot22Overlay(createPatriot22Overlays(map));
-            } else if (selectedHospital === 'Faulkner') {
-                createFaulknerOverlays(map);
-            }
-
-            const location =
-                hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
-            if (location) {
-                map.setZoom(19);
-                map.panTo(location);
-            }
-        } catch (err) {
-            console.error('Overlay setup error:', err);
-        }
-    }, [map, selectedHospital]);
-
-    useEffect(() => {
-        if (!map || !patriot22Overlay || selectedHospital !== '22 Patriot Place') return;
-        try {
-            updatePatriotPlace22(patriot22Overlay, selectedFloor || 3);
-        } catch (err) {
-            console.error('Error updating Patriot22 floor overlay:', err);
-        }
-    }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
+    function handleMapReady(map: google.maps.Map) {
+        const dirSvc  = new google.maps.DirectionsService();
+        const dirRndr = new google.maps.DirectionsRenderer({ map });
+        setIsLoadingMap(false);
+        mapRef.current = map;
+    }
 
     return (
         <div className="flex h-[95vh]">
+
+            {/*  Start of Sidebar Component */}
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
+                {/*  Start of displaying Node Info */}
+                {/*{nodeInfo && (*/}
+                {/*    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">*/}
+                {/*        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>*/}
+                {/*        <p className="text-black text-lg"><span className="font-bold">ID:</span> {nodeInfo.id}</p>*/}
+                {/*        <p className="text-black text-lg"><span className="font-bold">Name:</span> {nodeInfo.name}</p>*/}
+                {/*        <p className="text-black text-lg"><span className="font-bold">Type:</span> {nodeInfo.nodeType}</p>*/}
+                {/*        <SRQDropdown*/}
+                {/*            value={currentNodeType}*/}
+                {/*            setValue={setCurrentNodeType}*/}
+                {/*            width={"w-full"}*/}
+                {/*            placeholder={"Select a node type"}*/}
+                {/*            options={Object.values(NodeType) as string[]}/>*/}
+                {/*        /!*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*!/*/}
+                {/*        /!*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*!/*/}
+                {/*    </div>*/}
+                {/*)}*/}
+                {/*  End of displaying Node Info */}
 
-                {selectedNode && (
-                    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
-                        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {selectedNode.id}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {selectedNode.name}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {selectedNode.type}</p>
-                        <SRQDropdown
-                            value={currentNodeType}
-                            setValue={setCurrentNodeType}
-                            width={"w-full"}
-                            placeholder={"Select a node type"}
-                            options={Object.values(NodeType) as string[]}/>
-                        {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
-                        {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
-                    </div>
-                )}
-
+                {/*  Import Nodes and Edges */}
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />
                 </div>
+
+                {/*  Submit Changes */}
                 <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
                     Submit Changes
                 </button>
+
+                {/*  Start of Edit Edge Toggle */}
                 <button
                     className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
                     onClick={() => {
@@ -417,7 +173,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 >
                     {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
                 </button>
+                {/*  End of Edit Edge Toggle */}
 
+
+                {/*  Start of Select Algo type */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
@@ -433,31 +192,44 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                {/*  End of Select Algo type */}
             </div>
+            {/*  End of Sidebar Component */}
 
+
+
+            {/*  Start of Google Maps Component */}
             <div className="w-3/4 relative">
+
+                {/* Loading screen */}
                 {isLoadingMap && (
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
                         <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
-                <div ref={mapRef} className="w-full h-[95vh]"></div>
-                <MapEditorControls
-                    map={map}
-                    selectedHospital={selectedHospital}
-                    selectedFloor={selectedFloor}
-                    onHospitalChange={setSelectedHospital}
-                    onFloorChange={setSelectedFloor}
-                    hospitalLocationMap={hospitalLocationMap}
-                    showNodes={showNodes}
-                    showEdges={showEdges}
-                    onToggleNodes={handleToggleNodes}
-                    onToggleEdges={handleToggleEdges}
-                />
-                <HelpDropdown />
+
+                <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '95vh' }}
+                    center={{ lat: 42.3261, lng: -71.1496 }}
+                    zoom={19}
+                    onLoad={handleMapReady}
+                    options={{ disableDoubleClickZoom: true, mapId: 'ca6b761fac973d24' }}>
+                    <MapEditorControls
+                        map={mapRef.current}
+                        selectedHospital={selectedHospital}
+                        selectedFloor={selectedFloor}
+                        onHospitalChange={setSelectedHospital}
+                        onFloorChange={setSelectedFloor}
+                        hospitalLocationMap={hospitalLocationMap}
+                        showNodes={showNodes}
+                        showEdges={showEdges}
+                        onToggleNodes={handleToggleNodes}
+                        onToggleEdges={handleToggleEdges}/>
+                    <HelpDropdown />
+                    // {/* children */}
+                </GoogleMap>
             </div>
+        {/*    End of Google Maps Component */}
         </div>
     );
-};
-
-export default MapEditor;
+}

@@ -233,7 +233,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\.prisma\\client",
+      "value": "/Users/evandemas/WebstormProjects/team-f/packages/database/.prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -242,12 +242,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/evandemas/WebstormProjects/team-f/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -264,7 +264,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "POSTGRES_URL",
-        "value": "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
+        "value": "postgresql://postgres:postgres@localhost:5431/postgres?schema=public"
       }
     }
   },

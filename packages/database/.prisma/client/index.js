@@ -234,7 +234,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\.prisma\\client",
+      "value": "/Users/evandemas/WebstormProjects/team-f/packages/database/.prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -243,12 +243,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/evandemas/WebstormProjects/team-f/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -265,7 +265,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "POSTGRES_URL",
-        "value": "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
+        "value": "postgresql://postgres:postgres@localhost:5431/postgres?schema=public"
       }
     }
   },
@@ -309,8 +309,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query-engine-windows");
-path.join(process.cwd(), ".prisma/client/query-engine-windows")
+path.join(__dirname, "query-engine-darwin-arm64");
+path.join(process.cwd(), ".prisma/client/query-engine-darwin-arm64")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), ".prisma/client/schema.prisma")

@@ -5,6 +5,7 @@ import '../styles/mainStyles.css'
 import {LogInButton} from "./signIn/LogInButton.tsx";
 import {LogOutButton} from "./signIn/LogOutButton.tsx"
 import { useAuth0 } from "@auth0/auth0-react";
+import {is} from "@react-three/fiber/dist/declarations/src/core/utils";
 
 
 type Props = {
@@ -21,6 +22,7 @@ recognition.start();
 export default function NavBar({ userRole,  setUserRole }: Props) {
     const location = useLocation();
     const navigate = useNavigate();
+
     const [tab, setTab] = React.useState<string>(() => {
         const path = location.pathname;
         if(path.startsWith("/directory")) return "dir"; 
@@ -31,7 +33,10 @@ export default function NavBar({ userRole,  setUserRole }: Props) {
         if(path.startsWith("/admin/directory")) return "exp";
         return "";
     })
-    const { isAuthenticated, logout } = useAuth0();
+    const { isAuthenticated, logout, loginWithRedirect} = useAuth0();
+
+    useEffect(() => {
+    }, [isAuthenticated]);
 
     const voiceCommands = () => {
         recognition.onstart = () => {
@@ -48,8 +53,12 @@ export default function NavBar({ userRole,  setUserRole }: Props) {
                 navigate("/");
             } else if (transcript.toLowerCase().includes("directory") || transcript.toLowerCase().includes("department")) {
                 navigate("/directory");
-            } else if (transcript.toLowerCase().includes("home") ) {
-                navigate("/");
+            } else if (transcript.toLowerCase().includes("log") && transcript.toLowerCase().includes("out")) {
+                logout({ logoutParams: { returnTo: window.location.origin } })
+            } else if (transcript.toLowerCase().includes("log") && transcript.toLowerCase().includes("in")) {
+                loginWithRedirect({})
+            } else if (transcript.toLowerCase().includes("service") ) {
+                navigate("/services");
             }
         };
 

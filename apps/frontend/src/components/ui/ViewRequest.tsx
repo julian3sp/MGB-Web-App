@@ -4,8 +4,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/Tooltip.tsx';
-import DeleteIcon from '../../../assets/DeleteIcon.png';
+} from './Tooltip.tsx';
 
 export default function ViewRequest({
                                         size = 20,

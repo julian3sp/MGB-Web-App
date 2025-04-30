@@ -10,9 +10,9 @@ import {
 interface MapEditorControlsProps {
     map: google.maps.Map | null;
     selectedHospital: string | null;
-    selectedFloor: 3 | 4 | null;
+    selectedFloor: 1| 2 | 3 | 4 | null;
     onHospitalChange: (hospital: string) => void;
-    onFloorChange: (floor: 3 | 4 | null) => void;
+    onFloorChange: (floor: 1| 2 | 3 | 4 | null) => void;
     hospitalLocationMap: Record<string, { lat: number; lng: number }>;
     showNodes: boolean;
     showEdges: boolean;
@@ -20,8 +20,8 @@ interface MapEditorControlsProps {
     onToggleEdges: () => void;
 }
 
-const hospitalsWithFloors = ["22 Patriot Place"];
-const hospitalsNoFloors = ["MGB (Chestnut Hill)", "20 Patriot Place"];
+const hospitalsWithFloors = ["22 Patriot Place", "20 Patriot Place"];
+const hospitalsNoFloors = ["MGB (Chestnut Hill)"];
 
 const MapEditorControls: React.FC<MapEditorControlsProps> = ({
     map,
@@ -111,6 +111,23 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                             <DropdownMenuLabel>{selectedHospital}</DropdownMenuLabel>
                             <DropdownMenuItem
                                 onClick={() => {
+                                    onFloorChange(1);
+                                }}
+                                className={selectedFloor === 1 ? 'bg-blue-50' : ''}
+                            >
+                                Floor 1 {selectedFloor === 1 && '✓'}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    onFloorChange(2);
+
+                                }}
+                                className={selectedFloor === 2 ? 'bg-blue-50' : ''}
+                            >
+                                Floor 2 {selectedFloor === 2 && '✓'}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
                                     onFloorChange(3);
                                 }}
                                 className={selectedFloor === 3 ? 'bg-blue-50' : ''}
@@ -126,6 +143,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
                             >
                                 Floor 4 {selectedFloor === 4 && '✓'}
                             </DropdownMenuItem>
+
                         </DropdownMenuContent>
                     </DropdownMenu>
                 )}

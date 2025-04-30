@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
-import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
+import { createPatriot20Overlays, updatePatriotPlace20, Patriot20Overlays } from './overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from './overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 import { createMarkers } from './overlays/createMarkers';
@@ -11,11 +11,9 @@ import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
 import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfinding/StrategyPathfind.ts"
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 import { showRouteWithDirections } from './overlays/RouteWithDirection.tsx';
+import HospitalDirectionsGuide from './HospitalDirectionsGuide.tsx';
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
-import { graph } from "./GraphObject.ts"
-import { StringKeyframeTrack } from 'three/src/Three.Core.js';
-
 interface MapRendererProps {
   onMapReady: (
     map: google.maps.Map,
@@ -24,10 +22,12 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: 3 | 4;
+  selectedFloor?: 1| 2| 3 | 4;
   onFloorChange?: (floor: 3 | 4) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
+  onPathFound?: (pathNodes: Node[]) => void;
+  onTextDirectionsGenerated?: (textDirections: string[]) => void;
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({
@@ -36,7 +36,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onZoomChange,
   selectedFloor = 3,
   onFloorChange = () => { },
-  departmentNumber
+  departmentNumber,
+  onPathFound, 
+  onTextDirectionsGenerated
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -45,6 +47,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
+  const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot20Overlays | null>(null);
   // Markers and visualization
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [showNodes, setShowNodes] = useState(false);
@@ -177,94 +180,131 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
+  function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
+    const firstFloorNum: number = path[0].floor
+    const secondFloorStairs = path.find(n => n.floor != firstFloorNum);
+    if (secondFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
+      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+      return {
+        floor1: {path: floor1, floorNum: firstFloorNum},
+        floor2: {path: floor2, floorNum: secondFloorStairs.floor}
+      };
+    }
+    return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
+  }
+
   // Handle department pathfinding
   // Handle department pathfinding
 // Handle department pathfinding
 useEffect(() => {
-  if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData || !selectedDestination) return;
+  if (
+    !map ||
+    isNodesLoading ||
+    isEdgesLoading ||
+    !nodesData ||
+    !edgesData ||
+    !selectedDestination  // Make sure we have a destination selected
+  ) return;
 
   try {
-    // Build the graph
+    // Build the graph from TRPC data
     const graph = new Graph();
     graph.populate(nodesData, edgesData);
 
-    // DEBUG: Log graph contents
-    console.log('Graph nodes:', graph.getAllNodes().map(n => `${n.id}: (${n.x},${n.y})`));
-
-    // Entrance handling with fallbacks
-    const entrances: { [building: string]: number } = {
+    // Fixed entrance node and target department node
+    const entrances: { [building: string]: number; } = {
       "MGB (Chestnut Hill)": 3900,
       "20 Patriot Place": 1139,
       "22 Patriot Place": 1952,
       "Faulkner": 3995
-    };
-
-    let entrance = graph.getNode(entrances[selectedDestination.name]);
-    if (!entrance) {
-      console.warn(`Predefined entrance ${entrances[selectedDestination.name]} not found, searching alternatives...`);
-      
-      // Try likely entrance nodes
-      const potentialEntrances = graph.getAllNodes()
-        .filter(n => n.name?.toLowerCase().includes('entrance') || n.tags?.includes('entrance'));
-      
-      entrance = potentialEntrances[0] || graph.getAllNodes()[0];
-      console.warn(`Using fallback entrance:`, entrance);
     }
 
-    // Target handling with fallbacks
-    let targetNodeId = departmentNumber || 3781;
-    let target = graph.getNode(targetNodeId);
-    if (!target) {
-      console.warn(`Target node ${targetNodeId} not found, searching alternatives...`);
-      
-      // Try nodes with 'lab' in name
-      const potentialTargets = graph.getAllNodes()
-        .filter(n => n.name?.toLowerCase().includes('lab') || n.tags?.includes('lab'));
-      
-      target = potentialTargets[0] || graph.getAllNodes()[1] || graph.getAllNodes()[0];
-      targetNodeId = target.id;
-      console.warn(`Using fallback target:`, target);
+    const entrance = graph.getNode(entrances[selectedDestination.name]);
+    // Use departmentNumber if provided, otherwise default to Laboratory (3781)
+    const targetNodeId = departmentNumber || 3781;
+    const target = graph.getNode(targetNodeId);
+
+    if (!entrance || !target) {
+      console.error('Either the entrance or department node is missing');
+      return;
     }
 
-    // Clear previous path
-    [pathPolylineRef.current, startMarkerRef.current, targetMarkerRef.current].forEach(item => {
-      if (item) item.setMap(null);
-    });
+    // Clear previous path if exists
+    if (pathPolylineRef.current) {
+      pathPolylineRef.current.setMap(null);
+      pathPolylineRef.current = null;
+    }
 
-    // Pathfinding
-    context.setPathAlgorithm = new AStar();
-    if (algoType === "A-Star") context.setStrategyPathfind(new AStar());
-    else if (algoType === "DFS") context.setStrategyPathfind(new DFS());
-    else if (algoType === "BFS") context.setStrategyPathfind(new BFS());
-    else if (algoType === "Dijkstras") context.setStrategyPathfind(new Dijkstras());
+    // ... rest of your pathfinding code remains the same ...
+    context.setPathAlgorithm = new AStar()
+    if(algoType === "A-Star") {
+      context.setStrategyPathfind(new AStar());
+    } else if (algoType === "DFS") {
+      context.setStrategyPathfind(new DFS())
+    } else if (algoType === "BFS") {
+      context.setStrategyPathfind(new BFS())
+    } else if (algoType === "Dijkstras"){
+      context.setStrategyPathfind(new Dijkstras())
+    }
 
-    const pathNodes = context.pathFind(graph, entrance, target);
-    console.log("Path found with", pathNodes.length, "nodes");
+    const pathNodes = context.pathFind(graph, entrance, target)
+    console.log("Path to", targetNodeId === 3781 ? "Default Laboratory" : "Selected Department", pathNodes)
 
-    // Visualization
-    pathPolylineRef.current = drawPath(map, pathNodes);
+    if (pathNodes && onPathFound) {
+      onPathFound(pathNodes);
+    }
+    
+    // Draw path and generate directions
+    const newPolyline = drawPath(map, pathNodes);
+    pathPolylineRef.current = newPolyline;
+
+    // Generate and display directions
     const routeInfo = showRouteWithDirections(map, pathNodes);
+    if (routeInfo && onPathFound) {
+      onPathFound(pathNodes);
+    }
+    if (routeInfo && onTextDirectionsGenerated) {
+      onTextDirectionsGenerated(routeInfo.directions);
+    }
+    console.log("Route Directions:", routeInfo.directions);
+    console.log("Total Distance:", routeInfo.totalDistance);
 
-    // Markers
-    startMarkerRef.current = new google.maps.Marker({
-      position: { lat: entrance.x, lng: entrance.y },
-      map: map,
-      title: `Start (${entrance.name || 'Entrance'})`,
-      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-    });
 
-    targetMarkerRef.current = new google.maps.Marker({
-      position: { lat: target.x, lng: target.y },
-      map: map,
-      title: target.name || (targetNodeId === 3781 ? 'Laboratory' : 'Department'),
-      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-    });
+      // Clear existing markers
+      if (startMarkerRef.current) {
+        startMarkerRef.current.setMap(null);
+        startMarkerRef.current = null;
+      }
 
-  } catch (error) {
-    console.error('Pathfinding error:', error);
-  }
-}, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, algoType]);
+      if (targetMarkerRef.current) {
+        console.log("clearing target marker")
+        targetMarkerRef.current.setMap(null);
+        targetMarkerRef.current = null;
+      }
 
+      // Add new markers for start and destination
+      if (entrance.floor === selectedFloor) {
+        startMarkerRef.current = new google.maps.Marker({
+          position: { lat: entrance.x, lng: entrance.y },
+          map: map,
+          title: 'Start (Entrance)',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+        });
+      }
+
+      if (target.floor === selectedFloor) {
+        targetMarkerRef.current = new google.maps.Marker({
+          position: { lat: target.x, lng: target.y },
+          map: map,
+          title: 'Department',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+        });
+      }
+    } catch (error) {
+      console.error('Error in pathfinding:', error);
+    }
+  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, selectedFloor]);
   // Handle overlay updates based on selected destination
   useEffect(() => {
     if (!map) return;
@@ -284,6 +324,13 @@ useEffect(() => {
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
       }
+      if (patriot20Overlays) {
+        patriot20Overlays.floor1Overlay.setMap(null);
+        patriot20Overlays.floor2Overlay.setMap(null);
+        patriot20Overlays.floor3Overlay.setMap(null);
+        patriot20Overlays.floor4Overlay.setMap(null);
+        setPatriot20Overlays(null);
+      }
     };
 
     cleanupOverlays();
@@ -296,10 +343,13 @@ useEffect(() => {
           setParkingOverlay(overlays.parkingOverlay);
           setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
-          createPatriot20Overlays(map);
+          const overlays = createPatriot20Overlays(map);
+          setPatriot20Overlays(overlays);
+          updatePatriotPlace20(overlays, selectedFloor!);
         } else if (selectedDestination.name === "22 Patriot Place") {
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
+          updatePatriotPlace22(overlays, selectedFloor!);
         } else if (selectedDestination.name === "Faulkner") {
           createFaulknerOverlays(map);
         }
@@ -317,10 +367,11 @@ useEffect(() => {
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {
-    if (!map || !patriot22Overlays) return;
+    if (!map || !patriot22Overlays || !patriot20Overlays) return;
 
     try {
       updatePatriotPlace22(patriot22Overlays, selectedFloor);
+      updatePatriotPlace20(patriot20Overlays, selectedFloor);
 
       const patriotZoomListener = map.addListener('zoom_changed', () => {
         const zoom = map.getZoom();
@@ -333,7 +384,7 @@ useEffect(() => {
     } catch (error) {
       console.error('Error updating Patriot Place overlays:', error);
     }
-  }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
+  }, [selectedFloor, map, patriot22Overlays, patriot20Overlays, onZoomChange]);
 
   // Handle MGB overlay opacity animations
   useEffect(() => {

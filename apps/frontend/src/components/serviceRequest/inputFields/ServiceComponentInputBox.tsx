@@ -44,7 +44,7 @@ export function ServiceComponentInputBox({
                 minLength={minLength}
                 maxLength={maxLength}
                 {...(type && { type })}
-                className={`border-[1px] border-[#ececec] border-solid hover:border-[#a2caff] focus:bg-white rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
+                className={`border-[1px] border-[#ececec] border-solid hover:border-[#a2caff] focus:bg-white rounded-[5px] py-[5px] pr-[5px] pl-[15px] text-[14px] cursor-text font-[Poppins] h-[48px] ${width || 'w-[396px]'}`}
                 value={value}
                 onChange={(e) => {
                     setState(e.target.value);

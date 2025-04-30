@@ -5,6 +5,7 @@ import DepartmentDirectory from './routes/departmentDirectory/DepartmentDirector
 import ServiceRequestPage from './routes/ServiceRequestPage';
 import RequestListPage from './routes/requestDisplay/RequestListPage.tsx';
 import { WelcomePage } from './routes/WelcomePage';
+import {BryanDirectoryPage} from './routes/BryanDirectoryPage.tsx';
 import NavBar from './components/NavBar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
@@ -18,6 +19,7 @@ import WaitingScreen from './routes/WaitingScreen.tsx';
 import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
+import {Credits} from "./routes/Credits.tsx";
 
 function InnerApp() {
     const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
@@ -97,9 +99,9 @@ function InnerApp() {
                 <Route path='/waiting' element={<WaitingScreen />} />
                 <Route path='/' element={<WelcomePage />} />
                 <Route path="/navigation" element={<NavigationPage />} />
-                <Route path="/directory" element={<DepartmentDirectory />} />
-                <Route path="/directory/*" element={<DepartmentDirectory />} />
+                <Route path="/directory" element={<BryanDirectoryPage />} />
                 <Route path="/aboutus" element={<AboutUs />} />
+                <Route path="/credits" element={<Credits />} />
                 <Route element={<PrivateRoutes />}>
                     <Route path="/services" element={<ServiceRequestPage />} />
                     <Route path="/admin/directory" element={<DirectoryPage />} />

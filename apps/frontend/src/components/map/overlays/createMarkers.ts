@@ -16,7 +16,7 @@ export function createMarkers(
     ) {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
-
+    console.log("number of nodes for floor: ", nodes);
     for (const node of nodes) {
         const coord: google.maps.LatLngLiteral = {
             lat: node.x-0.000002,

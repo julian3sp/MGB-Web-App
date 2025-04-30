@@ -9,6 +9,7 @@ import {
     makeRequest,
     deleteRequest,
     updateRequest,
+    getRequestOfType,
 } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
@@ -19,6 +20,7 @@ import {
     getUniqueDirectories,
     getAllNamesArray,
     makeDirectories,
+    makeManyDirectories,
 } from './server/procedures/directories.ts';
 import {
     deleteAllNodes,
@@ -45,6 +47,7 @@ const cors = require('cors');
 
 const appRouter = t.router({
     requestList: getRequests,
+    requestListOfType: getRequestOfType,
     createRequest: makeRequest,
     deleteRequest: deleteRequest,
     updateRequest: updateRequest,
@@ -53,6 +56,7 @@ const appRouter = t.router({
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,
+    makeManyDirectories: makeManyDirectories,
     getAllNamesArray: getAllNamesArray,
     getDirectories: getDirectories,
     getUniqueDirectory: getUniqueDirectories,

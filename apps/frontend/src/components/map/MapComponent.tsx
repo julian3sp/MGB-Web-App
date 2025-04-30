@@ -190,6 +190,12 @@ const MapComponent: React.FC = () => {
         'Vascular Lab': 2883
       };
 
+      const mainCampusMapping: Record<string, number> = {
+        'test': 3000,
+      };
+
+
+
       if(selectedPlace?.name === null) {
         console.error("No location selected");
       }else if(selectedPlace?.name === "MGB (Chestnut Hill)"){
@@ -200,6 +206,9 @@ const MapComponent: React.FC = () => {
         return Pat22departmentMapping[department.name];
       } else if(selectedPlace?.name === "Faulkner"){
         return FaulknerMapping[department.name];
+      }
+      else if(selectedPlace?.name === "Main Campus"){
+        return mainCampusMapping[department.name];
       }
       console.log("Issues in finding dept node")
       return 0;

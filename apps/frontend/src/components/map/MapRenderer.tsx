@@ -4,6 +4,7 @@ import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
 import { createPatriot20Overlays, updatePatriotPlace20, Patriot20Overlays } from './overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from './overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
+import { createMainCampusOverlay, updateMainCampus, MainCampusOverlay } from './overlays/mainCampusOverlay.tsx';
 import { createMarkers } from './overlays/createMarkers';
 import { drawAllEdges, drawPath } from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
@@ -42,6 +43,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
   const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot20Overlays | null>(null);
+  const [mainCampusOverlays, setMainCampusOverlays] = useState<Patriot20Overlays | null>(null);
   // Markers and visualization
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [showNodes, setShowNodes] = useState(false);
@@ -327,6 +329,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         patriot20Overlays.floor4Overlay.setMap(null);
         setPatriot20Overlays(null);
       }
+      if (mainCampusOverlays) {
+        mainCampusOverlays.floor2Overlay.setMap(null);
+        setMainCampusOverlays(null);
+      }
     };
 
     cleanupOverlays();
@@ -348,6 +354,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           updatePatriotPlace22(overlays, selectedFloor!);
         } else if (selectedDestination.name === "Faulkner") {
           createFaulknerOverlays(map);
+        }
+        else if (selectedDestination.name === "Main Campus") {
+          const overlays: MainCampusOverlay = createMainCampusOverlay(map);
+          createMainCampusOverlay(map);
+          setFloorOverlay(overlays.floor2Overlay);
         }
 
         // Center map on the selected destination

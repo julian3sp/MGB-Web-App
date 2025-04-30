@@ -31,7 +31,8 @@ import {
 import { WorldDistance } from "./worldCalculations.ts"
 import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
-import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import { createMainCampusOverlay } from '@/components/map/overlays/mainCampusOverlay.tsx';
 
 
 // resolve
@@ -144,7 +145,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
-        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406 }
+        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406 },
+        'Main Campus': { lat:42.33539999367496 , lng: -71.10675757779984 }
     };
 
     function setAlgoTypeWrapper(algo: string) {
@@ -212,7 +214,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     function getEdgeLines() {
 
-        console.log("fetching lines what the heck")
         if (!selectedHospital || !map) return;
         let building = selectedHospital;
         if (building === "20 Patriot Place") {
@@ -223,6 +224,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         }
         else if (building === "MGB (Chestnut Hill)") {
             building = "chestnut";
+        }
+        else if (building === "Main Campus") {
+            building = "mainCampus";
         }
         const floor = selectedFloor === null ? 1 : selectedFloor;
         const edgeComponents = drawAllEdges(map, graph.getBuildingEdges(building, floor));
@@ -261,11 +265,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         nodeListenerRef.current?.remove();
 
         const floor = selectedFloor ?? 1;
-        const buildingKey =
-            selectedHospital === "MGB (Chestnut Hill)" ? "chestnut" :
-                selectedHospital === "20 Patriot Place" ? "pat20" :
-                    selectedHospital === "22 Patriot Place" ? "pat22" :
-                        selectedHospital;
+        const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
+            ? "chestnut"
+            : selectedHospital === "20 Patriot Place"
+                ? "pat20"
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital === "Main Campus"
+                        ? "mainCampus"
+                        : selectedHospital;
 
         // attach a single dbl-click listener
         nodeListenerRef.current = addNodeListener(
@@ -294,7 +302,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 ? "pat20"
                 : selectedHospital === "22 Patriot Place"
                     ? "pat22"
-                    : selectedHospital.toLowerCase();
+                    : selectedHospital === "Main Campus"
+                        ? "mainCampus"
+                            : selectedHospital;
 
         const newStatics = createMarkers(map, markerLib,
             graph.getBuildingNodes(buildingKey, floor),
@@ -435,6 +445,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             } else if (selectedHospital === 'Faulkner') {
                 createFaulknerOverlays(map);
             }
+            else if (selectedHospital === 'Main Campus') {
+                createMainCampusOverlay(map);
+            }
 
             const location =
                 hospitalLocationMap[selectedHospital as keyof typeof hospitalLocationMap];
@@ -480,6 +493,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 </p>
                                 <p className="text-black text-lg">
                                     <span className="font-semibold text-[#003a96]">Name:</span> {selectedNode.name}
+                                </p>
+                                <p className="text-black text-lg">
+                                    <span className="font-semibold text-[#003a96]">lat :</span> {selectedNode.x.toFixed(6)}
+                                </p>
+                                <p className="text-black text-lg">
+                                    <span className="font-semibold text-[#003a96]">long :</span> {selectedNode.y.toFixed(6)}
                                 </p>
 
                                 <p className="text-black text-lg">

@@ -28,11 +28,12 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
   const isPatriotPlace = selectedDestination?.name === "20 Patriot Place" || 
                           selectedDestination?.name === "22 Patriot Place";
   const isFaulkner = selectedDestination?.name === "Faulkner";
+  const isMainCampus = selectedDestination?.name === "Main Campus";
 
   return (
     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-full flex items-center justify-center px-4 shadow-md border border-gray-300 w-auto max-w-full py-1.5">
       <div className="flex items-center space-x-2">
-        {isMGB || isFaulkner ? (
+        {isMGB || isFaulkner || isMainCampus ? (
           <div className="font-medium">
             <span className="font-light">Viewing: </span><span className="font-bold">{selectedDestination.name}</span>
           </div>

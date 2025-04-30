@@ -80,13 +80,13 @@ const DirectoryPage = () => {
 
     return (
         <div className="p-6 min-h-screen ">
-            <h1 className="text-4xl font-bold mb-6 font-[poppins] text-gray-800">Admin Dashboard</h1>
+            <h1 className="text-4xl font-bold mb-6 font-[poppins] text-[#003a96]">Admin Dashboard</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Bar Chart */}
-                <div className="col-span-1 lg:col-span-2 bg-white rounded-2xl p-6 shadow-lg border-1">
-                    <h2 className="text-2xl font-semibold mb-4 font-[poppins] text-gray-800">Service Request Overview</h2>
-                    <ChartContainer config={serviceRequestConfig} className="min-h-[280px]">
+                <div className="col-span-2 lg:col-span-2 bg-white rounded-2xl shadow-lg border-1">
+                    <h2 className="text-2xl font-semibold bg-[#003a96] rounded-t-xl p-5 text-center mb-4 font-[poppins] text-white">Service Request Overview</h2>
+                    <ChartContainer config={serviceRequestConfig} className="min-h-[200px] m-5 font-[poppins] bg-blue-50 rounded-3xl  p-2">
                         <BarChart data={serviceRequestData} margin={{ top: 10, right: 30, left: 20, bottom: 30 }}>
                             <XAxis
                                 dataKey="type"
@@ -124,16 +124,21 @@ const DirectoryPage = () => {
 
                 {/* Directory Import/Export */}
                 <div>
-                    <div className="bg-white p-5 rounded-2xl shadow-lg border-1 space-y-10">
-                        <h2 className="text-lg font-[poppins] font-semibold text-gray-800">Import Tools</h2>
+                    <div className="bg-white rounded-2xl shadow-lg border-1 space-y-10">
+                        <h2 className="text-2xl font-[poppins] bg-[#003a96] text-center p-5 rounded-t-lg font-semibold text-white">Import/Export Tools</h2>
                         <ImportAllNodesAndEdges />
-                        <ExportCSV />
-                        <button
-                            onClick={downloadDirectories}
-                            className="w-full bg-[#003a96] font-[poppins] hover:bg-blue-950 text-white font-medium px-4 py-2 rounded-lg transition"
-                        >
-                            Download CSV
-                        </button>
+                        <div className={'mb-5 ml-2 space-y-12'}>
+                        <ExportCSV type="Nodes" />
+                        <ExportCSV type="Edges" />
+                        <ExportCSV type="Directories" />
+                        </div>
+
+                        {/*<button*/}
+                        {/*    onClick={downloadDirectories}*/}
+                        {/*    className="w-full bg-[#003a96] font-[poppins] hover:bg-blue-950 text-white font-medium px-4 py-2 rounded-lg transition"*/}
+                        {/*>*/}
+                        {/*    Download CSV*/}
+                        {/*</button>*/}
                     </div>
                 </div>
             </div>
@@ -141,9 +146,9 @@ const DirectoryPage = () => {
             {/* Directory Table */}
             <div className="mt-8 bg-white p-6 border-1 shadow-lg rounded-2xl">
                 <h2 className="text-2xl font-[poppins] font-semibold mb-4 text-gray-800">Directory Table</h2>
-                <div className="overflow-x-auto max-h-[400px] scrollbar-thin">
-                    <table className="w-full font-[poppins] border-collapse text-sm">
-                        <thead className="sticky top-0 bg-gray-100 text-gray-700">
+                <div className="overflow-x-auto max-h-[400px] rounded-lg border-1 scrollbar-thin">
+                    <table className="w-full font-[poppins] border-collapse  text-sm">
+                        <thead className="sticky top-0 bg-[#003a96] text-white ">
                         <tr>
                             <th className="border-b px-3 py-2 text-left font-medium">ID</th>
                             <th className="border-b px-3 py-2 text-left font-medium">Name</th>
@@ -155,7 +160,7 @@ const DirectoryPage = () => {
                         <tbody>
                         {directories?.length > 0 ? (
                             directories.map((dir) => (
-                                <tr key={dir.id} className="hover:bg-gray-50">
+                                <tr key={dir.id} className="hover:bg-blue-50">
                                     <td className="px-3 py-2">{dir.id}</td>
                                     <td className="px-3 py-2">{dir.name}</td>
                                     <td className="px-3 py-2">{dir.services}</td>

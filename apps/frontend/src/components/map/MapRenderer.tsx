@@ -30,7 +30,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onMapReady,
   selectedDestination,
   onZoomChange,
-  selectedFloor = 3,
+  selectedFloor = 1,
   onFloorChange = () => { },
   departmentNumber
 }) => {

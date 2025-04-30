@@ -26,7 +26,7 @@ const MapComponent: React.FC = () => {
   const [directionsResult, setDirectionsResult] = useState<google.maps.DirectionsResult | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
-  const [selectedFloor, setSelectedFloor] = useState<number>(3);
+  const [selectedFloor, setSelectedFloor] = useState<number>(1);
   const [travelTimes, setTravelTimes] = useState<TravelTimes>({
     driving: null,
     transit: null,

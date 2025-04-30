@@ -49,7 +49,7 @@ const DirectoryPage = () => {
         { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
     ];
 
-    const downloadCSV = () => {
+    const downloadDirectories = () => {
         if (!directories || directories.length === 0) {
             alert('No data available to download.');
             return;
@@ -85,155 +85,168 @@ const DirectoryPage = () => {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="p-6 min-h-screen ">
             <h1 className="text-2xl font-bold mb-4">Directory Management</h1>
+            <div className={'flex flex-cols-2 gap-x-6'}>
+                <div className="flex-1">
+                    {/* Form - make new directery input */}
+                    <div className="mb-6 bg-white p-4 shadow rounded-2xl space-y-4">
+                        <h2 className="text-xl font-semibold">Add New Directory Entry</h2>
+                        <input
+                            className="border p-2 w-full"
+                            name="name"
+                            placeholder="Name"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                        <input
+                            className="border p-2 w-full"
+                            name="services"
+                            placeholder="Services"
+                            value={formData.services}
+                            onChange={handleChange}
+                        />
+                        <input
+                            className="border p-2 w-full"
+                            name="location"
+                            placeholder="Location"
+                            value={formData.location}
+                            onChange={handleChange}
+                        />
 
-            {/* Form */}
-            <div className="mb-6 bg-white p-4 shadow rounded space-y-4">
-                <h2 className="text-xl font-semibold">Add New Directory Entry</h2>
-                <input
-                    className="border p-2 w-full"
-                    name="name"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
-                <input
-                    className="border p-2 w-full"
-                    name="services"
-                    placeholder="Services"
-                    value={formData.services}
-                    onChange={handleChange}
-                />
-                <input
-                    className="border p-2 w-full"
-                    name="location"
-                    placeholder="Location"
-                    value={formData.location}
-                    onChange={handleChange}
-                />
+                        <input
+                            className="border p-2 w-full"
+                            name="telephone"
+                            placeholder="Telephone"
+                            value={formData.telephone}
+                            onChange={handleChange}
+                        />
+                        <button
+                            onClick={handleSubmit}
+                            className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"
+                        >
+                            Submit
+                        </button>
+                    </div>
 
-                <input
-                    className="border p-2 w-full"
-                    name="telephone"
-                    placeholder="Telephone"
-                    value={formData.telephone}
-                    onChange={handleChange}
-                />
-                <button
-                    onClick={handleSubmit}
-                    className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"
-                >
-                    Submit
-                </button>
-            </div>
+                    {/* Table */}
+                    <div className="bg-white p-4 shadow rounded-xl mb-6">
+                        <h2 className="text-xl font-semibold mb-3">Directory Table</h2>
+                        <div className="overflow-x-auto max-h-80 scrollbar-thin">
+                            <table className="w-full border-collapse text-sm">
+                                <thead className="sticky top-0">
+                                <tr className="bg-gray-100 text-gray-700">
+                                    <th className="border-b px-3 py-2 text-left font-medium">ID</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Name</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Services</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Location</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Telephone</th>
+                                </tr>
+                                </thead>
+                                <tbody className="divide-y">
+                                {directories?.length > 0 ? (
+                                    directories.map((dir) => (
+                                        <tr key={dir.id} className="hover:bg-gray-50">
+                                            <td className="px-3 py-2">{dir.id}</td>
+                                            <td className="px-3 py-2">{dir.name}</td>
+                                            <td className="px-3 py-2">{dir.services}</td>
+                                            <td className="px-3 py-2">{dir.location}</td>
+                                            <td className="px-3 py-2">{dir.telephone}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" className="px-3 py-4 text-center text-gray-500">
+                                            No entries found
+                                        </td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-            {/* bar chart for service request form */}
-            <ChartContainer
-                config={serviceRequestConfig}
-                className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
-            >
-                <BarChart data={serviceRequestData} margin={{ top: 20, right: 30, left: 20, bottom: 70 }}>
-                    <XAxis
-                        dataKey="type"
-                        tickLine={false}
-                        tickMargin={18}
-                        axisLine={false}
-                        angle={-45}
-                        textAnchor="end"
-                        height={65}
-                        tick={{ fontSize: 13, fontWeight: 500, fill: "var(--color-foreground)" }}
-                    />
-                    <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={10}
-                        tick={{ fill: "var(--color-foreground)" }}
-                    />
-                    <CartesianGrid vertical={false} strokeDasharray="4" opacity={0.15} />
-                    <Bar
-                        dataKey="style"
-                        radius={[6, 6, 0, 0]}
-                        fill="rgba(124, 58, 237, 0.7)"
-                        stroke="rgba(124, 58, 237, 0.9)"
-                        strokeWidth={1}
-                    />
-                    <Bar
-                        dataKey="number"
-                        radius={[6, 6, 0, 0]}
-                        strokeWidth={1}
+                <div className="w-[40%]">
+                    {/* bar chart for service request form */}
+                    <ChartContainer
+                        config={serviceRequestConfig}
+                        className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
                     >
-                        {serviceRequestData.map((entry, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={[
-                                    "rgba(59, 130, 246, 0.8)",
-                                    "rgba(16, 185, 129, 0.8)",
-                                    "rgba(245, 158, 11, 0.8)",
-                                    "rgba(217, 70, 239, 0.8)",
-                                    "rgba(6, 182, 212, 0.8)",
-                                    "rgba(244, 63, 94, 0.8)",
-                                ][index % 6]}
-                                stroke={[
-                                    "rgba(59, 130, 246, 1)",
-                                    "rgba(16, 185, 129, 1)",
-                                    "rgba(245, 158, 11, 1)",
-                                    "rgba(217, 70, 239, 1)",
-                                    "rgba(6, 182, 212, 1)",
-                                    "rgba(244, 63, 94, 1)",
-                                ][index % 6]}
+                        <BarChart data={serviceRequestData} margin={{ top: 20, right: 30, left: 20, bottom: 70 }}>
+                            <XAxis
+                                dataKey="type"
+                                tickLine={false}
+                                tickMargin={18}
+                                axisLine={false}
+                                angle={-45}
+                                textAnchor="end"
+                                height={65}
+                                tick={{ fontSize: 13, fontWeight: 500, fill: "var(--color-foreground)" }}
                             />
-                        ))}
-                    </Bar>
-                    <ChartTooltip
-                        content={<ChartTooltipContent />}
-                        cursor={{ fill: "var(--color-primary)", opacity: 0.05 }}
-                    />
-                </BarChart>
-            </ChartContainer>
+                            <YAxis
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={10}
+                                tick={{ fill: "var(--color-foreground)" }}
+                            />
+                            <CartesianGrid vertical={false} strokeDasharray="4" opacity={0.15} />
+                            <Bar
+                                dataKey="style"
+                                radius={[6, 6, 0, 0]}
+                                fill="rgba(124, 58, 237, 0.7)"
+                                stroke="rgba(124, 58, 237, 0.9)"
+                                strokeWidth={1}
+                            />
+                            <Bar
+                                dataKey="number"
+                                radius={[6, 6, 0, 0]}
+                                strokeWidth={1}
+                            >
+                                {serviceRequestData.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={[
+                                            "#003a96",
+                                            "#009ca6",
+                                            "#003a96",
+                                            "#009ca6",
+                                            "#003a96",
+                                            "#009ca6",
+                                        ][index % 6]}
+                                        stroke={[
+                                            "#003a96",
+                                            "#009ca6",
+                                            "#003a96",
+                                            "#009ca6",
+                                            "#003a96",
+                                            "#009ca6",
+                                        ][index % 6]}
+                                    />
+                                ))}
+                            </Bar>
+                            <ChartTooltip
+                                content={<ChartTooltipContent />}
+                                cursor={{ fill: "var(--color-primary)", opacity: 0.05 }}
+                            />
+                        </BarChart>
+                    </ChartContainer>
 
-            <div className="w-full p-5 flex flex-col gap-4">
-                <ImportAllNodesAndEdges />
-            </div>
+                    {/*import*/}
+                    <div className="w-full p-5 flex flex-col gap-4">
+                        <ImportAllNodesAndEdges />
+                    </div>
 
-            {/*Export CSV */}
-            <div className="mb-6 bg-white p-4 shadow rounded">
-                <h2 className="text-xl font-semibold mb-2">Export CSV</h2>
-                <button
-                    onClick={downloadCSV}
-                    disabled={isLoading}
-                    className="bg-[#003a96] hover:bg-blue-950 text-white px-3 py-2 rounded mt-2 font-[Poppins]"
-                >
-                    Export CSV
-                </button>
-            </div>
-
-            {/* Table */}
-            <div className="bg-white p-4 shadow rounded">
-                <h2 className="text-xl font-semibold mb-4">Directory Table</h2>
-                <table className="w-full border border-collapse">
-                    <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border px-4 py-2">ID</th>
-                        <th className="border px-4 py-2">Name</th>
-                        <th className="border px-4 py-2">Services</th>
-
-                        <th className="border px-4 py-2">Location</th>
-                        <th className="border px-4 py-2">Telephone</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {directories?.map((dir) => (
-                        <tr key={dir.id}>
-                            <td className="border px-4 py-2">{dir.id}</td>
-                            <td className="border px-4 py-2">{dir.name}</td>
-                            <td className="border px-4 py-2">{dir.services}</td>
-                            <td className="border px-4 py-2">{dir.location}</td>
-                            <td className="border px-4 py-2">{dir.telephone}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+                    {/*Export CSV */}
+                    <h2 className="text-xl font-semibold mb-2">Export CSV</h2>
+                    <button
+                        onClick={downloadDirectories}
+                        disabled={isLoading}
+                        className="bg-[#003a96] hover:bg-blue-950 text-white px-3 py-2 rounded mt-2 font-[Poppins]"
+                    >
+                        Export CSV
+                    </button>
+                </div>
             </div>
         </div>
     );

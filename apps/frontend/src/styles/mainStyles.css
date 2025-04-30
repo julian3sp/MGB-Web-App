@@ -8,6 +8,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@plugin 'tailwind-scrollbar';
+
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -80,6 +82,18 @@
 }
 
 @theme inline {
+    --animate-move: move 5s linear infinite;
+
+    @keyframes move {
+        0% {
+            transform: translateX(-200px);
+        }
+
+        100% {
+            transform: translateX(200px);
+        }
+    }
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -122,6 +136,7 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }
@@ -175,20 +190,32 @@
     }
 }
 
+/* Hide scrollbar but still allow scrolling */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;      /* Firefox */
+}
+
+
 @layer base {
     * {
         @apply border-border;
     }
+
     body {
         @apply bg-background text-foreground;
     }
 }
 
-.navBar{
-    .logo{
+.navBar {
+    .logo {
         height: 100%;
         background-color: #003a96;
     }
+
     .servBut {
         font-size: 0.875rem;
         line-height: 1.25rem;
@@ -199,11 +226,13 @@
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms
     }
+
     .servBut:hover {
         background-color: #003a96;
         color: #fff;
     }
-    .notSignedIn{
+
+    .notSignedIn {
         font-size: 0.875rem;
         line-height: 1.25rem;
         color: #000;
@@ -213,11 +242,13 @@
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms
     }
+
     .notSignedIn:hover {
         background-color: #003a96;
         color: #fff;
     }
-    .signedIn{
+
+    .signedIn {
         font-size: 0.875rem;
         line-height: 1.25rem;
         color: #000;
@@ -233,17 +264,17 @@
     }
 
 
-    .signedIn:hover{
+    .signedIn:hover {
         display: block;
         background-color: #003a96;
         color: #fff;
     }
 
-    .signedIn:hover .defaultSign{
+    .signedIn:hover .defaultSign {
         display: none;
     }
 
-    .signedIn:hover .hover-text{
+    .signedIn:hover .hover-text {
         display: block;
     }
 }

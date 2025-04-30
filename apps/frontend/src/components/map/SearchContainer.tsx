@@ -90,7 +90,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
           placeholder={placeholder}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          className="w-full py-2.5 px-4 border-none rounded-3xl text-sm outline-none bg-transparent"
+          className="w-full py-2.5 px-4 border-none rounded-3xl font-[poppins] text-sm outline-none bg-transparent"
           onFocus={() => setShowRecent(true)}
           onBlur={() => setTimeout(() => setShowRecent(false), 200)}
         />
@@ -110,8 +110,8 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
                 setShowRecent(false);
               }}
             >
-              <span className="material-icons text-blue-500 mr-3">my_location</span>
-              <span className="text-sm text-gray-700">Your location</span>
+              <span className="material-icons font-[poppins] text-blue-500 mr-3">my_location</span>
+              <span className="text-sm font-[poppins] text-gray-700">Your location</span>
             </div>
             
             {/* Recent searches */}
@@ -122,7 +122,7 @@ const SearchContainer: React.FC<SearchContainerProps> = ({
                 onClick={() => handleRecentSearchClick(search)}
               >
                 <span className="material-icons text-gray-400 mr-3">history</span>
-                <span className="text-sm text-gray-700">{search.name}</span>
+                <span className="text-sm font-[poppins] text-gray-700">{search.name}</span>
               </div>
             ))}
           </div>

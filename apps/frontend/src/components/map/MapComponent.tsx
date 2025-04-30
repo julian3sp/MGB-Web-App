@@ -6,7 +6,9 @@ import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 import DirectionsGuide from './DirectionsGuide.tsx';
-import {trpc} from "../../lib/trpc"
+import {trpc} from "@/lib/trpc.ts"
+import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
+import PageWrapper from "@/components/ui/PageWrapper.tsx";
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -131,13 +133,71 @@ const MapComponent: React.FC = () => {
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
       setSelectedDepartment(department);
 
-      const departmentMapping: Record<string, number> = {
-        'Multi-Specialty Clinic': 912,
-        'Radiology': 80,
-        'Radiology, MRI/CT Scan': 66
+    function getDeptNum():number {
+      const CNdepartmentMapping: Record<string, number> = {
+        'Entrance': 3900,
+        'Multi-Specialty Clinic': 3734,
+        'Radiology': 3059,
+        'MRI': 3113,
+        'CT': 3136,
+        'Laboratory': 3781
       };
 
-      const deptNum = departmentMapping[department.name];
+      const Pat20departmentMapping: Record<string, number> = {
+        'Blood Draw / Phlebotomy': 714,
+        'Pharmacy': 694,
+        'Radiology': 535,
+        'Urgent Care Center': 817,
+        'Cardio Vascular Services': 859,
+        'Urology': 859,
+        'Main Entrance': 1139,
+        'South Entrance': 1027,
+        'Main Staircase': 1055,
+        'Main Checkin': 697,
+        'Reception': 814,
+        'East Checkin': 979,
+        'East Checkin 2': 988,
+        'East Elevator': 1063,
+        'East Staircase': 1063,
+        'East Entrance': 813,
+        'North Staircase': 54
+      };
+      const Pat22departmentMapping: Record<string, number> = {
+        'Gynecology': 1604,
+        'Lactation': 1817,
+        'Vein Treatment': 1798
+      };
+      const FaulknerMapping: Record<string, number> = {
+        'Admitting/Registration': 4059,
+        'Audiology': 4154,
+        'Blood Drawing Lab': 4163,
+        'Cardiac Rehab': 4181,
+        'Emergency Department': 4300,
+        'Endoscopy': 4344,
+        'MRI/CT': 4118,
+        'Pre-Admittance Screening': 4147,
+        'Pulmonary Lab': 4291,
+        'Radiology': 4108,
+        'Special Testing': 4316,
+        'Vascular Lab': 4354
+      };
+
+      if(selectedPlace?.name === null) {
+        console.error("No location selected");
+      }else if(selectedPlace?.name === "MGB (Chestnut Hill)"){
+        return CNdepartmentMapping[department.name];
+      } else if(selectedPlace?.name === "20 Patriot Place"){
+        return Pat20departmentMapping[department.name];
+      } else if(selectedPlace?.name === "22 Patriot Place"){
+        return Pat22departmentMapping[department.name];
+      } else if(selectedPlace?.name === "Faulkner"){
+        return FaulknerMapping[department.name];
+      }
+      console.log("Issues in finding dept node")
+      return 0;
+    }
+
+      const deptNum = getDeptNum();
       if (deptNum) {
         setDeptNumber(deptNum);
       } else {
@@ -190,9 +250,7 @@ const MapComponent: React.FC = () => {
     const request: google.maps.DirectionsRequest = {
       origin: start.location,
       destination: end.location,
-      travelMode: google.maps.DirectionsTravelMode[
-        selectedTransport.toUpperCase() as keyof typeof google.maps.DirectionsTravelMode
-      ],
+      travelMode: selectedTransport.toUpperCase() as google.maps.TravelMode,
     };
   
     console.log('Calculating route with request:', request);
@@ -276,94 +334,79 @@ const MapComponent: React.FC = () => {
   }, [selectedTransport, startLocation, selectedPlace]);
 
   return (
-    <div className="flex h-screen">
-      {/* Left Column: Search area */}
-      <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto" style={{maxHeight: '200vh'}}>
-        <h2 className="font-bold text-center">Enter your location and destination</h2>
+      <PageWrapper open={true}
+                   contents=
+                       {
+        // put sidebar contents here:</p>
+        <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
+          <GoogleMapSection
+              startLocation={startLocation}
+              selectedPlace={selectedPlace}
+              selectedTransport={selectedTransport}
+              travelTimes={travelTimes}
+              mapInstance={mapInstance}
+              handleStartLocationSelected={handleStartLocationSelected}
+              handleDestinationSelected={handleDestinationSelected}
+              handleViewMap={handleViewMap}
+              onTransportChange={(mode) => {
+                setSelectedTransport(mode);
+                if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer)
+                {displayRouteOnMap(startLocation, selectedPlace);}
+              }}
+              handleGetCurrentLocation={handleGetCurrentLocation}/>
+          {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
-        <GoogleMapSection
-          startLocation={startLocation}
-          selectedPlace={selectedPlace}
-          selectedTransport={selectedTransport}
-          travelTimes={travelTimes}
-          mapInstance={mapInstance}
-          handleStartLocationSelected={handleStartLocationSelected}
-          handleDestinationSelected={handleDestinationSelected}
-          handleViewMap={handleViewMap}
-          onTransportChange={(mode) => {
-            setSelectedTransport(mode);
-            if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) {
-              displayRouteOnMap(startLocation, selectedPlace);
-            }
-          }}
-          handleGetCurrentLocation={handleGetCurrentLocation}
-        />
-        
-        {directionsResult && (
-          <DirectionsGuide directions={directionsResult} />
-        )}
+          {/* Select Department dropdown */}
+          <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center">Select a department</h2>
+          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name ?? ""} />
+        </div>}
+                   scaling = {4}
+                   absolute={false}>
 
         {/* Hospital Map Section */}
-        <div className="flex flex-col mt-10 ">
-          <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
-          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} />
-          {showHospitalMap && (
-            <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
-              <div className="flex flex-col gap-2">
-                <div className="text-md font-medium font-bold mb-2">Map Legend</div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                    alt="Your Location"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Your Location</span>
+        <div className="flex">
+          <div className="flex flex-col">
+            {showHospitalMap && (
+                <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="text-md font-medium font-bold mb-2">Map Legend</div>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                        alt="Your Location"
+                        className="w-6 h-6"
+                      />
+                      <span className="text-sm text-gray-600 font-bold">Your Location</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                        alt="Destination"
+                        className="w-6 h-6"
+                      />
+                      <span className="text-sm text-gray-600 font-bold">Destination</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    alt="Destination"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Destination</span>
-                </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
-
         {error && <div className="text-red-500">{error}</div>}
       </div>
 
       {/* Right Column: Map area */}
-      <div className="w-3/4 relative">
-        <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <MapRenderer 
-            onMapReady={handleMapReady} 
-            selectedDestination={selectedPlace} 
-            onZoomChange={handleZoomChange}
-            selectedFloor={selectedFloor}
-            onFloorChange={handleFloorSelect}
-            departmentNumber={deptNumber}
-          />
-          {/* We don't need the FloorSelector component since we have it in HospitalViewControls now */}
-        </div>
-        <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-[#003a96] font-medium">Loading map...</p>
-          </div>
-        </div>
-        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 transition-all duration-500 ease-in-out ${showMap || showHospitalMap || isLoading ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
-          <div className="z-10 -mt-80 text-black">
-            {showText && <TextGenerateEffectDemo />}
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <DisplayLottie />
-          </div>
-        </div>
+      <div className="w-full relative">
+        <MapRenderer
+          onMapReady={handleMapReady}
+          selectedDestination={selectedPlace}
+          onZoomChange={handleZoomChange}
+          selectedFloor={selectedFloor}
+          onFloorChange={handleFloorSelect}
+          departmentNumber={deptNumber}
+          disableDoubleClickZoom={true}
+        />
       </div>
-    </div>
+      </PageWrapper>
   );
 };
 

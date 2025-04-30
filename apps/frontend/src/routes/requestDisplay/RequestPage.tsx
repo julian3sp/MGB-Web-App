@@ -1,13 +1,10 @@
-import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from './RequestListPage.tsx';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
-import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
-
+import PlusIcon from '../../../assets/PlusIcon.png';
+import CustomSwitch from '@/components/ui/CustomSwitch.tsx';
 
 //Handles closing the filter popup when you click outside the popup
 const useClickOutside = (handler: () => void) => {
@@ -57,6 +54,8 @@ export default function RequestPage() {
         { label: 'Audio/Visual', value: 'AudioVisual' },
         { label: 'Sanitation', value: 'Sanitation' },
         { label: 'Security', value: 'Security' },
+        { label: 'Medical Device', value: 'MedicalDevice' },
+        { label: 'Facilities', value: 'Facilities' },
     ];
 
     const { data, isLoading, error } = trpc.requestList.useQuery();
@@ -75,61 +74,64 @@ export default function RequestPage() {
         setShowFilterPanel(!showFilterPanel);
     };
 
+    const handleNewRequestClick = () => navigate('/services');
+
     const filterRef = useClickOutside(() => {
         setShowFilterPanel(false);
     });
+
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
 
     return (
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
             <div
-                className="border min-vh-10 bg-white mr-8 ml-8 mb-1 font-[Poppins] py-4"
+                className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
                 style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
-                <div className="flex gap-4 justify-between pl-4 pr-4 pb-2 pt-1 items-end">
-                    <h1
-                        className="text-4xl font-bold font-[Poppins] text-left"
-                        style={{ color: '#003A96' }}
-                    >
-                        Service Requests:
-                    </h1>
-
-                    <div className="flex items-end gap-8 z-100">
-                        <div className="flex flex-col mb-[-10px]">
-                            <Switch
-                                checked={currentView === 'list'}
-                                onCheckedChange={() => {
-                                    toggleActive();
-                                    if (currentView === 'list') {
-                                        navigate('table');
-                                    } else {
-                                        navigate('list');
-                                    }
-                                }}
-                                className="mx-auto"
-                                style={{
-                                    backgroundColor: currentView === 'table' ? '' : '#003A96',
-                                }}
-                            />
-                            <div>
-                                <p className="whitespace-nowrap text-sm font-[Poppins] py-1">
-                                    Switch view
-                                </p>
+                <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
+                    <div>
+                        <h1
+                            className="text-4xl font-bold font-[Poppins]  text-left"
+                            style={{ color: '#003A96' }}
+                        >
+                            Service Requests:
+                        </h1>
+                    </div>
+                    <div className="flex items-end gap-10 z-100">
+                        <button
+                            onClick={handleNewRequestClick}
+                            className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-fit h-[50px]"
+                        >
+                            <div className={'container'}>
+                                <img
+                                    src={PlusIcon}
+                                    alt="(Plus icon)"
+                                    className="h-7 inline-flex filter invert w-[18px] h-[18px]"
+                                />
+                                <p className="inline-flex ml-1">New Request</p>
                             </div>
-                        </div>
+                        </button>
 
                         <div ref={filterRef} className="flex flex-row gap-4">
-                            <div className="relative">
+                            <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-2 border rounded text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[12px] border border-blue-950 rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
-                                    <div className={"container"}><img src={FilterIcon} alt="(Filter icon)"  className="h-7 inline-flex filter invert"/> <p className="inline-flex ml-1">Filters</p></div>
+                                    <div className={'container'}>
+                                        <img
+                                            src={FilterIcon}
+                                            alt="(Filter icon)"
+                                            className="h-7 inline-flex filter invert"
+                                        />{' '}
+                                        <p className="inline-flex ml-1">Filters</p>
+                                    </div>
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-4 w-[450px]">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-light-subtle rounded-lg shadow-2xl p-4 pb-0 w-[450px] max-h-[450px] overflow-y-auto">
                                         <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests
@@ -145,9 +147,9 @@ export default function RequestPage() {
                                                         department: [],
                                                     })
                                                 }
-                                                className="px-4 py-2 border rounded text-white bg-red-600 hover:bg-red-800 w-[130px]"
+                                                className="px-4 py-[10px] border-2 border-[#003a96] rounded-4xl text-[#003a96] hover:bg-gray-200 bg-white w-[130px]"
                                             >
-                                                Clear
+                                                Reset
                                             </button>
                                         </div>
 
@@ -298,33 +300,36 @@ export default function RequestPage() {
                                             <p className="font-semibold mb-2">Department:</p>
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                                                 {[
-                                                    'Laboratory',
-                                                    'Multi-Specialty Clinic',
-                                                    'Radiology',
-                                                    'Radiology, MRI/CT Scan',
-                                                ].map((dep) => (
+                                                    ...new Set(
+                                                        departmentsRaw?.map((dep) => dep.name)
+                                                    ),
+                                                ].map((depName) => (
                                                     <label
-                                                        key={dep}
+                                                        key={depName}
                                                         className="flex items-start text-sm"
                                                     >
                                                         <input
                                                             type="checkbox"
                                                             checked={filters.department.includes(
-                                                                dep
+                                                                depName
                                                             )}
                                                             onChange={(e) => {
                                                                 setFilters((prev) => ({
                                                                     ...prev,
                                                                     department: e.target.checked
-                                                                        ? [...prev.department, dep]
+                                                                        ? [
+                                                                              ...prev.department,
+                                                                              depName,
+                                                                          ]
                                                                         : prev.department.filter(
-                                                                              (item) => item !== dep
+                                                                              (item) =>
+                                                                                  item !== depName
                                                                           ),
                                                                 }));
                                                             }}
                                                             className="mt-[2px] mr-2"
                                                         />
-                                                        {dep}
+                                                        {depName}
                                                     </label>
                                                 ))}
                                             </div>
@@ -333,9 +338,22 @@ export default function RequestPage() {
                                 )}
                             </div>
                         </div>
+                        <div className="flex flex-col items-center">
+                            <CustomSwitch
+                                checked={currentView === 'list'}
+                                onCheckedChange={() => {
+                                    toggleActive();
+                                    if (currentView === 'table') {
+                                        navigate('list');
+                                    } else {
+                                        navigate('table');
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-                <div className="py-1">
+                <div>
                     <Outlet />
                 </div>
             </div>

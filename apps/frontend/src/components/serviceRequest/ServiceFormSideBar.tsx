@@ -8,7 +8,10 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
     };
 
     return (
-        <div>
+        <div className=" p-5">
+            <h3 className="text-2xl font-bold mb-4 pt-2 font-[Poppins]"
+                style={{ color: '#003A96' }}>Menu:</h3>
+
             <SideBarButton
                 label={'Language Interpreter Service Form'}
                 onClick={() => handleFormRequest({
@@ -46,6 +49,22 @@ export default function ServiceFormSideBar({activeTab, setActiveTab}: {activeTab
                     title: "Audio/Visual Request Form",
                 })}
                 type="AudioVisual"
+            />
+            <SideBarButton
+                label={'Medical Device Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "MedicalDevice",
+                    title: "Medical Device Request Form",
+                })}
+                type="MedicalDevice"
+            />
+            <SideBarButton
+                label={'Facilities Request Form'}
+                onClick={() => handleFormRequest({
+                    type: "Facilities",
+                    title: "Facilities Request Form",
+                })}
+                type="Facilities"
             />
         </div>
     );

@@ -4,7 +4,12 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { getRequests, makeRequest } from './server/procedures/requests';
+import {
+    getRequests,
+    makeRequest,
+    deleteRequest,
+    updateRequest,
+} from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
@@ -12,10 +17,26 @@ import {
     deleteAllDirectories,
     getDirectories,
     getUniqueDirectories,
+    getAllNamesArray,
     makeDirectories,
 } from './server/procedures/directories.ts';
-import { deleteAllNodes, getAllNodes, getNode, makeNode } from './server/procedures/nodes.ts';
-import { deleteAllEdges, getAllEdges, makeEdge } from './server/procedures/edges.ts';
+import {
+    deleteAllNodes,
+    deleteSelectedNodes,
+    editNodes,
+    getAllNodes,
+    getNode,
+    makeManyNodes,
+    makeNode,
+} from './server/procedures/nodes.ts';
+import {
+    deleteAllEdges,
+    deleteSelectedEdges,
+    getAllEdges,
+    makeEdge,
+    makeManyEdges,
+} from './server/procedures/edges.ts';
+import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -25,21 +46,31 @@ const cors = require('cors');
 const appRouter = t.router({
     requestList: getRequests,
     createRequest: makeRequest,
+    deleteRequest: deleteRequest,
+    updateRequest: updateRequest,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,
+    getAllNamesArray: getAllNamesArray,
     getDirectories: getDirectories,
     getUniqueDirectory: getUniqueDirectories,
     deleteAllDirectories: deleteAllDirectories,
     makeNode: makeNode,
+    makeManyNodes: makeManyNodes,
     getNode: getNode,
     getAllNodes: getAllNodes,
+    editNodes: editNodes,
     deleteAllNodes: deleteAllNodes,
+    deleteSelectedNodes: deleteSelectedNodes,
     makeEdge: makeEdge,
+    makeManyEdges: makeManyEdges,
     getAllEdges: getAllEdges,
     deleteAllEdges: deleteAllEdges,
+    deleteSelectedEdges: deleteSelectedEdges,
+    getAlgoType: getAlgoType,
+    setAlgoType: setAlgoType,
 });
 
 const app: Express = express(); // Set up the backend

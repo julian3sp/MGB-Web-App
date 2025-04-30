@@ -5,6 +5,7 @@ import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import EditRequest from '@/components/ui/EditRequest.tsx';
+import ViewRequest from '@/components/ui/ViewRequest.tsx';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers
@@ -37,8 +38,31 @@ const useClickOutside = (handler: () => void) => {
     return reference;
 };
 
-export default function RequestTablePage() {
+export default function RequestTablePage({userRole}:{userRole: string}) {
     const { filteredData, isLoading, error } = useRequestData();
+    const deleteRequest = trpc.deleteRequest.useMutation();
+    const handleDelete = (selectedRequest: ServiceRequest) => {
+        console.log('Trying to delete:', selectedRequest);
+
+        if (!selectedRequest?.request_id) {
+            console.error('No request selected or ID is missing');
+            return;
+        }
+
+        deleteRequest.mutate(
+            { request_id: selectedRequest.request_id },
+            {
+                onSuccess: () => {
+                    console.log('Request deleted');
+                    //window.location.reload();
+                    window.location.href = 'http://localhost:3000/requests/table';
+                },
+                onError: (error) => {
+                    console.error('Error deleting request:', error);
+                },
+            }
+        );
+    };
 
     // Prop for column to sort by, has to be one of following columns
     const [sortKey, setSortKey] = useState<
@@ -59,9 +83,11 @@ export default function RequestTablePage() {
 
     // Input a service request, sets page to detailed view with that service request selected.
     const navigate = useNavigate();
-    const sendToDetailedView = (highlightedRequest: ServiceRequest) => {
+    const sendToDetailedView = (highlightedRequest: ServiceRequest, editMode: boolean) => {
         console.log(highlightedRequest);
-        navigate('/requests/list', { state: { ServiceRequest: highlightedRequest, editMode: true } });
+        navigate('/requests/list', {
+            state: { ServiceRequest: highlightedRequest, editMode: editMode },
+        });
     };
 
     // Edit & Delete menu props
@@ -129,23 +155,17 @@ export default function RequestTablePage() {
 
     //Table page
     return (
-        <nav className="flex flex-1">
-            <nav
-                className="w-full max-h-[105vh] bg-white p-6 font-[Poppins]"
-                style={{
-                    borderTop: 'none',
-                    borderBottom: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                }}
+        <div className="flex flex-1  mt-0">
+            <div
+                className="w-full  min-h-screen p-6 pl-4 pr-4 font-[Poppins]"
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden border border-gray-300 max-h-5/6 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
-                            <thead className="bg-gray-200 sticky top-0 z-20">
+                            <thead className="bg-[#003A96] sticky top-0 z-20 border-b-5 border-b-[#44A6A6]">
                                 <tr>
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
@@ -159,7 +179,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             ID {sortKey === 'request_id' && (ascending ? '↑' : '↓')}
                                         </h3>
@@ -178,7 +198,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins] break-words"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Request Type{' '}
                                             {sortKey === 'request_type' && (ascending ? '↑' : '↓')}
@@ -197,21 +217,21 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Priority{' '}
                                             {sortKey === 'priority' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300  break-words">
-                                        <h3
-                                            className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
-                                        >
-                                            Request Details
-                                        </h3>
-                                    </th>
+                                    {/*<th className="p-4 border-b border-gray-300  break-words">*/}
+                                    {/*    <h3*/}
+                                    {/*        className="block text-lg font-semibold font-[Poppins]"*/}
+                                    {/*        style={{ color: '#ffffff' }}*/}
+                                    {/*    >*/}
+                                    {/*        Request Details*/}
+                                    {/*    </h3>*/}
+                                    {/*</th>*/}
 
                                     <th
                                         className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
@@ -225,7 +245,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Location{' '}
                                             {sortKey === 'location' && (ascending ? '↑' : '↓')}
@@ -233,7 +253,7 @@ export default function RequestTablePage() {
                                     </th>
 
                                     <th
-                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300  break-words"
+                                        className="cursor-pointer hover:underline p-4 border-b border-gray-300 break-words"
                                         onClick={() => {
                                             if (sortKey === 'department') setAscending(!ascending);
                                             else {
@@ -244,7 +264,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Department{' '}
                                             {sortKey === 'department' && (ascending ? '↑' : '↓')}
@@ -263,7 +283,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Name (ID){' '}
                                             {sortKey === 'name' && (ascending ? '↑' : '↓')}
@@ -283,7 +303,7 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Request Date{' '}
                                             {sortKey === 'request_date' && (ascending ? '↑' : '↓')}
@@ -302,24 +322,29 @@ export default function RequestTablePage() {
                                     >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Status {sortKey === 'status' && (ascending ? '↑' : '↓')}
                                         </h3>
                                     </th>
 
-                                    <th className="p-4 border-b border-gray-300  break-words">
+                                    <th className="p-4 border-b border-gray-300 break-words">
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Additional Comments
                                         </h3>
                                     </th>
-                                    <th className="p-4 border-b border-gray-300  bg-gray-200 sticky right-0 z-10 text-center">
+                                    <th
+                                        className="p-4 border-b border-gray-300 sticky right-0 z-20 text-center bg-[#003A96]"
+                                        style={{
+                                            boxShadow: '-1px 0 0 #ffffff',
+                                        }}
+                                    >
                                         <h3
                                             className="block text-lg font-semibold font-[Poppins]"
-                                            style={{ color: '#003A96' }}
+                                            style={{ color: '#ffffff' }}
                                         >
                                             Manage
                                         </h3>
@@ -330,17 +355,17 @@ export default function RequestTablePage() {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100 pt-0 pb-0"
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-[#B8D9D9]"
                                     >
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.request_id}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words max-w-[200px] pt-0 pb-2">
-                                            <p className="block font-[Poppins] text-med text-blue-gray-900 font-semibold">
-                                                <i>
+                                        <td className="p-2 break-words max-w-[200px] pt-2 pb-2">
+                                            <p className="block font-[Poppins] text-med text-blue-gray-900 ">
+                                                <p>
                                                     {res.request_type === 'Sanitation'
                                                         ? 'Sanitation'
                                                         : res.request_type === 'Transportation'
@@ -351,162 +376,197 @@ export default function RequestTablePage() {
                                                               ? 'Audio/Visual Accommodations'
                                                               : res.request_type === 'Language'
                                                                 ? 'Language Interpreter ️'
-                                                                : 'N/A'}
-                                                </i>
+                                                                : res.request_type ===
+                                                                    'MedicalDevice'
+                                                                  ? 'Medical Device'
+                                                                  : res.request_type ===
+                                                                      'Facilities'
+                                                                    ? 'Facilities'
+                                                                    : 'N/A'}
+                                                </p>
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[110px] pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-2 pb-2">
                                             <p
-                                                className={`block font-[Poppins] text-med font-semibold ${
-                                                    res.priority === 'Low'
-                                                        ? 'text-green-600'
-                                                        : res.priority === 'Medium'
-                                                          ? 'text-yellow-500'
-                                                          : res.priority === 'High'
-                                                            ? 'text-red-500'
-                                                            : res.priority === 'Emergency'
-                                                              ? 'text-red-700 underline'
-                                                              : 'text-blue-gray-900'
-                                                }`}
                                             >
                                                 {res.priority}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[225px] pt-0 pb-2">
-                                            <div className="font-[Poppins] text-med text-blue-gray-900 space-y-1">
-                                                {res.sanitation?.cleaningType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Cleaning Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.sanitation.cleaningType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.language?.targetLanguage && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Target Language:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.language.targetLanguage}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.audioVisual?.accommodationType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Accommodation Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.audioVisual.accommodationType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.transportation?.transportationType && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Transportation Type:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.transportation.transportationType}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.security?.accessZones && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Access Zones:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.security.accessZones}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.request_type === 'Sanitation' && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Contaminant:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.sanitation?.contaminant?.trim()
-                                                                ? res.sanitation.contaminant
-                                                                : 'N/A'}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.language?.sourceLanguage && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Source Language:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.language.sourceLanguage}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.request_type === 'AudioVisual' && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Accommodation Details:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.audioVisual?.accommodationDetails?.trim()
-                                                                ? res.audioVisual
-                                                                      .accommodationDetails
-                                                                : 'N/A'}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.transportation?.transportationDestination && (
-                                                    <div className="pl-4">
-                                                        <span className="underline w-45 pl-4">
-                                                            <ul>Transportation Destination:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {
-                                                                res.transportation
-                                                                    .transportationDestination
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-                                                {res.security?.securityIssue && (
-                                                    <div className="pl-4">
-                                                        <span className="underline pl-4">
-                                                            <ul>Security Issue:</ul>
-                                                        </span>
-                                                        <p className="pl-4 py-2">
-                                                            {res.security.securityIssue}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            {/*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 */}
-                                        </td>
+                                        {/*<td className="p-4  break-words max-w-[225px] pt-2 pb-1">*/}
+                                        {/*    <div className="font-[Poppins] text-med text-blue-gray-900 space-y-0">*/}
+                                        {/*        {res.sanitation?.cleaningType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Cleaning Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.sanitation.cleaningType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.language?.targetLanguage && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Target Language:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.language.targetLanguage}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.audioVisual?.accommodationType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Accommodation Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.audioVisual.accommodationType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.transportation?.transportationType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Transportation Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.transportation.transportationType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.security?.accessZones && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Access Zones:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.security.accessZones}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.medicalDevice?.device && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Medical Device:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.medicalDevice.device}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.facilities?.maintenanceType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Maintenance Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.facilities.maintenanceType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.request_type === 'Sanitation' && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Contaminant:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.sanitation?.contaminant?.trim()*/}
+                                        {/*                        ? res.sanitation.contaminant*/}
+                                        {/*                        : 'N/A'}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.language?.sourceLanguage && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Source Language:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.language.sourceLanguage}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.request_type === 'AudioVisual' && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Accommodation Details:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.audioVisual?.accommodationDetails?.trim()*/}
+                                        {/*                        ? res.audioVisual*/}
+                                        {/*                              .accommodationDetails*/}
+                                        {/*                        : 'N/A'}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.transportation?.transportationDestination && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Transportation Destination:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {*/}
+                                        {/*                        res.transportation*/}
+                                        {/*                            .transportationDestination*/}
+                                        {/*                    }*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.security?.securityIssue && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline pl-4">*/}
+                                        {/*                    <ul>Security Issue:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.security.securityIssue}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.medicalDevice?.operatorRequired && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Operator Required?</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.medicalDevice.operatorRequired}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*        {res.facilities?.equipmentType && (*/}
+                                        {/*            <div className="pl-4">*/}
+                                        {/*                <span className="underline w-45 pl-4">*/}
+                                        {/*                    <ul>Equipment Type:</ul>*/}
+                                        {/*                </span>*/}
+                                        {/*                <p className="pl-4 py-2">*/}
+                                        {/*                    {res.facilities.equipmentType}*/}
+                                        {/*                </p>*/}
+                                        {/*            </div>*/}
+                                        {/*        )}*/}
+                                        {/*    </div>*/}
+                                        {/*    /!*Displays details for specific request types. Fields semibold, spacing consistent with flex & w-35 *!/*/}
+                                        {/*</td>*/}
 
-                                        <td className="p-4  break-words max-w-[150px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.location}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[130px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[130px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.department}
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[150px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.name} ({res.employee_id})
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[50px] pt-0 pb-2">
+                                        <td className="p-4  break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {new Date(res.request_date).toLocaleDateString(
                                                     undefined,
@@ -522,25 +582,17 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="p-4  break-words max-w-[115px] pt-0 pb-2">
+                                        <td className="p-4 break-words w-fit pt-2 pb-2">
                                             <p
                                                 className={`block font-[Poppins] text-med ${
-                                                    res.status === 'Unassigned'
-                                                        ? 'text-gray-500'
-                                                        : res.status === 'Assigned'
-                                                          ? 'text-blue-600'
-                                                          : res.status === 'Working'
-                                                            ? 'text-amber-600'
-                                                            : res.status === 'Done'
-                                                              ? 'text-green-600'
-                                                              : 'text-blue-gray-900'
+                                                    res.status
                                                 }`}
                                             >
                                                 {res.status}
                                             </p>
                                         </td>
 
-                                        <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
+                                        <td className="p-4 break-words max-w-[50px] py-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
                                                 {res.additional_comments?.trim() ? (
                                                     <i>{res.additional_comments}</i>
@@ -550,23 +602,52 @@ export default function RequestTablePage() {
                                             </p>
                                         </td>
 
-                                        <td className="pt-2 pb-2 max-w-[50px] sticky right-0 bg-inherit z-15">
-                                            <div className="flex justify-center gap-2 mx-auto w-fit">
-                                                <EditRequest
-                                                    size={20}
-                                                    onClick={() => {
-                                                        console.log('Edit');
-                                                        setMenuVisible(false);
-                                                        sendToDetailedView(res);
-                                                    }}
-                                                />
+                                        <td
+                                            className="p-4 sticky right-0 z-9 w-fit py-2 pb-1 break-words even:bg-gray-100 odd:bg-white hover:bg-blue-100"
+                                            style={{
+                                                backgroundColor: 'inherit',
+                                                boxShadow: '-1px 0 0 #ffffff',
+                                            }}
+                                        >
+                                            <div className="flex justify-center gap-2">
+                                                <div className={'flex justify-center gap-4'}>
+                                                    <ViewRequest
+                                                        size={25}
+                                                        onClick={() => {
+                                                            console.log('View');
+                                                            setMenuVisible(false);
+                                                            sendToDetailedView(res, false);
+                                                        }}
+                                                        tooltip={'View Service Request'}
+                                                    />
+                                                    <EditRequest
+                                                        size={20}
+                                                        onClick={() => {
+                                                            console.log('Edit');
+                                                            setMenuVisible(false);
+                                                            sendToDetailedView(res, true);
+                                                        }}
+                                                        tooltip={'Edit Service Request'}
+                                                    />
+                                                </div>
                                                 <DeleteRequest
                                                     size={20}
                                                     onClick={() => {
-                                                        console.log('Delete: ');
-                                                        console.log(res);
-                                                        setMenuVisible(false);
+                                                        console.log(
+                                                            userRole
+                                                        );
+                                                        if (
+                                                            userRole === 'Admin'
+                                                        ) {
+                                                            console.log('Delete: ');
+                                                            console.log(res);
+                                                            handleDelete(res);
+                                                            setMenuVisible(false);
+                                                        } else {
+                                                            console.log('Insufficient Permissions');
+                                                        }
                                                     }}
+                                                    tooltip={'Delete Service Request'}
                                                 />
                                             </div>
                                         </td>
@@ -583,8 +664,8 @@ export default function RequestTablePage() {
                         <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
                     </nav>
                 )}
-            </nav>
-        </nav>
+            </div>
+        </div>
     );
 }
 /*email phone#*/

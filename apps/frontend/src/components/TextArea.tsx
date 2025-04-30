@@ -12,7 +12,7 @@ function TextArea({value, setState, placeholder }: TextAreaProps) {
                 value={value}
                 onChange={(e)=>{setState(e.target.value)}}
                 placeholder={placeholder}
-                className="border-[1px] border-[#ececec] shadow border-solid focus:bg-white hover:bg-accent rounded-md py-[20px] pl-[15px] text-[14px] font-[Poppins] resize-none text-[14px] w-full h-full rounded-md"
+                className="border-[1px] bg-white border-[#ececec] shadow border-solid focus:bg-white hover:bg-accent rounded-md py-[20px] pl-[15px] text-[11pt] font-[Poppins] resize-none  w-full h-full rounded-md"
             />
         //removed this if needed for later: hover:border-[#a2caff]
 

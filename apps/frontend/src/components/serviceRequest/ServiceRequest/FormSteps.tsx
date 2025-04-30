@@ -153,7 +153,7 @@ export function FormSteps({
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col border-1 rounded-lg shadow-lg p-5 h-100">
             <div
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"

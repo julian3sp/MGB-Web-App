@@ -10,10 +10,10 @@ export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchP
             {/* true */}
             <button
                 onClick={() => onCheckedChange(true)}
-                className={`px-4 py-3 transition-colors duration-200 w-30 ${
+                className={`px-4 py-3 transition-colors duration-300 w-30 ${
                     checked
-                        ? "bg-white text-[#003A96]"
-                        : "bg-[#003A96] text-white"
+                        ? "bg-white text-[#003a96]"
+                        : "bg-[#003a96] text-white"
                 }`}
             >
                 Table
@@ -22,10 +22,10 @@ export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchP
             {/* false */}
             <button
                 onClick={() => onCheckedChange(false)}
-                className={`px-4 py-2 transition-colors duration-200 w-30 ${
+                className={`px-4 py-2 transition-colors duration-300 w-30 ${
                     !checked
-                        ? "bg-white text-[#003A96]"
-                        : "bg-[#003A96] text-white"
+                        ? "bg-white text-[#003a96]"
+                        : "bg-[#003a96] text-white"
                 }`}
             >
                 List

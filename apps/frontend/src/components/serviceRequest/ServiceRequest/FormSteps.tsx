@@ -142,7 +142,7 @@ export function FormSteps({
     }, [formValid]);
 
     return (
-        <div className="flex m-5 border-1 p-5 bg-white rounded-lg shadow-lg flex-col">
+        <div className="flex border-1 py-6 mt-1 ml-5 bg-white rounded-lg shadow-lg flex-col">
             <div 
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-80 scroll-smooth"
@@ -158,7 +158,7 @@ export function FormSteps({
                         transition={{ duration: 0.5 }}
                         className="flex-grow"
                     >
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-5">
                             <div>
                                 <InputHeader>Name</InputHeader>
                                 <ErrorPopUp
@@ -199,7 +199,7 @@ export function FormSteps({
                         transition={{ duration: 0.5 }}
                         className="flex-grow"
                     >
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-5">
                             <div>
                                 <InputHeader>Location</InputHeader>
                                 <SRQDropdown

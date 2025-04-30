@@ -374,7 +374,7 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center  p-5 text-sm flex flex-row"
+                    className="justify-center text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
@@ -450,10 +450,10 @@ function RequestForm({ title, type }: requestFormProps) {
 
                         )}
 
-                        <div className="flex justify-center gap-6 mt-6">
+                        <div className="flex justify-center gap-6 mt-3">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
-                                    className='w-30 h-12 bg-[#003a96] hover:bg-blue-950 transition text-[13pt] p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'
+                                    className='w-30 h-11 bg-[#003a96] hover:bg-blue-950 transition text-[11pt] p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Back
                                 </button>
@@ -464,19 +464,19 @@ function RequestForm({ title, type }: requestFormProps) {
                                     if (!validateCurrentStep()) return;
                                     setCurrentStep(currentStep + 1);
                                 }}
-                                    className='w-30 h-12 bg-[#003a96] hover:bg-blue-950 text-[13pt] transition p-5 rounded-lg flex items-center justify-center cursor-pointer text-white font-bold'
+                                    className='w-30 h-11 bg-[#003a96] hover:bg-blue-950 text-[11pt] transition p-5 rounded-lg flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Next
                                 </button>
                             )}
                             {currentStep === 4 && (
-                                <button type="submit" className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
+                                <button type="submit" className='w-30 h-11 bg-[#003a96] text-[11pt] hover:bg-blue-950 transition p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'>
                                     Submit
                                 </button>
                             )}
                         </div>
                     </div>
-                    <div className={'p-5 mt-2'}>
+                    <div className={'p-5 pt-5 '}>
                     <ProgressBar
                         currentStep={currentStep}
                         name={name}

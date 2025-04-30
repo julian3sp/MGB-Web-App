@@ -129,19 +129,19 @@ export default function RequestListPage() {
 
         <div className={'flex gap-x-10  '}>
             <PageWrapper  contents={
-                <nav className=" h-220   rounded-4xl ml-5 m-5    shadow-lg">
-                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-1 border-b-5  border-[#44A6A6] border-b-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
+                <nav className="   rounded-4xl ml-5 m-5    shadow-lg">
+                    <div className={'bg-[#003A96] pt-3 pl-3 pr-3 pb-3 border-1 border-b-5   border-[#44A6A6] border-b-[#44A6A6] rounded-tr-3xl rounded-tl-3xl    '}>
                     <h3
-                        className="text-xl  p-[8px]  font-[Poppins] text-white text-center"
+                        className="text-[14pt]  p-[8px]  font-[Poppins] text-white text-center"
                     >
                         Select a Request:
                     </h3>
                     </div>
-                    <div className={'overflow-y-auto  bg-blue-100   rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 h-220 scrollbar-thin scrollbar-thumb-[#bbbbbb] scrollbar-track-blue-100 '} >
+                    <div className={'overflow-y-auto  bg-blue-100  rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 min-h-200  scrollbar-thin scrollbar-thumb-[#bbbbbb] scrollbar-track-blue-100 '} >
                     {/*Header for list of departments on page*/}
                     {filteredData && filteredData.length > 0 ? (
                         filteredData?.sort((res) => {res.request_date }).map((res) => (
-                            <ul key={res.request_id} className="mb-4 text-[14pt] group">
+                            <ul key={res.request_id} className="mb-4 text-[12pt] group">
                                 <button
                                     onClick={() => {
                                         if (!selectedRequest) {
@@ -228,7 +228,7 @@ export default function RequestListPage() {
             <nav className="min-h-screen flex flex-1 m-5 font-[Poppins]">
                 {swapMenu && pendingRequest && (
                     <div className="fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg shadow-lg p-6 w-[450px] border-[#003A96] border-1">
-                        <h3 className="font-bold text-xl text-center text-[#003A96]">
+                        <h3 className="font-bold text-[14pt] text-center text-[#003A96]">
                             Are you sure? You will lose any unsaved changes.
                         </h3>
                         <div className="w-full flex flex-rows justify-center gap-4 pt-2">
@@ -263,7 +263,7 @@ export default function RequestListPage() {
                 )}
                 {exitMenu && (
                     <div className="fixed top-1/2 left-1/2 z-50 transform -translate-x-1/2 -translate-y-1/2 bg-white border rounded-lg shadow-lg p-6 w-[450px] border-[#003A96] border-1">
-                        <h3 className="font-bold text-xl text-center text-[#003A96]">
+                        <h3 className="font-bold text-[14pt] text-center text-[#003A96]">
                             Are you sure? You will lose any unsaved changes.
                         </h3>
                         <div className="w-full flex flex-rows justify-center gap-4 pt-4">
@@ -302,10 +302,10 @@ export default function RequestListPage() {
 
 
                     {selectedRequest ? (
-                        <nav className="shadow-xl rounded-[26px]  bg-blue-100 flex-1   text-blue-gray-900">
+                        <nav className="shadow-xl rounded-[26px]  bg-blue-100 flex-1  text-blue-gray-900">
                             <div className={''} >
                                 <div className="flex justify-between border-b-5 border-b-[#44A6A6] bg-[#003A96] rounded-tl-3xl rounded-tr-3xl border-[#d9d9d9] mb-3 ">
-                                    <h2 className="text-xl  p-5 " style={{ color: 'white' }}>
+                                    <h2 className="text-[14pt]  p-5 " style={{ color: 'white' }}>
                                         {selectedRequest.request_id}.{' '}
                                         {selectedRequest.request_type === 'Sanitation'
                                             ? 'Sanitation'
@@ -407,19 +407,19 @@ export default function RequestListPage() {
                                         />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 flex-1 pl-5 pr-5   ">
-                                    <div className={'border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg p-3 m-5 '}>
-                                    <div className={'p-2 '}>
+                                <div className="grid grid-cols-2 flex-1 pl-5 pr-5    ">
+                                    <div className={'border-1 border-[#D$D$D$] h-140 bg-white shadow-sm rounded-lg p-3 m-1 '}>
+                                    <div className={'p-1 '}>
                                         {/*Request Type*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Request Type:{' '}
                                         </h3>
                                         <ul className="list-disc  mt-3 mb-3 text-blue-gray-900">
                                             <p>
-                                                <p className={'text-[15pt]'}>
+                                                <p className={'text-[12pt]'}>
                                                     {selectedRequest.request_type === 'Sanitation'
                                                         ? 'Sanitation'
                                                         : selectedRequest.request_type ===
@@ -446,31 +446,31 @@ export default function RequestListPage() {
                                         </ul>
                                     </div>
                                     <hr/>
-                                    <div className={'p-2 pt-4  '}>
+                                    <div className={'p-1 pt-2  '}>
                                         {/*Request ID*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Request ID:{' '}
                                         </h3>
                                         <ul className="list-disc  mb-3 mt-3">
-                                            <p className={'text-[15pt]'}>
+                                            <p className={'text-[12pt]'}>
                                                 #{selectedRequest.request_id}
                                             </p>
                                         </ul>
                                     </div>
                                         <hr/>
-                                    <div className={'p-2 pt-4   '}>
+                                    <div className={'p-1 pt-4   '}>
                                         {/*MONTH DAY, YEAR at HOUR:MINUTE:SECOND AM/PM (Request ID: #)*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Request Date:{' '}
                                         </h3>
                                         <ul className="list-disc  mb-3 mt-3">
-                                            <p className={'text-[15pt]'}>
+                                            <p className={'text-[12pt]'}>
                                                 {new Date(
                                                     selectedRequest.request_date
                                                 ).toLocaleDateString(undefined, {
@@ -490,7 +490,7 @@ export default function RequestListPage() {
                                         <div className={'pt-2'}>
                                             {/* Priority Edit */}
                                             <div>
-                                                <h3 className="text-xl font-semibold font-[Poppins]  ml-2 pt-3  " style={{ color: '#003A96' }}>
+                                                <h3 className="text-[14pt] font-semibold font-[Poppins]  ml-2 pt-3  " style={{ color: '#003A96' }}>
                                                     Priority:
                                                 </h3>
                                                 <div className="flex flex-row gap-4 items-center mt-1 mb-3">
@@ -512,7 +512,7 @@ export default function RequestListPage() {
 
                                             {/* Status Edit */}
                                             <div className={'py-3'}>
-                                                <h3 className="text-xl font-semibold font-[Poppins] ml-2 pt-1" style={{ color: '#003A96' }}>
+                                                <h3 className="text-[14pt] font-semibold font-[Poppins] ml-2 pt-1" style={{ color: '#003A96' }}>
                                                     Status:
                                                 </h3>
                                                 <div className="flex flex-row gap-4 items-center  mb-3">
@@ -531,38 +531,38 @@ export default function RequestListPage() {
                                         <>
                                             {/* Priority Display */}
                                             <div className={'py-4'}>
-                                                <h3 className="text-xl font-semibold font-[Poppins] py-1 pl-2" style={{ color: '#003A96' }}>
+                                                <h3 className="text-[14pt] font-semibold font-[Poppins] py-1 pl-2" style={{ color: '#003A96' }}>
                                                     Priority:
                                                 </h3>
                                                 <ul className="list-disc ml-2 mb-3 mt-3 ">
-                                                    <p className="text-[15pt]">{selectedRequest.priority}</p>
+                                                    <p className="text-[12pt]">{selectedRequest.priority}</p>
                                                 </ul>
                                             </div>
 <hr/>
                                             {/* Status Display */}
                                             <div className={'py-3'}>
-                                                <h3 className="text-xl font-semibold font-[Poppins]  pl-2" style={{ color: '#003A96' }}>
+                                                <h3 className="text-[14pt] font-semibold font-[Poppins]  pl-2" style={{ color: '#003A96' }}>
                                                     Status:
                                                 </h3>
                                                 <ul className="list-disc ml-2 mb-3 mt-3 ">
-                                                    <p className="text-[15pt]">{selectedRequest.status}</p>
+                                                    <p className="text-[12pt]">{selectedRequest.status}</p>
                                                 </ul>
                                             </div>
                                         </>
                                     )}
                                     </div>
 <div>
-                                    <div className={'border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg p-3 m-5'}>
+                                    <div className={'border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg p-1 ml-4 mr-2 mt-1'}>
                                     <div className={'p-2'}>
                                             {/*Name (Employee ID: #)*/}
                                             <h3
-                                                className="text-xl  font-semibold font-[Poppins] py-1  "
+                                                className="text-[14pt]  font-semibold font-[Poppins] py-1  "
                                                 style={{ color: '#003A96' }}
                                             >
                                                 Name:{' '}
                                             </h3>
                                             <ul className="list-disc  mb-3 mt-3">
-                                                <p className={'text-[15pt]'}>
+                                                <p className={'text-[12pt]'}>
                                                     {selectedRequest.name} (Employee ID:{' '}
                                                     {selectedRequest.employee_id})
                                                 </p>
@@ -573,14 +573,14 @@ export default function RequestListPage() {
 
                                         {/*Location*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Location:{' '}
                                         </h3>
 
                                             <ul className="list-disc mb-3 mt-3 ">
-                                            <p className={'text-[15pt]'}>
+                                            <p className={'text-[12pt]'}>
                                                 {selectedRequest.location}
                                             </p>
                                         </ul>
@@ -589,30 +589,30 @@ export default function RequestListPage() {
                                     <div className={'p-2   '}>
                                         {/*Department*/}
                                         <h3
-                                            className="text-xl font-semibold font-[Poppins] py-1 "
+                                            className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                             style={{ color: '#003A96' }}
                                         >
                                             Department:{' '}
                                         </h3>
 
                                             <ul className="list-disc mb-3 mt-3 ">
-                                            <p className={'text-[15pt]'}>
+                                            <p className={'text-[12pt]'}>
                                                 {selectedRequest.department}
                                             </p>
                                         </ul>
                                     </div>
                                     </div>
-                                    <div className={'border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg p-3 m-5'}>
+                                    <div className={'border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg p-1 m-1 ml-4 mt-6 mr-2'}>
                                         <div className={'p-2   '}>
                                             {/*Request Details*/}
                                             <h3
-                                                className="text-xl font-semibold font-[Poppins] py-1 "
+                                                className="text-[14pt] font-semibold font-[Poppins] py-1 "
                                                 style={{ color: '#003A96' }}
                                             >
                                                 Request Details:{' '}
                                             </h3>
                                             <ul className="list-disc  mb-3 mt-1">
-                                                <p className={'text-[15pt]'}>
+                                                <p className={'text-[12pt]'}>
                                                     {selectedRequest.sanitation?.cleaningType && (
                                                         <div>
                                                         <div className={' '}>
@@ -794,10 +794,10 @@ export default function RequestListPage() {
                                 </div>
 
                                 </div >
-                                <div className={'border-1 border-[#D$D$D$] bg-white  shadow-sm rounded-lg ml-10 mr-10 mb-10 mt-5 p-3 m-5'}>
+                                <div className={'border-1 border-[#D$D$D$] bg-white  shadow-sm rounded-lg ml-6 mr-6 mb-10 mt-5 p-3 m-5'}>
                                     {/*Additional comments*/}
                                     <h3
-                                        className="text-xl font-semibold p-3 font-[Poppins] py-1 "
+                                        className="text-[14pt] font-semibold p-3 font-[Poppins] py-1 "
                                         style={{ color: '#003A96' }}
                                     >
                                         Additional Comments:{' '}
@@ -806,7 +806,7 @@ export default function RequestListPage() {
                                     <ul className="list-disc ml-2 mb-10 ">
                                         <div className={' mr-2 p-3  '}>
 
-                                        <p className={'text-[15pt] ml-1'}>
+                                        <p className={'text-[12pt] ml-1'}>
                                             {selectedRequest.additional_comments?.trim() ? (
                                                 <p>{selectedRequest.additional_comments}</p>
                                             ) : (

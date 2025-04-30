@@ -19,7 +19,7 @@ function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
         <button
             onClick={onClick}
             className={`
-    group relative flex items-center w-full text-left mb-3 py-5 px-5 rounded-xl
+    group relative flex items-center w-full text-left mb-3 py-3 px-5 rounded-xl
     font-poppins font-semibold transition-all duration-100 ease-in-out
     text-[13pt] border-[#44A6A6]
 
@@ -34,22 +34,22 @@ function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
 
             {/* Icon rendering */}
             {type === "AudioVisual" && (
-                <AudioIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
+                <AudioIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
             )}
             {type === "Transportation" && (
-                <AmbulanceIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
+                <AmbulanceIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[16px] ml-[1px] text-inherit" />
             )}
             {type === "Sanitation" && (
-                <CleaningIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[0px] text-inherit" />
+                <CleaningIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[0px] text-inherit" />
             )}
             {type === "Language" && (
-                <LanguageIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[21px] ml-[2px] text-inherit" />
+                <LanguageIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[21px] ml-[2px] text-inherit" />
             )}
             {type === "Security" && (
                 <LockIcon size={37} stroke="currentColor" fill="currentColor" className="mr-[12px] ml-[0px] text-inherit" />
             )}
             {type === "MedicalDevice" && (
-                <MedicalIcon size={40} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[2px] text-inherit" />
+                <MedicalIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[2px] text-inherit" />
             )}
             {type === "Facilities" && (
                 <ElevatorIcon size={38} stroke="currentColor" fill="currentColor" className="mr-[11px] ml-[0px] text-inherit" />

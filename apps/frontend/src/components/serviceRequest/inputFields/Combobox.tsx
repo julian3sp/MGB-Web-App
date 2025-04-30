@@ -36,7 +36,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className={`w-full h-[48px] bg-white font-[Poppins] text-[13pt] font-normal shadow justify-between ${value == "" && !open ? "text-gray-500" : "text-black"}`}
+                        className={`w-full h-[48px] bg-white font-[Poppins] text-[11pt] shadow justify-between ${value == "" && !open ? "text-gray-500" : "text-black"}`}
                     >
                         {value
                             ? options.find((option) => option === value)
@@ -75,7 +75,7 @@ export function Combobox({options, value, setValue, error, clearError, placehold
                 </PopoverContent>
             </Popover>
             {error && (
-                <div className="text-red-500 text-[14px] mt-1 font-[Poppins]">
+                <div className="text-red-500 text-[10pt] mt-1 font-[Poppins]">
                     * {error}
                 </div>
             )}

@@ -146,6 +146,14 @@ const MapComponent: React.FC = () => {
       const Pat20departmentMapping: Record<string, number> = {
         'Blood Draw / Phlebotomy': 714,
         'Pharmacy': 694,
+        'Orthopedics': 95,
+        'Rehabilitation': 10,
+        'Surgical Specialties': 204,
+        'Sports Medicine': 176,
+        'Day Surgery Center': 468,
+        'Pain Medicine': 351,
+        'Physiatry': 275,
+        'Pulmonary Testing': 271,
         'Radiology': 535,
         'Urgent Care Center': 817,
         'Cardio Vascular Services': 859,
@@ -168,18 +176,18 @@ const MapComponent: React.FC = () => {
         'Vein Treatment': 1798
       };
       const FaulknerMapping: Record<string, number> = {
-        'Admitting/Registration': 4059,
-        'Audiology': 4154,
-        'Blood Drawing Lab': 4163,
-        'Cardiac Rehab': 4181,
-        'Emergency Department': 4300,
-        'Endoscopy': 4344,
-        'MRI/CT': 4118,
-        'Pre-Admittance Screening': 4147,
-        'Pulmonary Lab': 4291,
-        'Radiology': 4108,
-        'Special Testing': 4316,
-        'Vascular Lab': 4354
+        'Admitting/Registration': 2774,
+        'Audiology': 2860,
+        'Blood Drawing Lab': 2863,
+        'Cardiac Rehab': 2838,
+        'Emergency Department': 2877,
+        'Endoscopy': 2882,
+        'MRI/CT': 2849,
+        'Pre-Admittance Screening': 2857,
+        'Pulmonary Lab': 2875,
+        'Radiology': 2831,
+        'Special Testing': 2881,
+        'Vascular Lab': 2883
       };
 
       if(selectedPlace?.name === null) {

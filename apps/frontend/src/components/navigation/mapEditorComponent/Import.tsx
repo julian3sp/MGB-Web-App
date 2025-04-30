@@ -69,9 +69,6 @@ export default function ImportPage() {
             await deleteEdges.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")
-              console.log(Number(values[0]?.trim().replace(/"/g, "")))
-              console.log(Number(values[1]?.trim().replace(/"/g, "")))
-              console.log(Number(values[2]?.trim().replace(/"/g, "")))
               return {
                 sourceId: Number(values[0]?.trim().replace(/"/g, "")),
                 targetId: Number(values[1]?.trim().replace(/"/g, "")),
@@ -97,7 +94,7 @@ export default function ImportPage() {
   }
 
   return (
-      <div className=" px-5 pt-5 w-full ">
+      <div className=" px-5 pt-2 w-full ">
           <FileUploadCard files={files} onFilesChange={setFiles} />
           <button
               onClick={handleImportFiles}

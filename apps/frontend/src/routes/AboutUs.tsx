@@ -19,7 +19,6 @@ function AboutUs() {
 
                 <div className="overflow-hidden dark:bg-[#0B0B0F] bg-white w-full min-h-screen flex flex-col justify-center items-center pt-20 pb-15">
 
-                    {/* Page Title */}
                     <div className="text-center px-6">
                         <h1 className="text-5xl font-bold text-[#003a96] mb-6">About Us</h1>
                         <p className="text-lg leading-7 dark:text-gray-300 text-gray-700 max-w-2xl mx-auto">
@@ -32,114 +31,134 @@ function AboutUs() {
                         </p>
                     </div>
 
-                    {/* Team Section */}
-                    <div className="grid grid-cols-1 font-bold sm:grid-cols-2 md:grid-cols-3 gap-8 mt-20 px-6 w-full max-w-6xl items-center justify-center">
+                    <div className="flex flex-wrap grid-cols-1 font-bold sm:grid-cols-2 md:grid-cols-3 gap-8 mt-20 px-6 w-full max-w-6xl align-items-center items-center content-center justify-center">
+
                         {/* Team Member 1 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={julian}
                                  alt="Julian Espinal"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Julian Espinal</h3>
+                                <a href={"https://github.com/julian3sp"}>
+                                    <h3 className="text-xl font-semibold">Julian Espinal</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Co-lead Eng, Back-end Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 2 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={brendon}
                                  alt="Brendon Peters"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Brendon Peters</h3>
+                                <a href={"https://github.com/bjpeters2027"}>
+                                    <h3 className="text-xl font-semibold">Brendon Peters</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Co-Lead Eng, Feature Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 3 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={kang}
                                  alt="Kang Zhang"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Kang Zhang</h3>
+                                <a href={"https://github.com/KZhang101"}>
+                                    <h3 className="text-xl font-semibold">Kang Zhang</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Project Manager, Feature Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 4 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={d}
                                  alt="Doanh Phung"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Doanh Phung</h3>
+                                <a href={"https://github.com/doanh280605"}>
+                                    <h3 className="text-xl font-semibold">Doanh Phung</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Ass. Lead Eng, Front-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 5 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={ayush}
                                  alt="Ayush Kulkarni"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Ayush Kulkarni</h3>
+                                <a href={"https://github.com/Ayushk2023"}>
+                                    <h3 className="text-xl font-semibold">Ayush Kulkarni</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Product Owner, Front-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 6 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={wheeler}
                                  alt="Bryan Wheeler"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Bryan Wheeler</h3>
+                                <a href={"https://github.com/wheeler-bryan"}>
+                                    <h3 className="text-xl font-semibold">Bryan Wheeler</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Document Analyst, Front-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 7 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={jackson}
                                  alt="Jackson Colegrove"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Jackson Colegrove</h3>
+                                <a href={"https://github.com/jacksoncolegrove"}>
+                                    <h3 className="text-xl font-semibold">Jackson Colegrove</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Scrum Master, Front-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 8 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={demas}
                                  alt="Evan Demas"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Evan Demas</h3>
+                                <a href={"https://github.com/EvanDemas"}>
+                                    <h3 className="text-xl font-semibold">Evan Demas</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Back-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 9 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={conor}
                                  alt="Conor McCoy"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Conor McCoy</h3>
+                                <a href={"https://github.com/Conor-McCoy"}>
+                                    <h3 className="text-xl font-semibold">Conor McCoy</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Front-End Eng.</p>
                             </CardContent>
                         </Card>
 
                         {/* Team Member 10 */}
-                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition">
+                        <Card className="flex flex-col items-center p-6 hover:shadow-lg transition w-[325px] h-[250]">
                             <img src={alejandro}
                                  alt="Alejandro Laredo Lazaro"
                                  className="rounded-full w-24 h-24 object-cover mb-4" />
                             <CardContent className="text-center">
-                                <h3 className="text-xl font-semibold">Alejandro Laredo Lazaro</h3>
+                                <a href={"https://github.com/Alejandr02212"}>
+                                    <h3 className="text-xl font-semibold">Alejandro Laredo Lazaro</h3>
+                                </a>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Back-End Eng.</p>
                             </CardContent>
                         </Card>

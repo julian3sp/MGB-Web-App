@@ -3,19 +3,17 @@ import FileUploadCard from "../../ui/fileUploadCard"
 import {toast} from "sonner"
 import { Toaster } from '../../ui/sonner';
 import { trpc } from '@/lib/trpc';
-
-
-
+import {makeDirectories} from "../../../../../backend/src/server/procedures/directories.ts";
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
-
-
 
   const makeNode = trpc.makeNode.useMutation()
   const deleteNodes = trpc.deleteAllNodes.useMutation()
   const makeEdge = trpc.makeEdge.useMutation()
   const deleteEdges = trpc.deleteAllEdges.useMutation()
+  const deleteAllDirectories = trpc.deleteAllDirectories.useMutation()
+  const makeManyDirectories = trpc.makeManyDirectories.useMutation()
 
   const handleImportFiles = async () => {
     if (files.length === 0) {
@@ -47,6 +45,19 @@ export default function ImportPage() {
             console.log(inputs)
             await makeNode.mutateAsync(inputs)
             toast.success(`Nodes from "${file.name}" uploaded successfully.`)
+          } else if (headers.length >= 4) {
+            await deleteAllDirectories.mutateAsync()
+            const inputs = lines.slice(1).map((line) => {
+              const values = line.split(",")
+              return {
+                name: values[0]?.trim().replace(/"/g, ""),
+                services: values[1]?.trim().replace(/"/g, ""),
+                location: values[2]?.trim().replace(/"/g, ""),
+                telephone: values[3]?.trim().replace(/"/g, ""),
+              }
+            })
+            await makeManyDirectories.mutateAsync(inputs)
+            toast.success(`Directories from "${file.name}" uploaded successfully.`)
           } else if (headers.length === 3) {
             await deleteEdges.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
@@ -59,7 +70,7 @@ export default function ImportPage() {
             })
             await makeEdge.mutateAsync(inputs)
             toast.success(`Edges from "${file.name}" uploaded successfully.`)
-          } else {
+          }else {
             toast.error(`Invalid file format for "${file.name}". Please check the headers.`)
           }
         } catch (err) {
@@ -70,7 +81,6 @@ export default function ImportPage() {
 
       reader.readAsText(file)
     }
-
     setFiles([]) // Clear the files after processing
   }
 

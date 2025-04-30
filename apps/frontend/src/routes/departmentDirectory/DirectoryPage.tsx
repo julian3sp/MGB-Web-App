@@ -3,7 +3,6 @@ import {trpc} from "@/lib/trpc.ts";
 import ImportCSV from "../../components/ImportDept.tsx";
 import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart.tsx";
-import { PieChart } from 'react-minimal-pie-chart';
 import {Bar, BarChart, CartesianGrid, Cell, Legend, XAxis, YAxis} from "recharts"
 
 
@@ -97,11 +96,6 @@ const DirectoryPage = () => {
         addDirectory.mutate(formData);
         window.location.reload();
     };
-
-
-    //const handleCSVExport = () => {
-        //window.open('/api/directory/export', '_blank');
-    //};
 
     return (
         <div className="p-6 max-w-4xl mx-auto">

@@ -40,6 +40,21 @@ export const makeDirectories = publicProcedure
         return directory;
     });
 
+export const makeManyDirectories = publicProcedure
+    .input(
+        z.array(
+            z.object({
+                name: z.string(),
+                services: z.string(),
+                location: z.string(),
+                telephone: z.string(),
+            })
+        )
+    )
+    .mutation(async ({ input }) => {
+        return client.directory.createMany({ data: input });
+    });
+
 export const deleteAllDirectories = publicProcedure.mutation(async () => {
     await client.directory.deleteMany();
     await client.$executeRaw`ALTER SEQUENCE "directory_id_seq" RESTART WITH 1`;

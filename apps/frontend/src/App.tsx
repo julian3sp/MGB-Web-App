@@ -44,6 +44,15 @@ function InnerApp() {
         }
     }, [navigate, isFirstVisit]);
 
+    useEffect(() => {
+        if (location.pathname === "/editor") {
+            const hasVisited = sessionStorage.getItem('mapEditorVisited');
+            if (!hasVisited && isFirstVisit) {
+                sessionStorage.setItem('mapEditorVisited', 'true');
+            }
+        }
+    }, [location, isFirstVisit]);
+
     const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
     const inactive = 5 * 60 * 1000;
 

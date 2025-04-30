@@ -72,7 +72,7 @@ export const flipCardsData = [
         title: "Pharmacy",
         src: pharmacyImg,
         content: (
-                <p>
+                <p className={"text-white"}>
                     Location: 20 Patriot Place
                 </p>
         ),
@@ -82,7 +82,7 @@ export const flipCardsData = [
         title: "Blood Draw / Phlebotomy",
         src: bloodImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 20 Patriot Place
             </p>
         ),
@@ -92,7 +92,7 @@ export const flipCardsData = [
         title: "Urgent Care Center",
         src: urgentCareImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 20 Patriot Place
             </p>
         ),
@@ -102,7 +102,7 @@ export const flipCardsData = [
         title: "Cardiovascular Services",
         src: cardiacImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 20 Patriot Place
             </p>
         ),
@@ -112,7 +112,7 @@ export const flipCardsData = [
         title: "Urology",
         src: urologyImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 20 Patriot Place
             </p>
         ),
@@ -122,7 +122,7 @@ export const flipCardsData = [
         title: "Gynecology",
         src: gynecologyImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 22 Patriot Place
             </p>
         ),
@@ -132,7 +132,7 @@ export const flipCardsData = [
         title: "Lactation",
         src: lactationImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 22 Patriot Place
             </p>
         ),
@@ -142,7 +142,7 @@ export const flipCardsData = [
         title: "Vein Treatment",
         src: veinTreatmentImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: 22 Patriot Place
             </p>
         ),
@@ -152,7 +152,7 @@ export const flipCardsData = [
         title: "Admitting/Registration",
         src: pathImage,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -162,7 +162,7 @@ export const flipCardsData = [
         title: "Audiology",
         src: audiologyImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -172,7 +172,7 @@ export const flipCardsData = [
         title: "Blood Drawing Lab",
         src: bloodImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -182,7 +182,7 @@ export const flipCardsData = [
         title: "Cardiac Rehab",
         src: cardiacImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -192,7 +192,7 @@ export const flipCardsData = [
         title: "Emergency Department",
         src: urgentCareImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -202,7 +202,7 @@ export const flipCardsData = [
         title: "Endoscopy",
         src: endoImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -212,7 +212,7 @@ export const flipCardsData = [
         title: "MRI/CT Scans",
         src: mriCTImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -222,7 +222,7 @@ export const flipCardsData = [
         title: "Pre-Admittance Screening",
         src: pathImage,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -232,7 +232,7 @@ export const flipCardsData = [
         title: "Pulmonary Lab",
         src: pulmonologyImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -242,7 +242,7 @@ export const flipCardsData = [
         title: "Radiology",
         src: radiologyImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -252,7 +252,7 @@ export const flipCardsData = [
         title: "Special Testing",
         src: bloodImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),
@@ -262,7 +262,7 @@ export const flipCardsData = [
         title: "Vascular Lab",
         src: vascularImg,
         content: (
-            <p>
+            <p className={"text-white"}>
                 Location: Floor 1
             </p>
         ),

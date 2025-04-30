@@ -241,7 +241,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\thisi\\WebstormProjects\\team-f\\packages\\database\\.prisma\\client",
+      "value": "/Users/Doanh/Documents/TermD2024-2025/CS3733/team-f/packages/database/.prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -250,16 +250,17 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\thisi\\WebstormProjects\\team-f\\packages\\database\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/Doanh/Documents/TermD2024-2025/CS3733/team-f/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../prisma/.env"
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.6.0",
@@ -316,8 +317,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query-engine-windows");
-path.join(process.cwd(), ".prisma/client/query-engine-windows")
+path.join(__dirname, "query-engine-darwin-arm64");
+path.join(process.cwd(), ".prisma/client/query-engine-darwin-arm64")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), ".prisma/client/schema.prisma")

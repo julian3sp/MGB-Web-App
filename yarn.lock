@@ -1052,6 +1052,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-checkbox@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@radix-ui/react-checkbox@npm:1.2.3"
+  dependencies:
+    "@radix-ui/primitive": 1.1.2
+    "@radix-ui/react-compose-refs": 1.1.2
+    "@radix-ui/react-context": 1.1.2
+    "@radix-ui/react-presence": 1.1.4
+    "@radix-ui/react-primitive": 2.1.0
+    "@radix-ui/react-use-controllable-state": 1.2.2
+    "@radix-ui/react-use-previous": 1.1.1
+    "@radix-ui/react-use-size": 1.1.1
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: e04aaf22ded02990a47d39b996769b4a72d8c5a96ea34783cff0dd05d8e2f1503ecc99df70e81242cf98b7da80d3559de7def616aa6280b075aa54c442dc354e
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-collection@npm:1.1.4":
   version: 1.1.4
   resolution: "@radix-ui/react-collection@npm:1.1.4"
@@ -5625,6 +5651,7 @@ __metadata:
     "@googlemaps/markerclusterer": ^2.5.3
     "@popperjs/core": ^2.11.8
     "@radix-ui/react-alert-dialog": ^1.1.8
+    "@radix-ui/react-checkbox": ^1.2.3
     "@radix-ui/react-dialog": ^1.1.10
     "@radix-ui/react-dropdown-menu": ^2.1.11
     "@radix-ui/react-popover": ^1.1.10

@@ -48,7 +48,7 @@ export const createPatriot22Overlays = (map: google.maps.Map) => {
 
 export const updatePatriotPlace22 = (
   overlays: Patriot22Overlays, 
-  selectedFloor: 1 | 3 | 4
+  selectedFloor: number
 ) => {
   if (selectedFloor === 3) {
     overlays.floor3Overlay.setOpacity(1);

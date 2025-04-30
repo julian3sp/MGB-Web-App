@@ -55,7 +55,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [showEdges, setShowEdges] = useState(false);
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
     const [selectedNode, setselectedNode] = useState<Node | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();

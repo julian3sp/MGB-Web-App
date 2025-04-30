@@ -21,7 +21,7 @@ interface MapRendererProps {
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
   selectedFloor?: 1| 2| 3 | 4;
-  onFloorChange?: (floor: 3 | 4) => void;
+  onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
 }
@@ -31,7 +31,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   selectedDestination,
   onZoomChange,
   selectedFloor = 1,
-  onFloorChange = () => { },
+  onFloorChange,
   departmentNumber
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -359,7 +359,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     }
 
     return cleanupOverlays;
-  }, [selectedDestination, map]);
+  }, [selectedDestination, map, selectedFloor]);
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {

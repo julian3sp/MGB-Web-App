@@ -1,14 +1,49 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
-import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from "sonner";
 import { Toaster } from "../../ui/sonner";
-import FileUploadCard from "../../ui/fileUploadCard"; 
 
-const Export_CSV = () => {
 
-    const [nodes, setNodes] = useState<{ Building: string; Floor: number; Name: string; X: number; Y: number }[]>([]);
-    const [edges, setEdges] = useState<{ SourceId: number; TargetId: number; Weight: number }[]>([]);
+export default function ExportCSV() {
+
+    const [nodes, setNodes] = useState<{
+        name: string | null
+        type: string
+        id: number
+        building: string
+        floor: number
+        x: number
+        y: number
+        edgeCost: number
+        totalCost: number
+    }[]>([]);
+    const [edges, setEdges] = useState<{
+        id: number
+        sourceId: number
+        targetId: number
+        weight: number
+        sourceNode: {
+            name: string | null
+            type: string
+            id: number
+            building: string
+            floor: number
+            x: number
+            y: number
+            edgeCost: number
+            totalCost: number
+        }
+        targetNode: {
+            name: string | null
+            type: string
+            id: number
+            building: string
+            floor: number
+            x: number
+            y: number
+            edgeCost: number
+            totalCost: number
+        }
+    }[]>([]);
 
     const { data: nodesData, isLoading: isLoadingNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesData, isLoading: isLoadingEdges } = trpc.getAllEdges.useQuery();
@@ -22,13 +57,13 @@ const Export_CSV = () => {
     
 
     const downloadCSV = async () => {
-        let csv_edge = "sourcec_id; target_id; weight"
-        let csv_node = "building; floor; name; x; y"
+        let csv_edge = "sourcec_id, target_id, weight\n"
+        let csv_node = "building, floor, name, x, y, type\n"
         nodes.forEach((file)=>{
-            csv_node += `${file.building}; ${file.floor}; ${file.name}; ${file.x}; ${file.y}\n`
+            csv_node += `${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`
         })
         edges.forEach((file)=>{
-            csv_edge += `${file.sourceId}; ${file.targetId}; ${file.weight}\n`
+            csv_edge += `${file.sourceId}, ${file.targetId}, ${file.weight}\n`
         })
         
         const encodedUri1 = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_node)
@@ -62,7 +97,5 @@ const Export_CSV = () => {
           </button>
           <Toaster />
         </div>
-      )
+    )
 }
-
-export default Export_CSV 

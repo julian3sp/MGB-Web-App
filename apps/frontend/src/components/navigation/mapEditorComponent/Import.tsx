@@ -23,13 +23,13 @@ export default function ImportPage() {
       reader.onload = async () => {
         const text = reader.result as string
         const lines = text.split("\n").filter(Boolean)
-        const headers = lines[0].split(";")
-
+        const headers = lines[0].split(",")
+        console.log(headers)
         try {
           if (headers.length >= 6) {
             await deleteNodes.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
-              const values = line.split(";")
+              const values = line.split(",")
               return {
                 building: values[0]?.trim().replace(/"/g, ""),
                 floor: Number(values[1]?.trim().replace(/"/g, "")),
@@ -45,7 +45,7 @@ export default function ImportPage() {
           } else if (headers.length === 3) {
             await deleteEdges.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
-              const values = line.split(";")
+              const values = line.split(",")
               return {
                 sourceId: Number(values[0]?.trim().replace(/"/g, "")),
                 targetId: Number(values[1]?.trim().replace(/"/g, "")),

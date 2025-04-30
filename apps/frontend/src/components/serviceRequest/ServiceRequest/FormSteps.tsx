@@ -153,10 +153,10 @@ export function FormSteps({
     };
 
     return (
-        <div className="flex flex-col border-1 rounded-lg shadow-lg p-5 h-100">
+        <div className="flex flex-col border-1 p-3  rounded-lg shadow-lg h-100">
             <div
                 ref={scrollContainerRef}
-                className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"
+                className="snap-y snap-mandatory overflow-y-auto w-full h-96 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {/* Step 1 */}
@@ -169,7 +169,7 @@ export function FormSteps({
                         transition={{ duration: 0.5 }}
                         className="flex-grow"
                     >
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6  mt-6">
                             <div>
                                 <InputHeader>Name</InputHeader>
                                 <ErrorPopUp

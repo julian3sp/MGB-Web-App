@@ -351,6 +351,10 @@ export class Graph {
         else if (building === "Faulkner"){
             building = "Faulkner";
         }
+        else if (building === "Main Campus"){
+            building = "Main Campus";
+        }
+
 
         // console.log("Getting nodes building: ", building, " Floor:", floor);
 

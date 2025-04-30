@@ -78,7 +78,7 @@ export function BryanDirectoryPage() {
                     </div>
                 </div>
 
-                <div className="flex-1 flex justify-end relative" ref={filterRef}>
+                <div className="flex-1 flex justify-between relative" ref={filterRef}>
                     <div className="relative z-50">
                         <button
                             onClick={handleFilterClick}

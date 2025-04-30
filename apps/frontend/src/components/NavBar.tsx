@@ -193,7 +193,7 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                                 onClick={() => setTab("admin/directory")}
                                 className={getNavLinkClass("admin/directory")}
                             >
-                                Export
+                                Admin
                             </Link>
                         </>
                     )}

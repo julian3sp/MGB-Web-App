@@ -10,6 +10,7 @@ import HospitalViewControls from './HospitalViewControls';
 import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
 import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfinding/StrategyPathfind.ts"
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
+import { showRouteWithDirections } from './overlays/RouteWithDirection.tsx';
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 import { graph } from "./GraphObject.ts"
@@ -177,101 +178,92 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   }, [onMapReady, apiKey]);
 
   // Handle department pathfinding
-  useEffect(() => {
-    if (
-      !map ||
-      !departmentNumber ||
-      isNodesLoading ||
-      isEdgesLoading ||
-      !nodesData ||
-      !edgesData
-    ) return;
+  // Handle department pathfinding
+// Handle department pathfinding
+useEffect(() => {
+  if (!map || isNodesLoading || isEdgesLoading || !nodesData || !edgesData || !selectedDestination) return;
 
-    try {
-      // Build the graph from TRPC data
-      const graph = new Graph();
-      graph.populate(nodesData, edgesData);
+  try {
+    // Build the graph
+    const graph = new Graph();
+    graph.populate(nodesData, edgesData);
 
-      // Fixed entrance node and target department node
+    // DEBUG: Log graph contents
+    console.log('Graph nodes:', graph.getAllNodes().map(n => `${n.id}: (${n.x},${n.y})`));
 
-      const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 3900,
-        "20 Patriot Place": 1139,
-        "22 Patriot Place": 1952,
-        "Faulkner": 3995
-      }
+    // Entrance handling with fallbacks
+    const entrances: { [building: string]: number } = {
+      "MGB (Chestnut Hill)": 3900,
+      "20 Patriot Place": 1139,
+      "22 Patriot Place": 1952,
+      "Faulkner": 3995
+    };
 
-      const entrance = graph.getNode(entrances[selectedDestination!.name]);
-      const target = graph.getNode(departmentNumber);
-
-      if (!entrance || !target) {
-        console.error('Either the entrance or department node is missing');
-        return;
-      }
-
-      // Clear previous path if exists
-      if (pathPolylineRef.current) {
-        pathPolylineRef.current.setMap(null);
-        pathPolylineRef.current = null;
-      }
-
-
-
-
-      context.setPathAlgorithm = new AStar()
-      // Compute and draw the new path
-      if(algoType === "A-Star") {
-        console.log("Using A-Star")
-        context.setStrategyPathfind(new AStar());
-      } else if (algoType === "DFS") {
-        console.log("Using DFS")
-        context.setStrategyPathfind(new DFS())
-      } else if (algoType === "BFS") {
-        console.log("Using BFS")
-        context.setStrategyPathfind(new BFS())
-      } else if (algoType === "Dijkstras"){
-        console.log("Using Dijkstra's")
-        context.setStrategyPathfind(new Dijkstras())
-      }
-
-
-      const pathNodes = context.pathFind(graph, entrance, target)
-
-      console.log("Path:", pathNodes)
-      const newPolyline = drawPath(map, pathNodes);
-      pathPolylineRef.current = newPolyline;
-
-
-      // Clear existing markers
-      if (startMarkerRef.current) {
-        startMarkerRef.current.setMap(null);
-        startMarkerRef.current = null;
-      }
-
-      if (targetMarkerRef.current) {
-        console.log("clearing target marker")
-        targetMarkerRef.current.setMap(null);
-        targetMarkerRef.current = null;
-      }
-
-      // Add new markers for start and destination
-      startMarkerRef.current = new google.maps.Marker({
-        position: { lat: entrance.x, lng: entrance.y },
-        map: map,
-        title: 'Start (Entrance)',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-      });
-
-      targetMarkerRef.current = new google.maps.Marker({
-        position: { lat: target.x, lng: target.y },
-        map: map,
-        title: 'Department',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-      });
-    } catch (error) {
-      console.error('Error in pathfinding:', error);
+    let entrance = graph.getNode(entrances[selectedDestination.name]);
+    if (!entrance) {
+      console.warn(`Predefined entrance ${entrances[selectedDestination.name]} not found, searching alternatives...`);
+      
+      // Try likely entrance nodes
+      const potentialEntrances = graph.getAllNodes()
+        .filter(n => n.name?.toLowerCase().includes('entrance') || n.tags?.includes('entrance'));
+      
+      entrance = potentialEntrances[0] || graph.getAllNodes()[0];
+      console.warn(`Using fallback entrance:`, entrance);
     }
-  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination]);
+
+    // Target handling with fallbacks
+    let targetNodeId = departmentNumber || 3781;
+    let target = graph.getNode(targetNodeId);
+    if (!target) {
+      console.warn(`Target node ${targetNodeId} not found, searching alternatives...`);
+      
+      // Try nodes with 'lab' in name
+      const potentialTargets = graph.getAllNodes()
+        .filter(n => n.name?.toLowerCase().includes('lab') || n.tags?.includes('lab'));
+      
+      target = potentialTargets[0] || graph.getAllNodes()[1] || graph.getAllNodes()[0];
+      targetNodeId = target.id;
+      console.warn(`Using fallback target:`, target);
+    }
+
+    // Clear previous path
+    [pathPolylineRef.current, startMarkerRef.current, targetMarkerRef.current].forEach(item => {
+      if (item) item.setMap(null);
+    });
+
+    // Pathfinding
+    context.setPathAlgorithm = new AStar();
+    if (algoType === "A-Star") context.setStrategyPathfind(new AStar());
+    else if (algoType === "DFS") context.setStrategyPathfind(new DFS());
+    else if (algoType === "BFS") context.setStrategyPathfind(new BFS());
+    else if (algoType === "Dijkstras") context.setStrategyPathfind(new Dijkstras());
+
+    const pathNodes = context.pathFind(graph, entrance, target);
+    console.log("Path found with", pathNodes.length, "nodes");
+
+    // Visualization
+    pathPolylineRef.current = drawPath(map, pathNodes);
+    const routeInfo = showRouteWithDirections(map, pathNodes);
+
+    // Markers
+    startMarkerRef.current = new google.maps.Marker({
+      position: { lat: entrance.x, lng: entrance.y },
+      map: map,
+      title: `Start (${entrance.name || 'Entrance'})`,
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+    });
+
+    targetMarkerRef.current = new google.maps.Marker({
+      position: { lat: target.x, lng: target.y },
+      map: map,
+      title: target.name || (targetNodeId === 3781 ? 'Laboratory' : 'Department'),
+      icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+    });
+
+  } catch (error) {
+    console.error('Pathfinding error:', error);
+  }
+}, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, algoType]);
 
   // Handle overlay updates based on selected destination
   useEffect(() => {

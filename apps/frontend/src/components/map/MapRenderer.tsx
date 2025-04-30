@@ -30,7 +30,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onMapReady,
   selectedDestination,
   onZoomChange,
-  selectedFloor = 3,
+  selectedFloor = 1,
   onFloorChange = () => { },
   departmentNumber
 }) => {
@@ -207,7 +207,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Fixed entrance node and target department node
 
       const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 3900,
+        "MGB (Chestnut Hill)": 2707,
         "20 Patriot Place": 1139,
         "22 Patriot Place": 1768,
         "Faulkner": 3995

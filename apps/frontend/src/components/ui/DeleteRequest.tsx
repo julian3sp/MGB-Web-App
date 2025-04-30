@@ -9,7 +9,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/Tooltip.tsx';
+} from '@/components/ui/tooltip.tsx';
 
 export default function DeleteRequest({
     size = 20,

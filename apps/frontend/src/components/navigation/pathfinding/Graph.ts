@@ -28,7 +28,9 @@ export type  Edge = {
     sourceId: Node
     targetId: Node;
     weight: number;
-    polyline?:google.maps.Polyline;
+    core?:google.maps.Polyline;
+    border?:google.maps.Polyline;
+    overlay?:google.maps.Polyline;
 }
 
 type Edit = {

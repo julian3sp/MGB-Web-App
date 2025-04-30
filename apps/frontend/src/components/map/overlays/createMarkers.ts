@@ -2,6 +2,7 @@ import {graph} from "@/components/map/GraphObject.ts";
 import {Node, NodeType} from "@/components/navigation/pathfinding/Graph.ts";
 
 import {nodeMarker} from "./markerStyles.ts";
+import {BORDER_WEIGHT, COLORS, CORE_WEIGHT, makeStroke} from "@/components/map/overlays/edgeHandler.ts";
 
 let prevMarker: google.maps.marker.AdvancedMarkerElement | null = null;
 
@@ -54,7 +55,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
             edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
         );
 
-        graph.deleteNode(node.id); // delete node
+        if (node.id) graph.deleteNode(node.id);
         console.log("remove node");
         content.style.transition = "transform 0.7s ease, opacity 0.7s ease";
         content.style.transform = "scale(0)";
@@ -62,18 +63,26 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
 
         // After animation, delete from graph and hide marker
         setTimeout(() => {
-            graph.deleteNode(node.id);
+            if (node.id) graph.deleteNode(node.id);
             marker.map = null;
         }, 500); // Match the transition time (300ms)
 
         connectedEdges.forEach(edge => {
             // You can delete the polyline by setting its map to null here
-            if (edge.polyline) edge.polyline.setMap(null);
+            if (edge.overlay && edge.core && edge.border) {
+                edge.overlay.setMap(null);
+                edge.core.setMap(null);
+                edge.border.setMap(null);
+            }
         });
     });
 
-    // Track all temporary polylines we create for this node
-    const tempPolylines: google.maps.Polyline[] = [];
+    // Track all temporary poly lines we create for this node
+    const tempEdgeGraphics: {
+        border: google.maps.Polyline;
+        core: google.maps.Polyline;
+        overlay: google.maps.Polyline;
+    }[] = [];
 
     marker.addListener('dragstart', () => {
         const connectedEdges = graph.getAllEdges().filter(
@@ -82,27 +91,36 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         // Delete edges from the graph and from the map visually
         connectedEdges.forEach(edge => {
             // You can delete the polyline by setting its map to null here
-            if (edge.polyline) edge.polyline.setMap(null);
+            if (edge.overlay && edge.core && edge.border) {
+                edge.overlay.setMap(null);
+                edge.core.setMap(null);
+                edge.border.setMap(null);
+            }
         });
-
 
         // Create a temporary polyline for each connected edge
         for (const edge of connectedEdges) {
             const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
-            const line = new google.maps.Polyline({
-                path: [
-                    {lat: node.x, lng: node.y},
-                    {lat: otherNode.x, lng: otherNode.y}
-                ],
-                map: marker.map,
+            const map = marker.map;
+            const path = [
+                {lat: node.x, lng: node.y},
+                {lat: otherNode.x, lng: otherNode.y}
+            ]
+
+            const border  = makeStroke(map, path, COLORS.border, BORDER_WEIGHT, 1);
+            const core    = makeStroke(map, path, COLORS.core,    CORE_WEIGHT, 2, true);
+
+            const overlay = new google.maps.Polyline({
+                map,
+                path,
                 geodesic: true,
-                strokeColor: "#FF0000",
-                strokeOpacity: 1.0,
-                strokeWeight: 5,
-            });
-            tempPolylines.push(line);
-        }
-    });
+                strokeOpacity: 0,
+                zIndex: 3,
+                clickable: false,});
+
+            tempEdgeGraphics.push({border, core, overlay});
+        }});
+
     // Get node Info
     content.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -116,8 +134,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         prevMarker = marker;
     })
 
-
-    // Update polylines during drag
+    // Update poly lines during drag
     marker.addListener('drag', () => {
         const pos = marker.position;
         if (!pos) return;
@@ -128,18 +145,22 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         );
 
         // Update each temporary polyline
-        for (let i = 0; i < connectedEdges.length && i < tempPolylines.length; i++) {
+        for (let i = 0; i < connectedEdges.length && i < tempEdgeGraphics.length; i++) {
             const edge = connectedEdges[i];
-            const line = tempPolylines[i];
+            const { border, core, overlay } = tempEdgeGraphics[i];
             const otherNode = edge.sourceId.id === node.id ? edge.targetId : edge.sourceId;
 
-            line.setPath([
+            const newPath = [
                 {
                     lat: (pos as google.maps.LatLngLiteral).lat + 0.000002,
                     lng: (pos as google.maps.LatLngLiteral).lng
                 },
                 {lat: otherNode.x, lng: otherNode.y}
-            ]);
+            ]
+
+            border.setPath(newPath);
+            core.setPath(newPath);
+            overlay.setPath(newPath);
         }
     });
 
@@ -155,10 +176,12 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
         }
 
         // Remove temporary polylines
-        for (const line of tempPolylines) {
-            line.setMap(null);
+        for (const graphics of tempEdgeGraphics) {
+            graphics.border.setMap(null);
+            graphics.core.setMap(null);
+            graphics.overlay.setMap(null);
         }
-        tempPolylines.length = 0;
+        tempEdgeGraphics.length = 0;
 
         onNodeMove();
 

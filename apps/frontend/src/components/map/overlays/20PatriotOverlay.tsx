@@ -1,4 +1,6 @@
-import floor1OverlayImg from '../../../../assets/pat20_floor1_rotated.png'
+// import floor1OverlayImg from '../../../../assets/pat20_floor1_rotated.png'
+import floor1OverlayImg from '../../../../assets/20-FLOOR1-BASIC-LG_rotated.png'
+
 
 export interface Patriot20Overlays {
     floor1Overlay: google.maps.GroundOverlay;
@@ -7,7 +9,7 @@ export interface Patriot20Overlays {
 
 export const createPatriot20Overlays = (map: google.maps.Map) => {
 
-    const coordinates: number[] = [42.093430649757835 , 42.0924193258622 , -71.26535172212122 , -71.26674863262852]
+    const coordinates: number[] = [42.093360887297486 , 42.09247356948301 , -71.26547814488669 , -71.26663027355382]
 
     const bounds = {
         north: coordinates[0],

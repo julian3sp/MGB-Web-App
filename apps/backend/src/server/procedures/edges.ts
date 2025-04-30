@@ -14,18 +14,15 @@ export const makeEdge = publicProcedure
         )
     )
     .mutation(async ({ input }) => {
-        for (const edge of input) {
-            try {
-                await client.edges.create({
-                    data: edge,
-                });
-            } catch (error) {
-                console.error('Failed to insert edge:', edge);
-                console.error('Error:', error);
-            }
+        try {
+            await client.edges.createMany({
+                data: input,
+            });
+        } catch (error) {
+            console.error('CreateMany error:', error);
+            console.log('Edges attempted to insert:', input);
         }
     });
-
 export const makeManyEdges = publicProcedure
     .input(
         z.array(

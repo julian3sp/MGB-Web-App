@@ -135,12 +135,12 @@ const MapComponent: React.FC = () => {
 
     function getDeptNum():number {
       const CNdepartmentMapping: Record<string, number> = {
-        'Entrance': 3900,
-        'Multi-Specialty Clinic': 3734,
-        'Radiology': 3059,
-        'MRI': 3113,
-        'CT': 3136,
-        'Laboratory': 3781
+        'Entrance': 3183,
+        'Multi-Specialty Clinic': 3102,
+        'Radiology': 2748,
+        'MRI': 3076,
+        'CT': 3072,
+        'Laboratory': 3099
       };
 
       const Pat20departmentMapping: Record<string, number> = {

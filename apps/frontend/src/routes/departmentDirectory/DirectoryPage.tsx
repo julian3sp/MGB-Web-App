@@ -3,6 +3,7 @@ import {trpc} from "@/lib/trpc.ts";
 import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart.tsx";
 import {Bar, BarChart, CartesianGrid, Cell, Legend, XAxis, YAxis} from "recharts"
+import ExportCSV from "@/components/navigation/mapEditorComponent/ExportCSV.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -85,93 +86,14 @@ const DirectoryPage = () => {
     };
 
     return (
-        <div className="p-6 min-h-screen ">
+        <div className="p-6 min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Directory Management</h1>
-            <div className={'flex flex-cols-2 gap-x-6'}>
-                <div className="flex-1">
-                    {/* Form - make new directery input */}
-                    <div className="mb-6 bg-white p-4 shadow rounded-2xl space-y-4">
-                        <h2 className="text-xl font-semibold">Add New Directory Entry</h2>
-                        <input
-                            className="border p-2 w-full"
-                            name="name"
-                            placeholder="Name"
-                            value={formData.name}
-                            onChange={handleChange}
-                        />
-                        <input
-                            className="border p-2 w-full"
-                            name="services"
-                            placeholder="Services"
-                            value={formData.services}
-                            onChange={handleChange}
-                        />
-                        <input
-                            className="border p-2 w-full"
-                            name="location"
-                            placeholder="Location"
-                            value={formData.location}
-                            onChange={handleChange}
-                        />
-
-                        <input
-                            className="border p-2 w-full"
-                            name="telephone"
-                            placeholder="Telephone"
-                            value={formData.telephone}
-                            onChange={handleChange}
-                        />
-                        <button
-                            onClick={handleSubmit}
-                            className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"
-                        >
-                            Submit
-                        </button>
-                    </div>
-
-                    {/* Table */}
-                    <div className="bg-white p-4 shadow rounded-xl mb-6">
-                        <h2 className="text-xl font-semibold mb-3">Directory Table</h2>
-                        <div className="overflow-x-auto max-h-80 scrollbar-thin">
-                            <table className="w-full border-collapse text-sm">
-                                <thead className="sticky top-0">
-                                <tr className="bg-gray-100 text-gray-700">
-                                    <th className="border-b px-3 py-2 text-left font-medium">ID</th>
-                                    <th className="border-b px-3 py-2 text-left font-medium">Name</th>
-                                    <th className="border-b px-3 py-2 text-left font-medium">Services</th>
-                                    <th className="border-b px-3 py-2 text-left font-medium">Location</th>
-                                    <th className="border-b px-3 py-2 text-left font-medium">Telephone</th>
-                                </tr>
-                                </thead>
-                                <tbody className="divide-y">
-                                {directories?.length > 0 ? (
-                                    directories.map((dir) => (
-                                        <tr key={dir.id} className="hover:bg-gray-50">
-                                            <td className="px-3 py-2">{dir.id}</td>
-                                            <td className="px-3 py-2">{dir.name}</td>
-                                            <td className="px-3 py-2">{dir.services}</td>
-                                            <td className="px-3 py-2">{dir.location}</td>
-                                            <td className="px-3 py-2">{dir.telephone}</td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5" className="px-3 py-4 text-center text-gray-500">
-                                            No entries found
-                                        </td>
-                                    </tr>
-                                )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="w-[40%]">
+            <div className='flex flex-cols gap-x-3'>
+                <div className="">
                     {/* bar chart for service request form */}
                     <ChartContainer
                         config={serviceRequestConfig}
-                        className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
+                        className="min-h-[280px] rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
                     >
                         <BarChart data={serviceRequestData} margin={{ top: 20, right: 30, left: 20, bottom: 70 }}>
                             <XAxis
@@ -232,21 +154,90 @@ const DirectoryPage = () => {
                         </BarChart>
                     </ChartContainer>
 
-                    {/*import*/}
-                    <div className="w-full p-5 flex flex-col gap-4">
-                        <ImportAllNodesAndEdges />
+                    {/*import directories*/}
+                    <div>
+                        <div className="p-5 gap-4">
+                            <ImportAllNodesAndEdges />
+                        </div>
+                        <ExportCSV/>
                     </div>
-
-                    {/*Export CSV */}
-                    <h2 className="text-xl font-semibold mb-2">Export CSV</h2>
-                    <button
-                        onClick={downloadDirectories}
-                        disabled={isLoading}
-                        className="bg-[#003a96] hover:bg-blue-950 text-white px-3 py-2 rounded mt-2 font-[Poppins]"
-                    >
-                        Export CSV
-                    </button>
                 </div>
+                    {/*/!* Form - make new directery input *!/*/}
+                    {/*<div className="mb-6 bg-white p-4 shadow rounded-2xl space-y-4">*/}
+                    {/*    <h2 className="text-xl font-semibold">Add New Directory Entry</h2>*/}
+                    {/*    <input*/}
+                    {/*        className="border p-2 w-full"*/}
+                    {/*        name="name"*/}
+                    {/*        placeholder="Name"*/}
+                    {/*        value={formData.name}*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    />*/}
+                    {/*    <input*/}
+                    {/*        className="border p-2 w-full"*/}
+                    {/*        name="services"*/}
+                    {/*        placeholder="Services"*/}
+                    {/*        value={formData.services}*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    />*/}
+                    {/*    <input*/}
+                    {/*        className="border p-2 w-full"*/}
+                    {/*        name="location"*/}
+                    {/*        placeholder="Location"*/}
+                    {/*        value={formData.location}*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    />*/}
+
+                    {/*    <input*/}
+                    {/*        className="border p-2 w-full"*/}
+                    {/*        name="telephone"*/}
+                    {/*        placeholder="Telephone"*/}
+                    {/*        value={formData.telephone}*/}
+                    {/*        onChange={handleChange}*/}
+                    {/*    />*/}
+                    {/*    <button*/}
+                    {/*        onClick={handleSubmit}*/}
+                    {/*        className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"*/}
+                    {/*    >*/}
+                    {/*        Submit*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
+
+                    {/* Table */}
+                    <div className="bg-white p-4 shadow rounded-xl ">
+                        <h2 className="text-xl font-semibold mb-3">Directory Table</h2>
+                        <div className="overflow-y-auto max-h-150 scrollbar-thin">
+                            <table className="w-full border-collapse text-sm">
+                                <thead className="sticky top-0">
+                                <tr className="bg-gray-100 text-gray-700">
+                                    <th className="border-b px-3 py-2 text-left font-medium">ID</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Name</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Services</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Location</th>
+                                    <th className="border-b px-3 py-2 text-left font-medium">Telephone</th>
+                                </tr>
+                                </thead>
+                                <tbody >
+                                {directories?.length > 0 ? (
+                                    directories.map((dir) => (
+                                        <tr key={dir.id} className="hover:bg-gray-50">
+                                            <td className="px-3 py-2">{dir.id}</td>
+                                            <td className="px-3 py-2">{dir.name}</td>
+                                            <td className="px-3 py-2">{dir.services}</td>
+                                            <td className="px-3 py-2">{dir.location}</td>
+                                            <td className="px-3 py-2">{dir.telephone}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" className="px-3 py-4 text-center text-gray-500">
+                                            No entries found
+                                        </td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
             </div>
         </div>
     );

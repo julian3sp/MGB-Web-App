@@ -93,8 +93,6 @@ export default function ImportPage() {
 
   return (
       <div className="p-4 max-w-md mx-auto space-y-4">
-
-          <h1 className="text-lg font-bold text-center">Import CSV Files</h1>
           <FileUploadCard files={files} onFilesChange={setFiles} />
           <button
               onClick={handleImportFiles}

@@ -1,6 +1,4 @@
-import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from './RequestListPage.tsx';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
@@ -78,12 +76,13 @@ export default function RequestPage() {
         setShowFilterPanel(!showFilterPanel);
     };
 
-    const handleNewRequestClick = () =>
-        navigate('/services');
+    const handleNewRequestClick = () => navigate('/services');
 
     const filterRef = useClickOutside(() => {
         setShowFilterPanel(false);
     });
+
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
 
     return (
         <RequestDataContext.Provider
@@ -97,13 +96,13 @@ export default function RequestPage() {
                         <h1
                             className="text-5xl text-[#003a96] text-center p-1 pl-0 font-bold font-[Poppins]  flex-start  "
                         >
-                            Service Requests
+                            Service Requests:
                         </h1>
                     </div>
                     <div className="flex items-end gap-10 z-100">
                         <button
                             onClick={handleNewRequestClick}
-                            className="px-4 py-[12px] border-2 border-[#44A6A6] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-fit h-[50px]"
+                            className="px-4 py-[12px] border-2 border-[#003a96] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-fit h-[50px]"
                         >
                             <div className={'container'}>
                                 <img
@@ -119,7 +118,7 @@ export default function RequestPage() {
                             <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[10px] border-2 border-[#44A6A6] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-[130px]"
+                                    className="px-4 py-[10px] border-2 border-[#003a96] rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={'container'}>
                                         <img
@@ -132,7 +131,7 @@ export default function RequestPage() {
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border-1 border-light-subtle rounded-lg shadow-lg p-4 pb-0 w-[450px]">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-light-subtle rounded-lg shadow-2xl p-4 pb-0 w-[450px] max-h-[450px] overflow-y-auto">
                                         <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests
@@ -148,9 +147,9 @@ export default function RequestPage() {
                                                         department: [],
                                                     })
                                                 }
-                                                className="px-4 py-2 border rounded text-white bg-red-600 hover:bg-red-800 w-[130px]"
+                                                className="px-4 py-[10px] border-2 border-[#003a96] rounded-4xl text-[#003a96] hover:bg-gray-200 bg-white w-[130px]"
                                             >
-                                                Clear
+                                                Reset
                                             </button>
                                         </div>
 
@@ -301,33 +300,36 @@ export default function RequestPage() {
                                             <p className="font-semibold mb-2">Department:</p>
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                                                 {[
-                                                    'Laboratory',
-                                                    'Multi-Specialty Clinic',
-                                                    'Radiology',
-                                                    'Radiology, MRI/CT Scan',
-                                                ].map((dep) => (
+                                                    ...new Set(
+                                                        departmentsRaw?.map((dep) => dep.name)
+                                                    ),
+                                                ].map((depName) => (
                                                     <label
-                                                        key={dep}
+                                                        key={depName}
                                                         className="flex items-start text-sm"
                                                     >
                                                         <input
                                                             type="checkbox"
                                                             checked={filters.department.includes(
-                                                                dep
+                                                                depName
                                                             )}
                                                             onChange={(e) => {
                                                                 setFilters((prev) => ({
                                                                     ...prev,
                                                                     department: e.target.checked
-                                                                        ? [...prev.department, dep]
+                                                                        ? [
+                                                                              ...prev.department,
+                                                                              depName,
+                                                                          ]
                                                                         : prev.department.filter(
-                                                                              (item) => item !== dep
+                                                                              (item) =>
+                                                                                  item !== depName
                                                                           ),
                                                                 }));
                                                             }}
                                                             className="mt-[2px] mr-2"
                                                         />
-                                                        {dep}
+                                                        {depName}
                                                     </label>
                                                 ))}
                                             </div>
@@ -351,7 +353,7 @@ export default function RequestPage() {
                         </div>
                     </div>
                 </div>
-                <div    >
+                <div>
                     <Outlet />
                 </div>
             </div>

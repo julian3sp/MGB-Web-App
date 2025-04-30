@@ -445,6 +445,8 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
+                                errors={errors}
+                                clearError={clearError}
                             />
 
                         )}

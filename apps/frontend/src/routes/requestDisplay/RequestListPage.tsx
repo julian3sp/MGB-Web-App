@@ -123,6 +123,10 @@ export default function RequestListPage() {
             return false;
         }
     }
+    const sortedData = filteredData
+        ?.slice()
+        .sort((a, b) => new Date(b.request_date).getTime() - new Date(a.request_date).getTime());
+
 
     return (
 
@@ -139,22 +143,12 @@ export default function RequestListPage() {
                     </div>
                     <div className={'overflow-y-auto  bg-blue-100  rounded-br-3xl rounded-bl-3xl pl-5 pr-5 pt-3 min-h-200  scrollbar-thin scrollbar-thumb-[#bbbbbb] scrollbar-track-blue-100 '} >
                     {/*Header for list of departments on page*/}
-                    {filteredData && filteredData.length > 0 ? (
-                        filteredData?.sort((res) => {res.request_date }).map((res) => (
-                            <ul key={res.request_id} className="mb-4 text-[12pt] group">
-                                <button
-                                    onClick={() => {
-                                        if (!selectedRequest) {
-                                            console.log('SAFE SWAP!!!!!');
-                                            setSelectedRequest(res);
-                                            setEditMode(false);
-                                            setEditId(res.request_id);
-                                            setEditPriority(res.priority);
-                                            setEditStatus(res.status);
-                                        } else {
-                                            if (
-                                                allowSwap(editPriority, editStatus, selectedRequest)
-                                            ) {
+                        {sortedData && sortedData.length > 0 ? (
+                            sortedData.map((res) => (
+                                <ul key={res.request_id} className="mb-4 text-[12pt] group">
+                                    <button
+                                        onClick={() => {
+                                            if (!selectedRequest) {
                                                 console.log('SAFE SWAP!!!!!');
                                                 setSelectedRequest(res);
                                                 setEditMode(false);
@@ -162,66 +156,65 @@ export default function RequestListPage() {
                                                 setEditPriority(res.priority);
                                                 setEditStatus(res.status);
                                             } else {
-                                                console.log('UNSAFE SWAP!!!!!');
-                                                setSwapMenu(true);
-                                                console.log(swapMenu);
-                                                setPendingRequest(res);
-                                                console.log(pendingRequest);
+                                                if (allowSwap(editPriority, editStatus, selectedRequest)) {
+                                                    console.log('SAFE SWAP!!!!!');
+                                                    setSelectedRequest(res);
+                                                    setEditMode(false);
+                                                    setEditId(res.request_id);
+                                                    setEditPriority(res.priority);
+                                                    setEditStatus(res.status);
+                                                } else {
+                                                    console.log('UNSAFE SWAP!!!!!');
+                                                    setSwapMenu(true);
+                                                    console.log(swapMenu);
+                                                    setPendingRequest(res);
+                                                    console.log(pendingRequest);
+                                                }
                                             }
-                                        }
-                                    }}
-                                    className={
-                                        `w-full text-left block p-5  rounded-lg   ${
+                                        }}
+                                        className={`w-full text-left block p-5 rounded-lg ${
                                             selectedRequest?.request_id == res.request_id
-                                                ? 'text-white bg-[#003a96]  font-[Poppins] border-b-5  border-[#44A6A6] shadow-md'
-                                                : 'text-gray-700 hover:text-gray-700  bg-white hover:border-b-5 border-[#44A6A6]  transition-all  font-[Poppins] shadow-lg'
-                                        }` /* Put requests in rounded rectangle boxes*/
-                                    }
-                                    style={{
-                                        borderColor:
-                                            selectedRequest?.request_id == res.request_id
-                                                ? 'light-grey'
-                                                : 'light-grey',
-                                        borderWidth: '1 px',
-                                        borderStyle: 'solid',
-                                    }}
-                                >
-                                    {res.request_type === 'Sanitation'
-                                        ? 'Sanitation Request'
-                                        : res.request_type === 'Transportation'
-                                          ? 'Transportation Request'
-                                          : res.request_type === 'Security'
-                                            ? 'Security Request'
-                                            : res.request_type === 'AudioVisual'
-                                              ? 'Audio/Visual Request'
-                                              : res.request_type === 'Language'
-                                                ? 'Language Interpreter Request'
-                                                : res.request_type === 'MedicalDevice'
-                                                  ? 'Medical Device Request'
-                                                  : res.request_type === 'Facilities'
-                                                    ? 'Facilities Request'
-                                                    : 'N/A'}{' '}
-                                    (<span>{new Date(res.request_date).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}</span>)
-                                </button>
-                            </ul>
-                        ))
-                    ) : (
-                        <nav
-                            className="border p-5
-                             flex items-center"
-                            style={{ borderColor: '#003A96' }}
-                        >
-                            <p className="text-gray-700 font-[Poppins]">
-                                No active service requests.
-                            </p>
-                        </nav>
-                    )}
+                                                ? 'text-white bg-[#003a96] font-[Poppins] border-b-5 border-[#44A6A6] shadow-md'
+                                                : 'text-gray-700 hover:text-gray-700 bg-white hover:border-b-5 border-[#44A6A6] transition-all font-[Poppins] shadow-lg'
+                                        }`}
+                                    >
+                                        {res.request_type === 'Sanitation'
+                                            ? 'Sanitation Request'
+                                            : res.request_type === 'Transportation'
+                                                ? 'Transportation Request'
+                                                : res.request_type === 'Security'
+                                                    ? 'Security Request'
+                                                    : res.request_type === 'AudioVisual'
+                                                        ? 'Audio/Visual Request'
+                                                        : res.request_type === 'Language'
+                                                            ? 'Language Interpreter Request'
+                                                            : res.request_type === 'MedicalDevice'
+                                                                ? 'Medical Device Request'
+                                                                : res.request_type === 'Facilities'
+                                                                    ? 'Facilities Request'
+                                                                    : 'N/A'}{' '}
+
+
+                                        <span>
+                                            (
+              {new Date(res.request_date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit'
+              })}
+                                            )
+            </span>
+                                    </button>
+                                </ul>
+                            ))
+                        ) : (
+                            <nav
+                                className="border p-5 flex items-center"
+                                style={{ borderColor: '#003A96' }}
+                            >
+                                <p className="text-gray-700 font-[Poppins]">No active service requests.</p>
+                            </nav>
+                        )}
                     </div>
                 </nav>} scaling = {3} open = {true} absolute = {true} x={-70} y={35} xOut={10}>
             </PageWrapper>

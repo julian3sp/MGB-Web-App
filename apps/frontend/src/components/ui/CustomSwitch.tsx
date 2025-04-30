@@ -5,7 +5,7 @@ type CustomSwitchProps = {
 
 export default function CustomSwitch({ checked, onCheckedChange }: CustomSwitchProps) {
     return (
-        <div className="flex border-2 border-[#44A6A6] rounded-full overflow-hidden w-fit text-md font-medium cursor-pointer text-center">
+        <div className="flex border-2 border-[#003a96] rounded-full overflow-hidden w-fit text-md font-medium cursor-pointer text-center">
 
             {/* true */}
             <button

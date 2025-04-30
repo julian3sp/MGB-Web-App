@@ -10,7 +10,7 @@ import {
 interface MapEditorControlsProps {
     map: google.maps.Map | null;
     selectedHospital: string | null;
-    selectedFloor: 1| 2 | 3 | 4 | null;
+    selectedFloor: number | null;
     onHospitalChange: (hospital: string) => void;
     onFloorChange: (floor: 1| 2 | 3 | 4 | null) => void;
     hospitalLocationMap: Record<string, { lat: number; lng: number }>;

@@ -1,52 +1,71 @@
-import React, {useEffect, useRef, useState} from 'react';
-import DepartmentList from '../DepartmentList';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Department_array from '../DepartmentList';//not needed anymore
+import { trpc } from '../../lib/trpc.ts'
 import DepartmentIcon from '../../../assets/DepartmentIcon.png';
 
 interface Department {
-    id: string;
-    name: string;
-    specialties: string[];
-    floor: string[];
-    building: string;
-    phone: string;
+  id: string;
+  name: string;
+  services: string[];
+  floor: string[];
+  building: string;
+  phone: string;
 }
 
 interface DepartmentDropdownProps {
-    building: string;
-    onDepartmentSelected: (department: { name: string; floor: string[] }) => void;
-    prefill?: string;
+  building: string;
+  onDepartmentSelected: (department: { name: string; floor: string[] }) => void;
+  prefill?: string;
 }
 
 const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
     onDepartmentSelected,
     building,
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const { data: departmentsRaw, isLoading } = trpc.getDirectories.useQuery();
+
+  const [isOpen, setIsOpen] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sorted, setSorted] = useState<Department[]>([]);
 
-    useEffect(() => {
-        if (searchTerm) {
-            setSearchTerm('');
-            setSelectedDepartment(null);
-        }
-    }, [building]);
 
-    useEffect(() => {
-        setSorted(filterDepartments());
-    }, [building, searchTerm]);
+  const departments: Department[] = useMemo(() => {
+    if (!departmentsRaw) return [];
+    return departmentsRaw.map((dept) => ({
+      id: String(dept.id),
+      name: dept.name,
+      services: dept.services.split(','),
+      building: dept.location,
+      floor: [],
+      phone: dept.telephone,
+    }));
+  }, [departmentsRaw]);
 
-    // if the user types exactly a department name, auto‐select it
-    useEffect(() => {
-        const exactMatch = DepartmentList.find(
-            (dept) => dept.name.toLowerCase() === searchTerm.toLowerCase()
-        );
-        if (exactMatch) {
-            setSelectedDepartment(exactMatch);
-            onDepartmentSelected({ name: exactMatch.name, floor: exactMatch.floor });
-        }
-    }, [searchTerm]);
+  useEffect(() => {
+    if (searchTerm) {
+      setSearchTerm('');
+      setSelectedDepartment(null);
+    }
+  }, [building]);
+
+  useEffect(() => {
+    if (departments) {
+      setSorted(filterDepartments(departments));
+    }
+  }, [building, searchTerm, departments]);
+
+  useEffect(() => {
+    if (departments) {
+      const exactMatch = departments.find(
+          (dept) => dept.name.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (exactMatch) {
+        setSelectedDepartment(exactMatch);
+        onDepartmentSelected({ name: exactMatch.name, floor: exactMatch.floor });
+      }
+    }
+  }, [searchTerm, departments]);
 
     const useClickOutside = (handler: () => void) => {
         const reference = useRef();
@@ -66,31 +85,30 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
     };
 
 
-    function filterDepartments(): Department[] {
-        const buildList = DepartmentList.filter((d) => d.building === building);
+    function filterDepartments(departments: Department[]): Department[] {
+        const buildList = departments.filter((d) => d.building === building);
         if (searchTerm) {
             return buildList.filter((d) => d.name.toLowerCase().includes(searchTerm.toLowerCase()));
         }
         return buildList;
     }
 
-    const handleSelect = (department: Department) => {
-        setSelectedDepartment(department);
-        setSearchTerm(department.name);
-        setIsOpen(false);
-        onDepartmentSelected({ name: department.name, floor: department.floor });
-    };
+  const handleSelect = (department: Department) => {
+    setSelectedDepartment(department);
+    setSearchTerm(department.name);
+    setIsOpen(false);
+    onDepartmentSelected({ name: department.name, floor: department.floor });
+  };
 
-    const handleClear = () => {
-        setSearchTerm('');
-        setSelectedDepartment(null);
-        setIsOpen(false);
-    };
+  const handleClear = () => {
+    setSearchTerm('');
+    setSelectedDepartment(null);
+    setIsOpen(false);
+  };
 
     const depRef = useClickOutside(() => {
         setIsOpen(false);
     });
-
 
     return (
         <div>
@@ -107,9 +125,9 @@ const DepartmentDropdown: React.FC<DepartmentDropdownProps> = ({
                     >
                         <input
                             type="text"
-                            className="w-full rounded-3xl py-2 pl-3 pr-10 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
+                            className="w-full rounded-3xl py-3 pl-3 pr-10 text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
                             value={searchTerm}
-                            onFocus={() => setIsOpen(true)}
+                            onClick={() => setIsOpen((prev) => !prev)}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Select a department"
                         />

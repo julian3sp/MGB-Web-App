@@ -137,7 +137,7 @@ const MapComponent: React.FC = () => {
       const CNdepartmentMapping: Record<string, number> = {
         'Entrance': 3900,
         'Multi-Specialty Clinic': 3734,
-        'Radiology, MRI/CT Scan': 3059,
+        'Radiology': 3059,
         'MRI': 3113,
         'CT': 3136,
         'Laboratory': 3781
@@ -182,15 +182,15 @@ const MapComponent: React.FC = () => {
         'Vascular Lab': 4354
       };
 
-      if(selectedPlace.name === null) {
+      if(selectedPlace?.name === null) {
         console.error("No location selected");
-      }else if(selectedPlace.name === "MGB (Chestnut Hill)"){
+      }else if(selectedPlace?.name === "MGB (Chestnut Hill)"){
         return CNdepartmentMapping[department.name];
-      } else if(selectedPlace.name === "20 Patriot Place"){
+      } else if(selectedPlace?.name === "20 Patriot Place"){
         return Pat20departmentMapping[department.name];
-      } else if(selectedPlace.name === "22 Patriot Place"){
+      } else if(selectedPlace?.name === "22 Patriot Place"){
         return Pat22departmentMapping[department.name];
-      } else if(selectedPlace.name === "Faulkner"){
+      } else if(selectedPlace?.name === "Faulkner"){
         return FaulknerMapping[department.name];
       }
       console.log("Issues in finding dept node")
@@ -250,9 +250,7 @@ const MapComponent: React.FC = () => {
     const request: google.maps.DirectionsRequest = {
       origin: start.location,
       destination: end.location,
-      travelMode: google.maps.DirectionsTravelMode[
-        selectedTransport.toUpperCase() as keyof typeof google.maps.DirectionsTravelMode
-      ],
+      travelMode: selectedTransport.toUpperCase() as google.maps.TravelMode,
     };
   
     console.log('Calculating route with request:', request);
@@ -360,8 +358,8 @@ const MapComponent: React.FC = () => {
           {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
           {/* Select Department dropdown */}
-          <h2 className="text-sm font-semibold pt-4 font-[poppins] self-center">Select a department</h2>
-          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name} />
+          <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center">Select a department</h2>
+          <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name ?? ""} />
         </div>}
                    scaling = {4}
                    absolute={false}>
@@ -398,31 +396,15 @@ const MapComponent: React.FC = () => {
 
       {/* Right Column: Map area */}
       <div className="w-full relative">
-        <div className={`h-full transition-all duration-500 ease-in-out ${showMap ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <MapRenderer 
-            onMapReady={handleMapReady} 
-            selectedDestination={selectedPlace} 
-            onZoomChange={handleZoomChange}
-            selectedFloor={selectedFloor}
-            onFloorChange={handleFloorSelect}
-            departmentNumber={deptNumber}
-          />
-          {/* We don't need the FloorSelector component since we have it in HospitalViewControls now */}
-        </div>
-        <div className={`absolute inset-0 flex items-center justify-center bg-white transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-2 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-[#003a96] font-medium">Loading map...</p>
-          </div>
-        </div>
-        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-5 transition-all duration-500 ease-in-out ${showMap || showHospitalMap || isLoading ? 'opacity-0 invisible' : 'opacity-100 visible'}`}>
-          <div className="z-10 -mt-80 text-black">
-            {showText && <TextGenerateEffectDemo />}
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <DisplayLottie />
-          </div>
-        </div>
+        <MapRenderer
+          onMapReady={handleMapReady}
+          selectedDestination={selectedPlace}
+          onZoomChange={handleZoomChange}
+          selectedFloor={selectedFloor}
+          onFloorChange={handleFloorSelect}
+          departmentNumber={deptNumber}
+          disableDoubleClickZoom={true}
+        />
       </div>
       </PageWrapper>
   );

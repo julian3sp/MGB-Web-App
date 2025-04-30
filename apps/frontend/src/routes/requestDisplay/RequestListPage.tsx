@@ -1,20 +1,14 @@
 import { trpc } from '../../lib/trpc.ts';
-import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
-import DepartmentList from '../../components/DepartmentList.ts';
-import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
 import EditRequest from '@/components/ui/EditRequest.tsx';
 import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
 import { ServiceComponentDropdown } from '@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx';
-import FilterIcon from '../../../assets/FilterIcon.png';
 import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
 import ExitButton from '@/components/ui/ExitButton.tsx';
-import ServiceFormSideBar from '@/components/serviceRequest/ServiceFormSideBar.tsx';
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
-import ServiceRequestPage from '@/routes/ServiceRequestPage.tsx';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -30,7 +24,7 @@ const end = digits.slice(6, 10);
 return `(${start}) ${middle}-${end}`;
 */
 
-export default function RequestListPage() {
+export default function RequestListPage({userRole}: {userRole:string}) {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
@@ -387,8 +381,7 @@ export default function RequestListPage() {
                                             size={20}
                                             onClick={() => {
                                                 if (
-                                                    window.sessionStorage.getItem('isAdmin') ===
-                                                    'true'
+                                                    userRole === 'Admin'
                                                 ) {
                                                     console.log('Delete: ');
                                                     console.log(selectedRequest);

@@ -1,11 +1,7 @@
-import { NavLink, Outlet, redirect, useLocation, useNavigate } from 'react-router-dom';
-import RequestTablePage from './RequestTablePage.tsx';
-import RequestListPage from './RequestListPage.tsx';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
-import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import PlusIcon from '../../../assets/PlusIcon.png';
 import CustomSwitch from '@/components/ui/CustomSwitch.tsx';
@@ -78,26 +74,29 @@ export default function RequestPage() {
         setShowFilterPanel(!showFilterPanel);
     };
 
-    const handleNewRequestClick = () =>
-        navigate('/services');
+    const handleNewRequestClick = () => navigate('/services');
 
     const filterRef = useClickOutside(() => {
         setShowFilterPanel(false);
     });
 
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
+
     return (
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
-            <div className=" min-h-screen flex flex-col bg-gradient-to-t  from-blue-100 to-[#003A96] bg-blue-300  font-[Poppins]"
+            <div
+                className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
+                style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
             >
-
-                <div className="gap-4  rounded-[100px]  flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
+                <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
                     <div>
                         <h1
-                            className="text-5xl text-white text-center pl-3 pt-5 font-bold font-[Poppins]  flex-start  "
+                            className="text-4xl font-bold font-[Poppins]  text-left"
+                            style={{ color: '#003A96' }}
                         >
-                            Service Requests
+                            Service Requests:
                         </h1>
                     </div>
                     <div className="flex items-end gap-10 z-100">
@@ -119,7 +118,7 @@ export default function RequestPage() {
                             <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[10px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[12px] border border-blue-950 rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={'container'}>
                                         <img
@@ -132,7 +131,7 @@ export default function RequestPage() {
                                 </button>
 
                                 {showFilterPanel && (
-                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border-1 border-light-subtle rounded-lg shadow-2xl p-4 pb-0 w-[450px]">
+                                    <div className="absolute top-full mt-2 right-0 z-50 bg-white border border-light-subtle rounded-lg shadow-2xl p-4 pb-0 w-[450px] max-h-[450px] overflow-y-auto">
                                         <div className="w-full inline-flex items-center justify-between">
                                             <h3 className="font-bold text-xl underline mb-2 text-[#003A96]">
                                                 Filter Requests
@@ -301,33 +300,36 @@ export default function RequestPage() {
                                             <p className="font-semibold mb-2">Department:</p>
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                                                 {[
-                                                    'Laboratory',
-                                                    'Multi-Specialty Clinic',
-                                                    'Radiology',
-                                                    'Radiology, MRI/CT Scan',
-                                                ].map((dep) => (
+                                                    ...new Set(
+                                                        departmentsRaw?.map((dep) => dep.name)
+                                                    ),
+                                                ].map((depName) => (
                                                     <label
-                                                        key={dep}
+                                                        key={depName}
                                                         className="flex items-start text-sm"
                                                     >
                                                         <input
                                                             type="checkbox"
                                                             checked={filters.department.includes(
-                                                                dep
+                                                                depName
                                                             )}
                                                             onChange={(e) => {
                                                                 setFilters((prev) => ({
                                                                     ...prev,
                                                                     department: e.target.checked
-                                                                        ? [...prev.department, dep]
+                                                                        ? [
+                                                                              ...prev.department,
+                                                                              depName,
+                                                                          ]
                                                                         : prev.department.filter(
-                                                                              (item) => item !== dep
+                                                                              (item) =>
+                                                                                  item !== depName
                                                                           ),
                                                                 }));
                                                             }}
                                                             className="mt-[2px] mr-2"
                                                         />
-                                                        {dep}
+                                                        {depName}
                                                     </label>
                                                 ))}
                                             </div>
@@ -351,7 +353,7 @@ export default function RequestPage() {
                         </div>
                     </div>
                 </div>
-                <div    >
+                <div>
                     <Outlet />
                 </div>
             </div>

@@ -40,6 +40,11 @@ model service_request {
   transportation Transportation?
 }
 
+model AlgoType {
+  id       Int    @id @default(1)
+  algoType String @default("A-Star")
+}
+
 model Sanitation {
   request_id      Int             @id @default(autoincrement())
   cleaningType    String
@@ -86,8 +91,6 @@ model directory {
   services  String
   location  String
   telephone String
-  node      nodes  @relation(fields: [nodesId], references: [id])
-  nodesId   Int
 }
 
 model users {
@@ -104,12 +107,12 @@ model nodes {
   name      String?
   x         Float
   y         Float
+  type      String
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 
-  outgoingEdges edges[]     @relation("SourceEdges")
-  incomingEdges edges[]     @relation("TargetEdges")
-  directory     directory[]
+  outgoingEdges edges[] @relation("SourceEdges")
+  incomingEdges edges[] @relation("TargetEdges")
 }
 
 model edges {

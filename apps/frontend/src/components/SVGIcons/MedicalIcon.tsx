@@ -19,7 +19,7 @@ const MedicalIcon: React.FC<MedicalIconProps> = (
          viewBox="0 0 800 800"
          className={className}>
         <path id="Imported Path"
-              fill={fill} fillRule={"evenodd"} stroke={stroke} stroke-width="1"
+              fill={fill} fillRule={"evenodd"} stroke={stroke} strokeWidth="1"
               d="M 275.00,150.00
            C 275.00,150.00 125.00,150.00 125.00,150.00
              105.10,150.00 86.02,157.90 71.97,171.98

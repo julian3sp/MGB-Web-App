@@ -59,6 +59,11 @@ export type MedicalDevice = $Result.DefaultSelection<Prisma.$MedicalDevicePayloa
  */
 export type Facilities = $Result.DefaultSelection<Prisma.$FacilitiesPayload>
 /**
+ * Model AlgoType
+ * 
+ */
+export type AlgoType = $Result.DefaultSelection<Prisma.$AlgoTypePayload>
+/**
  * Model directory
  * 
  */
@@ -293,6 +298,16 @@ export class PrismaClient<
     * ```
     */
   get facilities(): Prisma.FacilitiesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.algoType`: Exposes CRUD operations for the **AlgoType** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AlgoTypes
+    * const algoTypes = await prisma.algoType.findMany()
+    * ```
+    */
+  get algoType(): Prisma.AlgoTypeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.directory`: Exposes CRUD operations for the **directory** model.
@@ -782,6 +797,7 @@ export namespace Prisma {
     Security: 'Security',
     MedicalDevice: 'MedicalDevice',
     Facilities: 'Facilities',
+    AlgoType: 'AlgoType',
     directory: 'directory',
     users: 'users',
     nodes: 'nodes',
@@ -804,7 +820,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "employee" | "service_request" | "sanitation" | "language" | "transportation" | "audioVisual" | "security" | "medicalDevice" | "facilities" | "directory" | "users" | "nodes" | "edges"
+      modelProps: "employee" | "service_request" | "sanitation" | "language" | "transportation" | "audioVisual" | "security" | "medicalDevice" | "facilities" | "algoType" | "directory" | "users" | "nodes" | "edges"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1474,6 +1490,80 @@ export namespace Prisma {
           }
         }
       }
+      AlgoType: {
+        payload: Prisma.$AlgoTypePayload<ExtArgs>
+        fields: Prisma.AlgoTypeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AlgoTypeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AlgoTypeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          findFirst: {
+            args: Prisma.AlgoTypeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AlgoTypeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          findMany: {
+            args: Prisma.AlgoTypeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>[]
+          }
+          create: {
+            args: Prisma.AlgoTypeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          createMany: {
+            args: Prisma.AlgoTypeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AlgoTypeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>[]
+          }
+          delete: {
+            args: Prisma.AlgoTypeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          update: {
+            args: Prisma.AlgoTypeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          deleteMany: {
+            args: Prisma.AlgoTypeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AlgoTypeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AlgoTypeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>[]
+          }
+          upsert: {
+            args: Prisma.AlgoTypeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AlgoTypePayload>
+          }
+          aggregate: {
+            args: Prisma.AlgoTypeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAlgoType>
+          }
+          groupBy: {
+            args: Prisma.AlgoTypeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AlgoTypeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AlgoTypeCountArgs<ExtArgs>
+            result: $Utils.Optional<AlgoTypeCountAggregateOutputType> | number
+          }
+        }
+      }
       directory: {
         payload: Prisma.$directoryPayload<ExtArgs>
         fields: Prisma.directoryFieldRefs
@@ -1863,6 +1953,7 @@ export namespace Prisma {
     security?: SecurityOmit
     medicalDevice?: MedicalDeviceOmit
     facilities?: FacilitiesOmit
+    algoType?: AlgoTypeOmit
     directory?: directoryOmit
     users?: usersOmit
     nodes?: nodesOmit
@@ -12007,6 +12098,996 @@ export namespace Prisma {
 
 
   /**
+   * Model AlgoType
+   */
+
+  export type AggregateAlgoType = {
+    _count: AlgoTypeCountAggregateOutputType | null
+    _avg: AlgoTypeAvgAggregateOutputType | null
+    _sum: AlgoTypeSumAggregateOutputType | null
+    _min: AlgoTypeMinAggregateOutputType | null
+    _max: AlgoTypeMaxAggregateOutputType | null
+  }
+
+  export type AlgoTypeAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AlgoTypeSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type AlgoTypeMinAggregateOutputType = {
+    id: number | null
+    algoType: string | null
+  }
+
+  export type AlgoTypeMaxAggregateOutputType = {
+    id: number | null
+    algoType: string | null
+  }
+
+  export type AlgoTypeCountAggregateOutputType = {
+    id: number
+    algoType: number
+    _all: number
+  }
+
+
+  export type AlgoTypeAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type AlgoTypeSumAggregateInputType = {
+    id?: true
+  }
+
+  export type AlgoTypeMinAggregateInputType = {
+    id?: true
+    algoType?: true
+  }
+
+  export type AlgoTypeMaxAggregateInputType = {
+    id?: true
+    algoType?: true
+  }
+
+  export type AlgoTypeCountAggregateInputType = {
+    id?: true
+    algoType?: true
+    _all?: true
+  }
+
+  export type AlgoTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AlgoType to aggregate.
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AlgoTypes to fetch.
+     */
+    orderBy?: AlgoTypeOrderByWithRelationInput | AlgoTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AlgoTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AlgoTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AlgoTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AlgoTypes
+    **/
+    _count?: true | AlgoTypeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AlgoTypeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AlgoTypeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AlgoTypeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AlgoTypeMaxAggregateInputType
+  }
+
+  export type GetAlgoTypeAggregateType<T extends AlgoTypeAggregateArgs> = {
+        [P in keyof T & keyof AggregateAlgoType]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAlgoType[P]>
+      : GetScalarType<T[P], AggregateAlgoType[P]>
+  }
+
+
+
+
+  export type AlgoTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AlgoTypeWhereInput
+    orderBy?: AlgoTypeOrderByWithAggregationInput | AlgoTypeOrderByWithAggregationInput[]
+    by: AlgoTypeScalarFieldEnum[] | AlgoTypeScalarFieldEnum
+    having?: AlgoTypeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AlgoTypeCountAggregateInputType | true
+    _avg?: AlgoTypeAvgAggregateInputType
+    _sum?: AlgoTypeSumAggregateInputType
+    _min?: AlgoTypeMinAggregateInputType
+    _max?: AlgoTypeMaxAggregateInputType
+  }
+
+  export type AlgoTypeGroupByOutputType = {
+    id: number
+    algoType: string
+    _count: AlgoTypeCountAggregateOutputType | null
+    _avg: AlgoTypeAvgAggregateOutputType | null
+    _sum: AlgoTypeSumAggregateOutputType | null
+    _min: AlgoTypeMinAggregateOutputType | null
+    _max: AlgoTypeMaxAggregateOutputType | null
+  }
+
+  type GetAlgoTypeGroupByPayload<T extends AlgoTypeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AlgoTypeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AlgoTypeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AlgoTypeGroupByOutputType[P]>
+            : GetScalarType<T[P], AlgoTypeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AlgoTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    algoType?: boolean
+  }, ExtArgs["result"]["algoType"]>
+
+  export type AlgoTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    algoType?: boolean
+  }, ExtArgs["result"]["algoType"]>
+
+  export type AlgoTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    algoType?: boolean
+  }, ExtArgs["result"]["algoType"]>
+
+  export type AlgoTypeSelectScalar = {
+    id?: boolean
+    algoType?: boolean
+  }
+
+  export type AlgoTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "algoType", ExtArgs["result"]["algoType"]>
+
+  export type $AlgoTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AlgoType"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      algoType: string
+    }, ExtArgs["result"]["algoType"]>
+    composites: {}
+  }
+
+  type AlgoTypeGetPayload<S extends boolean | null | undefined | AlgoTypeDefaultArgs> = $Result.GetResult<Prisma.$AlgoTypePayload, S>
+
+  type AlgoTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AlgoTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AlgoTypeCountAggregateInputType | true
+    }
+
+  export interface AlgoTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AlgoType'], meta: { name: 'AlgoType' } }
+    /**
+     * Find zero or one AlgoType that matches the filter.
+     * @param {AlgoTypeFindUniqueArgs} args - Arguments to find a AlgoType
+     * @example
+     * // Get one AlgoType
+     * const algoType = await prisma.algoType.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AlgoTypeFindUniqueArgs>(args: SelectSubset<T, AlgoTypeFindUniqueArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AlgoType that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AlgoTypeFindUniqueOrThrowArgs} args - Arguments to find a AlgoType
+     * @example
+     * // Get one AlgoType
+     * const algoType = await prisma.algoType.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AlgoTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, AlgoTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AlgoType that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeFindFirstArgs} args - Arguments to find a AlgoType
+     * @example
+     * // Get one AlgoType
+     * const algoType = await prisma.algoType.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AlgoTypeFindFirstArgs>(args?: SelectSubset<T, AlgoTypeFindFirstArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AlgoType that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeFindFirstOrThrowArgs} args - Arguments to find a AlgoType
+     * @example
+     * // Get one AlgoType
+     * const algoType = await prisma.algoType.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AlgoTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, AlgoTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AlgoTypes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AlgoTypes
+     * const algoTypes = await prisma.algoType.findMany()
+     * 
+     * // Get first 10 AlgoTypes
+     * const algoTypes = await prisma.algoType.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const algoTypeWithIdOnly = await prisma.algoType.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AlgoTypeFindManyArgs>(args?: SelectSubset<T, AlgoTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AlgoType.
+     * @param {AlgoTypeCreateArgs} args - Arguments to create a AlgoType.
+     * @example
+     * // Create one AlgoType
+     * const AlgoType = await prisma.algoType.create({
+     *   data: {
+     *     // ... data to create a AlgoType
+     *   }
+     * })
+     * 
+     */
+    create<T extends AlgoTypeCreateArgs>(args: SelectSubset<T, AlgoTypeCreateArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AlgoTypes.
+     * @param {AlgoTypeCreateManyArgs} args - Arguments to create many AlgoTypes.
+     * @example
+     * // Create many AlgoTypes
+     * const algoType = await prisma.algoType.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AlgoTypeCreateManyArgs>(args?: SelectSubset<T, AlgoTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AlgoTypes and returns the data saved in the database.
+     * @param {AlgoTypeCreateManyAndReturnArgs} args - Arguments to create many AlgoTypes.
+     * @example
+     * // Create many AlgoTypes
+     * const algoType = await prisma.algoType.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AlgoTypes and only return the `id`
+     * const algoTypeWithIdOnly = await prisma.algoType.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AlgoTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, AlgoTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AlgoType.
+     * @param {AlgoTypeDeleteArgs} args - Arguments to delete one AlgoType.
+     * @example
+     * // Delete one AlgoType
+     * const AlgoType = await prisma.algoType.delete({
+     *   where: {
+     *     // ... filter to delete one AlgoType
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AlgoTypeDeleteArgs>(args: SelectSubset<T, AlgoTypeDeleteArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AlgoType.
+     * @param {AlgoTypeUpdateArgs} args - Arguments to update one AlgoType.
+     * @example
+     * // Update one AlgoType
+     * const algoType = await prisma.algoType.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AlgoTypeUpdateArgs>(args: SelectSubset<T, AlgoTypeUpdateArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AlgoTypes.
+     * @param {AlgoTypeDeleteManyArgs} args - Arguments to filter AlgoTypes to delete.
+     * @example
+     * // Delete a few AlgoTypes
+     * const { count } = await prisma.algoType.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AlgoTypeDeleteManyArgs>(args?: SelectSubset<T, AlgoTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AlgoTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AlgoTypes
+     * const algoType = await prisma.algoType.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AlgoTypeUpdateManyArgs>(args: SelectSubset<T, AlgoTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AlgoTypes and returns the data updated in the database.
+     * @param {AlgoTypeUpdateManyAndReturnArgs} args - Arguments to update many AlgoTypes.
+     * @example
+     * // Update many AlgoTypes
+     * const algoType = await prisma.algoType.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AlgoTypes and only return the `id`
+     * const algoTypeWithIdOnly = await prisma.algoType.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AlgoTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, AlgoTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AlgoType.
+     * @param {AlgoTypeUpsertArgs} args - Arguments to update or create a AlgoType.
+     * @example
+     * // Update or create a AlgoType
+     * const algoType = await prisma.algoType.upsert({
+     *   create: {
+     *     // ... data to create a AlgoType
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AlgoType we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AlgoTypeUpsertArgs>(args: SelectSubset<T, AlgoTypeUpsertArgs<ExtArgs>>): Prisma__AlgoTypeClient<$Result.GetResult<Prisma.$AlgoTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AlgoTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeCountArgs} args - Arguments to filter AlgoTypes to count.
+     * @example
+     * // Count the number of AlgoTypes
+     * const count = await prisma.algoType.count({
+     *   where: {
+     *     // ... the filter for the AlgoTypes we want to count
+     *   }
+     * })
+    **/
+    count<T extends AlgoTypeCountArgs>(
+      args?: Subset<T, AlgoTypeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AlgoTypeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AlgoType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AlgoTypeAggregateArgs>(args: Subset<T, AlgoTypeAggregateArgs>): Prisma.PrismaPromise<GetAlgoTypeAggregateType<T>>
+
+    /**
+     * Group by AlgoType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AlgoTypeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AlgoTypeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AlgoTypeGroupByArgs['orderBy'] }
+        : { orderBy?: AlgoTypeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AlgoTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAlgoTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AlgoType model
+   */
+  readonly fields: AlgoTypeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AlgoType.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AlgoTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AlgoType model
+   */
+  interface AlgoTypeFieldRefs {
+    readonly id: FieldRef<"AlgoType", 'Int'>
+    readonly algoType: FieldRef<"AlgoType", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AlgoType findUnique
+   */
+  export type AlgoTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which AlgoType to fetch.
+     */
+    where: AlgoTypeWhereUniqueInput
+  }
+
+  /**
+   * AlgoType findUniqueOrThrow
+   */
+  export type AlgoTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which AlgoType to fetch.
+     */
+    where: AlgoTypeWhereUniqueInput
+  }
+
+  /**
+   * AlgoType findFirst
+   */
+  export type AlgoTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which AlgoType to fetch.
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AlgoTypes to fetch.
+     */
+    orderBy?: AlgoTypeOrderByWithRelationInput | AlgoTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AlgoTypes.
+     */
+    cursor?: AlgoTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AlgoTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AlgoTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AlgoTypes.
+     */
+    distinct?: AlgoTypeScalarFieldEnum | AlgoTypeScalarFieldEnum[]
+  }
+
+  /**
+   * AlgoType findFirstOrThrow
+   */
+  export type AlgoTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which AlgoType to fetch.
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AlgoTypes to fetch.
+     */
+    orderBy?: AlgoTypeOrderByWithRelationInput | AlgoTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AlgoTypes.
+     */
+    cursor?: AlgoTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AlgoTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AlgoTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AlgoTypes.
+     */
+    distinct?: AlgoTypeScalarFieldEnum | AlgoTypeScalarFieldEnum[]
+  }
+
+  /**
+   * AlgoType findMany
+   */
+  export type AlgoTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which AlgoTypes to fetch.
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AlgoTypes to fetch.
+     */
+    orderBy?: AlgoTypeOrderByWithRelationInput | AlgoTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AlgoTypes.
+     */
+    cursor?: AlgoTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AlgoTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AlgoTypes.
+     */
+    skip?: number
+    distinct?: AlgoTypeScalarFieldEnum | AlgoTypeScalarFieldEnum[]
+  }
+
+  /**
+   * AlgoType create
+   */
+  export type AlgoTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AlgoType.
+     */
+    data?: XOR<AlgoTypeCreateInput, AlgoTypeUncheckedCreateInput>
+  }
+
+  /**
+   * AlgoType createMany
+   */
+  export type AlgoTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AlgoTypes.
+     */
+    data: AlgoTypeCreateManyInput | AlgoTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AlgoType createManyAndReturn
+   */
+  export type AlgoTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * The data used to create many AlgoTypes.
+     */
+    data: AlgoTypeCreateManyInput | AlgoTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AlgoType update
+   */
+  export type AlgoTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AlgoType.
+     */
+    data: XOR<AlgoTypeUpdateInput, AlgoTypeUncheckedUpdateInput>
+    /**
+     * Choose, which AlgoType to update.
+     */
+    where: AlgoTypeWhereUniqueInput
+  }
+
+  /**
+   * AlgoType updateMany
+   */
+  export type AlgoTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AlgoTypes.
+     */
+    data: XOR<AlgoTypeUpdateManyMutationInput, AlgoTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which AlgoTypes to update
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * Limit how many AlgoTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AlgoType updateManyAndReturn
+   */
+  export type AlgoTypeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * The data used to update AlgoTypes.
+     */
+    data: XOR<AlgoTypeUpdateManyMutationInput, AlgoTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which AlgoTypes to update
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * Limit how many AlgoTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AlgoType upsert
+   */
+  export type AlgoTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AlgoType to update in case it exists.
+     */
+    where: AlgoTypeWhereUniqueInput
+    /**
+     * In case the AlgoType found by the `where` argument doesn't exist, create a new AlgoType with this data.
+     */
+    create: XOR<AlgoTypeCreateInput, AlgoTypeUncheckedCreateInput>
+    /**
+     * In case the AlgoType was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AlgoTypeUpdateInput, AlgoTypeUncheckedUpdateInput>
+  }
+
+  /**
+   * AlgoType delete
+   */
+  export type AlgoTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+    /**
+     * Filter which AlgoType to delete.
+     */
+    where: AlgoTypeWhereUniqueInput
+  }
+
+  /**
+   * AlgoType deleteMany
+   */
+  export type AlgoTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AlgoTypes to delete
+     */
+    where?: AlgoTypeWhereInput
+    /**
+     * Limit how many AlgoTypes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AlgoType without action
+   */
+  export type AlgoTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AlgoType
+     */
+    select?: AlgoTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AlgoType
+     */
+    omit?: AlgoTypeOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model directory
    */
 
@@ -14054,6 +15135,7 @@ export namespace Prisma {
     name: string | null
     x: number | null
     y: number | null
+    type: string | null
     edgeCost: number | null
     totalCost: number | null
   }
@@ -14065,6 +15147,7 @@ export namespace Prisma {
     name: string | null
     x: number | null
     y: number | null
+    type: string | null
     edgeCost: number | null
     totalCost: number | null
   }
@@ -14076,6 +15159,7 @@ export namespace Prisma {
     name: number
     x: number
     y: number
+    type: number
     edgeCost: number
     totalCost: number
     _all: number
@@ -14107,6 +15191,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
   }
@@ -14118,6 +15203,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
   }
@@ -14129,6 +15215,7 @@ export namespace Prisma {
     name?: true
     x?: true
     y?: true
+    type?: true
     edgeCost?: true
     totalCost?: true
     _all?: true
@@ -14227,6 +15314,7 @@ export namespace Prisma {
     name: string | null
     x: number
     y: number
+    type: string
     edgeCost: number
     totalCost: number
     _count: NodesCountAggregateOutputType | null
@@ -14257,6 +15345,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
     outgoingEdges?: boolean | nodes$outgoingEdgesArgs<ExtArgs>
@@ -14271,6 +15360,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }, ExtArgs["result"]["nodes"]>
@@ -14282,6 +15372,7 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }, ExtArgs["result"]["nodes"]>
@@ -14293,11 +15384,12 @@ export namespace Prisma {
     name?: boolean
     x?: boolean
     y?: boolean
+    type?: boolean
     edgeCost?: boolean
     totalCost?: boolean
   }
 
-  export type nodesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "building" | "floor" | "name" | "x" | "y" | "edgeCost" | "totalCost", ExtArgs["result"]["nodes"]>
+  export type nodesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "building" | "floor" | "name" | "x" | "y" | "type" | "edgeCost" | "totalCost", ExtArgs["result"]["nodes"]>
   export type nodesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     outgoingEdges?: boolean | nodes$outgoingEdgesArgs<ExtArgs>
     incomingEdges?: boolean | nodes$incomingEdgesArgs<ExtArgs>
@@ -14319,6 +15411,7 @@ export namespace Prisma {
       name: string | null
       x: number
       y: number
+      type: string
       edgeCost: number
       totalCost: number
     }, ExtArgs["result"]["nodes"]>
@@ -14752,6 +15845,7 @@ export namespace Prisma {
     readonly name: FieldRef<"nodes", 'String'>
     readonly x: FieldRef<"nodes", 'Float'>
     readonly y: FieldRef<"nodes", 'Float'>
+    readonly type: FieldRef<"nodes", 'String'>
     readonly edgeCost: FieldRef<"nodes", 'Int'>
     readonly totalCost: FieldRef<"nodes", 'Int'>
   }
@@ -16417,6 +17511,14 @@ export namespace Prisma {
   export type FacilitiesScalarFieldEnum = (typeof FacilitiesScalarFieldEnum)[keyof typeof FacilitiesScalarFieldEnum]
 
 
+  export const AlgoTypeScalarFieldEnum: {
+    id: 'id',
+    algoType: 'algoType'
+  };
+
+  export type AlgoTypeScalarFieldEnum = (typeof AlgoTypeScalarFieldEnum)[keyof typeof AlgoTypeScalarFieldEnum]
+
+
   export const DirectoryScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -16445,6 +17547,7 @@ export namespace Prisma {
     name: 'name',
     x: 'x',
     y: 'y',
+    type: 'type',
     edgeCost: 'edgeCost',
     totalCost: 'totalCost'
   };
@@ -17067,6 +18170,45 @@ export namespace Prisma {
     facilitiesID?: IntWithAggregatesFilter<"Facilities"> | number
   }
 
+  export type AlgoTypeWhereInput = {
+    AND?: AlgoTypeWhereInput | AlgoTypeWhereInput[]
+    OR?: AlgoTypeWhereInput[]
+    NOT?: AlgoTypeWhereInput | AlgoTypeWhereInput[]
+    id?: IntFilter<"AlgoType"> | number
+    algoType?: StringFilter<"AlgoType"> | string
+  }
+
+  export type AlgoTypeOrderByWithRelationInput = {
+    id?: SortOrder
+    algoType?: SortOrder
+  }
+
+  export type AlgoTypeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AlgoTypeWhereInput | AlgoTypeWhereInput[]
+    OR?: AlgoTypeWhereInput[]
+    NOT?: AlgoTypeWhereInput | AlgoTypeWhereInput[]
+    algoType?: StringFilter<"AlgoType"> | string
+  }, "id">
+
+  export type AlgoTypeOrderByWithAggregationInput = {
+    id?: SortOrder
+    algoType?: SortOrder
+    _count?: AlgoTypeCountOrderByAggregateInput
+    _avg?: AlgoTypeAvgOrderByAggregateInput
+    _max?: AlgoTypeMaxOrderByAggregateInput
+    _min?: AlgoTypeMinOrderByAggregateInput
+    _sum?: AlgoTypeSumOrderByAggregateInput
+  }
+
+  export type AlgoTypeScalarWhereWithAggregatesInput = {
+    AND?: AlgoTypeScalarWhereWithAggregatesInput | AlgoTypeScalarWhereWithAggregatesInput[]
+    OR?: AlgoTypeScalarWhereWithAggregatesInput[]
+    NOT?: AlgoTypeScalarWhereWithAggregatesInput | AlgoTypeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AlgoType"> | number
+    algoType?: StringWithAggregatesFilter<"AlgoType"> | string
+  }
+
   export type directoryWhereInput = {
     AND?: directoryWhereInput | directoryWhereInput[]
     OR?: directoryWhereInput[]
@@ -17178,6 +18320,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"nodes"> | string | null
     x?: FloatFilter<"nodes"> | number
     y?: FloatFilter<"nodes"> | number
+    type?: StringFilter<"nodes"> | string
     edgeCost?: IntFilter<"nodes"> | number
     totalCost?: IntFilter<"nodes"> | number
     outgoingEdges?: EdgesListRelationFilter
@@ -17191,6 +18334,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
     outgoingEdges?: edgesOrderByRelationAggregateInput
@@ -17207,6 +18351,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"nodes"> | string | null
     x?: FloatFilter<"nodes"> | number
     y?: FloatFilter<"nodes"> | number
+    type?: StringFilter<"nodes"> | string
     edgeCost?: IntFilter<"nodes"> | number
     totalCost?: IntFilter<"nodes"> | number
     outgoingEdges?: EdgesListRelationFilter
@@ -17220,6 +18365,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
     _count?: nodesCountOrderByAggregateInput
@@ -17239,6 +18385,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"nodes"> | string | null
     x?: FloatWithAggregatesFilter<"nodes"> | number
     y?: FloatWithAggregatesFilter<"nodes"> | number
+    type?: StringWithAggregatesFilter<"nodes"> | string
     edgeCost?: IntWithAggregatesFilter<"nodes"> | number
     totalCost?: IntWithAggregatesFilter<"nodes"> | number
   }
@@ -17781,6 +18928,41 @@ export namespace Prisma {
     facilitiesID?: IntFieldUpdateOperationsInput | number
   }
 
+  export type AlgoTypeCreateInput = {
+    id?: number
+    algoType?: string
+  }
+
+  export type AlgoTypeUncheckedCreateInput = {
+    id?: number
+    algoType?: string
+  }
+
+  export type AlgoTypeUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    algoType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AlgoTypeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    algoType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AlgoTypeCreateManyInput = {
+    id?: number
+    algoType?: string
+  }
+
+  export type AlgoTypeUpdateManyMutationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    algoType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AlgoTypeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    algoType?: StringFieldUpdateOperationsInput | string
+  }
+
   export type directoryCreateInput = {
     name: string
     services: string
@@ -17889,6 +19071,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesCreateNestedManyWithoutSourceNodeInput
@@ -17902,6 +19085,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesUncheckedCreateNestedManyWithoutSourceNodeInput
@@ -17914,6 +19098,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUpdateManyWithoutSourceNodeNestedInput
@@ -17927,6 +19112,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUncheckedUpdateManyWithoutSourceNodeNestedInput
@@ -17940,6 +19126,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
   }
@@ -17950,6 +19137,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
   }
@@ -17961,6 +19149,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
   }
@@ -18472,6 +19661,29 @@ export namespace Prisma {
     facilitiesID?: SortOrder
   }
 
+  export type AlgoTypeCountOrderByAggregateInput = {
+    id?: SortOrder
+    algoType?: SortOrder
+  }
+
+  export type AlgoTypeAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type AlgoTypeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    algoType?: SortOrder
+  }
+
+  export type AlgoTypeMinOrderByAggregateInput = {
+    id?: SortOrder
+    algoType?: SortOrder
+  }
+
+  export type AlgoTypeSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type directoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -18553,6 +19765,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -18573,6 +19786,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -18584,6 +19798,7 @@ export namespace Prisma {
     name?: SortOrder
     x?: SortOrder
     y?: SortOrder
+    type?: SortOrder
     edgeCost?: SortOrder
     totalCost?: SortOrder
   }
@@ -20461,6 +21676,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     incomingEdges?: edgesCreateNestedManyWithoutTargetNodeInput
@@ -20473,6 +21689,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     incomingEdges?: edgesUncheckedCreateNestedManyWithoutTargetNodeInput
@@ -20489,6 +21706,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesCreateNestedManyWithoutSourceNodeInput
@@ -20501,6 +21719,7 @@ export namespace Prisma {
     name?: string | null
     x: number
     y: number
+    type: string
     edgeCost?: number
     totalCost?: number
     outgoingEdges?: edgesUncheckedCreateNestedManyWithoutSourceNodeInput
@@ -20528,6 +21747,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     incomingEdges?: edgesUpdateManyWithoutTargetNodeNestedInput
@@ -20540,6 +21760,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     incomingEdges?: edgesUncheckedUpdateManyWithoutTargetNodeNestedInput
@@ -20562,6 +21783,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUpdateManyWithoutSourceNodeNestedInput
@@ -20574,6 +21796,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     x?: FloatFieldUpdateOperationsInput | number
     y?: FloatFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
     edgeCost?: IntFieldUpdateOperationsInput | number
     totalCost?: IntFieldUpdateOperationsInput | number
     outgoingEdges?: edgesUncheckedUpdateManyWithoutSourceNodeNestedInput

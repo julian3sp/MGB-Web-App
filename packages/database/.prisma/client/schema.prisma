@@ -99,6 +99,11 @@ model Facilities {
   service_request service_request @relation(fields: [facilitiesID], references: [request_id], onDelete: Cascade)
 }
 
+model AlgoType {
+  id       Int    @id @default(1)
+  algoType String @default("A-Star")
+}
+
 model directory {
   id        Int    @id @default(autoincrement())
   name      String
@@ -121,6 +126,7 @@ model nodes {
   name      String?
   x         Float
   y         Float
+  type      String
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 

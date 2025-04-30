@@ -186,6 +186,11 @@ exports.Prisma.FacilitiesScalarFieldEnum = {
   facilitiesID: 'facilitiesID'
 };
 
+exports.Prisma.AlgoTypeScalarFieldEnum = {
+  id: 'id',
+  algoType: 'algoType'
+};
+
 exports.Prisma.DirectoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -208,6 +213,7 @@ exports.Prisma.NodesScalarFieldEnum = {
   name: 'name',
   x: 'x',
   y: 'y',
+  type: 'type',
   edgeCost: 'edgeCost',
   totalCost: 'totalCost'
 };
@@ -245,6 +251,7 @@ exports.Prisma.ModelName = {
   Security: 'Security',
   MedicalDevice: 'MedicalDevice',
   Facilities: 'Facilities',
+  AlgoType: 'AlgoType',
   directory: 'directory',
   users: 'users',
   nodes: 'nodes',

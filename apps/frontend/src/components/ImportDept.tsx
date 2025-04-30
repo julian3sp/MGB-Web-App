@@ -34,7 +34,7 @@ const ImportDept = () => {
                     id: values[0],
                     name: values[1].replace(/"/g, "").replace(/'/g,""),
                     services: values[2].replace(/"/g, "").replace(/#/g,','),
-                    location: values[3].replace(/"/g, ""),
+                    location: values[3].replace(/"/g, "").replace(/_/g," "),
                     telephone: values[4].replace(/"/g, ""),
                 };
 

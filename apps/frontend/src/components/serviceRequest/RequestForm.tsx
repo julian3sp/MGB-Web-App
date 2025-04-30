@@ -1,16 +1,12 @@
 import { FormEvent, useState } from 'react';
-import { AuthenticationError } from '@auth0/auth0-react';
-import {ServiceComponentDropdown} from "./inputFields/ServiceComponentDropdown.tsx";
-import {ErrorPopUp} from "./inputFields/ErrorPopUp.tsx";
-import {SRQDropdown} from "./inputFields/SRQDropdown.tsx";
-import {Combobox} from "./inputFields/Combobox.tsx";
-import TextArea from '../TextArea.tsx';
-import SubmitButton from '../SubmitButton.tsx';
-import { InputHeader } from '../signIn/InputHeader.tsx';
+
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
-import {languages} from "./data/languages.ts";
+import { ProgressBar } from './ServiceRequest/ProgressBar.tsx';
+import { FormSteps } from './ServiceRequest/FormSteps.tsx'
+import { FinalReview } from './ServiceRequest/FinalReview.tsx';
+import { motion } from 'framer-motion';
 
 type requestFormProps = {
     title: string;
@@ -19,25 +15,25 @@ type requestFormProps = {
 
 type errorProps =
     {
-    name: string,
-    employeeID: string,
-    department: string,
-    priority: string,
-    location: string,
-    status: string,
-    cleaningType: string,
-    accommodationType: string,
-    sourceLanguage: string,
-    targetLanguage: string,
-    accessZones: string,
-    securityIssue: string,
-    transportationType: string,
-    transportationDestination: string,
-    device: string,
-    operatorRequired: string,
-    maintenanceType: string,
-    equipmentType: string,
-}
+        name: string,
+        employeeID: string,
+        department: string,
+        priority: string,
+        location: string,
+        status: string,
+        cleaningType: string,
+        accommodationType: string,
+        sourceLanguage: string,
+        targetLanguage: string,
+        accessZones: string,
+        securityIssue: string,
+        transportationType: string,
+        transportationDestination: string,
+        device: string,
+        operatorRequired: string,
+        maintenanceType: string,
+        equipmentType: string,
+    }
 
 function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
@@ -64,6 +60,7 @@ function RequestForm({ title, type }: requestFormProps) {
     const [status, setStatus] = useState<string>("");
     const mutation = trpc.createRequest.useMutation()
     const [open, setOpen] = useState<boolean>(false);
+    const [currentStep, setCurrentStep] = useState(1);
     const [errors, setErrors] = useState({
         name: '',
         employeeID: '',
@@ -130,7 +127,7 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('targetLanguage error');
         }
 
-        if(!accommodationType && type === 'AudioVisual') {
+        if (!accommodationType && type === 'AudioVisual') {
             errors.accommodationType = "Please select an accommodation type";
             console.log('accommodationType error');
         }
@@ -161,47 +158,47 @@ function RequestForm({ title, type }: requestFormProps) {
             console.log('priority error');
         }
 
-        if (!cleaningType && type ==='Sanitation') {
+        if (!cleaningType && type === 'Sanitation') {
             errors.cleaningType = 'Please set a cleaning type';
             console.log('cleaningType error');
         }
 
-        if (!accessZones && type ==='Security') {
+        if (!accessZones && type === 'Security') {
             errors.accessZones = 'Please set a access zone';
             console.log('accessZone error');
         }
 
-        if (!securityIssue && type ==='Security') {
+        if (!securityIssue && type === 'Security') {
             errors.securityIssue = 'Please set a security issue';
             console.log('accessZone error');
         }
 
-        if (!transportationType && type==='Transportation') {
+        if (!transportationType && type === 'Transportation') {
             errors.transportationType = 'Please set a transportation type';
             console.log('transportationType error');
         }
 
-        if (!transportationDestination && type==='Transportation') {
+        if (!transportationDestination && type === 'Transportation') {
             errors.transportationDestination = 'Please set a transportation destination';
             console.log('transportationDestination error');
         }
 
-        if (!device && type==='MedicalDevice') {
+        if (!device && type === 'MedicalDevice') {
             errors.device = 'Please select a device';
             console.log('medicalDevice error');
         }
 
-        if (!operatorRequired && type==='MedicalDevice') {
+        if (!operatorRequired && type === 'MedicalDevice') {
             errors.operatorRequired = 'Please select an option';
             console.log('operatorRequired error');
         }
 
-        if(!maintenanceType && type==='MaintenanceType') {
+        if (!maintenanceType && type === 'MaintenanceType') {
             errors.maintenanceType = 'Please select a maintenance type';
             console.log('maintenance error');
         }
 
-        if(!equipmentType && type==='EquipmentType') {
+        if (!equipmentType && type === 'EquipmentType') {
             errors.maintenanceType = 'Please select an equipment type';
             console.log('equipment error');
         }
@@ -210,16 +207,61 @@ function RequestForm({ title, type }: requestFormProps) {
         return Object.values(errors).some(value => value.length > 0);
     };
 
+    const validateCurrentStep = (): boolean => {
+        if (currentStep === 1) {
+            if (!name || !employeeID) {
+                Validate();
+                return false;
+            }
+        } else if (currentStep === 2) {
+            if (!location || !department || !priority || !status) {
+                Validate();
+                return false;
+            }
+        } else if (currentStep === 3) {
+            if (type === "Language" && (!sourceLanguage || !targetLanguage)) {
+                Validate();
+                return false;
+            }
+            if (type === "Sanitation" && !cleaningType) {
+                Validate();
+                return false;
+            }
+            if (type === "Security" && (!accessZones || !securityIssue)) {
+                Validate();
+                return false;
+            }
+            if (type === "Transportation" && (!transportationType || !transportationDestination)) {
+                Validate();
+                return false;
+            }
+            if (type === "AudioVisual" && !accommodationType) {
+                Validate();
+                return false;
+            }
+            if (type === "MedicalDevice" && (!device || !operatorRequired)) {
+                Validate();
+                return false;
+            }
+            if (type === "Facilities" && (!maintenanceType || !equipmentType)) {
+                Validate();
+                return false;
+            }
+        }
+        return true;
+    };
+
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.currentTarget; // This is the actual HTMLFormElement
-        const isValid = form.checkValidity(); // Now
+        const form = e.currentTarget;
+        const isValid = form.checkValidity();
 
         if (Validate()) {
             console.log('submission error')
             return;
         }
-        else{setOpen(true);}
+        else { setOpen(true); }
 
         mutation.mutate({
             name: name,
@@ -275,6 +317,7 @@ function RequestForm({ title, type }: requestFormProps) {
         });
 
         handleReset(e);
+        setCurrentStep(1);
     };
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -331,318 +374,134 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center  text-sm"
+                    className="justify-center text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className=" rounded-lg shadow-lg overflow-hidden w-200 bg-white flex flex-col gap-5">
-
-                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-tr-md rounded-tl-md">
-                            {title}
-                        </h2>
+                    <div className="w-[90vh] flex flex-col gap-5">
+                        <motion.div
+                            key="step1"
+                            initial={{ y: 100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -100, opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="flex-grow"
+                        >
+                            <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
+                                {title}
+                            </h2>
+                        </motion.div>
 
                         {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
                         {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
                         {type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}
 
-                        {/* Employee Information (Two-Column Grid) */}
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
-                            <div>
-                                <InputHeader>Name:</InputHeader>
-                                <ErrorPopUp
-                                    value={name}
-                                    setState={setName}
-                                    placeholder="Name"
-                                    width="w-full"
-                                    error={errors.name}
-                                    clearError={() => clearError('name')}/>
-                            </div>
-
-                            <div>
-                                <InputHeader>Employee ID:</InputHeader>
-                                <ErrorPopUp
-                                    value={employeeID}
-                                    setState={(value) => {
-                                        if (/^\d*$/.test(value)) {
-                                            setEmployeeID(value);}
-                                    }}
-                                    maxLength={9}
-                                    placeholder="Employee ID"
-                                    width="w-full"
-                                    error={errors.employeeID}
-                                    clearError={() => clearError('employeeID')}/>
-                            </div>
-
-                            <div>
-                                <InputHeader>Location</InputHeader>
-                                <SRQDropdown
-                                    value={location}
-                                    setValue={setLocation}
-                                    placeholder={"Select Location"}
-                                    width={"w-full"}
-                                    error={errors.location}
-                                    options={["Brigham & Women's Hospital Main Campus",
-                                        "Chestnut Hill",
-                                        "Faulkner Hospital",
-                                        "Patriot Place"]}
-                                    clearError={() => clearError('location')}
-                                />
-                            </div>
-
-                            <div>
-                                <InputHeader>Department</InputHeader>
-                                <SRQDropdown
-                                    value={department}
-                                    setValue={setDepartment}
-                                    width={"w-full"}
-                                    placeholder={"Select Department"}
-                                    error={errors.department}
-                                    options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
-                                    clearError={() => clearError('department')}
-                                />
-                            </div>
-
-                            <div>
-                                <InputHeader>Priority</InputHeader>
-                                <SRQDropdown
-                                    value={priority}
-                                    setValue={setPriority}
-                                    width={"w-full"}
-                                    options={["Low", "Medium", "High", "Emergency"]}
-                                    placeholder={"Select Priority"}
-                                    error={errors.priority}
-                                    clearError={() => clearError('priority')}
-                                />
-                            </div>
-
-                            <div>
-                                <InputHeader>Status</InputHeader>
-                                <SRQDropdown
-                                    value={status}
-                                    setValue={setStatus}
-                                    placeholder={"Select Status"}
-                                    width={"w-full"}
-                                    error={errors.status}
-                                    options={["Unassigned", "Assigned", "Working", "Done"]}
-                                    clearError={() => clearError('status')}
-
-                                />
-                            </div>
-
-                            {type === "Language" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Source Language (Patient)</InputHeader>
-                                        <Combobox
-                                            options={languages}
-                                            value={sourceLanguage}
-                                            setValue={setSourceLanguage}
-                                            placeholder={"Source Language"}
-                                            error={errors.sourceLanguage}
-                                            clearError={() => clearError('sourceLanguage')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Target Language (Doctor/Staff)</InputHeader>
-                                        <Combobox
-                                            options={languages}
-                                            value={targetLanguage}
-                                            setValue={setTargetLanguage}
-                                            error={errors.targetLanguage}
-                                            clearError={() => clearError('targetLanguage')}
-                                            placeholder={"Select a Language"}/>
-                                    </div>
-                                </>
-                                : null}
-
-                            {type === "Sanitation" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Cleaning Needed</InputHeader>
-                                        <SRQDropdown
-                                        value={cleaningType}
-                                        setValue={setCleaningType}
-                                        placeholder={"Select Cleaning Needed"}
-                                        width={"w-full"}
-                                        error={errors.cleaningType}
-                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}
-                                        clearError={() => clearError('cleaningType')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Contaminant (Optional)</InputHeader>
-                                        <ErrorPopUp
-                                            value={contaminant}
-                                            setState={setContaminant}
-                                            placeholder={"Contaminant"}
-                                            width="w-full"/>
-                                    </div>
-                                </>
-                                : null}
-
-                            {type === "Security" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Security Needed</InputHeader>
-                                        <SRQDropdown
-                                            value={accessZones}
-                                            setValue={setAccessZones}
-                                            placeholder={"Select Access Zones Needed"}
-                                            width={"w-full"}
-                                            error={errors.accessZones}
-                                            options={[
-                                                "",
-                                                "ICU",
-                                                "Operating Room",
-                                                "Pharmacy",
-                                                "Medical Records",
-                                                "Pediatric Ward",
-                                                "Emergency Department",
-                                                "Laboratory",
-                                                "Server Room (IT)",
-                                                "Supply Closet",
-                                                "Radiology",
-                                                "Morgue"
-                                            ]}
-                                            clearError={() => clearError('accessZones')}
-                                        />
-                                    </div>
-                                    <div>
-                                        <InputHeader>Security Issue</InputHeader>
-                                        <ErrorPopUp
-                                            value={securityIssue}
-                                            setState={setSecurityIssue}
-                                            placeholder={"Security Issue"}
-                                            width="w-full"
-                                            error={errors.securityIssue}
-                                            clearError={() => clearError('securityIssue')}/>
-                                    </div>
-                                </>
-                                : null}
-
-                            {type === "Transportation" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Transportation Type</InputHeader>
-                                        <SRQDropdown
-                                            value={transportationType}
-                                            setValue={setTransportationType}
-                                            placeholder={"Select Transportation Type"}
-                                            width={"w-full"}
-                                            error={errors.transportationType}
-                                            options={["Ambulance", "Helicopter", "Other (Please Specify Below)"]}
-                                            clearError={() => clearError('transportationType')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Destination</InputHeader>
-                                        <SRQDropdown
-                                            value={transportationDestination}
-                                            setValue={setTransportationDestination}
-                                            width={"w-full"}
-                                            placeholder={"Select Destination"}
-                                            error={errors.transportationDestination}
-                                            options={["Brigham & Women's Hospital Main Campus",
-                                                "Chestnut Hill",
-                                                "Faulkner Hospital",
-                                                "Patriot Place"]}
-                                            clearError={() => clearError('transportationDestination')}/>
-                                    </div>
-                                </>
-                                : null}
-
-                            {type === "AudioVisual" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Accommodation Type</InputHeader>
-                                        <SRQDropdown
-                                            value={accommodationType}
-                                            setValue={setAccommodationType}
-                                            placeholder={"Select Accommodation Type"}
-                                            width={"w-full"}
-                                            error={errors.accommodationType}
-                                            options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other (Please Specify Below)"]}
-                                            clearError={() => clearError('accommodationType')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Accommodation Details (Optional)</InputHeader>
-                                        <ErrorPopUp
-                                            value={accommodationDetails}
-                                            setState={setAccommodationDetails}
-                                            placeholder={"Enter Accommodation Details"}
-                                            width="w-full"
-                                            />
-                                    </div>
-                                </>
-                                : null}
-                            {type === "MedicalDevice" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Medical Device</InputHeader>
-                                        <SRQDropdown
-                                            value={device}
-                                            setValue={setDevice}
-                                            width={"w-full"}
-                                            placeholder={"Select a Device"}
-                                            error={errors.device}
-                                            options={["EKG", "X-Ray", "Ventilator", "CT Scan", "Defibrillator"]}
-                                            clearError={() => clearError('device')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Operator Required</InputHeader>
-                                        <SRQDropdown
-                                            value={operatorRequired}
-                                            setValue={setOperatorRequired}
-                                            placeholder={"Do You Require an Operator?"}
-                                            error={errors.operatorRequired}
-                                            width={"w-full"}
-                                            options={["Yes", "No"]}
-                                            clearError={() => clearError('operatorRequired')}/>
-                                    </div>
-                                </>
-                                : null}
-                            {type === "Facilities" ?
-                                <>
-                                    <div>
-                                        <InputHeader>Maintenance Type</InputHeader>
-                                        <SRQDropdown
-                                            value={maintenanceType}
-                                            setValue={setMaintenanceType}
-                                            placeholder={"Select Maintenance Type"}
-                                            width={"w-full"}
-                                            error={errors.maintenanceType}
-                                            options={["Elevator", "Plumbing", "HVAC/R", "Power", "Electrical", "Other (Please Specify Below)"]}
-                                            clearError={() => clearError('maintenanceType')}/>
-                                    </div>
-                                    <div>
-                                        <InputHeader>Equipment Type</InputHeader>
-                                        <ErrorPopUp
-                                            value={equipmentType}
-                                            setState={setEquipmentType}
-                                            placeholder={"Specify any Equipment Needed"}
-                                            width={"w-full"}
-                                            error={errors.equipmentType}
-                                            clearError={() => clearError('equipmentType')}/>
-                                    </div>
-                                </>
-                                : null}
-
-                        </div>
-                        <div className={'mr-5 ml-5'}>
-                            <InputHeader children={'Additional Comments:'} />
-                            <TextArea
-                                placeholder="Additional Comments..."
-                                value={comments}
-                                setState={setComments}
+                        {currentStep <= 3 ? (
+                            <FormSteps
+                                currentStep={currentStep}
+                                type={type}
+                                name={name} setName={setName}
+                                employeeID={employeeID} setEmployeeID={setEmployeeID}
+                                location={location} setLocation={setLocation}
+                                department={department} setDepartment={setDepartment}
+                                priority={priority} setPriority={setPriority}
+                                status={status} setStatus={setStatus}
+                                sourceLanguage={sourceLanguage} setSourceLanguage={setSourceLanguage}
+                                targetLanguage={targetLanguage} setTargetLanguage={setTargetLanguage}
+                                cleaningType={cleaningType} setCleaningType={setCleaningType}
+                                contaminant={contaminant} setContaminant={setContaminant}
+                                accessZones={accessZones} setAccessZones={setAccessZones}
+                                securityIssue={securityIssue} setSecurityIssue={setSecurityIssue}
+                                transportationType={transportationType} setTransportationType={setTransportationType}
+                                transportationDestination={transportationDestination} setTransportationDestination={setTransportationDestination}
+                                accommodationType={accommodationType} setAccommodationType={setAccommodationType}
+                                accommodationDetails={accommodationDetails} setAccommodationDetails={setAccommodationDetails}
+                                device={device} setDevice={setDevice}
+                                operatorRequired={operatorRequired} setOperatorRequired={setOperatorRequired}
+                                maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
+                                equipmentType={equipmentType} setEquipmentType={setEquipmentType}
+                                comments={comments} setComments={setComments}
+                                errors={errors}
+                                clearError={clearError}
                             />
-                        </div>
+                        ) : (
+                            <FinalReview
+                                type={type}
+                                name={name} setName={setName}
+                                employeeID={employeeID} setEmployeeID={setEmployeeID}
+                                location={location} setLocation={setLocation}
+                                department={department} setDepartment={setDepartment}
+                                priority={priority} setPriority={setPriority}
+                                status={status} setStatus={setStatus}
+                                sourceLanguage={sourceLanguage} setSourceLanguage={setSourceLanguage}
+                                targetLanguage={targetLanguage} setTargetLanguage={setTargetLanguage}
+                                cleaningType={cleaningType} setCleaningType={setCleaningType}
+                                contaminant={contaminant} setContaminant={setContaminant}
+                                accessZones={accessZones} setAccessZones={setAccessZones}
+                                securityIssue={securityIssue} setSecurityIssue={setSecurityIssue}
+                                transportationType={transportationType} setTransportationType={setTransportationType}
+                                transportationDestination={transportationDestination} setTransportationDestination={setTransportationDestination}
+                                accommodationType={accommodationType} setAccommodationType={setAccommodationType}
+                                accommodationDetails={accommodationDetails} setAccommodationDetails={setAccommodationDetails}
+                                device={device} setDevice={setDevice}
+                                operatorRequired={operatorRequired} setOperatorRequired={setOperatorRequired}
+                                maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
+                                equipmentType={equipmentType} setEquipmentType={setEquipmentType}
+                                comments={comments} setComments={setComments}
+                                errors={errors}
+                                clearError={clearError}
+                            />
 
-                        {/* Buttons */}
-                        <div className=" flex  gap-5 justify-center mt-5">
-                            <ResetButton label={'Reset'} type={"reset"}/>
-                            <SubmitButton
-                                label={'Submit'}
-                                type={'submit'}/>
+                        )}
+
+                        <div className="flex justify-center gap-6 mt-6">
+                            {currentStep > 1 && (
+                                <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
+                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
+                                >
+                                    Back
+                                </button>
+                            )}
+                            {currentStep < 4 && (
+                                <button onClick={(e) => {
+                                    e.preventDefault();
+                                    if (!validateCurrentStep()) return;
+                                    setCurrentStep(currentStep + 1);
+                                }}
+                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
+                                >
+                                    Next
+                                </button>
+                            )}
+                            {currentStep === 4 && (
+                                <button type="submit" className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
+                                    Submit
+                                </button>
+                            )}
                         </div>
                     </div>
-
+                    <ProgressBar
+                        currentStep={currentStep}
+                        name={name}
+                        employeeID={employeeID}
+                        location={location}
+                        department={department}
+                        priority={priority}
+                        status={status}
+                        type={type}
+                        sourceLanguage={sourceLanguage}
+                        targetLanguage={targetLanguage}
+                        cleaningType={cleaningType}
+                        accessZones={accessZones}
+                        securityIssue={securityIssue}
+                        transportationType={transportationType}
+                        transportationDestination={transportationDestination}
+                        accommodationType={accommodationType}
+                        device={device}
+                        operatorRequired={operatorRequired}
+                        maintenanceType={maintenanceType}
+                        equipmentType={equipmentType}
+                    />
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">

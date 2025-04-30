@@ -20,10 +20,10 @@ function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
             onClick={onClick}
             className={`
     group relative flex items-center w-full text-left mb-3 py-3 px-5 rounded-xl
-    font-poppins font-semibold transition-all duration-100 ease-in-out
-    text-[13pt] border-[#44A6A6]
+    font-poppins font-semibold ease-in-out
+    text-[13pt] 
 
-    ${isActive ? 'bg-white text-[#003a96] border-b-0 shadow-inner shadow-[#001e4d]/50' :  'bg-[#003a96] hover:bg-white hover:text-[#003a96] border-b-5 border-b-[#44A6A6] text-white shadow-md'}
+    ${isActive ? 'bg-accent text-[#003a96] border-2 ' :  'bg-[#003a96] hover:bg-blue-950 hover:text-white text-white shadow-lg'}
 
     
     

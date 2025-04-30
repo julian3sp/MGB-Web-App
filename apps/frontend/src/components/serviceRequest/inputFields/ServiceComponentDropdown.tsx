@@ -63,7 +63,7 @@ export function ServiceComponentDropdown({
 
             <select
                 {...(type && { type })}
-                className={`border-[1px] shadow border-[#ececec] border-solid hover:bg-accent hover:text-black rounded-md py-[5px] pr-[5px] pl-[15px] text-[14pt] font-[Poppins] h-[48px] ${width || 'w-[396px]'} ${
+                className={`border-[1px] shadow border-light-subtle border-solid bg-white hover:text-black hover:bg-accent  rounded-lg ml-2 pl-3 pb-0 text-[15pt] font-[Poppins] h-14 w-[465px] ${
                     styledOptions ? styledOptions(value) : ''}`}
                 value={value}
                 onChange={(e) => {

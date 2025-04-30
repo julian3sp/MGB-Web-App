@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {trpc} from "@/lib/trpc.ts";
 import ImportCSV from "../../components/ImportDept.tsx";
+import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
 
 
 const DirectoryPage = () => {
@@ -99,6 +100,9 @@ const DirectoryPage = () => {
                 >
                     Submit
                 </button>
+            </div>
+            <div className="w-full p-5 flex flex-col gap-4">
+                <ImportAllNodesAndEdges />
             </div>
 
             {/* Import/Export CSV */}

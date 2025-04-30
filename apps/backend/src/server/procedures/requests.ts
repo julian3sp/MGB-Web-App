@@ -21,6 +21,24 @@ export const getRequests = trpc.procedure.query(async () => {
     return requests;
 });
 
+export const getRequestOfType = publicProcedure
+    .input(
+        z.object({
+            type: z.string(),
+        })
+    )
+    .query(async (opts) => {
+        const { input } = opts;
+        console.log(input);
+        const requests = await client.service_request.findMany({
+            where: {
+                request_type: input.type,
+            },
+        });
+        console.log('getRequestOfType returned');
+        return requests;
+    });
+
 export const makeRequest = publicProcedure
     .input(
         z.object({

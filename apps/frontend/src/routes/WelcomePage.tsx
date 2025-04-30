@@ -97,26 +97,6 @@ export function WelcomePage() {
         </div>
       </div>
 
-      {!scrolling && (
-        <div className="absolute bottom-10 w-full flex justify-center">
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-5xl text-white animate-pulse"
-          >
-            <div className="flex flex-col items-center space-y-0">
-              <div className="flex flex-col items-center space-y-0">
-                <ChevronDown className="animate-bounce -mb-20" size={100} strokeWidth={0.5}/>
-                <ChevronDown className="animate-bounce delay-200 -mb-20" size={100} strokeWidth={0.5}/>
-                <ChevronDown className="animate-bounce delay-400 -mb-19" size={100} strokeWidth={0.5}/>
-              </div>
-            </div>
-
-          </motion.div>
-        </div>
-      )}
-
       <motion.div
         className="w-full flex flex-col items-center justify-center px-4 text-center"
         initial={{ opacity: 0, y: 50 }}

@@ -12,9 +12,6 @@ import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfindi
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
-import { graph } from "./GraphObject.ts"
-import { StringKeyframeTrack } from 'three/src/Three.Core.js';
-
 interface MapRendererProps {
   onMapReady: (
     map: google.maps.Map,
@@ -177,6 +174,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
+  function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
+    const firstFloorNum: number = path[0].floor
+    const secondFloorStairs = path.find(n => n.floor != firstFloorNum);
+    if (secondFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
+      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+      return {
+        floor1: {path: floor1, floorNum: firstFloorNum},
+        floor2: {path: floor2, floorNum: secondFloorStairs.floor}
+      };
+    }
+    return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
+  }
+
   // Handle department pathfinding
   useEffect(() => {
     if (
@@ -198,7 +209,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const entrances: { [building: string]: number; } = {
         "MGB (Chestnut Hill)": 3900,
         "20 Patriot Place": 1139,
-        "22 Patriot Place": 1952,
+        "22 Patriot Place": 1768,
         "Faulkner": 3995
       }
 
@@ -216,9 +227,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current = null;
       }
 
-
-
-
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
       if(algoType === "A-Star") {
@@ -235,11 +243,26 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         context.setStrategyPathfind(new Dijkstras())
       }
 
-
       const pathNodes = context.pathFind(graph, entrance, target)
 
+      const multiFloors = getMultiFloor(pathNodes)
+
       console.log("Path:", pathNodes)
-      const newPolyline = drawPath(map, pathNodes);
+
+      let newPolyline: any
+
+      console.log("Floor: ", selectedFloor)
+
+      if(multiFloors.floor2.floorNum === multiFloors.floor1.floorNum){
+        newPolyline = drawPath(map, pathNodes);
+      } else {
+        if(multiFloors.floor1.floorNum === selectedFloor){
+          newPolyline = drawPath(map, multiFloors.floor1.path);
+        } else if (multiFloors.floor2.floorNum === selectedFloor){
+          newPolyline = drawPath(map, multiFloors.floor2.path);
+        }
+      }
+
       pathPolylineRef.current = newPolyline;
 
 
@@ -256,23 +279,27 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       }
 
       // Add new markers for start and destination
-      startMarkerRef.current = new google.maps.Marker({
-        position: { lat: entrance.x, lng: entrance.y },
-        map: map,
-        title: 'Start (Entrance)',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-      });
+      if (entrance.floor === selectedFloor) {
+        startMarkerRef.current = new google.maps.Marker({
+          position: { lat: entrance.x, lng: entrance.y },
+          map: map,
+          title: 'Start (Entrance)',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+        });
+      }
 
-      targetMarkerRef.current = new google.maps.Marker({
-        position: { lat: target.x, lng: target.y },
-        map: map,
-        title: 'Department',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-      });
+      if (target.floor === selectedFloor) {
+        targetMarkerRef.current = new google.maps.Marker({
+          position: { lat: target.x, lng: target.y },
+          map: map,
+          title: 'Department',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+        });
+      }
     } catch (error) {
       console.error('Error in pathfinding:', error);
     }
-  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination]);
+  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, selectedFloor]);
 
   // Handle overlay updates based on selected destination
   useEffect(() => {

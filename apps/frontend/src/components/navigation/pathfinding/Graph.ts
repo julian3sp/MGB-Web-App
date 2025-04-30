@@ -59,6 +59,29 @@ export class Graph {
         }
     }
 
+    string2NT(string: string): NodeType {
+        switch (string) {
+            case "Department":
+                return NodeType.Department;
+            case "Elevator":
+                return NodeType.Elevator;
+            case "Stairwell":
+                return NodeType.Stairwell;
+            case "Checkin":
+                return NodeType.Checkin;
+            case "Entrance":
+                return NodeType.Entrance;
+            case "ParkingLot":
+                return NodeType.ParkingLot;
+            case "Restroom":
+                return NodeType.Restroom;
+            case "SkyBridge":
+                return NodeType.SkyBridge;
+            default:
+                return NodeType.Hall;
+        }
+    }
+
     populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
                           edgeCost: number, totalCost: number, parent?: Node; type: string}[],
              edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
@@ -257,7 +280,7 @@ export class Graph {
             ?.push({ id: id, sourceId: sourceId, targetId: targetId, weight: weight });
         this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
 
-        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: 0});
+        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: weight});
         this.edges.push(edge)
     }
 

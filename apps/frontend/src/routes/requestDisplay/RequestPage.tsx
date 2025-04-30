@@ -1,7 +1,9 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
+import { Switch } from '../../components/ui/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
+import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import PlusIcon from '../../../assets/PlusIcon.png';
 import CustomSwitch from '@/components/ui/CustomSwitch.tsx';
@@ -86,15 +88,13 @@ export default function RequestPage() {
         <RequestDataContext.Provider
             value={{ filteredData, isLoading, error: error as Error | null }}
         >
-            <div
-                className="border min-h-screen flex flex-col bg-white mb-1 font-[Poppins]"
-                style={{ borderColor: '#005E64', borderWidth: '0px', borderStyle: 'solid' }}
+            <div className=" min-h-screen flex flex-col bg-white   font-[Poppins]"
             >
-                <div className="flex gap-4 justify-between px-[16px] mt-5 pb-2 pt-1 items-end">
+
+                <div className="gap-4  rounded-[100px] bg-white   flex justify-between mt-5 mr-3 ml-3 px-4 pb-3 items-end ">
                     <div>
                         <h1
-                            className="text-4xl font-bold font-[Poppins]  text-left"
-                            style={{ color: '#003A96' }}
+                            className="text-5xl text-[#003a96] text-center p-1 pl-0 font-bold font-[Poppins]  flex-start  "
                         >
                             Service Requests:
                         </h1>
@@ -102,7 +102,7 @@ export default function RequestPage() {
                     <div className="flex items-end gap-10 z-100">
                         <button
                             onClick={handleNewRequestClick}
-                            className="px-4 py-[12px] border-2 border-white rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-fit h-[50px]"
+                            className="px-4 py-[12px] border-2 border-[#003a96] rounded-4xl text-white hover:bg-blue-950 bg-[#003a96] w-fit h-[50px]"
                         >
                             <div className={'container'}>
                                 <img
@@ -118,7 +118,7 @@ export default function RequestPage() {
                             <div className="relative pt-3">
                                 <button
                                     onClick={handleFilterClick}
-                                    className="px-4 py-[12px] border border-blue-950 rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
+                                    className="px-4 py-[10px] border-2 border-[#003a96] rounded-4xl text-white hover:bg-blue-950 bg-[#003A96] w-[130px]"
                                 >
                                     <div className={'container'}>
                                         <img

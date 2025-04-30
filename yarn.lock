@@ -1052,6 +1052,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-checkbox@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@radix-ui/react-checkbox@npm:1.2.3"
+  dependencies:
+    "@radix-ui/primitive": "npm:1.1.2"
+    "@radix-ui/react-compose-refs": "npm:1.1.2"
+    "@radix-ui/react-context": "npm:1.1.2"
+    "@radix-ui/react-presence": "npm:1.1.4"
+    "@radix-ui/react-primitive": "npm:2.1.0"
+    "@radix-ui/react-use-controllable-state": "npm:1.2.2"
+    "@radix-ui/react-use-previous": "npm:1.1.1"
+    "@radix-ui/react-use-size": "npm:1.1.1"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/6365528dacee7d3869a9c27954bb69b8f934305f9d764cc33de721625674871e64012122ee6d050fed1beb3b9027fd6f571c796a849bf8e8313d12c002419cbd
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-collection@npm:1.1.4":
   version: 1.1.4
   resolution: "@radix-ui/react-collection@npm:1.1.4"
@@ -2932,6 +2958,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prismjs@npm:^1.26.0":
+  version: 1.26.5
+  resolution: "@types/prismjs@npm:1.26.5"
+  checksum: 10/617099479db9550119d0f84272dc79d64b2cf3e0d7a17167fe740d55fdf0f155697d935409464392d164e62080c2c88d649cf4bc4fdd30a87127337536657277
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*, @types/prop-types@npm:^15.7.12, @types/prop-types@npm:^15.7.5":
   version: 15.7.14
   resolution: "@types/prop-types@npm:15.7.14"
@@ -4297,7 +4330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.1.1":
+"clsx@npm:^2.0.0, clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10/cdfb57fa6c7649bbff98d9028c2f0de2f91c86f551179541cf784b1cfdc1562dcb951955f46d54d930a3879931a980e32a46b598acaea274728dbe068deca919
@@ -5625,6 +5658,7 @@ __metadata:
     "@googlemaps/markerclusterer": "npm:^2.5.3"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-alert-dialog": "npm:^1.1.8"
+    "@radix-ui/react-checkbox": "npm:^1.2.3"
     "@radix-ui/react-dialog": "npm:^1.1.10"
     "@radix-ui/react-dropdown-menu": "npm:^2.1.11"
     "@radix-ui/react-popover": "npm:^1.1.10"
@@ -5676,6 +5710,7 @@ __metadata:
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.9"
+    react-card-flip: "npm:^1.2.3"
     react-dom: "npm:^18.2.0"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^7.5.0"
@@ -5683,7 +5718,9 @@ __metadata:
     serve: "npm:^14.2.0"
     sonner: "npm:^2.0.3"
     tailwind-merge: "npm:^3.2.0"
-    tailwindcss: "npm:^4.0.17"
+    tailwind-scrollbar: "npm:^4.0.2"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.160.0"
     trpc: "npm:^0.11.3"
     ts-config-custom: "workspace:*"
@@ -7839,6 +7876,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prism-react-renderer@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "prism-react-renderer@npm:2.4.1"
+  dependencies:
+    "@types/prismjs": "npm:^1.26.0"
+    clsx: "npm:^2.0.0"
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 10/f76ea89b8b18c477eb74e9ddda2571b5c4d21142731f6733160723aa03567b17df315d7db68ffb1122c199750ece65578ecacb488559229b26db5474d6aae55b
+  languageName: node
+  linkType: hard
+
 "prisma@npm:^6.6.0":
   version: 6.6.0
   resolution: "prisma@npm:6.6.0"
@@ -8055,6 +8104,16 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/aaa923af1cf724471f8c9dd7aa365b0e5556cb3aa63b023912353b6874d7f274b4362a9b97df91fb0c04e998c7a49fa8c5e071f3ba468e888afa26b2d0d27ca2
+  languageName: node
+  linkType: hard
+
+"react-card-flip@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "react-card-flip@npm:1.2.3"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 10/f67a7113024e5f87cce027cb7d345da1e38941eb698d84faa48c2df612e671690880b7872b30309f14f6fb35a21ee641a0907c3bac7b8a004022e99b042f6145
   languageName: node
   linkType: hard
 
@@ -8925,10 +8984,14 @@ __metadata:
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
     react: "npm:latest"
+    react-card-flip: "npm:^1.2.3"
     react-dom: "npm:latest"
     react-intersection-observer: "npm:^9.16.0"
     react-open-weather: "npm:^1.3.8"
     tailwind-merge: "npm:^3.2.0"
+    tailwind-scrollbar: "npm:^4.0.2"
+    tailwind-scrollbar-utilities: "npm:^0.3.0"
+    tailwindcss: "npm:^4.1.4"
     three: "npm:^0.175.0"
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
@@ -9202,10 +9265,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.0.17, tailwindcss@npm:^4.0.17":
+"tailwind-scrollbar-utilities@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "tailwind-scrollbar-utilities@npm:0.3.0"
+  checksum: 10/77368bd85da23e90547e0d23c49a434bd1925c54de51bc8ca0832ebd07ce6f1272edabcb1cd1ffb5f95354b704bf194ef40dc11b7091266b130124148029c347
+  languageName: node
+  linkType: hard
+
+"tailwind-scrollbar@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "tailwind-scrollbar@npm:4.0.2"
+  dependencies:
+    prism-react-renderer: "npm:^2.4.1"
+  peerDependencies:
+    tailwindcss: 4.x
+  checksum: 10/ac67f84a478003938ec40f3007f88874b3a25db62b1e6b5a8a28bc20bf51027ea6ce074a8d37249eabbde4a4bb4b87ea310aade82c018845acd0eecc667f91df
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:4.0.17":
   version: 4.0.17
   resolution: "tailwindcss@npm:4.0.17"
   checksum: 10/c4463f7df51c45252d540db7a7c9d06f386f944b9626e4953dba6274d93c69b9133a9c095918fd2164d3012755cfa2d57ef86b4f11a08b30070ee67d1da98265
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "tailwindcss@npm:4.1.4"
+  checksum: 10/632510378ca0c73fb4ebd88d365480eab66a8f043cdefe3885afd45eaf71b9b1449ecbb17ead1b513de936cc98748fa5dc1759c8d91d8cd89887fecffa10648e
   languageName: node
   linkType: hard
 

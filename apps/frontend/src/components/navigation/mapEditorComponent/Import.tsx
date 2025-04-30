@@ -24,7 +24,7 @@ export default function ImportPage() {
         const text = reader.result as string
         const lines = text.split("\n").filter(Boolean)
         const headers = lines[0].split(",")
-        console.log(headers)
+
         try {
           if (headers.length >= 6) {
             await deleteNodes.mutateAsync()

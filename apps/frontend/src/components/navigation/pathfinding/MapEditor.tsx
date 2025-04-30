@@ -1,17 +1,23 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Loader} from '@googlemaps/js-api-loader';
-import {createMGBOverlays, MGBOverlays} from '../../map/overlays/MGBOverlay';
-import {createPatriot20Overlays} from '../../map/overlays/20PatriotOverlay';
-import {createFaulknerOverlays} from '@/components/map/overlays/FaulknerOverlay.tsx';
-import {createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22,} from '../../map/overlays/22PatriotOverlay';
-import {addNodeListener, createMarkers} from '../../map/overlays/createMarkers';
+import React, { useEffect, useRef, useState } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
+import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
+import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
+import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
+import { createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22, } from '../../map/overlays/22PatriotOverlay';
+import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
-import {trpc} from '@/lib/trpc';
+import { trpc } from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Edge, Node, NodeType} from './Graph';
-import {graph} from "../../map/GraphObject.ts"
+import { Edge, Node, NodeType } from './Graph';
+import { graph } from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
-import {drawAllEdges} from "@/components/map/overlays/edgeHandler.ts";
+import { drawAllEdges } from "@/components/map/overlays/edgeHandler.ts";
+import addNode from '../../../../assets/addNode-1.gif'
+import createEdge from '../../../../assets/createEdge-1.gif'
+import removeEdge from '../../../../assets/removeEdge-1.gif'
+import removeNode from '../../../../assets/removeNode-1.gif'
+
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,8 +27,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from '../../ui/dropdown-menu.tsx';
-import {WorldDistance} from "./worldCalculations.ts"
-import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
+// import {NodeType} from ""
+import { WorldDistance } from "./worldCalculations.ts"
+import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
 
 // resolve
@@ -47,7 +54,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
-    const [selectedNode, setselectedNode] = useState< Node | null>(null);
+    const [selectedNode, setselectedNode] = useState<Node | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
@@ -59,16 +66,64 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-    const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
+    const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
     const [edgeMode, setEdgeMode] = useState(false);
     const [ghostLine, setGhostLine] = useState<google.maps.Polyline | null>(null);
     const nodeListenerRef = useRef<GMapsListener | null>(null);
     const [markerLib, setMarkerLib] = useState<google.maps.MarkerLibrary | null>(null);
     const [currentNodeType, setCurrentNodeType] = useState<string>("");
-    const [startNode, setStartNode] = useState<Node| null>(null);
+
+    const [showTutorial, setShowTutorial] = useState(true);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [dontShowAgain, setDontShowAgain] = useState(false);
+
+    const tutorialGifs = [
+        addNode,
+        removeNode,
+        removeEdge,
+        createEdge,
+    ]
+
+    const tutorialSteps = [
+        "Double click anywhere on a map to create a node.",
+        "Double click on a node to remove it.",
+        "Double click on an edge to remove it.",
+        "Turn on add edge node to add edges by clicking on two nodes."
+    ];
+
+    const [startNode, setStartNode] = useState<Node | null>(null);
     const startNodeRef = useRef<Node | null>(null);
 
+    const handleCloseTutorial = () => {
+        if (dontShowAgain) {
+            localStorage.setItem("dontShowTutorial", "true");
+        }
+        setShowTutorial(false);
+    }
+
+    const handleNextStep = () => {
+        if (currentStep < tutorialSteps.length - 1) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
+    const handlePrevStep = () => {
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        }
+    };
+
+    useEffect(() => {
+        const savePreference = localStorage.getItem("dontShowTutorial");
+        if (savePreference === "true") {
+            setShowTutorial(false);
+        }
+    }, [])
+
+    const handleCheckboxChange = () => {
+        setDontShowAgain(!dontShowAgain);
+    }
     function handleNodeTypeChange(nodeType: string) {
         console.log("selectedNode, Pre change: ", selectedNode);
         setCurrentNodeType(nodeType);
@@ -86,7 +141,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         'MGB (Chestnut Hill)': { lat: 42.32610671664074, lng: -71.14958629820883 },
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
-        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406}
+        'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406 }
     };
 
     function setAlgoTypeWrapper(algo: string) {
@@ -115,7 +170,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         loader.load().then(async () => {
             if (mapRef.current) {
                 const newMap = new google.maps.Map(mapRef.current, {
-                    center: {lat: 42.3601, lng: -71.0589},
+                    center: { lat: 42.3601, lng: -71.0589 },
                     zoom: 12,
                     fullscreenControl: true,
                     mapTypeControl: false,
@@ -152,21 +207,21 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    function getEdgeLines(){
+    function getEdgeLines() {
 
         console.log("fetching lines what the heck")
-        if(!selectedHospital || !map) return;
+        if (!selectedHospital || !map) return;
         let building = selectedHospital;
-        if (building === "20 Patriot Place"){
+        if (building === "20 Patriot Place") {
             building = "pat20";
         }
-        else if (building === "22 Patriot Place"){
+        else if (building === "22 Patriot Place") {
             building = "pat22";
         }
-        else if (building === "MGB (Chestnut Hill)"){
+        else if (building === "MGB (Chestnut Hill)") {
             building = "chestnut";
         }
-        const floor = selectedFloor === null ? 1: selectedFloor;
+        const floor = selectedFloor === null ? 1 : selectedFloor;
         const edgeComponents = drawAllEdges(map, graph.getBuildingEdges(building, floor));
         const allLayers: google.maps.Polyline[] = edgeComponents.flatMap(pack => pack.layers);
         return allLayers;
@@ -202,11 +257,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         // detach any previous listener
         nodeListenerRef.current?.remove();
 
-        const floor  = selectedFloor ?? 1;
+        const floor = selectedFloor ?? 1;
         const buildingKey =
             selectedHospital === "MGB (Chestnut Hill)" ? "chestnut" :
-                selectedHospital === "20 Patriot Place"   ? "pat20"   :
-                    selectedHospital === "22 Patriot Place"   ? "pat22"   :
+                selectedHospital === "20 Patriot Place" ? "pat20" :
+                    selectedHospital === "22 Patriot Place" ? "pat22" :
                         selectedHospital;
 
         // attach a single dbl-click listener
@@ -224,10 +279,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         };
     }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
-    function displayNodes(){
+    function displayNodes() {
         if (!map || !selectedHospital || !markerLib) return;
 
-        const floor = selectedFloor === null ? 1: selectedFloor;
+        const floor = selectedFloor === null ? 1 : selectedFloor;
         console.log("Displaying")
 
         const buildingKey = selectedHospital === "MGB (Chestnut Hill)"
@@ -248,7 +303,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     }
 
-    function handleEdgeClick(node: Node){
+    function handleEdgeClick(node: Node) {
         console.log("edge mode: ", edgeMode);
         if (!edgeMode) return;
         if (!startNodeRef.current) {
@@ -260,19 +315,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
             const w = WorldDistance(startNodeRef.current, node);
-            const edge: Edge = {id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w}
+            const edge: Edge = { id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w }
             graph.addEdge(edge);
             setStartNode(null);
 
 
-            if(startNodeRef.current.building !== node.building){
+            if (startNodeRef.current.building !== node.building) {
                 startNodeRef.current.type = NodeType.SkyBridge;
                 node.type = NodeType.SkyBridge;
                 graph.editNode(startNodeRef.current)
                 graph.editNode(node)
                 console.log("set nodes to sky bridge (default)")
             }
-            else if (startNodeRef.current.building === node.building && startNodeRef.current.floor !== node.floor){
+            else if (startNodeRef.current.building === node.building && startNodeRef.current.floor !== node.floor) {
                 startNodeRef.current.type = NodeType.Elevator;
                 node.type = NodeType.Elevator;
                 graph.editNode(startNodeRef.current)
@@ -340,7 +395,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
-        setselectedNode({ id: node.id.toString(), name:node.name, x: node.x, y: node.y, nodeType: node.type});
+        setselectedNode({ id: node.id.toString(), name: node.name, x: node.x, y: node.y, nodeType: node.type });
     };
 
     useEffect(() => {
@@ -391,6 +446,65 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     return (
         <div className="flex h-[95vh]">
+            {showTutorial && (
+                <div className="absolute top-0 left-0 w-full h-full bg-opacity-25 backdrop-blur-xs z-40"></div>
+            )}
+
+            {showTutorial && (
+                <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center z-50">
+                    <div className="relative bg-white rounded-full shadow-[0_20px_50px_rgba(0,_58,_150,_0.7)] w-120 h-120 flex flex-col justify-center items-center overflow-hidden">
+                        <img
+                            src={tutorialGifs[currentStep]}
+                            alt="Tutorial Step Gif"
+                            className="mb-4 w-full h-auto object-cover rounded-4xl"
+                        />
+                        <div className="text-black text-center px-15 ">
+                            <p>{tutorialSteps[currentStep]}</p>
+                        </div>
+                    </div>
+
+
+                    <div className="mt-8 flex items-center justify-center">
+                        <button
+                            onClick={handlePrevStep}
+                            className="w-12 h-12 bg-white rounded-full hover:bg-gray-100 focus:outline-none shadow-md flex justify-center items-center"
+                            disabled={currentStep === 0}
+                        >
+                            <span className="text-gray-700 text-xl">←</span>
+                        </button>
+
+                        <div className="mx-4 px-4 py-2 bg-white rounded-full shadow-md">
+                            <span className="text-gray-700">{currentStep + 1} / {tutorialSteps.length}</span>
+                        </div>
+
+                        <button
+                            onClick={handleNextStep}
+                            className="w-12 h-12 bg-white rounded-full hover:bg-gray-100 focus:outline-none shadow-md flex justify-center items-center"
+                            disabled={currentStep === tutorialSteps.length - 1}
+                        >
+                            <span className="text-gray-700 text-xl">→</span>
+                        </button>
+                    </div>
+
+                    <button
+                        onClick={handleCloseTutorial}
+                        className="mt-4 px-4 py-2 rounded-lg font-bold shadow-md hover:bg-blue-950 bg-[#003a96] text-white"
+                    >
+                        SKIP TUTORIAL
+                    </button>
+                    <div className="mt-4">
+                        <label className="flex items-center text-black">
+                            <input
+                                type="checkbox"
+                                checked={dontShowAgain}
+                                onChange={handleCheckboxChange}
+                                className="mr-2"
+                            />
+                            <span>Don't show again</span>
+                        </label>
+                    </div>
+                </div>
+            )}
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
@@ -405,7 +519,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             setValue={handleNodeTypeChange}
                             width={"w-full"}
                             placeholder={"Select a node type"}
-                            options={Object.values(NodeType) as string[]}/>
+                            options={Object.values(NodeType) as string[]} />
                         {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
                         {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
                     </div>
@@ -465,7 +579,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     onToggleNodes={handleToggleNodes}
                     onToggleEdges={handleToggleEdges}
                 />
-                <HelpDropdown />
             </div>
         </div>
     );

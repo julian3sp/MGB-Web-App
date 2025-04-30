@@ -338,8 +338,8 @@ const MapComponent: React.FC = () => {
                    contents=
                        {
         // put sidebar contents here:</p>
-        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto ">
-          <h2 className="font-bold text-center">Enter your location and <br/>destination</h2>
+        <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}
               selectedPlace={selectedPlace}
@@ -358,7 +358,7 @@ const MapComponent: React.FC = () => {
           {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
           {/* Select Department dropdown */}
-          <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
+          <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name ?? ""} />
         </div>}
                    scaling = {4}
@@ -396,9 +396,9 @@ const MapComponent: React.FC = () => {
 
       {/* Right Column: Map area */}
       <div className="w-full relative">
-        <MapRenderer 
-          onMapReady={handleMapReady} 
-          selectedDestination={selectedPlace} 
+        <MapRenderer
+          onMapReady={handleMapReady}
+          selectedDestination={selectedPlace}
           onZoomChange={handleZoomChange}
           selectedFloor={selectedFloor}
           onFloorChange={handleFloorSelect}

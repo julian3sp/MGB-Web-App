@@ -30,6 +30,7 @@ import {
 // import {NodeType} from ""
 import { WorldDistance } from "./worldCalculations.ts"
 import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
+import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
 
 // resolve
 interface MapEditorProps {
@@ -122,6 +123,18 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     const handleCheckboxChange = () => {
         setDontShowAgain(!dontShowAgain);
+    }
+    function handleNodeTypeChange(nodeType: string) {
+        console.log("selectedNode, Pre change: ", selectedNode);
+        setCurrentNodeType(nodeType);
+        let newNode: Node
+        if(selectedNode){
+            newNode = {... selectedNode, type: graph.string2NT(nodeType)};
+            graph.editNode(newNode)
+            setselectedNode(newNode);
+        } else {
+            console.log('New Achievement Unlocked: "How did we get here?"')
+        }
     }
 
     const hospitalLocationMap = {
@@ -503,7 +516,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         <p className="text-black text-lg"><span className="font-bold">Type:</span> {selectedNode.type}</p>
                         <SRQDropdown
                             value={currentNodeType}
-                            setValue={setCurrentNodeType}
+                            setValue={handleNodeTypeChange}
                             width={"w-full"}
                             placeholder={"Select a node type"}
                             options={Object.values(NodeType) as string[]} />
@@ -527,6 +540,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 >
                     {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
                 </button>
+
+                <ExportCSV/>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

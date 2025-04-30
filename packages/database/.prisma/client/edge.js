@@ -240,7 +240,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\thisi\\WebstormProjects\\team-f\\packages\\database\\.prisma\\client",
+      "value": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\.prisma\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -249,17 +249,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/Doanh/Documents/TermD2024-2025/CS3733/team-f/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\brend\\Downloads\\CS-3733\\Final-Project\\team-f\\packages\\database\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../prisma/.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.6.0",

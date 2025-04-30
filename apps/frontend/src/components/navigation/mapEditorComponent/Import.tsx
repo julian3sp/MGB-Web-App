@@ -13,7 +13,14 @@ export default function ImportPage() {
   const makeEdge = trpc.makeEdge.useMutation()
   const deleteEdges = trpc.deleteAllEdges.useMutation()
   const deleteAllDirectories = trpc.deleteAllDirectories.useMutation()
-  const makeManyDirectories = trpc.makeManyDirectories.useMutation()
+
+  const utils = trpc.useUtils();
+
+  const makeManyDirectories = trpc.makeManyDirectories.useMutation({
+    onSuccess:async (newDirectories)=> {
+      await utils.getDirectories.invalidate();
+    },
+  });
 
   const handleImportFiles = async () => {
     if (files.length === 0) {

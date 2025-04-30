@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import {trpc} from "@/lib/trpc.ts";
-import ImportCSV from "../../components/ImportDept.tsx";
 import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart.tsx";
 import {Bar, BarChart, CartesianGrid, Cell, Legend, XAxis, YAxis} from "recharts"
-
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -14,10 +12,16 @@ const DirectoryPage = () => {
         telephone: '',
     });
 
-    //const utils = trpc.useUtils();
+    const utils = trpc.useUtils();
+
     const { data: directories, isLoading} = trpc.getDirectories.useQuery();
 
-    const addDirectory = trpc.makeDirectory.useMutation();
+    const addDirectory = trpc.makeDirectory.useMutation({
+        onSuccess:async (newDirectory)=> {
+            await utils.getDirectories.invalidate();
+        },
+    });
+    // get data for table from backend
     const sanitationRequests = trpc.requestListOfType.useQuery({ type: 'Sanitation' });
     const languageRequests = trpc.requestListOfType.useQuery({ type: 'Language' });
     const securityRequests = trpc.requestListOfType.useQuery({ type: 'Security' });
@@ -25,32 +29,16 @@ const DirectoryPage = () => {
     const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
     const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
     const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
-    const chartData = [
-        { month: "January", desktop: 186, mobile: 80 },
-        { month: "February", desktop: 305, mobile: 200 },
-        { month: "March", desktop: 237, mobile: 120 },
-        { month: "April", desktop: 73, mobile: 190 },
-        { month: "May", desktop: 209, mobile: 130 },
-        { month: "June", desktop: 214, mobile: 140 },
-    ]
 
-    const chartConfig = {
-        desktop: {
-            label: "Desktop",
-            color: "#2563eb",
-        },
-        mobile: {
-            label: "Mobile",
-            color: "#60a5fa",
-        },
-    } satisfies ChartConfig
-
+    // make config for service request from bar chart
     const serviceRequestConfig = {
         number: {
             label: "amount",
             color: "#2563eb",
         },
     } satisfies ChartConfig
+
+    // make chart data for service request form
     const serviceRequestData = [
         { type: 'Sanitation', number: sanitationRequests.data?.length ?? 0 },
         { type: 'Language', number: languageRequests.data?.length ?? 0 },
@@ -68,9 +56,9 @@ const DirectoryPage = () => {
         }
 
         // Construct CSV string
-        let csv = 'id;name;services;location;telephone\n';
+        let csv = 'id, name,services,location,telephone\n';
         directories.forEach((dir) => {
-            csv += `${dir.id}';'${dir.name}";"${dir.services.replace(/,/g,"#")}";"${dir.location}";"${dir.telephone}"\n`;
+            csv += `${dir.id},"${dir.name}","${dir.services.replace(/,/g,"#")}","${dir.location}","${dir.telephone}"\n`;
         });
 
         // Encode the CSV data as a Data URI
@@ -94,7 +82,6 @@ const DirectoryPage = () => {
 
     const handleSubmit = () => {
         addDirectory.mutate(formData);
-        window.location.reload();
     };
 
     return (
@@ -140,15 +127,8 @@ const DirectoryPage = () => {
                     Submit
                 </button>
             </div>
-            <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-                <BarChart data={chartData}>
-                    <Bar dataKey="month" />
-                    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                </BarChart>
-            </ChartContainer>
 
+            {/* bar chart for service request form */}
             <ChartContainer
                 config={serviceRequestConfig}
                 className="min-h-[280px] w-full rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-background to-muted/50 p-6 shadow-lg"
@@ -216,9 +196,9 @@ const DirectoryPage = () => {
                 <ImportAllNodesAndEdges />
             </div>
 
-            {/* Import/Export CSV */}
+            {/*Export CSV */}
             <div className="mb-6 bg-white p-4 shadow rounded">
-                <h2 className="text-xl font-semibold mb-2">Import / Export CSV</h2>
+                <h2 className="text-xl font-semibold mb-2">Export CSV</h2>
                 <button
                     onClick={downloadCSV}
                     disabled={isLoading}
@@ -226,13 +206,7 @@ const DirectoryPage = () => {
                 >
                     Export CSV
                 </button>
-
-                <br /><br />
-
-                <ImportCSV/>
             </div>
-
-
 
             {/* Table */}
             <div className="bg-white p-4 shadow rounded">

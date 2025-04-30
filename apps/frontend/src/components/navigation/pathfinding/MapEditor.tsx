@@ -31,6 +31,8 @@ import {
 import { WorldDistance } from "./worldCalculations.ts"
 import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
+import PageWrapper from "@/components/ui/PageWrapper.tsx";
+
 
 // resolve
 interface MapEditorProps {
@@ -445,7 +447,143 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
 
     return (
-        <div className="flex h-[95vh]">
+        <div className="flex h-screen">
+            <PageWrapper
+                contents={
+                    <div className="w-full p-5 border-r border-gray-300 flex flex-col gap-4 h-full overflow-y-scroll scollbar-thin">
+                        <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
+                            Map Editor Controls
+                        </h2>
+
+                        {selectedNode ? (
+                            <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
+
+                                <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 border-b-[#44A6A6] ">Node Info</h2>
+                                <p className="text-black pt-2 text-lg">
+                                    <span className="font-semibold text-[#003a96]">ID:</span> {selectedNode.id}
+                                </p>
+                                <p className="text-black text-lg">
+                                    <span className="font-semibold text-[#003a96]">Name:</span> {selectedNode.name}
+                                </p>
+
+                                <p className="text-black text-lg">
+                                    <span className="font-semibold text-[#003a96]">Type:</span> {selectedNode.type}
+                                </p>
+                                <hr className={'mx-5 my-5 border-black'}/>
+
+                                <div className={'mx-4 my-4'}>
+                                <SRQDropdown
+                                    value={currentNodeType}
+                                    setValue={handleNodeTypeChange}
+                                    width={'w-full'}
+                                    placeholder={'Select a node type'}
+                                    options={Object.values(NodeType) as string[]}
+                                />
+                                </div>
+                                {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
+                                {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
+                            </div>
+                        ) : (
+                            <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3  font-[poppins] text-center space-y-3 ">
+
+                                <h2 className="text-xl font-bold text-white p-5 rounded-t-lg bg-[#003a96] border-b-5 border-b-[#44A6A6] ">Node Info</h2>
+                                <p className="text-black text-lg p-2">
+                                    <span className="font-semibold text-[#003a96]">ID:</span> Select a Node
+                                </p>
+                                <p className="text-black text-lg p-2">
+                                    <span className="font-semibold text-[#003a96]">Name:</span> Select a Node
+                                </p>
+                                <p className="text-black text-lg p-2">
+                                    <span className="font-semibold text-[#003a96]">Type:</span> Select a Node
+                                </p>
+                            </div>
+                        )}
+
+                        {/*<div className="w-full p-5 flex flex-col gap-4">*/}
+                        {/*    <ImportAllNodesAndEdges />*/}
+                        {/*</div>*/}
+
+                        <button
+                            className="bg-[#003a96] w-[80%] mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                            onClick={() => {
+                                setEdgeMode((prevState) => !prevState);
+                                setShowEdges(true);
+                            }}
+                        >
+                            {edgeMode ? 'Exit Edge Mode' : 'Add Edge Mode'}
+                        </button>
+
+                        {/*<ExportCSV />*/}
+
+                        {/*<DropdownMenu>*/}
+                        {/*    <DropdownMenuTrigger asChild>*/}
+                        {/*        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">*/}
+                        {/*            Choose Your Algorithm*/}
+                        {/*        </button>*/}
+                        {/*    </DropdownMenuTrigger>*/}
+                        {/*    <DropdownMenuContent className="w-56">*/}
+                        {/*        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>*/}
+                        {/*        <DropdownMenuSeparator />*/}
+                        {/*        <DropdownMenuRadioGroup*/}
+                        {/*            value={algoType}*/}
+                        {/*            onValueChange={setAlgoTypeWrapper}*/}
+                        {/*        >*/}
+                        {/*            <DropdownMenuRadioItem value="A-Star">*/}
+                        {/*                A-Star*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="DFS">*/}
+                        {/*                Depth First Search*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="BFS">*/}
+                        {/*                Breadth First Search*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="Dijkstras">*/}
+                        {/*                Dijkstra's*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*        </DropdownMenuRadioGroup>*/}
+                        {/*    </DropdownMenuContent>*/}
+                        {/*</DropdownMenu>*/}
+
+                        <button
+                            className={
+                                'bg-white  text-[#003a96] w-[80%] mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
+                            }
+                            type={'submit'}
+                            onClick={handleSubmit}
+                        >
+                            Submit Changes
+                        </button>
+                    </div>
+                }
+                scaling={3}
+                open={true}
+                absolute={false}
+                x={-60}
+                y={15}
+                xOut={10}
+            ></PageWrapper>
+
+            <div className="w-full relative">
+                {isLoadingMap && (
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
+                <div ref={mapRef} className="w-full h-full"></div>
+                <MapEditorControls
+                    map={map}
+                    selectedHospital={selectedHospital}
+                    selectedFloor={selectedFloor}
+                    onHospitalChange={setSelectedHospital}
+                    onFloorChange={setSelectedFloor}
+                    hospitalLocationMap={hospitalLocationMap}
+                    showNodes={showNodes}
+                    showEdges={showEdges}
+                    onToggleNodes={handleToggleNodes}
+                    onToggleEdges={handleToggleEdges}
+                />
+            </div>
+
             {showTutorial && (
                 <div className="absolute top-0 left-0 w-full h-full bg-opacity-25 backdrop-blur-xs z-40"></div>
             )}
@@ -505,81 +643,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     </div>
                 </div>
             )}
-            <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
-                <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
-
-                {selectedNode && (
-                    <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
-                        <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                        <p className="text-black text-lg"><span className="font-bold">ID:</span> {selectedNode.id}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Name:</span> {selectedNode.name}</p>
-                        <p className="text-black text-lg"><span className="font-bold">Type:</span> {selectedNode.type}</p>
-                        <SRQDropdown
-                            value={currentNodeType}
-                            setValue={handleNodeTypeChange}
-                            width={"w-full"}
-                            placeholder={"Select a node type"}
-                            options={Object.values(NodeType) as string[]} />
-                        {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
-                        {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
-                    </div>
-                )}
-
-                <div className="w-full p-5 flex flex-col gap-4">
-                    <ImportAllNodesAndEdges />
-                </div>
-                <button className={'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '} type={"submit"} onClick={handleSubmit}>
-                    Submit Changes
-                </button>
-                <button
-                    className='bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 '
-                    onClick={() => {
-                        setEdgeMode((prevState) => !prevState);
-                        setShowEdges(true);
-                    }}
-                >
-                    {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
-                </button>
-
-                <ExportCSV/>
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">Choose Your Algorithm</button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value={algoType} onValueChange={setAlgoTypeWrapper}>
-                            <DropdownMenuRadioItem value="A-Star">A-Star</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="DFS">Depth First Search</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="BFS">Breadth First Search</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="Dijkstras">Dijkstra's</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-
-            <div className="w-3/4 relative">
-                {isLoadingMap && (
-                    <div className="absolute inset-0 z-20 flex items-center justify-center">
-                        <div className="w-12 h-12 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                )}
-                <div ref={mapRef} className="w-full h-[95vh]"></div>
-                <MapEditorControls
-                    map={map}
-                    selectedHospital={selectedHospital}
-                    selectedFloor={selectedFloor}
-                    onHospitalChange={setSelectedHospital}
-                    onFloorChange={setSelectedFloor}
-                    hospitalLocationMap={hospitalLocationMap}
-                    showNodes={showNodes}
-                    showEdges={showEdges}
-                    onToggleNodes={handleToggleNodes}
-                    onToggleEdges={handleToggleEdges}
-                />
-            </div>
         </div>
     );
 };

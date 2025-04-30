@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
-import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
+import { createPatriot20Overlays, updatePatriotPlace20, Patriot20Overlays } from './overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from './overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
 import { createMarkers } from './overlays/createMarkers';
@@ -20,8 +20,8 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: number;
-  onFloorChange?: (floor: number) => void;
+  selectedFloor?: 1| 2| 3 | 4;
+  onFloorChange?: (floor: 3 | 4) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
 }
@@ -41,6 +41,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
+  const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot20Overlays | null>(null);
   // Markers and visualization
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [showNodes, setShowNodes] = useState(false);
@@ -251,7 +252,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       let newPolyline: any
 
       console.log("Floor: ", selectedFloor)
-      
+
       if(multiFloors.floor2.floorNum === multiFloors.floor1.floorNum){
         newPolyline = drawPath(map, pathNodes);
       } else {
@@ -319,6 +320,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
       }
+      if (patriot20Overlays) {
+        patriot20Overlays.floor1Overlay.setMap(null);
+        patriot20Overlays.floor2Overlay.setMap(null);
+        patriot20Overlays.floor3Overlay.setMap(null);
+        patriot20Overlays.floor4Overlay.setMap(null);
+        setPatriot20Overlays(null);
+      }
     };
 
     cleanupOverlays();
@@ -331,10 +339,13 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           setParkingOverlay(overlays.parkingOverlay);
           setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
-          createPatriot20Overlays(map);
+          const overlays = createPatriot20Overlays(map);
+          setPatriot20Overlays(overlays);
+          updatePatriotPlace20(overlays, selectedFloor!);
         } else if (selectedDestination.name === "22 Patriot Place") {
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
+          updatePatriotPlace22(overlays, selectedFloor!);
         } else if (selectedDestination.name === "Faulkner") {
           createFaulknerOverlays(map);
         }
@@ -352,10 +363,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {
-    if (!map || !patriot22Overlays) return;
+    if (!map || !patriot22Overlays || !patriot20Overlays) return;
 
     try {
       updatePatriotPlace22(patriot22Overlays, selectedFloor);
+      updatePatriotPlace20(patriot20Overlays, selectedFloor);
 
       const patriotZoomListener = map.addListener('zoom_changed', () => {
         const zoom = map.getZoom();
@@ -368,7 +380,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     } catch (error) {
       console.error('Error updating Patriot Place overlays:', error);
     }
-  }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
+  }, [selectedFloor, map, patriot22Overlays, patriot20Overlays, onZoomChange]);
 
   // Handle MGB overlay opacity animations
   useEffect(() => {

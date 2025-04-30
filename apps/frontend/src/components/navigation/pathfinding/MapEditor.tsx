@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
-import { createPatriot20Overlays } from '../../map/overlays/20PatriotOverlay';
+import { createPatriot20Overlays , Patriot20Overlays, updatePatriotPlace20} from '../../map/overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22, } from '../../map/overlays/22PatriotOverlay';
 import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
-import { trpc } from '@/lib/trpc';
+import {trpc} from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import { Edge, Node, NodeType } from './Graph';
-import { graph } from "../../map/GraphObject.ts"
+import {Edge, Node, NodeType} from './Graph';
+import {graph} from "../../map/GraphObject.ts"
 import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
 import { drawAllEdges } from "@/components/map/overlays/edgeHandler.ts";
 import addNode from '../../../../assets/addNode-1.gif'
@@ -62,6 +62,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const { data: edgesDataFromAPI, isLoading: isEdgesLoading, refetch: refetchEdges } = trpc.getAllEdges.useQuery();
     const [mgbOverlay, setMgbOverlay] = useState<MGBOverlays | null>(null);
     const [patriot22Overlay, setPatriot22Overlay] = useState<Patriot22Overlays | null>(null);
+    const [patriot20Overlay, setPatriot20Overlay] = useState<Patriot20Overlays | null>(null);
     const addNodes = trpc.makeManyNodes.useMutation();
     const addEdges = trpc.makeManyEdges.useMutation();
     const editNodes = trpc.editNodes.useMutation();
@@ -415,11 +416,20 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             setPatriot22Overlay(null);
         }
 
+        if (patriot20Overlay) {
+            patriot20Overlay.floor1Overlay.setMap(null);
+            patriot20Overlay.floor2Overlay.setMap(null);
+            patriot20Overlay.floor3Overlay.setMap(null);
+            patriot20Overlay.floor4Overlay.setMap(null);
+            setPatriot20Overlay(null);
+        }
+
         try {
             if (selectedHospital === 'MGB (Chestnut Hill)') {
                 setMgbOverlay(createMGBOverlays(map));
             } else if (selectedHospital === '20 Patriot Place') {
                 createPatriot20Overlays(map);
+                setPatriot20Overlay(createPatriot20Overlays(map));
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));
             } else if (selectedHospital === 'Faulkner') {
@@ -438,13 +448,19 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [map, selectedHospital]);
 
     useEffect(() => {
-        if (!map || !patriot22Overlay || selectedHospital !== '22 Patriot Place') return;
-        try {
-            updatePatriotPlace22(patriot22Overlay, selectedFloor || 3);
-        } catch (err) {
-            console.error('Error updating Patriot22 floor overlay:', err);
+        if (!map) return;
+
+        // If we're in the 20-Patriot view, update those
+        if (patriot20Overlay) {
+            updatePatriotPlace20(patriot20Overlay, selectedFloor || 1);
         }
-    }, [selectedFloor, map, patriot22Overlay, selectedHospital]);
+
+        // If we're in the 22-Patriot view, update those
+        if (patriot22Overlay) {
+            updatePatriotPlace22(patriot22Overlay, selectedFloor || 3);
+        }
+
+    }, [map, selectedFloor, patriot20Overlay, patriot22Overlay]);
 
     return (
         <div className="flex h-screen">

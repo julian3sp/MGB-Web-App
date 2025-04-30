@@ -23,9 +23,9 @@ async def generate_new_map_endpoint(
         file: UploadFile = File(...),
         sourcePoints: str  = Form(...),   # JSON string "[[x1,y1],…]"
         targetPoints: str  = Form(...),   # JSON string "[[u1,v1],…]"
-        name:         str  = Form(...),
         building:     str  = Form(...),
         floor:        int  = Form(...),
+        offset:       int  = Form(...),
 ):
     # parse the JSON arrays
     try:
@@ -47,16 +47,18 @@ async def generate_new_map_endpoint(
         try:
             # call your function, which will create:
             #   nodes_<name>.csv  and  edges_<name>.csv
-            generate_new_map(img_path, source_pts, target_pts, name, building, floor)
+            generate_new_map(img_path, source_pts, target_pts, building, floor, offset)
+            print("python - Successfully generated nodes and edges")
         finally:
             os.chdir(cwd)
 
         # 3) locate the two CSVs
-        nodes_csv = os.path.join(tmpdir, f"nodes_{name}.csv")
-        edges_csv = os.path.join(tmpdir, f"edges_{name}.csv")
+        nodes_csv = os.path.join(tmpdir, f"nodes.csv")
+        edges_csv = os.path.join(tmpdir, f"edges.csv")
         for p in (nodes_csv, edges_csv):
             if not os.path.exists(p):
                 raise HTTPException(500, f"Expected output file missing: {os.path.basename(p)}")
+        print("python - files found")
 
         # 4) bundle into a ZIP in memory
         buf = io.BytesIO()
@@ -67,6 +69,8 @@ async def generate_new_map_endpoint(
 
         # 5) stream back to client
         headers = {
-            "Content-Disposition": f"attachment; filename={name}_graph.zip"
+            "Content-Disposition": f"attachment; filename=graph.zip"
         }
+        print("python - zipped file")
+
         return StreamingResponse(buf, media_type="application/zip", headers=headers)

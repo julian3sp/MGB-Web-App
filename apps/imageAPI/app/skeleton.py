@@ -569,13 +569,13 @@ def collapse_colinear(G, angle_tol_deg=5):
     return G
 
 
-def generate_new_map(file, source_points, target_points, name, building, floor):
+def generate_new_map(file, source_points, target_points, building, floor, offset):
     image_path = file
 
     nodes, newNodes, edges, _, _ = generate_nodes_edges(image_path, source_points, target_points)
     # worldPoints, tform = calculateHomography(np.flip(source_points), target_points, nodes)
-    nodes_to_csv(newNodes, "nodes_" + name + ".csv", building, floor, source_points, target_points)
-    edges_to_csv(edges, "edges_" + name + ".csv", 0)
+    nodes_to_csv(newNodes, "nodes.csv", building, floor, source_points, target_points)
+    edges_to_csv(edges, "edges.csv", offset)
 
 
 

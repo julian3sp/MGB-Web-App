@@ -27,7 +27,8 @@ import { SRQDropdown } from '@/components/serviceRequest/inputFields/SRQDropdown
 import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
 import { PictureCorners } from '../mapEditorComponent/PictureCorners.tsx';
 import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessorPanel.tsx";
-
+import {importGraphFromZip} from "@/components/importZipGraph.ts";
+import JSZip from 'jszip';
 // resolve
 interface MapEditorProps {
     onMapReady: (
@@ -61,6 +62,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
+    const makeNode = trpc.makeNode.useMutation()
+    const makeEdge = trpc.makeEdge.useMutation()
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers,  setStaticMarkers]  = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -400,7 +403,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
         const form = new FormData();
 
-        // 1) The **exact** key “file”
+        // 1) The file
         form.append('file', imgFile);
 
         // 2) sourcePoints (pixel coords)
@@ -421,36 +424,40 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             )
         );
 
-        // 4) name  — give your image/map a short identifier
-        form.append('name', 'test');  // you can make this dynamic
-
-        // 5) building
-        form.append('building', selectedHospital || '');
-
-        // 6) floor  (convert to string)
+        form.append('name', 'test');
+        form.append('building', "chestnut");
         form.append('floor', "1");
+        form.append('offset',(graph.getAllNodes().length+1 || 1).toString());
 
-        alert('Calculating ');
-        const res = await fetch('http://localhost:3001/image-api/generate-new-map', {
-            method: 'POST',
-            body: form,
-        });
+        try {
+            console.log("calculating")
+            // 1) Fetch the ZIP from the FastAPI endpoint
+            const res = await fetch('http://localhost:3001/image-api/generate-new-map', {
+                method: 'POST',
+                body: form,
+            });
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
+            const blob = await res.blob();
+            const arrayBuffer = await blob.arrayBuffer();
+            const zip = await JSZip.loadAsync(arrayBuffer);
+            const node_edge_input = await importGraphFromZip(zip)
 
-        if (!res.ok) {
-            // log the error payload to see exactly what FastAPI complains about
-            console.error('Error response:', await res.text());
-            return alert(`Failed: ${res.status}`);
+            await makeNode.mutateAsync(node_edge_input[0]);
+            await makeEdge.mutateAsync(node_edge_input[1]);
+
+            alert('Graph appended successfully!');
+        } catch (e) {
+            console.error(e);
+            alert('Import failed: ' + e.message);
         }
-        const blob = await res.blob(); // ZIP containing nodes.csv + edges.csv
-        // forward to backend DB (one example: upload via tRPC)
-        const buf = await blob.arrayBuffer();
-        // await trpc.importCsv.mutate({ bytes: new Uint8Array(buf) }); // write a tiny procedure
-        console.log(buf)
-        alert('Graph imported!');
+
+
         // cleanup
         setMode('edit');
         imgOverlay?.setMap(null);
-        worldCorners.forEach(m => m.position(null));
+        worldCorners.forEach(m => m.position == null);
         setImgFile(null);
         setPixelCorners([]);
         setWorldCorners([]);

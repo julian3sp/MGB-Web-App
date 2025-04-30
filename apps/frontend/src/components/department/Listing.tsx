@@ -179,7 +179,7 @@ export const Card = ({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 h-full w-full backdrop-blur-xl rounded-3xl"
+                            className="absolute inset-0 h-full w-full backdrop-blur-3xl rounded-3xl"
                         />
                         <motion.div
                             initial={{ opacity: 0 }}

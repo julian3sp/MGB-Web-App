@@ -20,6 +20,7 @@ import {
     getUniqueDirectories,
     getAllNamesArray,
     makeDirectories,
+    makeManyDirectories,
 } from './server/procedures/directories.ts';
 import {
     deleteAllNodes,
@@ -55,6 +56,7 @@ const appRouter = t.router({
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,
+    makeManyDirectories: makeManyDirectories,
     getAllNamesArray: getAllNamesArray,
     getDirectories: getDirectories,
     getUniqueDirectory: getUniqueDirectories,

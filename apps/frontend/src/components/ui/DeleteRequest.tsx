@@ -10,9 +10,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/Tooltip.tsx';
-import ExitButton from '@/components/ui/ExitButton.tsx';
-import EditIcon from "../../../assets/EditIcon.png";
-import EditIconWhite from "../../../assets/EditIconWhite.png";
 
 export default function DeleteRequest({
     size = 20,

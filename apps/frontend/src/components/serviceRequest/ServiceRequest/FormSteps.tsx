@@ -1,11 +1,12 @@
-import { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { InputHeader } from "../../signIn/InputHeader";
-import { ErrorPopUp } from "../inputFields/ErrorPopUp";
-import { SRQDropdown } from "../inputFields/SRQDropdown";
-import { Combobox } from "../inputFields/Combobox";
-import { languages } from "../data/languages";
-import TextArea from "../../TextArea";
+import { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { InputHeader } from '../../signIn/InputHeader';
+import { ErrorPopUp } from '../inputFields/ErrorPopUp';
+import { SRQDropdown } from '../inputFields/SRQDropdown';
+import { Combobox } from '../inputFields/Combobox';
+import { languages } from '../data/languages';
+import TextArea from '../../TextArea';
+import { trpc } from '@/lib/trpc.ts';
 
 type FormStepsProps = {
     currentStep: number;
@@ -58,65 +59,65 @@ type FormStepsProps = {
 };
 
 export function FormSteps({
-        currentStep,
-        type,
-        name,
-        setName,
-        employeeID,
-        setEmployeeID,
-        location,
-        setLocation,
-        department,
-        setDepartment,
-        priority,
-        setPriority,
-        status,
-        setStatus,
-        sourceLanguage,
-        setSourceLanguage,
-        targetLanguage,
-        setTargetLanguage,
-        cleaningType,
-        setCleaningType,
-        contaminant,
-        setContaminant,
-        accessZones,
-        setAccessZones,
-        securityIssue,
-        setSecurityIssue,
-        transportationType,
-        setTransportationType,
-        transportationDestination,
-        setTransportationDestination,
-        accommodationType,
-        setAccommodationType,
-        accommodationDetails,
-        setAccommodationDetails,
-        device,
-        setDevice,
-        operatorRequired,
-        setOperatorRequired,
-        maintenanceType,
-        setMaintenanceType,
-        equipmentType,
-        setEquipmentType,
-        comments,
-        setComments,
-        errors,
-        clearError,
-        formValid
+    currentStep,
+    type,
+    name,
+    setName,
+    employeeID,
+    setEmployeeID,
+    location,
+    setLocation,
+    department,
+    setDepartment,
+    priority,
+    setPriority,
+    status,
+    setStatus,
+    sourceLanguage,
+    setSourceLanguage,
+    targetLanguage,
+    setTargetLanguage,
+    cleaningType,
+    setCleaningType,
+    contaminant,
+    setContaminant,
+    accessZones,
+    setAccessZones,
+    securityIssue,
+    setSecurityIssue,
+    transportationType,
+    setTransportationType,
+    transportationDestination,
+    setTransportationDestination,
+    accommodationType,
+    setAccommodationType,
+    accommodationDetails,
+    setAccommodationDetails,
+    device,
+    setDevice,
+    operatorRequired,
+    setOperatorRequired,
+    maintenanceType,
+    setMaintenanceType,
+    equipmentType,
+    setEquipmentType,
+    comments,
+    setComments,
+    errors,
+    clearError,
+    formValid,
 }: FormStepsProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    
+
     // Control scroll to the current step
     useEffect(() => {
         if (scrollContainerRef.current) {
             const children = scrollContainerRef.current.children;
             if (children[currentStep - 1]) {
                 children[currentStep - 1].scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "nearest"
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'nearest',
                 });
             }
         }
@@ -134,20 +135,30 @@ export function FormSteps({
         const scrollContainer = scrollContainerRef.current;
         if (scrollContainer) {
             scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
-            
+
             return () => {
                 scrollContainer.removeEventListener('wheel', handleWheel);
             };
         }
     }, [formValid]);
 
+    const { data: departmentsRaw } = trpc.getDirectories.useQuery();
+
+    //CSV handles location names differently
+    const locationMap: Record<string, string[]> = {
+        'Chestnut Hill': ['MGB (Chestnut Hill)'],
+        'Patriot Place': ['20 Patriot Place', '22 Patriot Place'],
+        'Faulkner Hospital': ['Faulkner'],
+        "Brigham & Women's Hospital Main Campus": ['MGB Main'], //None in CSV yet, assuming this would be format used
+    };
+
     return (
         <div className="flex flex-col">
-            <div 
+            <div
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-96 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >   
+            >
                 {/* Step 1 */}
                 <div className="snap-start w-full h-full flex flex-col">
                     <motion.div
@@ -167,7 +178,8 @@ export function FormSteps({
                                     placeholder="Name"
                                     width="w-full"
                                     error={errors.name}
-                                    clearError={() => clearError('name')} />
+                                    clearError={() => clearError('name')}
+                                />
                             </div>
 
                             <div>
@@ -183,7 +195,8 @@ export function FormSteps({
                                     placeholder="Employee ID"
                                     width="w-full"
                                     error={errors.employeeID}
-                                    clearError={() => clearError('employeeID')} />
+                                    clearError={() => clearError('employeeID')}
+                                />
                             </div>
                         </div>
                     </motion.div>
@@ -204,14 +217,20 @@ export function FormSteps({
                                 <InputHeader>Location</InputHeader>
                                 <SRQDropdown
                                     value={location}
-                                    setValue={setLocation}
-                                    placeholder={"Select Location"}
-                                    width={"w-full"}
+                                    setValue={(loc) => {
+                                        setLocation(loc);
+                                        setDepartment(""); // Clear previous department
+                                        clearError("department");
+                                    }}
+                                    placeholder={'Select Location'}
+                                    width={'w-full'}
                                     error={errors.location}
-                                    options={["Brigham & Women's Hospital Main Campus",
-                                        "Chestnut Hill",
-                                        "Faulkner Hospital",
-                                        "Patriot Place"]}
+                                    options={[
+                                        "Brigham & Women's Hospital Main Campus",
+                                        'Chestnut Hill',
+                                        'Faulkner Hospital',
+                                        'Patriot Place',
+                                    ]}
                                     clearError={() => clearError('location')}
                                 />
                             </div>
@@ -221,10 +240,20 @@ export function FormSteps({
                                 <SRQDropdown
                                     value={department}
                                     setValue={setDepartment}
-                                    width={"w-full"}
-                                    placeholder={"Select Department"}
+                                    width={'w-full'}
+                                    placeholder={
+                                        location ? 'Select Department' : 'Select a location first'
+                                    }
                                     error={errors.department}
-                                    options={["Laboratory", "Multi-Specialty Clinic", "Radiology", "Radiology, MRI/CT Scan"]}
+                                    options={
+                                        location
+                                            ? departmentsRaw
+                                                  ?.filter((dept) =>
+                                                      locationMap[location]?.includes(dept.location)
+                                                  )
+                                                  .map((dept) => dept.name) || []
+                                            : []
+                                    }
                                     clearError={() => clearError('department')}
                                 />
                             </div>
@@ -234,9 +263,9 @@ export function FormSteps({
                                 <SRQDropdown
                                     value={priority}
                                     setValue={setPriority}
-                                    width={"w-full"}
-                                    options={["Low", "Medium", "High", "Emergency"]}
-                                    placeholder={"Select Priority"}
+                                    width={'w-full'}
+                                    options={['Low', 'Medium', 'High', 'Emergency']}
+                                    placeholder={'Select Priority'}
                                     error={errors.priority}
                                     clearError={() => clearError('priority')}
                                 />
@@ -247,10 +276,10 @@ export function FormSteps({
                                 <SRQDropdown
                                     value={status}
                                     setValue={setStatus}
-                                    placeholder={"Select Status"}
-                                    width={"w-full"}
+                                    placeholder={'Select Status'}
+                                    width={'w-full'}
                                     error={errors.status}
-                                    options={["Unassigned", "Assigned", "Working", "Done"]}
+                                    options={['Unassigned', 'Assigned', 'Working', 'Done']}
                                     clearError={() => clearError('status')}
                                 />
                             </div>
@@ -268,7 +297,7 @@ export function FormSteps({
                         transition={{ duration: 0.5 }}
                         className="flex-grow"
                     >
-                        {type === "Language" ? (
+                        {type === 'Language' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Source Language (Patient)</InputHeader>
@@ -276,9 +305,10 @@ export function FormSteps({
                                         options={languages}
                                         value={sourceLanguage}
                                         setValue={setSourceLanguage}
-                                        placeholder={"Source Language"}
+                                        placeholder={'Source Language'}
                                         error={errors.sourceLanguage}
-                                        clearError={() => clearError('sourceLanguage')} />
+                                        clearError={() => clearError('sourceLanguage')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Target Language (Doctor/Staff)</InputHeader>
@@ -288,58 +318,67 @@ export function FormSteps({
                                         setValue={setTargetLanguage}
                                         error={errors.targetLanguage}
                                         clearError={() => clearError('targetLanguage')}
-                                        placeholder={"Select a Language"} />
+                                        placeholder={'Select a Language'}
+                                    />
                                 </div>
                             </div>
                         ) : null}
 
-                        {type === "Sanitation" ? (
+                        {type === 'Sanitation' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Cleaning Needed</InputHeader>
                                     <SRQDropdown
                                         value={cleaningType}
                                         setValue={setCleaningType}
-                                        placeholder={"Select Cleaning Needed"}
-                                        width={"w-full"}
+                                        placeholder={'Select Cleaning Needed'}
+                                        width={'w-full'}
                                         error={errors.cleaningType}
-                                        options={["Daily/General Cleaning", "Post-Patient Cleaning", "Spill Response", "Restroom Sanitization", "PPE Restock"]}
-                                        clearError={() => clearError('cleaningType')} />
+                                        options={[
+                                            'Daily/General Cleaning',
+                                            'Post-Patient Cleaning',
+                                            'Spill Response',
+                                            'Restroom Sanitization',
+                                            'PPE Restock',
+                                        ]}
+                                        clearError={() => clearError('cleaningType')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Contaminant (Optional)</InputHeader>
                                     <ErrorPopUp
                                         value={contaminant}
                                         setState={setContaminant}
-                                        placeholder={"Contaminant"}
-                                        width="w-full" />
+                                        placeholder={'Contaminant'}
+                                        width="w-full"
+                                    />
                                 </div>
                             </div>
                         ) : null}
 
-                        {type === "Security" ? (
+                        {type === 'Security' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Security Needed</InputHeader>
                                     <SRQDropdown
                                         value={accessZones}
                                         setValue={setAccessZones}
-                                        placeholder={"Select Access Zones Needed"}
-                                        width={"w-full"}
+                                        placeholder={'Select Access Zones Needed'}
+                                        width={'w-full'}
                                         error={errors.accessZones}
                                         options={[
-                                            "",
-                                            "ICU",
-                                            "Operating Room",
-                                            "Pharmacy",
-                                            "Medical Records",
-                                            "Pediatric Ward",
-                                            "Emergency Department",
-                                            "Laboratory",
-                                            "Server Room (IT)",
-                                            "Supply Closet",
-                                            "Radiology",
-                                            "Morgue"
+                                            '',
+                                            'ICU',
+                                            'Operating Room',
+                                            'Pharmacy',
+                                            'Medical Records',
+                                            'Pediatric Ward',
+                                            'Emergency Department',
+                                            'Laboratory',
+                                            'Server Room (IT)',
+                                            'Supply Closet',
+                                            'Radiology',
+                                            'Morgue',
                                         ]}
                                         clearError={() => clearError('accessZones')}
                                     />
@@ -349,118 +388,151 @@ export function FormSteps({
                                     <ErrorPopUp
                                         value={securityIssue}
                                         setState={setSecurityIssue}
-                                        placeholder={"Security Issue"}
+                                        placeholder={'Security Issue'}
                                         width="w-full"
                                         error={errors.securityIssue}
-                                        clearError={() => clearError('securityIssue')} />
+                                        clearError={() => clearError('securityIssue')}
+                                    />
                                 </div>
                             </div>
                         ) : null}
 
-                        {type === "Transportation" ? (
+                        {type === 'Transportation' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Transportation Type</InputHeader>
                                     <SRQDropdown
                                         value={transportationType}
                                         setValue={setTransportationType}
-                                        placeholder={"Select Transportation Type"}
-                                        width={"w-full"}
+                                        placeholder={'Select Transportation Type'}
+                                        width={'w-full'}
                                         error={errors.transportationType}
-                                        options={["Ambulance", "Helicopter", "Other (Please Specify Below)"]}
-                                        clearError={() => clearError('transportationType')} />
+                                        options={[
+                                            'Ambulance',
+                                            'Helicopter',
+                                            'Other (Please Specify Below)',
+                                        ]}
+                                        clearError={() => clearError('transportationType')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Destination</InputHeader>
                                     <SRQDropdown
                                         value={transportationDestination}
                                         setValue={setTransportationDestination}
-                                        width={"w-full"}
-                                        placeholder={"Select Destination"}
+                                        width={'w-full'}
+                                        placeholder={'Select Destination'}
                                         error={errors.transportationDestination}
-                                        options={["Brigham & Women's Hospital Main Campus",
-                                            "Chestnut Hill",
-                                            "Faulkner Hospital",
-                                            "Patriot Place"]}
-                                        clearError={() => clearError('transportationDestination')} />
+                                        options={[
+                                            "Brigham & Women's Hospital Main Campus",
+                                            'Chestnut Hill',
+                                            'Faulkner Hospital',
+                                            'Patriot Place',
+                                        ]}
+                                        clearError={() => clearError('transportationDestination')}
+                                    />
                                 </div>
                             </div>
                         ) : null}
 
-                        {type === "AudioVisual" ? (
+                        {type === 'AudioVisual' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Accommodation Type</InputHeader>
                                     <SRQDropdown
                                         value={accommodationType}
                                         setValue={setAccommodationType}
-                                        placeholder={"Select Accommodation Type"}
-                                        width={"w-full"}
+                                        placeholder={'Select Accommodation Type'}
+                                        width={'w-full'}
                                         error={errors.accommodationType}
-                                        options={["ASL Interpreter", "Live Captioning", "Braille Materials", "Tactile Interpreter", "Other (Please Specify Below)"]}
-                                        clearError={() => clearError('accommodationType')} />
+                                        options={[
+                                            'ASL Interpreter',
+                                            'Live Captioning',
+                                            'Braille Materials',
+                                            'Tactile Interpreter',
+                                            'Other (Please Specify Below)',
+                                        ]}
+                                        clearError={() => clearError('accommodationType')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Accommodation Details (Optional)</InputHeader>
                                     <ErrorPopUp
                                         value={accommodationDetails}
                                         setState={setAccommodationDetails}
-                                        placeholder={"Enter Accommodation Details"}
+                                        placeholder={'Enter Accommodation Details'}
                                         width="w-full"
                                     />
                                 </div>
                             </div>
                         ) : null}
-                        
-                        {type === "MedicalDevice" ? (
+
+                        {type === 'MedicalDevice' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Medical Device</InputHeader>
                                     <SRQDropdown
                                         value={device}
                                         setValue={setDevice}
-                                        width={"w-full"}
-                                        placeholder={"Select a Device"}
+                                        width={'w-full'}
+                                        placeholder={'Select a Device'}
                                         error={errors.device}
-                                        options={["EKG", "X-Ray", "Ventilator", "CT Scan", "Defibrillator"]}
-                                        clearError={() => clearError('device')} />
+                                        options={[
+                                            'EKG',
+                                            'X-Ray',
+                                            'Ventilator',
+                                            'CT Scan',
+                                            'Defibrillator',
+                                        ]}
+                                        clearError={() => clearError('device')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Operator Required</InputHeader>
                                     <SRQDropdown
                                         value={operatorRequired}
                                         setValue={setOperatorRequired}
-                                        placeholder={"Do You Require an Operator?"}
+                                        placeholder={'Do You Require an Operator?'}
                                         error={errors.operatorRequired}
-                                        width={"w-full"}
-                                        options={["Yes", "No"]}
-                                        clearError={() => clearError('operatorRequired')} />
+                                        width={'w-full'}
+                                        options={['Yes', 'No']}
+                                        clearError={() => clearError('operatorRequired')}
+                                    />
                                 </div>
                             </div>
                         ) : null}
-                        
-                        {type === "Facilities" ? (
+
+                        {type === 'Facilities' ? (
                             <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6 mt-6">
                                 <div>
                                     <InputHeader>Maintenance Type</InputHeader>
                                     <SRQDropdown
                                         value={maintenanceType}
                                         setValue={setMaintenanceType}
-                                        placeholder={"Select Maintenance Type"}
-                                        width={"w-full"}
+                                        placeholder={'Select Maintenance Type'}
+                                        width={'w-full'}
                                         error={errors.maintenanceType}
-                                        options={["Elevator", "Plumbing", "HVAC/R", "Power", "Electrical", "Other (Please Specify Below)"]}
-                                        clearError={() => clearError('maintenanceType')} />
+                                        options={[
+                                            'Elevator',
+                                            'Plumbing',
+                                            'HVAC/R',
+                                            'Power',
+                                            'Electrical',
+                                            'Other (Please Specify Below)',
+                                        ]}
+                                        clearError={() => clearError('maintenanceType')}
+                                    />
                                 </div>
                                 <div>
                                     <InputHeader>Equipment Type</InputHeader>
                                     <ErrorPopUp
                                         value={equipmentType}
                                         setState={setEquipmentType}
-                                        placeholder={"Specify any Equipment Needed"}
-                                        width={"w-full"}
+                                        placeholder={'Specify any Equipment Needed'}
+                                        width={'w-full'}
                                         error={errors.equipmentType}
-                                        clearError={() => clearError('equipmentType')} />
+                                        clearError={() => clearError('equipmentType')}
+                                    />
                                 </div>
                             </div>
                         ) : null}
@@ -480,7 +552,7 @@ export function FormSteps({
             <div className="flex justify-center px-6 mt-4">
                 <div className="flex space-x-2">
                     {Array.from({ length: 3 }).map((_, index) => (
-                        <div 
+                        <div
                             key={index}
                             className={`w-3 h-3 rounded-full ${currentStep === index + 1 ? 'bg-blue-500' : 'bg-gray-300'}`}
                         />

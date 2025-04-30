@@ -240,7 +240,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/Doanh/Documents/TermD2024-2025/CS3733/team-f/packages/database/.prisma/client",
+      "value": "C:\\Users\\thisi\\WebstormProjects\\team-f\\packages\\database\\.prisma\\client",
       "fromEnvVar": null
     },
     "config": {

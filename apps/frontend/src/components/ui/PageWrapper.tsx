@@ -9,9 +9,12 @@ type PageWrapperProps ={
     scaling?: 8|6|5|4|3;
     open?: boolean;
     absolute?: boolean;
+    x?: number;
+    y?: number;
+    xOut?: number;
 }
 
-const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling = 3, open = false, absolute = true}) => {
+const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling = 3, open = false, absolute = true,x, y, xOut}) => {
     const [isSidebarOpen, setSidebarOpen] = useState(open);
 
     const useOneThirdWidth = () => {
@@ -28,11 +31,11 @@ const PageWrapper: React.FC<PageWrapperProps> = ({ children, contents, scaling =
     };
 
     const width = useOneThirdWidth();
-    const translateMargin = isSidebarOpen ? 0 : -1*(width ?? 256);
+    const translateMargin = isSidebarOpen ? 0 : -1*(width -20 ?? 256);
 
     return (
         <div className="flex">
-        <SideNav isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} width={width} absolute={absolute}>
+        <SideNav isOpen={isSidebarOpen} setIsOpen={setSidebarOpen} width={width} absolute={absolute} x={x} y={y} xOut={xOut}>
 
             {contents}
         </SideNav>

@@ -142,7 +142,7 @@ export function FormSteps({
     }, [formValid]);
 
     return (
-        <div className="flex border-1 py-6 mt-1 ml-5 bg-white rounded-lg shadow-lg flex-col">
+        <div className="flex border-1 py-6 mt-1 ml-0 bg-white rounded-lg shadow-lg flex-col">
             <div 
                 ref={scrollContainerRef}
                 className="snap-y snap-mandatory overflow-y-auto h-80 scroll-smooth"

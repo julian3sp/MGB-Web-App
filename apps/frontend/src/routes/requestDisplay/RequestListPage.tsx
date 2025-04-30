@@ -827,7 +827,7 @@ export default function RequestListPage() {
                             <nav
                                 className="border p-5 py-[22px] border-1 border-[#44A6A6] h-20 w-full bg-white rounded-3xl flex items-center shadow-md"
                             >
-                                <p className="text-gray-700 text-[14pt] font-[Poppins]">
+                                <p className="text-gray-700 text-[12pt] font-[Poppins]">
                                     Select a service request to view details.
                                 </p>
                             </nav>

@@ -374,18 +374,17 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center text-sm flex flex-row"
+                    className="justify-center text-sm flex flex-row "
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-[90vh] flex flex-col gap-4">
+                    <div className="w-[88vh] ml-5 flex flex-col gap-4">
                         <motion.div
                             key="step1"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -100, opacity: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="flex-grow"
                         >
 
                         </motion.div>

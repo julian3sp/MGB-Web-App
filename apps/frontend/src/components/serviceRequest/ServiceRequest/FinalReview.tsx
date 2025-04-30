@@ -98,7 +98,7 @@ export function FinalReview({
 
 }: FinalReviewProps) {
     return (
-        <div className={'border-1 shadow-lg rounded-lg w-170 ml-5 py-5'}>
+        <div className={'border-1 shadow-lg rounded-lg  ml-5 py-5 '}>
             <div className="grid  grid-cols-2 gap-x-4 gap-y-4 px-6">
                 {/* General Info */}
                 <div>

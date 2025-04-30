@@ -114,10 +114,10 @@ export default function ExportCSV({type} : ExportCSVProps) {
         };
 
     return (
-        <div className=" px-6  max-w-md">
+        <div className=" m-2 mt-10  max-w-lg">
           <button
             onClick={downloadCSV}
-            className="w-full bg-white border-1 shadow-sm border-[#44A6A6] text-[#003a96] font-[poppins] py-2 rounded-lg hover:bg-[#003a96] hover:text-white"
+            className="w-full bg-[#003a96] border-1 shadow-sm border-[#44A6A6] text-white font-[poppins] p-3 rounded-2xl hover:bg-blue-950 hover:text-white"
           >
             Export {type}
           </button>

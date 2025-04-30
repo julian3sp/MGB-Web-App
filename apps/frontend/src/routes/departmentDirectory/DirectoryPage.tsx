@@ -79,14 +79,14 @@ const DirectoryPage = () => {
     };
 
     return (
-        <div className="p-6 min-h-screen relative">
+        <div className="p-6 min-h-screen ">
             <h1 className="text-4xl font-bold mb-6 font-[poppins] text-[#003a96]">Admin Dashboard</h1>
 
             {/* Top Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_2px_1fr] gap-6 items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 items-stretch">
                 {/* Bar Chart */}
-                <div className="col-span-1 bg-white rounded-2xl mb-6  shadow-lg border-1">
-                    <h2 className="text-2xl font-semibold bg-[#003a96] rounded-t-xl p-5 text-center border-b-5 border-b-[#44A6A6] mb-4 font-[poppins] text-white">
+                <div className="col-span-2 bg-white rounded-2xl  shadow-lg border-1">
+                    <h2 className="text-2xl font-semibold bg-[#003a96] rounded-t-2xl  p-5 text-center border-b-5 border-b-[#44A6A6] mb-4 font-[poppins] text-white">
                         Service Request Overview
                     </h2>
                     <ChartContainer config={serviceRequestConfig} className="min-h-[200px] m-5 font-[poppins] bg-blue-50 rounded-3xl p-2">
@@ -126,28 +126,30 @@ const DirectoryPage = () => {
                 </div>
 
                 {/* Teal Divider Line */}
-                <div className=" left-1/2 top-0 -translate-x-1/2 h-1/2 w-[2px] h-full bg-teal-500"></div>
 
                 {/* Directory Import/Export */}
-                <div className="col-span-1 mb-6">
-                    <div className="bg-white rounded-2xl shadow-lg border-1 space-y-11 h-full flex flex-col">
-                        <h2 className="text-2xl font-[poppins] bg-[#003a96] text-center p-5 border-b-5 border-b-[#44A6A6] rounded-t-lg font-semibold text-white">
-                            Import/Export Tools
-                        </h2>
+
+                    <div className="bg-white rounded-2xl shadow-lg border-1 ">
+                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Import/Export Tools</h2>
                         <ImportAllNodesAndEdges />
-                        <div className="mb-5 ml-2 space-y-12">
+                        <div className={'mb-30 p-3 flex justify-between space-y-10'}>
                             <ExportCSV type="Nodes" />
                             <ExportCSV type="Edges" />
                             <ExportCSV type="Directories" />
                         </div>
+
+                        {/*<button*/}
+                        {/*    onClick={downloadDirectories}*/}
+                        {/*    className="w-full bg-[#003a96] font-[poppins] hover:bg-blue-950 text-white font-medium px-4 py-2 rounded-lg transition"*/}
+                        {/*>*/}
+                        {/*    Download CSV*/}
+                        {/*</button>*/}
                     </div>
-                </div>
             </div>
-            <div className="   h-[2px] bg-teal-500"></div>
 
             {/* Directory Table */}
             <div className="mt-8 bg-white border-1 shadow-lg rounded-2xl">
-                <h2 className="text-2xl font-[poppins] text-white rounded-t-lg p-5 border-b-3 border-b-[#44A6A6] text-center bg-[#003a96] font-semibold  text-gray-800">Directory Table</h2>
+                <h2 className="text-2xl font-[poppins] text-white rounded-t-2xl p-5 border-b-3 border-b-[#44A6A6] text-center bg-[#003a96] font-semibold  text-gray-800">Directory Table</h2>
                 <div className="overflow-x-auto max-h-[400px] border-t-2 border-t-[#44A6A6] border-1 scrollbar-thin">
                     <table className="w-full font-[poppins]  border-collapse text-sm">
                         <thead className="sticky top-0 bg-[#B8D9D9]  text-black">

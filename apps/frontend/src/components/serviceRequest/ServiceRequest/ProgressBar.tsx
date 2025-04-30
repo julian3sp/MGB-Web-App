@@ -163,7 +163,7 @@ export function ProgressBar(props: ProgressBarProps) {
     };
 
     return (
-        <div className="flex items-start gap-10 border-1 rounded-lg shadow-lg bg-white p-8 pl-2 ">
+        <div className="flex items-start gap-10 border-1 rounded-lg shadow-lg bg-white p-8 pl-2  ">
             {/* Vertical Progress Bar */}
             <div className='flex flex-col items-center translate-x-5'>
                 <div className="relative h-85 w-10 bg-gray-200 rounded-full">

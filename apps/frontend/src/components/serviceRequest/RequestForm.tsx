@@ -374,11 +374,11 @@ function RequestForm({ title, type }: requestFormProps) {
         <>
             <div>
                 <form
-                    className="justify-center text-sm flex flex-row"
+                    className="justify-center  p-5 text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-[90vh] flex flex-col gap-5">
+                    <div className="w-[90vh] flex flex-col gap-4">
                         <motion.div
                             key="step1"
                             initial={{ y: 100, opacity: 0 }}
@@ -390,9 +390,9 @@ function RequestForm({ title, type }: requestFormProps) {
 
                         </motion.div>
 
-                        {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
-                        {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
-                        {type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}
+                        {/*{type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}*/}
+                        {/*{type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}*/}
+                        {/*{type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}*/}
 
                         {currentStep <= 3 ? (
                             <FormSteps
@@ -453,7 +453,7 @@ function RequestForm({ title, type }: requestFormProps) {
                         <div className="flex justify-center gap-6 mt-6">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
-                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
+                                    className='w-30 h-12 bg-[#003a96] hover:bg-blue-950 transition text-[13pt] p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Back
                                 </button>
@@ -464,7 +464,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                     if (!validateCurrentStep()) return;
                                     setCurrentStep(currentStep + 1);
                                 }}
-                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg flex items-center justify-center cursor-pointer text-white font-bold'
+                                    className='w-30 h-12 bg-[#003a96] hover:bg-blue-950 text-[13pt] transition p-5 rounded-lg flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Next
                                 </button>
@@ -476,7 +476,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             )}
                         </div>
                     </div>
-                    <div className={'p-5 mt-20'}>
+                    <div className={'p-5 mt-2'}>
                     <ProgressBar
                         currentStep={currentStep}
                         name={name}

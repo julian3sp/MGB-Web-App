@@ -1,7 +1,6 @@
+import {Link} from "react-router-dom";
 import CreditCard from '../components/CreditCard.tsx'
 import Ian from '../../assets/Ian.png';
-import { Table } from 'react-bootstrap';
-import PERN from '../../assets/PERN Stack.png';
 import logo from '../../assets/Mass-General-Brigham-Logo.png';
 import postgre from '../../assets/postgre.png';
 import express from '../../assets/express.jfif';
@@ -55,9 +54,11 @@ export function Credits() {
                 <CreditCard image={aceternity} title="Aceternity UI" description="UI Component Library" docs="https://ui.aceternity.com/components" />
             </div>
             <p className="flex justify-center font-bold pt-5 text-xl">Thank you to our sponsor!</p>
+            <Link to="https://www.massgeneralbrigham.org/en">
             <div className="flex justify-center">
-                <img className="relative flex flex-col w-full bottom-10" src={logo} alt="logo" />
+                <img className="relative flex flex-col w-3/4 pb-10" src={logo} alt="logo" />
             </div>
+            </Link>
         </div>
     );
 }

@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Toaster } from "../../ui/sonner";
 
+type ExportType = 'Nodes' | 'Edges' | 'Directories';
 
-export default function ExportCSV() {
+interface ExportCSVProps {
+    type: ExportType;
+}
+export default function ExportCSV({type} : ExportCSVProps) {
 
     const [nodes, setNodes] = useState<{
         name: string | null
@@ -63,58 +67,59 @@ export default function ExportCSV() {
             setDirectories(directoriesData);
         }
     }, [nodesData, edgesData, directoriesData]);
-    
-    
 
-    const downloadCSV = async () => {
-        let csv_edge = "source_id, target_id, weight\n"
-        let csv_node = "building, floor, name, x, y, type\n"
-        let csv_directories = "name, services, location, telephone\n"
 
-        nodes.forEach((file)=>{
-            csv_node += `${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`
-        })
-        edges.forEach((file)=>{
-            csv_edge += `${file.sourceId}, ${file.targetId}, ${file.weight}\n`
-        })
-        directories.forEach((file)=>{
-            csv_directories += `${file.name}, ${file.services}, ${file.location}, ${file.telephone}\n`
-        })
-        
-        const encodedUri1 = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_node)
-        const encodedUri2 = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_edge)
-        const encodedUri3 = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_directories)
+        const downloadCSV = async () => {
+            let csv_edge = "source_id, target_id, weight\n";
+            let csv_node = "building, floor, name, x, y, type\n";
+            let csv_directories = "name, services, location, telephone\n";
 
-        const link = document.createElement('a')
-        link.setAttribute('href', encodedUri1)
-        link.setAttribute('download', 'nodes_export.csv')
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+            nodes.forEach((file) => {
+                csv_node += `${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`;
+            });
+            edges.forEach((file) => {
+                csv_edge += `${file.sourceId}, ${file.targetId}, ${file.weight}\n`;
+            });
+            directories.forEach((file) => {
+                csv_directories += `${file.name}, ${file.services}, ${file.location}, ${file.telephone}\n`;
+            });
 
-        const link1 = document.createElement('a')
-        link1.setAttribute('href', encodedUri2)
-        link1.setAttribute('download', 'edges_export.csv')
-        document.body.appendChild(link1)
-        link1.click()
-        document.body.removeChild(link1)
+            let encodedUri: string;
+            let filename: string;
 
-        const link2 = document.createElement('a')
-        link2.setAttribute('href', encodedUri3)
-        link2.setAttribute('download', 'directories_export.csv')
-        document.body.appendChild(link2)
-        link2.click()
-        document.body.removeChild(link2)
-    };
+            switch (type) {
+                case 'Nodes':
+                    encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_node);
+                    filename = 'nodes_export.csv';
+                    break;
+                case 'Edges':
+                    encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_edge);
+                    filename = 'edges_export.csv';
+                    break;
+                case 'Directories':
+                    encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_directories);
+                    filename = 'directories_export.csv';
+                    break;
+                default:
+                    console.error("Invalid export type.");
+                    return;
+            }
+
+            const link = document.createElement('a');
+            link.href = encodedUri;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
 
     return (
-        <div className="p-4 max-w-md mx-auto space-y-4">
-          <h1 className="text-lg font-bold text-center">Export Nodes and Edges</h1>
+        <div className=" px-6  max-w-md">
           <button
             onClick={downloadCSV}
-            className="w-full bg-[#003a96] text-white font-[poppins] px-4 py-2 rounded hover:bg-blue-950"
+            className="w-full bg-white border-2 border-[#bbbbbb] text-[#003a96] font-[poppins] py-2 rounded-lg hover:bg-accent"
           >
-            Export CSV
+            Export {type}
           </button>
           <Toaster />
         </div>

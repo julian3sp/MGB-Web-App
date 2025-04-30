@@ -4,7 +4,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/Tooltip.tsx';
+} from '@/components/ui/tooltip.tsx';
 
 export default function ExitButton({
     size = 20,

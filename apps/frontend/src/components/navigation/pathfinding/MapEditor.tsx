@@ -55,7 +55,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [showEdges, setShowEdges] = useState(false);
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-    const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
+    const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
     const [selectedNode, setselectedNode] = useState<Node | null>(null);
     const newAlgo = trpc.setAlgoType.useMutation();
     const { data: nodesDataFromAPI, isLoading: isNodesLoading, refetch: refetchNodes } = trpc.getAllNodes.useQuery();
@@ -474,7 +474,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         {selectedNode ? (
                             <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
 
-                                <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 border-b-[#44A6A6] ">Node Info</h2>
+                                <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 bg-[#003a96] border-b-[#44A6A6] ">Node Info</h2>
                                 <p className="text-black pt-2 text-lg">
                                     <span className="font-semibold text-[#003a96]">ID:</span> {selectedNode.id}
                                 </p>

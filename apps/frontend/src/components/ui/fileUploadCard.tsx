@@ -29,9 +29,9 @@ export default function FileUploadCard({ files, onFilesChange }: FileUploadCardP
   }
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-5">
       <div
-        className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col gap-1 p-6 items-center cursor-pointer hover:bg-gray-50 transition"
+        className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col gap-1 p-10 items-center cursor-pointer hover:bg-gray-50 transition"
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
@@ -51,7 +51,7 @@ export default function FileUploadCard({ files, onFilesChange }: FileUploadCardP
       />
 
       {files.length > 0 && (
-        <div className="p-3 bg-gray-100 rounded-md border text-sm text-gray-700 space-y-2">
+        <div className="p-3 bg-gray-100 rounded-md border text-sm text-gray-700 space-y-5">
           <div className="font-semibold mb-1">Uploaded Files:</div>
           {files.map((file, idx) => (
             <div

@@ -49,10 +49,10 @@ const HospitalViewControls: React.FC<HospitalViewControlsProps> = ({
               <DropdownMenuContent align="start">
                 <DropdownMenuLabel>{selectedDestination?.name}</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => onFloorChange(1)} className={selectedFloor === 1 ? "bg-blue-50" : ""}>
-                      Floor 3 {selectedFloor === 1 && "✓"}
+                      Floor 1 {selectedFloor === 1 && "✓"}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onFloorChange(2)} className={selectedFloor === 2 ? "bg-blue-50" : ""}>
-                      Floor 4 {selectedFloor === 2 && "✓"}
+                      Floor 2 {selectedFloor === 2 && "✓"}
                   </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => onFloorChange(3)} className={selectedFloor === 3 ? "bg-blue-50" : ""}>
                   Floor 3 {selectedFloor === 3 && "✓"}

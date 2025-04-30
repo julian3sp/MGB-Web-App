@@ -346,6 +346,9 @@ export class Graph {
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
         }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
+        }
 
         // console.log("Getting nodes building: ", building, " Floor:", floor);
 
@@ -363,6 +366,9 @@ export class Graph {
         }
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
+        }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
         }
 
         return Array.from(this.edges).filter(

@@ -80,8 +80,9 @@ export const createPatriot20Overlays = (map: google.maps.Map) => {
 
 export const updatePatriotPlace20 = (
     overlays: Patriot20Overlays,
-    selectedFloor: 1 | 2 | 3 | 4
+    selectedFloor: number
 ) => {
+    console.log("Pat 20 Val: ", selectedFloor)
     if (selectedFloor === 1) {
         overlays.floor1Overlay.setOpacity(1);
         overlays.floor2Overlay.setOpacity(0);

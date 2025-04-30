@@ -21,7 +21,7 @@ interface MapRendererProps {
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
   selectedFloor?: 1| 2| 3 | 4;
-  onFloorChange?: (floor: 3 | 4) => void;
+  onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
 }
@@ -30,8 +30,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onMapReady,
   selectedDestination,
   onZoomChange,
-  selectedFloor = 3,
-  onFloorChange = () => { },
+  selectedFloor = 1,
+  onFloorChange,
   departmentNumber
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -207,10 +207,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Fixed entrance node and target department node
 
       const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 3900,
-        "20 Patriot Place": 1139,
-        "22 Patriot Place": 1768,
-        "Faulkner": 3995
+        "MGB (Chestnut Hill)": 2707,
+        "20 Patriot Place": 113,
+        "22 Patriot Place": 1290,
+        "Faulkner": 2708
       }
 
       const entrance = graph.getNode(entrances[selectedDestination!.name]);
@@ -359,7 +359,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     }
 
     return cleanupOverlays;
-  }, [selectedDestination, map]);
+  }, [selectedDestination, map, selectedFloor]);
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {

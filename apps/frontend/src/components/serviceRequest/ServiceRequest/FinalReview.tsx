@@ -111,8 +111,8 @@ export function FinalReview({
     };
 
     return (
-        <>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6">
+        <div className={'border-1 shadow-lg rounded-lg  ml-5 py-5 '}>
+            <div className="grid  grid-cols-2 gap-x-4 gap-y-4 px-6">
                 {/* General Info */}
                 <div>
                     <InputHeader>Name</InputHeader>
@@ -453,7 +453,7 @@ export function FinalReview({
             </div>
 
             {/* Additional Comments */}
-            <div className="mr-5 ml-5">
+            <div className="mr-5 mt-5 ml-5">
                 <InputHeader>Additional Comments</InputHeader>
                 <TextArea
                     placeholder="Additional Comments..."
@@ -461,6 +461,6 @@ export function FinalReview({
                     setState={setComments}
                 />
             </div>
-        </>
+        </div>
     );
 }

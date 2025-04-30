@@ -38,7 +38,7 @@ const useClickOutside = (handler: () => void) => {
     return reference;
 };
 
-export default function RequestTablePage({userRole}:{userRole: string}) {
+export default function RequestTablePage() {
     const { filteredData, isLoading, error } = useRequestData();
     const deleteRequest = trpc.deleteRequest.useMutation();
     const handleDelete = (selectedRequest: ServiceRequest) => {
@@ -161,7 +161,7 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 scrollbar-hide text-gray-700 bg-white bg-clip-border rounded-tl-3xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
@@ -355,7 +355,7 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
                                 {sortedData.map((res) => (
                                     <tr
                                         key={res.request_id}
-                                        className="even:bg-gray-100 odd:bg-white hover:bg-[#B8D9D9]"
+                                        className="even:bg-gray-100 odd:bg-white hover:bg-blue-100"
                                     >
                                         <td className="p-4 break-words max-w-[50px] pt-2 pb-2">
                                             <p className="block font-[Poppins] text-med text-blue-gray-900">
@@ -634,10 +634,12 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
                                                     size={20}
                                                     onClick={() => {
                                                         console.log(
-                                                            userRole
+                                                            window.sessionStorage.getItem('isAdmin')
                                                         );
                                                         if (
-                                                            userRole === 'Admin'
+                                                            window.sessionStorage.getItem(
+                                                                'isAdmin'
+                                                            ) === 'true'
                                                         ) {
                                                             console.log('Delete: ');
                                                             console.log(res);

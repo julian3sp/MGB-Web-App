@@ -508,7 +508,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             <div className="w-1/4 p-5 border-r border-gray-300 flex flex-col gap-4">
                 <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
 
-                {selectedNode && (
+                {selectedNode ? (
                     <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
                         <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
                         <p className="text-black text-lg"><span className="font-bold">ID:</span> {selectedNode.id}</p>
@@ -523,7 +523,16 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
                         {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
                     </div>
-                )}
+                ) : (
+                    <div className=" bg-white shadow-lg border-2 pb-3 border-frey rounded-2xl rounded-lg font-[poppins] text-center space-y-3 ">
+                        <div className={'bg-[#003a96] rounded-t-lg p-4'}>
+                    <h2 className="text-xl font-semibold text-white">Node Info</h2>
+                        </div>
+                    <p className="text-black text-lg"><span className="font-bold">ID:</span> </p>
+            <p className="text-black text-lg"><span className="font-bold">Name:</span> </p>
+            <p className="text-black text-lg"><span className="font-bold">Type:</span> </p>
+                    </div>
+                    )}
 
                 <div className="w-full p-5 flex flex-col gap-4">
                     <ImportAllNodesAndEdges />

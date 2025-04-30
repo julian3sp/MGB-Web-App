@@ -176,6 +176,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
+  function checkMultiFloor(path: Node[]): {floor1: Node[], floor2: Node[]} {
+
+  }
+
   // Handle department pathfinding
   useEffect(() => {
     if (
@@ -233,6 +237,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         console.log("Using Dijkstra's")
         context.setStrategyPathfind(new Dijkstras())
       }
+
 
 
       const pathNodes = context.pathFind(graph, entrance, target)

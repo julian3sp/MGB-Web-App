@@ -14,7 +14,7 @@ cd /app/apps/backend
 PORT=$BACKEND_PORT yarn docker:run &
 BACKEND_PID=$!
 
-yarn workspace database push
+yarn workspace database push:force
 yarn workspace database seed
 
 # Handle signals properly

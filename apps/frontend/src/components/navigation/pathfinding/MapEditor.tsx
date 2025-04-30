@@ -451,23 +451,27 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             <PageWrapper
                 contents={
                     <div className="w-full p-5 border-r border-gray-300 flex flex-col gap-4 h-full overflow-y-scroll scollbar-thin">
-                        <h2 className="font-bold text-center font-[poppins]">
+                        <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
                             Map Editor Controls
                         </h2>
 
                         {selectedNode ? (
-                            <div className=" bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3 ">
+                            <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
 
-                                <h2 className="text-xl font-bold text-[#003a96] underline">Node Info</h2>
-                                <p className="text-black text-lg">
+                                <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 border-b-[#44A6A6] ">Node Info</h2>
+                                <p className="text-black pt-2 text-lg">
                                     <span className="font-semibold text-[#003a96]">ID:</span> {selectedNode.id}
                                 </p>
                                 <p className="text-black text-lg">
                                     <span className="font-semibold text-[#003a96]">Name:</span> {selectedNode.name}
                                 </p>
+
                                 <p className="text-black text-lg">
                                     <span className="font-semibold text-[#003a96]">Type:</span> {selectedNode.type}
                                 </p>
+                                <hr className={'mx-5 my-5 border-black'}/>
+
+                                <div className={'mx-4 my-4'}>
                                 <SRQDropdown
                                     value={currentNodeType}
                                     setValue={handleNodeTypeChange}
@@ -475,13 +479,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                     placeholder={'Select a node type'}
                                     options={Object.values(NodeType) as string[]}
                                 />
+                                </div>
                                 {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
                                 {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
                             </div>
                         ) : (
                             <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3  font-[poppins] text-center space-y-3 ">
 
-                                <h2 className="text-xl font-bold text-white p-5 rounded-t-lg bg-[#003a96] ">Node Info</h2>
+                                <h2 className="text-xl font-bold text-white p-5 rounded-t-lg bg-[#003a96] border-b-5 border-b-[#44A6A6] ">Node Info</h2>
                                 <p className="text-black text-lg p-2">
                                     <span className="font-semibold text-[#003a96]">ID:</span> Select a Node
                                 </p>
@@ -499,7 +504,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         {/*</div>*/}
 
                         <button
-                            className="bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3 "
+                            className="bg-[#003a96] w-[80%] mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
                             onClick={() => {
                                 setEdgeMode((prevState) => !prevState);
                                 setShowEdges(true);
@@ -508,40 +513,40 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             {edgeMode ? 'Exit Edge Mode' : 'Add Edge Mode'}
                         </button>
 
-                        <ExportCSV />
+                        {/*<ExportCSV />*/}
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">
-                                    Choose Your Algorithm
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56">
-                                <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuRadioGroup
-                                    value={algoType}
-                                    onValueChange={setAlgoTypeWrapper}
-                                >
-                                    <DropdownMenuRadioItem value="A-Star">
-                                        A-Star
-                                    </DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="DFS">
-                                        Depth First Search
-                                    </DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="BFS">
-                                        Breadth First Search
-                                    </DropdownMenuRadioItem>
-                                    <DropdownMenuRadioItem value="Dijkstras">
-                                        Dijkstra's
-                                    </DropdownMenuRadioItem>
-                                </DropdownMenuRadioGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {/*<DropdownMenu>*/}
+                        {/*    <DropdownMenuTrigger asChild>*/}
+                        {/*        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">*/}
+                        {/*            Choose Your Algorithm*/}
+                        {/*        </button>*/}
+                        {/*    </DropdownMenuTrigger>*/}
+                        {/*    <DropdownMenuContent className="w-56">*/}
+                        {/*        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>*/}
+                        {/*        <DropdownMenuSeparator />*/}
+                        {/*        <DropdownMenuRadioGroup*/}
+                        {/*            value={algoType}*/}
+                        {/*            onValueChange={setAlgoTypeWrapper}*/}
+                        {/*        >*/}
+                        {/*            <DropdownMenuRadioItem value="A-Star">*/}
+                        {/*                A-Star*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="DFS">*/}
+                        {/*                Depth First Search*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="BFS">*/}
+                        {/*                Breadth First Search*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*            <DropdownMenuRadioItem value="Dijkstras">*/}
+                        {/*                Dijkstra's*/}
+                        {/*            </DropdownMenuRadioItem>*/}
+                        {/*        </DropdownMenuRadioGroup>*/}
+                        {/*    </DropdownMenuContent>*/}
+                        {/*</DropdownMenu>*/}
 
                         <button
                             className={
-                                'bg-[#003a96] w-[80%] mx-auto text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3 '
+                                'bg-white  text-[#003a96] w-[80%] mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
                             }
                             type={'submit'}
                             onClick={handleSubmit}
@@ -553,8 +558,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 scaling={3}
                 open={true}
                 absolute={false}
-                x={-70}
-                y={35}
+                x={-60}
+                y={15}
                 xOut={10}
             ></PageWrapper>
 

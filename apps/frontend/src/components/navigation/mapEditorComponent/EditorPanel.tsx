@@ -33,7 +33,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
 
                                                         }) => {
     return (
-            <div>
+            <div className="flex flex-col space-y-3">
                 {selectedNode ? (
                     <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
 
@@ -87,7 +87,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 {/*</div>*/}
 
                 <button
-                    className="bg-[#003a96] w-[80%] mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                    className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
                     onClick={() => {
                         setEdgeMode((prevState) => !prevState);
                         setShowEdges(true);
@@ -97,7 +97,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 </button>
                 <button
                     className={
-                        'bg-white  text-[#003a96] w-[80%] mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
+                        'bg-white  text-[#003a96] w-[80%] block mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
                     }
                     type={'submit'}
                     onClick={handleSubmit}

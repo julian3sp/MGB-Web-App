@@ -20,7 +20,6 @@ export function WelcomePage() {
   const [scrolling, setScrolling] = useState(false);
   const [inactive, setInactive] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const togglePlayback = () => {
     const video = videoRef.current;
@@ -97,7 +96,7 @@ export function WelcomePage() {
       {/* pinned section */}
       <div ref={containerRef}>
         <div
-          ref={wrapperRef}
+          ref={wrapperRef} // everthing inside wrapper ref including the video and the button's parent is being shrunk
           className="relative w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
         >
           <div className="relative w-full h-full">
@@ -112,7 +111,10 @@ export function WelcomePage() {
             />
 
             <button
-              ref={buttonRef}
+              /**
+               * before the button was absolutely positioned, fixed in place and not transformed with the video
+               * after the button is treated as part of the animation timeline and follows the same changes in width, height, scale as it's tied to layout
+               */
               onClick={togglePlayback}
               className="absolute bottom-5 right-5 bg-[#f2f2f7]/80 hover:bg-[#e5e5ea]/90 text-[#3c3c43] p-2 rounded-full transition shadow-md backdrop-blur z-50"
             >

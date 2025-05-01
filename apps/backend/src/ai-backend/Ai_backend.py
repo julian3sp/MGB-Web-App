@@ -6,7 +6,7 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-
+# If you wondering why doesnt it work try this
 #pip install google-generativeai
 #pip install python-dotenv
 #pip install requests

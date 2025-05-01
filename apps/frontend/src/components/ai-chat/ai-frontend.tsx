@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 
+//Go to AI backend and also open a new terminal and cd to src/ai_backend and see tutorial on how to run
+
 export function AiFrontend() {
-    const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]); // Chat messages
+    const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]); 
     const [prompt, setPrompt] = useState<string>(""); // User's input
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!prompt.trim()) return; // Prevent sending empty messages
+        if (!prompt.trim()) return; 
 
-        // Add the user's message to the chat
+        
         setMessages((prev) => [...prev, { sender: "user", text: prompt }]);
 
         try {
@@ -33,7 +35,7 @@ export function AiFrontend() {
                     { sender: "ai", text: "Sorry, something went wrong." },
                 ]);
             } else {
-                // Add the AI's response to the chat
+                
                 setMessages((prev) => [...prev, { sender: "ai", text: data.response }]);
             }
         } catch (error) {
@@ -44,7 +46,7 @@ export function AiFrontend() {
             ]);
         }
 
-        setPrompt(""); // Clear the input field
+        setPrompt("");
     };
 
     return (

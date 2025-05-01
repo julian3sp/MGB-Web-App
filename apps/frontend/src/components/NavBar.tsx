@@ -71,6 +71,12 @@ export default function NavBar({ userRole, setUserRole }: Props) {
             setTab("services");
         } else if(lowerTranscript.includes("off")) {
             setVoiceControls(false)
+        } else if (lowerTranscript.includes("edit")) {
+            navigate("/editor");
+            setTab("editor");
+        } else if (lowerTranscript.includes("view")) {
+            navigate("/requests");
+            setTab("requests");
         }
     }, [navigate, logout, loginWithRedirect]);
 

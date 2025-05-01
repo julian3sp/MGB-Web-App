@@ -149,7 +149,7 @@ export function FormSteps({
         'Chestnut Hill': ['MGB (Chestnut Hill)'],
         'Patriot Place': ['20 Patriot Place', '22 Patriot Place'],
         'Faulkner Hospital': ['Faulkner'],
-        "Brigham & Women's Hospital Main Campus": ['MGB Main'], //None in CSV yet, assuming this would be format used
+        "Brigham & Women's Hospital Main Campus": ['Main Campus'], //None in CSV yet, assuming this would be format used
     };
 
     return (

@@ -7,6 +7,8 @@ import React, {
     useContext,
 } from "react";
 
+import { X } from 'lucide-react';
+
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../../../hooks/use-outside-click";
@@ -190,10 +192,10 @@ export const Card = ({
                             className="relative z-[60] mx-auto my-10 max-h-[90v] max-w-5xl rounded-3xl p-4 md:p-10 dark:bg-neutral-900"
                         >
                             <button
-                                className="absolute top-4 right-4 ml-auto flex h-8 w-8 font-[Poppins] items-center justify-center rounded-full bg-white hover:cursor-pointer"
+                                className="absolute -top-5 right-4 ml-auto flex h-8 w-8 font-[Poppins] items-center justify-center rounded-full bg-white hover:cursor-pointer"
                                 onClick={handleClose}
                             >
-                                x
+                                <X size={16}/>
                             </button>
                             <motion.p
                                 layoutId={layout ? `category-${card.title}` : undefined}

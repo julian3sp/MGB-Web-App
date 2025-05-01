@@ -114,7 +114,7 @@ export function WelcomePage() {
             <button
               ref={buttonRef}
               onClick={togglePlayback}
-              className="absolute bottom-10 right-5 bg-[#f2f2f7]/80 hover:bg-[#e5e5ea]/90 text-[#3c3c43] p-2 rounded-full transition shadow-md backdrop-blur z-50"
+              className="absolute bottom-5 right-5 bg-[#f2f2f7]/80 hover:bg-[#e5e5ea]/90 text-[#3c3c43] p-2 rounded-full transition shadow-md backdrop-blur z-50"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -19,7 +19,7 @@ function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
         <button
             onClick={onClick}
             className={`
-    group relative flex items-center w-full text-left mb-3 py-3 px-5 rounded-xl
+    group relative flex items-center w-full text-left mb-3 py-4 px-5 rounded-xl
     font-poppins font-semibold ease-in-out
     text-[13pt] 
 
@@ -46,13 +46,13 @@ function RequestButton({ label, onClick, type, isActive }: formRequestButton) {
                 <LanguageIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[21px] ml-[2px] text-inherit" />
             )}
             {type === "Security" && (
-                <LockIcon size={37} stroke="currentColor" fill="currentColor" className="mr-[12px] ml-[0px] text-inherit" />
+                <LockIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[12px] ml-[0px] text-inherit" />
             )}
             {type === "MedicalDevice" && (
                 <MedicalIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[15px] ml-[2px] text-inherit" />
             )}
             {type === "Facilities" && (
-                <ElevatorIcon size={38} stroke="currentColor" fill="currentColor" className="mr-[11px] ml-[0px] text-inherit" />
+                <ElevatorIcon size={30} stroke="currentColor" fill="currentColor" className="mr-[11px] ml-[0px] text-inherit" />
             )}
 
             {/* Label */}

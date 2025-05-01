@@ -25,8 +25,8 @@ import {
 import {WorldDistance} from "./worldCalculations.ts"
 import { SRQDropdown } from '@/components/serviceRequest/inputFields/SRQDropdown.tsx';
 import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
-import { PictureCorners } from '../mapEditorComponent/PictureCorners.tsx';
-import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessorPanel.tsx";
+import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorners.tsx';
+import {ImageProcessorPanel, placeOverlay} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
 import {importGraphFromZip} from "@/components/importZipGraph.ts";
 import JSZip from 'jszip';
 // resolve
@@ -46,8 +46,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
     const [isLoadingMap, setIsLoadingMap] = useState(true);
-    const [showNodes, setShowNodes] = useState(false);
-    const [showEdges, setShowEdges] = useState(false);
+    const [showNodes, setShowNodes] = useState(true);
+    const [showEdges, setShowEdges] = useState(true);
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<3 | 4 | null>(null);
@@ -327,6 +327,29 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         edgePolylines.forEach(l => l.setMap(null));
         setEdgePolylines([]);
         graph.populate(nodesRes.data, edgesRes.data);
+        setEdgeRefresh((v) => v + 1);
+        setShowNodes(true);
+        if (showNodes) displayNodes();
+        if (showEdges) {
+            console.log("how was this called?")
+            const lines = getEdgeLines();
+            if (lines) setEdgePolylines(lines);
+        }
+    }
+
+    const handleImageSubmit = async () =>{
+        const [nodesRes, edgesRes] = await Promise.all([
+            refetchNodes(),
+            refetchEdges(),
+        ]);
+
+        staticMarkers.forEach(m => m.setMap(null));
+        setStaticMarkers([]);
+        edgePolylines.forEach(l => l.setMap(null));
+        setEdgePolylines([]);
+        graph.populate(nodesRes.data, edgesRes.data);
+        setEdgeRefresh((v) => v + 1);
+        setShowNodes(true);
         if (showNodes) displayNodes();
         if (showEdges) {
             console.log("how was this called?")
@@ -425,7 +448,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         );
 
         form.append('name', 'test');
-        form.append('building', "chestnut");
+        form.append('building', "pat20");
         form.append('floor', "1");
         form.append('offset',(graph.getAllNodes().length+1 || 1).toString());
 
@@ -462,74 +485,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setPixelCorners([]);
         setWorldCorners([]);
         setImgOverlay(null);
+        await handleSubmit();
     }
 
-    function placeOverlay() {
-        if (!map || !imgFile) return;
 
-        // 1) compute initial bounds around center
-        const centre = map.getCenter()!;
-        const bounds = new google.maps.LatLngBounds(
-            { lat: centre.lat() - 0.0005, lng: centre.lng() - 0.0005 },
-            { lat: centre.lat() + 0.0005, lng: centre.lng() + 0.0005 },
-        );
-
-        // 2) create the overlay
-        const url = URL.createObjectURL(imgFile);
-        const overlay = new google.maps.GroundOverlay(url, bounds, { opacity: 0.6 });
-        overlay.setMap(map);
-        setImgOverlay(overlay);
-
-        worldCorners.forEach(m => m.position(null));
-        const newMarkers: google.maps.marker.AdvancedMarkerElement[] = [];
-
-        // get current bounds
-        const b = overlay.getBounds();
-        if (!b) return;
-
-        const ne = b.getNorthEast();
-        const sw = b.getSouthWest();
-        const nw = new google.maps.LatLng(ne.lat(), sw.lng());
-        const se = new google.maps.LatLng(sw.lat(), ne.lng());
-
-        // order them Top-Left (NW), Top-Right (NE), Bottom-Right (SE), Bottom-Left (SW)
-        const corners = [nw, ne, se, sw];
-
-        corners.forEach((pos, idx) => {
-            const m = new google.maps.marker.AdvancedMarkerElement({
-                position: pos,
-                map,
-                title: `${idx + 1}`,
-                gmpDraggable: true
-            });
-            newMarkers.push(m);
-        });
-
-        setWorldCorners(newMarkers);
-
-        // // 3) double-click handler to drop corner markers
-        // overlay.addListener('dblclick', () => {
-        //     // clear old markers
-        //
-        // });
-
-        // // 4) retain your drag-to-move logic
-        // overlay.addListener('mousedown', e => {
-        //     const start = e.latLng!;
-        //     const listener = map.addListener('mousemove', m => {
-        //         const dx = m.latLng!.lat() - start.lat();
-        //         const dy = m.latLng!.lng() - start.lng();
-        //         const sw = bounds.getSouthWest();
-        //         const ne = bounds.getNorthEast();
-        //         const newBounds = new google.maps.LatLngBounds(
-        //             { lat: sw.lat() + dx, lng: sw.lng() + dy },
-        //             { lat: ne.lat() + dx, lng: ne.lng() + dy },
-        //         );
-        //         overlay.setOptions({ bounds: newBounds });
-        //     });
-        //     map.addListener('mouseup', () => google.maps.event.removeListener(listener));
-        // });
-    }
 
     return (
         <div className="flex h-[95vh]">
@@ -558,13 +517,16 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     />
                     :
                     <ImageProcessorPanel
+                        map= {map}
                         imgFile={imgFile}
                         setImgFile={setImgFile}
                         pixelCorners={pixelCorners}
                         setPixelCorners={setPixelCorners}
                         imgOverlay={imgOverlay}
+                        setImgOverlay={setImgOverlay}
                         placeOverlay={placeOverlay}
                         worldCorners={worldCorners}
+                        setWorldCorners={setWorldCorners}
                         sendToFastApi={sendToFastApi}
                     />
                 }

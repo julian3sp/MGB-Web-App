@@ -1,6 +1,8 @@
-import {PictureCorners} from "@/components/navigation/mapEditorComponent/PictureCorners.tsx";
-
+import {PictureCorners} from "@/components/navigation/mapEditorComponent/ImageProcessor/PictureCorners.tsx";
+// import {graph} from "../../../map/GraphObject.ts"
 export interface ImageProcessorPanelProps {
+    map: google.maps.Map | null;
+
     /** Image*/
     imgFile: File | null;
     setImgFile: React.Dispatch<React.SetStateAction<File | null>>;
@@ -11,23 +13,35 @@ export interface ImageProcessorPanelProps {
 
     /**Google Maps Overlay*/
     imgOverlay: google.maps.GroundOverlay | null;
-    placeOverlay: () => void;
+    placeOverlay: (map: google.maps.Map | null,
+                   imgFile: File | null,
+                   setImgOverlay: (overlay: google.maps.GroundOverlay | null) => void,
+                   worldCorners: google.maps.marker.AdvancedMarkerElement[],
+                   setWorldCorners: (markers: google.maps.marker.AdvancedMarkerElement[] | null) => void) => void;
+    setImgOverlay: (overlay: google.maps.GroundOverlay | null) => void;
+
 
     /** World Coordinate corners */
     worldCorners: google.maps.marker.AdvancedMarkerElement[];
+    setWorldCorners: (m: google.maps.marker.AdvancedMarkerElement[]) => void;
     sendToFastApi: () => void;
+
 }
 
 
 export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
+                                                                            map,
                                                                             imgFile,
                                                                             setImgFile,
                                                                             pixelCorners,
                                                                             setPixelCorners,
                                                                             imgOverlay,
+                                                                            setImgOverlay,
                                                                             placeOverlay,
                                                                             worldCorners,
+                                                                            setWorldCorners,
                                                                             sendToFastApi,
+
                                                                         }) => {
     /** STEP 1 – upload ********************************************/
     if (!imgFile) {
@@ -63,7 +77,14 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
         return (
             <button
                 className="bg-[#0076CE] text-white w-full py-2 rounded"
-                onClick={placeOverlay}
+                onClick={() =>
+                    placeOverlay(
+                        map,
+                        imgFile,
+                        setImgOverlay,
+                        worldCorners,
+                        setWorldCorners
+                    )}
             >
                 Place Image on Map
             </button>
@@ -90,3 +111,59 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
         </button>
     );
 };
+
+
+
+
+export function placeOverlay(
+    map: google.maps.Map | null,
+    imgFile: File | null,
+    setImgOverlay: (overlay: google.maps.GroundOverlay | null) => void,
+    worldCorners: google.maps.marker.AdvancedMarkerElement[],
+    setWorldCorners: (markers: google.maps.marker.AdvancedMarkerElement[] | null) => void) {
+    if (!map || !imgFile) return;
+
+    // 1) compute initial bounds around center
+    const centre = map.getCenter()!;
+    const bounds = new google.maps.LatLngBounds(
+        { lat: centre.lat() - 0.0005, lng: centre.lng() - 0.0005 },
+        { lat: centre.lat() + 0.0005, lng: centre.lng() + 0.0005 },
+    );
+
+    // 2) create the overlay
+    const url = URL.createObjectURL(imgFile);
+    const overlay = new google.maps.GroundOverlay(url, bounds, { opacity: 0.6 });
+    overlay.setMap(map);
+    setImgOverlay(overlay);
+
+    worldCorners.forEach(m => m.position(null));
+    const newMarkers: google.maps.marker.AdvancedMarkerElement[] = [];
+
+    // get current bounds
+    const b = overlay.getBounds();
+    if (!b) return;
+
+    const ne = b.getNorthEast();
+    const sw = b.getSouthWest();
+    const nw = new google.maps.LatLng(ne.lat(), sw.lng());
+    const se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+    // order them Top-Left (NW), Top-Right (NE), Bottom-Right (SE), Bottom-Left (SW)
+    const corners = [nw, ne, se, sw];
+
+    corners.forEach((pos, idx) => {
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            position: pos,
+            map,
+            title: `${idx + 1}`,
+            gmpDraggable: true
+        });
+        const content = marker.content as HTMLElement;
+        content.addEventListener('dragend', (e) => {
+            e.stopPropagation();
+            console.log(marker.position)
+        })
+        newMarkers.push(marker);
+    });
+    setWorldCorners(newMarkers);
+}

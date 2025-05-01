@@ -17,7 +17,7 @@ type Props = {
 export default function NavBar({ userRole, setUserRole }: Props) {
     const location = useLocation();
     const navigate = useNavigate();
-    const [voiceControls, setVoiceControls] = useState(true);
+    const [voiceControls, setVoiceControls] = useState(false);
     const recognitionRef = useRef<SpeechRecognition | null>(null);
     const [isRecognitionSupported, setIsRecognitionSupported] = useState(false);
     const { isAuthenticated, logout, loginWithRedirect } = useAuth0();

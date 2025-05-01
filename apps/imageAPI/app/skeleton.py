@@ -73,7 +73,7 @@ def annotate_nodes(skeleton_img):
 
     return annotated_img, endpoint_coords, branch_coords
 
-def nodes_to_csv(newNodes, csv_filename, building, floor, source_points, target_points):
+def nodes_to_csv(newNodes, csv_filename, building, floor, source_points, target_points, offset =0):
     """
     Transforms node coordinates (from newNodes) to world coordinates using a homography 
     transform and writes them to CSV.
@@ -103,11 +103,13 @@ def nodes_to_csv(newNodes, csv_filename, building, floor, source_points, target_
         writer = csv.writer(csvfile)
         # Write header if file is being created.
         if mode == "w":
-            writer.writerow(["building", "floor", "name", "x", "y", "type"])
+            writer.writerow(["id", "building", "floor", "name", "x", "y", "type"])
         # Loop through each node and its transformed coordinate.
+        id = offset
         for i, node in enumerate(newNodes):
             x, y = world_coords[i]
-            writer.writerow([building, floor, "", x, y, "Hall"])
+            writer.writerow([id, building, floor, "", x, y, "Hall"])
+            id = 1 + id
             
 
     print(f"Node coordinates saved to {csv_filename}")
@@ -574,7 +576,7 @@ def generate_new_map(file, source_points, target_points, building, floor, offset
 
     nodes, newNodes, edges, _, _ = generate_nodes_edges(image_path, source_points, target_points)
     # worldPoints, tform = calculateHomography(np.flip(source_points), target_points, nodes)
-    nodes_to_csv(newNodes, "nodes.csv", building, floor, source_points, target_points)
+    nodes_to_csv(newNodes, "nodes.csv", building, floor, source_points, target_points, offset)
     edges_to_csv(edges, "edges.csv", offset)
 
 

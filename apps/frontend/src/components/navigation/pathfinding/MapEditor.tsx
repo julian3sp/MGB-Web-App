@@ -73,8 +73,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
-    const makeNode = trpc.makeNode.useMutation()
+    const makeNode = trpc.makeNode.useMutation();
     const makeEdge = trpc.makeEdge.useMutation()
+    const { data: largestArr, isLoading} = trpc.getLargestNodeId.useQuery();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -161,8 +162,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setAlgoType(algo);
     }
 
-    // Start of map e
-    // ditor
+    // Start of map editor
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
@@ -543,10 +543,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             )
         );
 
+        const firstNode = largestArr?.[0];
+
         form.append('name', 'test');
         form.append('building', "pat20");
         form.append('floor', "1");
-        form.append('offset',(graph.getAllNodes().length+1 || 1).toString());
+        form.append('offset', (firstNode ? firstNode.id + 1 : 1).toString());
 
         try {
             console.log("calculating")

@@ -14,12 +14,13 @@ export async function importGraphFromZip(zip:JSZip) {
     const nodeInputs = nodeLines.map(line => {
         const parts = line.split(',').map(s => s.replace(/"/g, '').trim());
         return {
-            building:   parts[0],
-            floor:      Number(parts[1]),
-            name:       parts[2],
-            x:          Number(parts[3]),
-            y:          Number(parts[4]),
-            type:       parts[5],
+            id:         Number(parts[0]),
+            building:   parts[1],
+            floor:      Number(parts[2]),
+            name:       parts[3],
+            x:          Number(parts[4]),
+            y:          Number(parts[5]),
+            type:       parts[6],
         };
     });
 

@@ -4,8 +4,12 @@ import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/I
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu.tsx";
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu.tsx';
 import PageWrapper from "@/components/ui/PageWrapper";
 
 export interface EditorPanelProps {

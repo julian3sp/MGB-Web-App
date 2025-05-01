@@ -20,6 +20,7 @@ import NavigationPage from "./routes/NavigationPage.tsx";
 import MapEditor from "./components/navigation/pathfinding/MapEditor.tsx";
 import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
 import {Credits} from "./routes/Credits.tsx";
+import { AiFrontend } from './components/ai-chat/ai-frontend';
 
 function InnerApp() {
     const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
@@ -102,6 +103,7 @@ function InnerApp() {
                 <Route path="/directory" element={<BryanDirectoryPage />} />
                 <Route path="/aboutus" element={<AboutUs />} />
                 <Route path="/credits" element={<Credits />} />
+                <Route path="/chatbot" element={<AiFrontend />} />
                 <Route element={<PrivateRoutes />}>
                     <Route path="/services" element={<ServiceRequestPage />} />
                     <Route path="/admin/directory" element={<DirectoryPage />} />

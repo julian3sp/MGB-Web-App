@@ -4,12 +4,25 @@ import FilterIcon from '../../assets/FilterIcon.png';
 import { DepartmentContext } from './departmentDirectory/DepartmentContext.tsx';
 import { flipCardsData } from '@/data/flipCardData.tsx';
 import SearchIcon from '../../assets/SearchIcon.png';
+import { PlaceholdersAndVanishInput } from "../components/ui/placeholders-and-vanish-input.tsx";
 
 export function BryanDirectoryPage() {
     const [showFilterPanel, setShowFilterPanel] = useState(false);
     const [filters, setFilters] = useState({
         category: [] as string[],
     });
+
+    const placeholders = [
+        "Laboratory", "Multi-Specialty Clinic", "Radiology, MRI/CT Scan", "Pharmacy", "Blood Draw / Phlebotomy"
+    ]
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+    };
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log("submitted");
+    };
 
     const [searchItem, setSearchItem] = useState('');
 
@@ -54,7 +67,7 @@ export function BryanDirectoryPage() {
     //Pass the filtered departments into context so it can be read by AppleCardsListing
     return (
         <DepartmentContext.Provider value={{ filteredDeps: filteredDeps ?? null }}>
-            <div className='w-full px-33'>
+            <div className='w-full px-30'>
                 <div className="flex-1 flex justify-center mt-10">
                     <h1
                         className="text-5xl text-white text-center pl-3 font-bold font-[Poppins] flex-start  "
@@ -66,16 +79,13 @@ export function BryanDirectoryPage() {
                 <div className="flex w-full justify-between mt-5 pb-1 pt-4 items-center">
                     <div className="flex-1 flex justify-start items-center relative">
                         <div className={'w-full relative z-50'}>
-                            <input
-                                type={'text'}
+                            <PlaceholdersAndVanishInput
                                 value={searchItem}
                                 onChange={handleInputChange}
-                                placeholder={'Search departments'}
+                                onSubmit={onSubmit}
+                                placeholders={placeholders}
                                 className="pr-10 border rounded-lg px-4 py-2 w-full h-[52px] rounded-3xl text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#003a96] text-md"
                             />
-                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                                <img src={SearchIcon} alt="Search icon" className={"w-[25px] h-[25px]"} />
-                            </div>
                         </div>
                     </div>
 

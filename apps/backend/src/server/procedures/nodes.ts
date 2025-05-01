@@ -7,6 +7,7 @@ export const makeNode = publicProcedure
     .input(
         z.array(
             z.object({
+                id: z.optional(z.number()),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string(),
@@ -94,6 +95,17 @@ export const getNode = publicProcedure
         });
         return node;
     });
+
+export const getLargestId = publicProcedure.query(() => {
+    return client.nodes.findMany({
+        orderBy: [
+            {
+                id: 'desc',
+            },
+        ],
+        take: 1,
+    });
+});
 export const deleteSelectedNodes = publicProcedure
     .input(z.array(z.number())) // expects an array of node IDs
     .mutation(async ({ input }) => {

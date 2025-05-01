@@ -33,7 +33,11 @@ import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown
 import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
 import { createMainCampusOverlay } from '@/components/map/overlays/mainCampusOverlay.tsx';
-
+import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
+import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorners.tsx';
+import {ImageProcessorPanel, placeOverlay} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
+import {importGraphFromZip} from "@/components/importZipGraph.ts";
+import JSZip from 'jszip';
 
 // resolve
 interface MapEditorProps {
@@ -52,8 +56,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
     const [isLoadingMap, setIsLoadingMap] = useState(true);
-    const [showNodes, setShowNodes] = useState(false);
-    const [showEdges, setShowEdges] = useState(false);
+    const [showNodes, setShowNodes] = useState(true);
+    const [showEdges, setShowEdges] = useState(true);
     const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
     const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
@@ -69,6 +73,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const editNodes = trpc.editNodes.useMutation();
     const deleteNodes = trpc.deleteSelectedNodes.useMutation();
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
+    const makeNode = trpc.makeNode.useMutation();
+    const makeEdge = trpc.makeEdge.useMutation()
+    const { data: largestArr, isLoading} = trpc.getLargestNodeId.useQuery();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -128,6 +135,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const handleCheckboxChange = () => {
         setDontShowAgain(!dontShowAgain);
     }
+
     function handleNodeTypeChange(nodeType: string) {
         console.log("selectedNode, Pre change: ", selectedNode);
         setCurrentNodeType(nodeType);
@@ -154,8 +162,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setAlgoType(algo);
     }
 
-    // Start of map e
-    // ditor
+    // Start of map editor
     useEffect(() => {
         const nodesReady = !!nodesDataFromAPI && !isNodesLoading;
         const edgesReady = !!edgesDataFromAPI && !isEdgesLoading;
@@ -212,7 +219,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             .catch(console.error);
     }, [onMapReady, apiKey]);
 
-    function getEdgeLines() {
+    function getEdgeLines(){
 
         if (!selectedHospital || !map) return;
         let building = selectedHospital;
@@ -398,6 +405,29 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         edgePolylines.forEach(l => l.setMap(null));
         setEdgePolylines([]);
         graph.populate(nodesRes.data, edgesRes.data);
+        setEdgeRefresh((v) => v + 1);
+        setShowNodes(true);
+        if (showNodes) displayNodes();
+        if (showEdges) {
+            console.log("how was this called?")
+            const lines = getEdgeLines();
+            if (lines) setEdgePolylines(lines);
+        }
+    }
+
+    const handleImageSubmit = async () =>{
+        const [nodesRes, edgesRes] = await Promise.all([
+            refetchNodes(),
+            refetchEdges(),
+        ]);
+
+        staticMarkers.forEach(m => m.setMap(null));
+        setStaticMarkers([]);
+        edgePolylines.forEach(l => l.setMap(null));
+        setEdgePolylines([]);
+        graph.populate(nodesRes.data, edgesRes.data);
+        setEdgeRefresh((v) => v + 1);
+        setShowNodes(true);
         if (showNodes) displayNodes();
         if (showEdges) {
             console.log("how was this called?")
@@ -475,8 +505,91 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
     }, [map, selectedFloor, patriot20Overlay, patriot22Overlay]);
 
+    //------------ Image Processor States ---------//
+    // MODE  ───────────────────────────────────────────────
+    const [mode, setMode] = useState<'edit' | 'image'>('edit');
+
+    // IMAGE-PROCESSOR STATE ──────────────────────────────
+    const [imgFile, setImgFile] = useState<File | null>(null);
+    const [pixelCorners, setPixelCorners] = useState<[number, number][]>([]);
+    const [worldCorners, setWorldCorners] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
+    const [imgOverlay, setImgOverlay] = useState<google.maps.GroundOverlay | null>(null);
+
+    async function sendToFastApi() {
+        if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
+            return alert('Need all four image + map points!');
+        }
+
+        const form = new FormData();
+
+        // 1) The file
+        form.append('file', imgFile);
+
+        // 2) sourcePoints (pixel coords)
+        form.append(
+            'sourcePoints',
+            JSON.stringify(pixelCorners)
+        );
+
+        // 3) targetPoints (world coords)
+        form.append(
+            'targetPoints',
+            JSON.stringify(
+                worldCorners.map(m => {
+                    const pos = m.position!;
+                    console.log(pos);
+                    return [pos.lat, pos.lng];
+                })
+            )
+        );
+
+        const firstNode = largestArr?.[0];
+
+        form.append('name', 'test');
+        form.append('building', "pat20");
+        form.append('floor', "1");
+        form.append('offset', (firstNode ? firstNode.id + 1 : 1).toString());
+
+        try {
+            console.log("calculating")
+            // 1) Fetch the ZIP from the FastAPI endpoint
+            const res = await fetch('http://localhost:3001/image-api/generate-new-map', {
+                method: 'POST',
+                body: form,
+            });
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
+            const blob = await res.blob();
+            const arrayBuffer = await blob.arrayBuffer();
+            const zip = await JSZip.loadAsync(arrayBuffer);
+            const node_edge_input = await importGraphFromZip(zip)
+
+            await makeNode.mutateAsync(node_edge_input[0]);
+            await makeEdge.mutateAsync(node_edge_input[1]);
+
+            alert('Graph appended successfully!');
+        } catch (e) {
+            console.error(e);
+            alert('Import failed: ' + e.message);
+        }
+
+
+        // cleanup
+        setMode('edit');
+        imgOverlay?.setMap(null);
+        worldCorners.forEach(m => m.position == null);
+        setImgFile(null);
+        setPixelCorners([]);
+        setWorldCorners([]);
+        setImgOverlay(null);
+        await handleSubmit();
+    }
+
+
+
     return (
-        <div className="flex h-screen">
+        <div className="flex min-h-[95vh]">
             <PageWrapper
                 contents={
                     <div className="w-full p-5 border-r border-gray-300 flex flex-col gap-4 h-full overflow-y-scroll scollbar-thin">
@@ -484,110 +597,40 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             Map Editor Controls
                         </h2>
 
-                        {selectedNode ? (
-                            <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
-
-                                <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 bg-[#003a96] border-b-[#44A6A6] ">Node Info</h2>
-                                <p className="text-black pt-2 text-lg">
-                                    <span className="font-semibold text-[#003a96]">ID:</span> {selectedNode.id}
-                                </p>
-                                <p className="text-black text-lg">
-                                    <span className="font-semibold text-[#003a96]">Name:</span> {selectedNode.name}
-                                </p>
-                                <p className="text-black text-lg">
-                                    <span className="font-semibold text-[#003a96]">lat :</span> {selectedNode.x.toFixed(6)}
-                                </p>
-                                <p className="text-black text-lg">
-                                    <span className="font-semibold text-[#003a96]">long :</span> {selectedNode.y.toFixed(6)}
-                                </p>
-
-                                <p className="text-black text-lg">
-                                    <span className="font-semibold text-[#003a96]">Type:</span> {selectedNode.type}
-                                </p>
-                                <hr className={'mx-5 my-5 border-black'}/>
-
-                                <div className={'mx-4 my-4'}>
-                                <SRQDropdown
-                                    value={currentNodeType}
-                                    setValue={handleNodeTypeChange}
-                                    width={'w-full'}
-                                    placeholder={'Select a node type'}
-                                    options={Object.values(NodeType) as string[]}
-                                />
-                                </div>
-                                {/*<p className="text-black text-lg"><span className="font-bold">Longitude:</span> {nodeInfo.x.toFixed(6)}</p>*/}
-                                {/*<p className="text-black text-lg"><span className="font-bold">Latitude:</span> {nodeInfo.y.toFixed(6)}</p>*/}
-                            </div>
-                        ) : (
-                            <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3  font-[poppins] text-center space-y-3 ">
-
-                                <h2 className="text-xl font-bold text-white p-5 rounded-t-lg bg-[#003a96] border-b-5 border-b-[#44A6A6] ">Node Info</h2>
-                                <p className="text-black text-lg p-2">
-                                    <span className="font-semibold text-[#003a96]">ID:</span> Select a Node
-                                </p>
-                                <p className="text-black text-lg p-2">
-                                    <span className="font-semibold text-[#003a96]">Name:</span> Select a Node
-                                </p>
-                                <p className="text-black text-lg p-2">
-                                    <span className="font-semibold text-[#003a96]">Type:</span> Select a Node
-                                </p>
-                            </div>
-                        )}
-
-                        {/*<div className="w-full p-5 flex flex-col gap-4">*/}
-                        {/*    <ImportAllNodesAndEdges />*/}
-                        {/*</div>*/}
-
                         <button
-                            className="bg-[#003a96] w-[80%] mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
-                            onClick={() => {
-                                setEdgeMode((prevState) => !prevState);
-                                setShowEdges(true);
-                            }}
+                            className="bg-[#0076CE] text-white font-[poppins] shadow rounded p-3 mb-4"
+                            onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
                         >
-                            {edgeMode ? 'Exit Edge Mode' : 'Add Edge Mode'}
+                            {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
                         </button>
 
-                        {/*<ExportCSV />*/}
+                        {mode === 'edit' ?
+                            <EditorPanel
+                                selectedNode={selectedNode}
+                                currentNodeType={currentNodeType}
+                                setCurrentNodeType={setCurrentNodeType}
+                                handleSubmit={handleSubmit}
+                                edgeMode={edgeMode}
+                                setEdgeMode={setEdgeMode}
+                                setShowEdges={setShowEdges}
+                                handleNodeTypeChange = {handleNodeTypeChange}
+                            />
+                            :
+                            <ImageProcessorPanel
+                                map= {map}
+                                imgFile={imgFile}
+                                setImgFile={setImgFile}
+                                pixelCorners={pixelCorners}
+                                setPixelCorners={setPixelCorners}
+                                imgOverlay={imgOverlay}
+                                setImgOverlay={setImgOverlay}
+                                placeOverlay={placeOverlay}
+                                worldCorners={worldCorners}
+                                setWorldCorners={setWorldCorners}
+                                sendToFastApi={sendToFastApi}
+                            />
+                        }
 
-                        {/*<DropdownMenu>*/}
-                        {/*    <DropdownMenuTrigger asChild>*/}
-                        {/*        <button className="bg-[#003a96] w-[80%] mx-auto font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded p-3">*/}
-                        {/*            Choose Your Algorithm*/}
-                        {/*        </button>*/}
-                        {/*    </DropdownMenuTrigger>*/}
-                        {/*    <DropdownMenuContent className="w-56">*/}
-                        {/*        <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>*/}
-                        {/*        <DropdownMenuSeparator />*/}
-                        {/*        <DropdownMenuRadioGroup*/}
-                        {/*            value={algoType}*/}
-                        {/*            onValueChange={setAlgoTypeWrapper}*/}
-                        {/*        >*/}
-                        {/*            <DropdownMenuRadioItem value="A-Star">*/}
-                        {/*                A-Star*/}
-                        {/*            </DropdownMenuRadioItem>*/}
-                        {/*            <DropdownMenuRadioItem value="DFS">*/}
-                        {/*                Depth First Search*/}
-                        {/*            </DropdownMenuRadioItem>*/}
-                        {/*            <DropdownMenuRadioItem value="BFS">*/}
-                        {/*                Breadth First Search*/}
-                        {/*            </DropdownMenuRadioItem>*/}
-                        {/*            <DropdownMenuRadioItem value="Dijkstras">*/}
-                        {/*                Dijkstra's*/}
-                        {/*            </DropdownMenuRadioItem>*/}
-                        {/*        </DropdownMenuRadioGroup>*/}
-                        {/*    </DropdownMenuContent>*/}
-                        {/*</DropdownMenu>*/}
-
-                        <button
-                            className={
-                                'bg-white  text-[#003a96] w-[80%] mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
-                            }
-                            type={'submit'}
-                            onClick={handleSubmit}
-                        >
-                            Submit Changes
-                        </button>
                     </div>
                 }
                 scaling={3}
@@ -597,6 +640,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 y={15}
                 xOut={10}
             ></PageWrapper>
+            {/*End of side bar*/}
 
             <div className="w-full relative">
                 {isLoadingMap && (

@@ -46,6 +46,7 @@
         "dotenv-cli": "*",
         "framer-motion": "^12.6.3",
         "gsap": "^3.12.7",
+        "jszip": "^3.10.1",
         "localforage": "^1.10.0",
         "lottie-web": "^5.12.2",
         "lucide-react": "^0.503.0",

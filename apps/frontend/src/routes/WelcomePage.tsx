@@ -19,6 +19,20 @@ export function WelcomePage() {
   const [sidePadding, setSidePadding] = useState(0);
   const [scrolling, setScrolling] = useState(false);
   const [inactive, setInactive] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  }
 
   const calculatePadding = () => {
     const viewportWidth = window.innerWidth; // get the width of the viewport
@@ -68,8 +82,8 @@ export function WelcomePage() {
     window.addEventListener("scroll", handleScroll);
 
     const inactivityTimer = setTimeout(() => {
-      setInactive(true); 
-    }, 60000); 
+      setInactive(true);
+    }, 60000);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -82,19 +96,45 @@ export function WelcomePage() {
       {/* pinned section */}
       <div ref={containerRef}>
         <div
-          ref={wrapperRef}
-          className="w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
+          ref={wrapperRef} // everthing inside wrapper ref including the video and the button's parent is being shrunk
+          className="relative w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
         >
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            className="w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+          <div className="relative w-full h-full">
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+
+            <button
+              /**
+               * before the button was absolutely positioned, fixed in place and not transformed with the video
+               * after the button is treated as part of the animation timeline and follows the same changes in width, height, scale as it's tied to layout
+               */
+              onClick={togglePlayback}
+              className="absolute bottom-5 right-5 bg-[#f2f2f7]/80 hover:bg-[#e5e5ea]/90 text-[#3c3c43] p-2 rounded-full transition shadow-md backdrop-blur z-50"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                width="18"
+                height="18"
+              >
+                {isPlaying ? (
+                  <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+                ) : (
+                  <path d="M8 5v14l11-7z" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+
       </div>
 
       <motion.div

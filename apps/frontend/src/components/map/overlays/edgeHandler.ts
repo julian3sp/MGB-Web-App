@@ -12,7 +12,7 @@ export interface EdgeLayer {
     edge: Edge;
 }
 
-function makeStroke(
+export function makeStroke(
     map: google.maps.Map,
     path: google.maps.LatLngLiteral[],
     color: string,
@@ -32,16 +32,16 @@ function makeStroke(
     });
 }
 
-const COLORS = {
+export const COLORS = {
     border: 'rgba(255,255,255,0.9)',
     core: '#A6192E',
     arrow: '#FFC72C',
 };
 
-const BORDER_WEIGHT = 10;
-const CORE_WEIGHT   = 6;
-const BORDER_HOVER  = 14;
-const CORE_HOVER    = 10;
+export const BORDER_WEIGHT = 10;
+export const CORE_WEIGHT   = 6;
+export const BORDER_HOVER  = 14;
+export const CORE_HOVER    = 10;
 
 let arrowTimerId: number | null = null;
 let animatedOverlays: google.maps.Polyline[] = [];
@@ -120,6 +120,12 @@ export function drawAllEdges(
             clickable: false,
             // icons: [{ icon: ARROW_SYMBOL, offset: '0%', repeat: '20%' }],
         });
+
+        //Attach the poly lines to the edge object
+        edge.border = border;
+        edge.core = core;
+        edge.overlay = overlay;
+
         overlays.push(overlay);
 
         // allow dbl-click to remove everything

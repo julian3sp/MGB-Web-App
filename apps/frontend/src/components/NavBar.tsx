@@ -1,12 +1,12 @@
-import logo from "../../assets/Mass-General-Brigham-Logo.png";
+import logo from "../../assets/logo-icon-mass-general-brigham.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import '../styles/mainStyles.css';
 import { LogInButton } from "./signIn/LogInButton.tsx";
 import { LogOutButton } from "./signIn/LogOutButton.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import microphone from "../../assets/voice/microphone-svgrepo-com.svg";
-import mute from "../../assets/voice/microphone-slash-svgrepo-com.svg";
+import microphone from "../../assets/voice/microphone-svgrepo-comWhite.png";
+import mute from "../../assets/voice/microphone-slash-svgrepo-comWhite.png";
 
 type Props = {
     userRole: string;
@@ -71,6 +71,12 @@ export default function NavBar({ userRole, setUserRole }: Props) {
             setTab("services");
         } else if(lowerTranscript.includes("off")) {
             setVoiceControls(false)
+        } else if (lowerTranscript.includes("edit")) {
+            navigate("/editor");
+            setTab("editor");
+        } else if (lowerTranscript.includes("view")) {
+            navigate("/requests");
+            setTab("requests");
         }
     }, [navigate, logout, loginWithRedirect]);
 
@@ -135,14 +141,14 @@ export default function NavBar({ userRole, setUserRole }: Props) {
 
     const getNavLinkClass = (tabName: string) =>
         tab === tabName
-            ? "bg-[#003a96] font-[Poppins] text-white px-5 py-5"
-            : "text-base text-black hover:bg-[#003a96] font-[Poppins] hover:text-white px-5 py-5 transition-all";
+            ? "bg-white font-[Poppins] text-black px-5 py-5"
+            : "text-base text-white hover:bg-white font-[Poppins] hover:text-black px-5 py-5 transition-all";
 
     return (
-        <nav id="navbar" className="flex justify-between items-center bg-white text-white border-b-1 border-gray-300">
+        <nav id="navbar" className="flex justify-between items-center border-b-3 border-b-[#44A6A6] bg-[#003a96] text-white border-b-1 border-gray-300">
             <div className="flex items-center space-x-4">
-                <Link to="/" className="ml-5" onClick={() => setTab("")}>
-                    <img src={logo} alt="Mass General Brigham Logo" className="h-8 w-auto" />
+                <Link to="/" className="ml-5 flex" onClick={() => setTab("")}>
+                    <img src={logo} alt="Mass General Brigham Logo" className="h-8 w-auto" /> <h1 className={'p-1 font-[poppins]'}>Mass General Brigham</h1>
                 </Link>
                 <div className="flex">
                     <Link
@@ -193,7 +199,7 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                                 onClick={() => setTab("admin/directory")}
                                 className={getNavLinkClass("admin/directory")}
                             >
-                                Export
+                                Admin
                             </Link>
                         </>
                     )}
@@ -206,8 +212,8 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                     <img src={mute} alt={"Microphone PNG"} className="h-6 w-6 cursor-pointer" onClick={handleVCToggle} />
                 }
 
-                <LogInButton className="text-base text-black" rerender={setUserRole} />
-                <LogOutButton className="text-base text-black" rerender={setUserRole} />
+                <LogInButton className="text-base text-white" rerender={setUserRole} />
+                <LogOutButton className="text-base text-white" rerender={setUserRole} />
             </div>
         </nav>
     )

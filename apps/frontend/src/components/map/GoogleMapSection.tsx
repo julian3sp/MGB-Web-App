@@ -92,9 +92,9 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
         <div className="flex items-center justify-center gap-4 mb-4 w-[90%]">
           <button
             onClick={() => onTransportChange('driving')}
-            className="flex flex-col items-center px-3 py-1.5"
+            className="flex flex-col font-[poppins] items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${
               selectedTransport === 'driving'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
@@ -107,12 +107,12 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('transit')}
             className="flex flex-col items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${
               selectedTransport === 'transit'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
             }`}>directions_transit</span>
-            <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
+            <span className="text-[8px] mt-0.5 font-[poppins] max-w-[40px] truncate">
               {travelTimes.transit || '--'}
             </span>
           </button>
@@ -125,16 +125,17 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
             }`}>directions_walk</span>
-            <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
+            <span className="text-[8px] font-[poppins] mt-0.5 max-w-[40px] truncate">
               {travelTimes.walking || '--'}
             </span>
           </button>
         </div>
       )}
+
       <div className="flex items-start relative w-[90%]">
         <div className="flex flex-col items-center absolute -left-3">
           <div className="flex items-center h-[40px]">
-            <div className="w-3 h-3 rounded-full bg-white border-2 border-gray-600"></div>
+            <div className="w-3 h-3 rounded-full bg-white border-2 border-[#003a96]"></div>
           </div>
           <div className="w-0.5 h-5 bg-gray-300" style={{ background: 'repeating-linear-gradient(to bottom, #9CA3AF 0, #9CA3AF 2px, transparent 2px, transparent 6px)' }}></div>
           <div className="flex items-center h-[40px]">
@@ -143,8 +144,9 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             </div>
           </div>
         </div>
-        <div className="flex-1">
-          <div>
+
+        <div className="flex-1 ">
+          <div >
             {mapInstance && (
               <SearchContainer
                 onPlaceSelected={handleStartLocationSelected}
@@ -153,7 +155,7 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
               />
             )}
           </div>
-          <div className="mt-5">
+          <div className="mt-5 ">
             <DestinationDropdown onDestinationSelected={handleDestinationSelected} />
           </div>
         </div>

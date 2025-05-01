@@ -28,7 +28,9 @@ export type  Edge = {
     sourceId: Node
     targetId: Node;
     weight: number;
-    polyline?:google.maps.Polyline;
+    core?:google.maps.Polyline;
+    border?:google.maps.Polyline;
+    overlay?:google.maps.Polyline;
 }
 
 type Edit = {
@@ -56,6 +58,29 @@ export class Graph {
             deletedEdges: [],
             addedEdges: [],
             editedNodes: [],
+        }
+    }
+
+    string2NT(string: string): NodeType {
+        switch (string) {
+            case "Department":
+                return NodeType.Department;
+            case "Elevator":
+                return NodeType.Elevator;
+            case "Stairwell":
+                return NodeType.Stairwell;
+            case "Checkin":
+                return NodeType.Checkin;
+            case "Entrance":
+                return NodeType.Entrance;
+            case "ParkingLot":
+                return NodeType.ParkingLot;
+            case "Restroom":
+                return NodeType.Restroom;
+            case "SkyBridge":
+                return NodeType.SkyBridge;
+            default:
+                return NodeType.Hall;
         }
     }
 
@@ -257,7 +282,7 @@ export class Graph {
             ?.push({ id: id, sourceId: sourceId, targetId: targetId, weight: weight });
         this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
 
-        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: 0});
+        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: weight});
         this.edges.push(edge)
     }
 
@@ -323,6 +348,9 @@ export class Graph {
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
         }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
+        }
 
         // console.log("Getting nodes building: ", building, " Floor:", floor);
 
@@ -340,6 +368,9 @@ export class Graph {
         }
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
+        }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
         }
 
         return Array.from(this.edges).filter(

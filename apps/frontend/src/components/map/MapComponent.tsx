@@ -26,7 +26,7 @@ const MapComponent: React.FC = () => {
   const [directionsResult, setDirectionsResult] = useState<google.maps.DirectionsResult | null>(null);
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
-  const [selectedFloor, setSelectedFloor] = useState<3 | 4>(3);
+  const [selectedFloor, setSelectedFloor] = useState<number>(1);
   const [travelTimes, setTravelTimes] = useState<TravelTimes>({
     driving: null,
     transit: null,
@@ -70,7 +70,7 @@ const MapComponent: React.FC = () => {
     setMgbOverlays(overlays);
   };
 
-  const handleFloorSelect = (floor: 3 | 4) => {
+  const handleFloorSelect = (floor: number) => {
     console.log(`Floor changed to: ${floor}`);
     setSelectedFloor(floor);
   };
@@ -135,17 +135,25 @@ const MapComponent: React.FC = () => {
 
     function getDeptNum():number {
       const CNdepartmentMapping: Record<string, number> = {
-        'Entrance': 3900,
-        'Multi-Specialty Clinic': 3734,
-        'Radiology': 3059,
-        'MRI': 3113,
-        'CT': 3136,
-        'Laboratory': 3781
+        'Entrance': 2707,
+        'Multi-Specialty Clinic': 2573,
+        'Radiology': 2163,
+        'MRI': 2075,
+        'CT': 2108,
+        'Laboratory': 2630
       };
 
       const Pat20departmentMapping: Record<string, number> = {
         'Blood Draw / Phlebotomy': 714,
         'Pharmacy': 694,
+        'Orthopedics': 95,
+        'Rehabilitation': 10,
+        'Surgical Specialties': 204,
+        'Sports Medicine': 176,
+        'Day Surgery Center': 468,
+        'Pain Medicine': 351,
+        'Physiatry': 275,
+        'Pulmonary Testing': 271,
         'Radiology': 535,
         'Urgent Care Center': 817,
         'Cardio Vascular Services': 859,
@@ -168,19 +176,25 @@ const MapComponent: React.FC = () => {
         'Vein Treatment': 1798
       };
       const FaulknerMapping: Record<string, number> = {
-        'Admitting/Registration': 4059,
-        'Audiology': 4154,
-        'Blood Drawing Lab': 4163,
-        'Cardiac Rehab': 4181,
-        'Emergency Department': 4300,
-        'Endoscopy': 4344,
-        'MRI/CT': 4118,
-        'Pre-Admittance Screening': 4147,
-        'Pulmonary Lab': 4291,
-        'Radiology': 4108,
-        'Special Testing': 4316,
-        'Vascular Lab': 4354
+        'Admitting/Registration': 2774,
+        'Audiology': 2860,
+        'Blood Drawing Lab': 2863,
+        'Cardiac Rehab': 2838,
+        'Emergency Department': 2877,
+        'Endoscopy': 2882,
+        'MRI/CT': 2849,
+        'Pre-Admittance Screening': 2857,
+        'Pulmonary Lab': 2875,
+        'Radiology': 2831,
+        'Special Testing': 2881,
+        'Vascular Lab': 2883
       };
+
+      const mainCampusMapping: Record<string, number> = {
+        'test': 3000,
+      };
+
+
 
       if(selectedPlace?.name === null) {
         console.error("No location selected");
@@ -192,6 +206,9 @@ const MapComponent: React.FC = () => {
         return Pat22departmentMapping[department.name];
       } else if(selectedPlace?.name === "Faulkner"){
         return FaulknerMapping[department.name];
+      }
+      else if(selectedPlace?.name === "Main Campus"){
+        return mainCampusMapping[department.name];
       }
       console.log("Issues in finding dept node")
       return 0;
@@ -338,8 +355,8 @@ const MapComponent: React.FC = () => {
                    contents=
                        {
         // put sidebar contents here:</p>
-        <div className="h-[95vh] w-full p-5 border-r border-gray-300 flex flex-col gap-4 overflow-y-auto ">
-          <h2 className="font-bold text-center">Enter your location and <br/>destination</h2>
+        <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
+          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}
               selectedPlace={selectedPlace}
@@ -358,7 +375,7 @@ const MapComponent: React.FC = () => {
           {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
           {/* Select Department dropdown */}
-          <h2 className="text-sm font-semibold mb-2 self-center">Select a department</h2>
+          <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name ?? ""} />
         </div>}
                    scaling = {4}
@@ -396,9 +413,9 @@ const MapComponent: React.FC = () => {
 
       {/* Right Column: Map area */}
       <div className="w-full relative">
-        <MapRenderer 
-          onMapReady={handleMapReady} 
-          selectedDestination={selectedPlace} 
+        <MapRenderer
+          onMapReady={handleMapReady}
+          selectedDestination={selectedPlace}
           onZoomChange={handleZoomChange}
           selectedFloor={selectedFloor}
           onFloorChange={handleFloorSelect}

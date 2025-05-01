@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import {trpc} from "@/lib/trpc.ts";
-import ImportCSV from "../../components/ImportDept.tsx";
-
+import { trpc } from "@/lib/trpc.ts";
+import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart.tsx";
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+import ExportCSV from "@/components/navigation/mapEditorComponent/ExportCSV.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -11,27 +13,52 @@ const DirectoryPage = () => {
         telephone: '',
     });
 
-    //const utils = trpc.useUtils();
-    const { data: directories, isLoading} = trpc.getDirectories.useQuery();
+    const utils = trpc.useUtils();
+    const { data: directories, isLoading } = trpc.getDirectories.useQuery();
 
-    const addDirectory = trpc.makeDirectory.useMutation();
+    const addDirectory = trpc.makeDirectory.useMutation({
+        onSuccess: async () => {
+            await utils.getDirectories.invalidate();
+        },
+    });
 
-    const downloadCSV = () => {
+    const sanitationRequests = trpc.requestListOfType.useQuery({ type: 'Sanitation' });
+    const languageRequests = trpc.requestListOfType.useQuery({ type: 'Language' });
+    const securityRequests = trpc.requestListOfType.useQuery({ type: 'Security' });
+    const audioVisualRequests = trpc.requestListOfType.useQuery({ type: 'AudioVisual' });
+    const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
+    const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
+    const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
+
+    const serviceRequestConfig = {
+        number: {
+            label: "amount",
+            color: "#2563eb",
+        },
+    } satisfies ChartConfig;
+
+    const serviceRequestData = [
+        { type: 'Sanitation', number: sanitationRequests.data?.length ?? 0 },
+        { type: 'Language', number: languageRequests.data?.length ?? 0 },
+        { type: 'Security', number: securityRequests.data?.length ?? 0 },
+        { type: 'AudioVisual', number: audioVisualRequests.data?.length ?? 0 },
+        { type: 'Transportation', number: transportationRequests.data?.length ?? 0 },
+        { type: 'MedicalDevice', number: medicalDeviceRequests.data?.length ?? 0 },
+        { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
+    ];
+
+    const downloadDirectories = () => {
         if (!directories || directories.length === 0) {
             alert('No data available to download.');
             return;
         }
 
-        // Construct CSV string
-        let csv = 'id;name;services;location;telephone\n';
+        let csv = 'id, name,services,location,telephone\n';
         directories.forEach((dir) => {
-            csv += `${dir.id}';'${dir.name}";"${dir.services.replace(/,/g,"#")}";"${dir.location}";"${dir.telephone}"\n`;
+            csv += `${dir.id},"${dir.name}","${dir.services.replace(/,/g, "#")}","${dir.location}","${dir.telephone}"\n`;
         });
 
-        // Encode the CSV data as a Data URI
         const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-
-        // Create a temporary link to trigger download
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
         link.setAttribute('download', 'directory_export.csv');
@@ -49,105 +76,115 @@ const DirectoryPage = () => {
 
     const handleSubmit = () => {
         addDirectory.mutate(formData);
-        window.location.reload();
     };
 
-
-    //const handleCSVExport = () => {
-        //window.open('/api/directory/export', '_blank');
-    //};
-
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <h1 className="text-2xl font-bold mb-4">Directory Management</h1>
+        <div className="p-6 min-h-screen ">
+            <h1 className="text-4xl font-bold mb-6 font-[poppins] text-[#003a96]">Admin Dashboard</h1>
 
-            {/* Form */}
-            <div className="mb-6 bg-white p-4 shadow rounded space-y-4">
-                <h2 className="text-xl font-semibold">Add New Directory Entry</h2>
-                <input
-                    className="border p-2 w-full"
-                    name="name"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
-                <input
-                    className="border p-2 w-full"
-                    name="services"
-                    placeholder="Services"
-                    value={formData.services}
-                    onChange={handleChange}
-                />
-                <input
-                    className="border p-2 w-full"
-                    name="location"
-                    placeholder="Location"
-                    value={formData.location}
-                    onChange={handleChange}
-                />
+            {/* Top Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 items-stretch">
+                {/* Bar Chart */}
+                <div className="col-span-2 bg-white rounded-2xl  shadow-lg border-1">
+                    <h2 className="text-2xl font-semibold bg-[#003a96] rounded-t-2xl  p-5 text-center border-b-5 border-b-[#44A6A6] mb-4 font-[poppins] text-white">
+                        Service Request Overview
+                    </h2>
+                    <ChartContainer config={serviceRequestConfig} className="min-h-[200px] m-5 font-[poppins] bg-blue-50 rounded-3xl p-2">
+                        <BarChart data={serviceRequestData} margin={{ top: 10, right: 30, left: 20, bottom: 30 }}>
+                            <XAxis
+                                dataKey="type"
+                                tickLine={false}
+                                tickMargin={18}
+                                axisLine={false}
+                                angle={-45}
+                                textAnchor="end"
+                                height={65}
+                                tick={{ fontSize: 13, fontWeight: 500, fill: "#374151" }}
+                            />
+                            <YAxis
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={10}
+                                tick={{ fill: "#374151" }}
+                            />
+                            <CartesianGrid vertical={false} strokeDasharray="4" opacity={0.15} />
+                            <Bar dataKey="number" radius={[6, 6, 0, 0]} strokeWidth={1}>
+                                {serviceRequestData.map((_, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={["#003a96", "#009ca6"][index % 2]}
+                                        stroke={["#003a96", "#009ca6"][index % 2]}
+                                    />
+                                ))}
+                            </Bar>
+                            <ChartTooltip
+                                content={<ChartTooltipContent />}
+                                cursor={{ fill: "#2563eb", opacity: 0.05 }}
+                            />
+                        </BarChart>
+                    </ChartContainer>
+                </div>
 
-                <input
-                    className="border p-2 w-full"
-                    name="telephone"
-                    placeholder="Telephone"
-                    value={formData.telephone}
-                    onChange={handleChange}
-                />
-                <button
-                    onClick={handleSubmit}
-                    className="bg-[#003a96] hover:bg-blue-950 text-white font-[Poppins] px-4 py-2 rounded"
-                >
-                    Submit
-                </button>
+                {/* Teal Divider Line */}
+
+                {/* Directory Import/Export */}
+
+                    <div className="bg-white rounded-2xl shadow-lg border-1 ">
+                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Import/Export Tools</h2>
+                        <ImportAllNodesAndEdges />
+                        <div className={'mb-30 p-3 flex justify-between space-y-10'}>
+                            <ExportCSV type="Nodes" />
+                            <ExportCSV type="Edges" />
+                            <ExportCSV type="Directories" />
+                        </div>
+
+                        {/*<button*/}
+                        {/*    onClick={downloadDirectories}*/}
+                        {/*    className="w-full bg-[#003a96] font-[poppins] hover:bg-blue-950 text-white font-medium px-4 py-2 rounded-lg transition"*/}
+                        {/*>*/}
+                        {/*    Download CSV*/}
+                        {/*</button>*/}
+                    </div>
             </div>
 
-            {/* Import/Export CSV */}
-            <div className="mb-6 bg-white p-4 shadow rounded">
-                <h2 className="text-xl font-semibold mb-2">Import / Export CSV</h2>
-                <button
-                    onClick={downloadCSV}
-                    disabled={isLoading}
-                    className="bg-[#003a96] hover:bg-blue-950 text-white px-3 py-2 rounded mt-2 font-[Poppins]"
-                >
-                    Export CSV
-                </button>
-
-                <br /><br />
-
-                <ImportCSV/>
-            </div>
-
-
-
-            {/* Table */}
-            <div className="bg-white p-4 shadow rounded">
-                <h2 className="text-xl font-semibold mb-4">Directory Table</h2>
-                <table className="w-full border border-collapse">
-                    <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border px-4 py-2">ID</th>
-                        <th className="border px-4 py-2">Name</th>
-                        <th className="border px-4 py-2">Services</th>
-
-                        <th className="border px-4 py-2">Location</th>
-                        <th className="border px-4 py-2">Telephone</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {directories?.map((dir) => (
-                        <tr key={dir.id}>
-                            <td className="border px-4 py-2">{dir.id}</td>
-                            <td className="border px-4 py-2">{dir.name}</td>
-                            <td className="border px-4 py-2">{dir.services}</td>
-                            <td className="border px-4 py-2">{dir.location}</td>
-                            <td className="border px-4 py-2">{dir.telephone}</td>
+            {/* Directory Table */}
+            <div className="mt-8 bg-white border-1 shadow-lg rounded-2xl">
+                <h2 className="text-2xl font-[poppins] text-white rounded-t-2xl p-5 border-b-3 border-b-[#44A6A6] text-center bg-[#003a96] font-semibold  text-gray-800">Directory Table</h2>
+                <div className="overflow-x-auto max-h-[400px] border-t-2 border-t-[#44A6A6] border-1 scrollbar-thin">
+                    <table className="w-full font-[poppins]  border-collapse text-sm">
+                        <thead className="sticky top-0 bg-[#B8D9D9]  text-black">
+                        <tr>
+                            <th className="border-b px-3 py-2 text-left font-medium">ID</th>
+                            <th className="border-b px-3 py-2 text-left font-medium">Name</th>
+                            <th className="border-b px-3 py-2 text-left font-medium">Services</th>
+                            <th className="border-b px-3 py-2 text-left font-medium">Location</th>
+                            <th className="border-b px-3 py-2 text-left font-medium">Telephone</th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {directories?.length > 0 ? (
+                            directories.map((dir) => (
+                                <tr key={dir.id} className="hover:bg-blue-50">
+                                    <td className="px-3 py-2">{dir.id}</td>
+                                    <td className="px-3 py-2">{dir.name}</td>
+                                    <td className="px-3 py-2">{dir.services}</td>
+                                    <td className="px-3 py-2">{dir.location}</td>
+                                    <td className="px-3 py-2">{dir.telephone}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className="px-3 py-4 text-center text-gray-500">
+                                    No entries found
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
 };
 
-export default DirectoryPage
+export default DirectoryPage;

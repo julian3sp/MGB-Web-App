@@ -6,12 +6,12 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.tsx";
+import PageWrapper from "@/components/ui/PageWrapper";
 
 export interface EditorPanelProps {
     selectedNode: Node | null;
-
     currentNodeType: string;
-    setCurrentNodeType: React.Dispatch<React.SetStateAction<string>>;
+    handleNodeTypeChange: (nodeType: string) => void;
 
     handleSubmit: () => void | Promise<void>;
 
@@ -20,82 +20,90 @@ export interface EditorPanelProps {
     setEdgeMode: React.Dispatch<React.SetStateAction<boolean>>;
     setShowEdges: React.Dispatch<React.SetStateAction<boolean>>;
 
-    // Algo Type
-    algoType: string;
-    setAlgoTypeWrapper: (algo: string) => void;
 }
 
 export const EditorPanel: React.FC<EditorPanelProps> = ({
                                                             selectedNode,
                                                             currentNodeType,
-                                                            setCurrentNodeType,
                                                             handleSubmit,
                                                             edgeMode,
                                                             setEdgeMode,
                                                             setShowEdges,
-                                                            algoType,
-                                                            setAlgoTypeWrapper,
+                                                            handleNodeTypeChange,
+
                                                         }) => {
     return (
-        <div>
-            <h2 className="font-bold text-center font-[poppins]">Map Editor Controls</h2>
+            <div>
+                {selectedNode ? (
+                    <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
 
-            {selectedNode && (
-                <div className="bg-white shadow-lg border-2 border-frey rounded-2xl p-6 font-[poppins] text-center space-y-3">
+                        <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 bg-[#003a96] border-b-[#44A6A6] ">Node Info</h2>
+                        <p className="text-black pt-2 text-lg">
+                            <span className="font-semibold text-[#003a96]">ID:</span> {selectedNode.id}
+                        </p>
+                        <p className="text-black text-lg">
+                            <span className="font-semibold text-[#003a96]">Name:</span> {selectedNode.name}
+                        </p>
+                        <p className="text-black text-lg">
+                            <span className="font-semibold text-[#003a96]">lat :</span> {selectedNode.x.toFixed(6)}
+                        </p>
+                        <p className="text-black text-lg">
+                            <span className="font-semibold text-[#003a96]">long :</span> {selectedNode.y.toFixed(6)}
+                        </p>
 
-                    <h2 className="text-xl font-semibold text-gray-800">Node Info</h2>
-                    <p className="text-black text-lg">
-                        <span className="font-bold">ID:</span> {selectedNode.id}
-                    </p>
-                    <p className="text-black text-lg">
-                        <span className="font-bold">Name:</span> {selectedNode.name}
-                    </p>
-                    <p className="text-black text-lg">
-                        <span className="font-bold">Type:</span> {selectedNode.type}
-                    </p>
-                    <SRQDropdown
-                        value={currentNodeType}
-                        setValue={setCurrentNodeType}
-                        width="w-full"
-                        placeholder="Select a node type"
-                        options={Object.values(NodeType) as string[]}
-                    />
-                </div>
-            )}
+                        <p className="text-black text-lg">
+                            <span className="font-semibold text-[#003a96]">Type:</span> {selectedNode.type}
+                        </p>
+                        <hr className={'mx-5 my-5 border-black'}/>
 
-            <div className="w-full p-5 flex flex-col items-center gap-4">
-                <div className="w-full">
-                    <ImportAllNodesAndEdges />
-                </div>
+                        <div className={'mx-4 my-4'}>
+                            <SRQDropdown
+                                value={currentNodeType}
+                                setValue={handleNodeTypeChange}
+                                width={'w-full'}
+                                placeholder={'Select a node type'}
+                                options={Object.values(NodeType) as string[]}
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3  font-[poppins] text-center space-y-3 ">
+
+                        <h2 className="text-xl font-bold text-white p-5 rounded-t-lg bg-[#003a96] border-b-5 border-b-[#44A6A6] ">Node Info</h2>
+                        <p className="text-black text-lg p-2">
+                            <span className="font-semibold text-[#003a96]">ID:</span> Select a Node
+                        </p>
+                        <p className="text-black text-lg p-2">
+                            <span className="font-semibold text-[#003a96]">Name:</span> Select a Node
+                        </p>
+                        <p className="text-black text-lg p-2">
+                            <span className="font-semibold text-[#003a96]">Type:</span> Select a Node
+                        </p>
+                    </div>
+                )}
+
+                {/*<div className="w-full p-5 flex flex-col gap-4">*/}
+                {/*    <ImportAllNodesAndEdges />*/}
+                {/*</div>*/}
 
                 <button
-                    className="bg-[#003a96] w-4/5 text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3"
+                    className="bg-[#003a96] w-[80%] mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                    onClick={() => {
+                        setEdgeMode((prevState) => !prevState);
+                        setShowEdges(true);
+                    }}
+                >
+                    {edgeMode ? 'Exit Edge Mode' : 'Add Edge Mode'}
+                </button>
+                <button
+                    className={
+                        'bg-white  text-[#003a96] w-[80%] mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
+                    }
+                    type={'submit'}
                     onClick={handleSubmit}
                 >
                     Submit Changes
                 </button>
-
-                <button
-                    className="bg-[#003a96] w-4/5 text-white font-[poppins] hover:bg-blue-600 shadow-lg rounded p-3"
-                    onClick={() => {
-                        setEdgeMode((prev) => !prev);
-                        setShowEdges(true);
-                    }}
-                >
-                    {edgeMode ? "Exit Edge Mode" : "Add Edge Mode"}
-                </button>
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button className="bg-[#003a96] w-4/5 text-white font-[poppins] hover:bg-blue-950 shadow-lg rounded p-3">
-                            Choose Your Algorithm
-                        </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        {/* … */}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
-        </div>
     );
 };

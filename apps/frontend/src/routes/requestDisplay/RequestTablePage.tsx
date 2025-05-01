@@ -38,7 +38,7 @@ const useClickOutside = (handler: () => void) => {
     return reference;
 };
 
-export default function RequestTablePage({userRole}:{userRole: string}) {
+export default function RequestTablePage() {
     const { filteredData, isLoading, error } = useRequestData();
     const deleteRequest = trpc.deleteRequest.useMutation();
     const handleDelete = (selectedRequest: ServiceRequest) => {
@@ -155,19 +155,13 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
 
     //Table page
     return (
-        <div className="flex flex-1 ml-10 mr-10 mt-1">
+        <div className="flex flex-1  mt-0">
             <div
-                className="w-full min-h-screen bg-white p-6 pl-4 pr-4 font-[Poppins]"
-                style={{
-                    borderTop: 'none',
-                    borderBottom: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                }}
+                className="w-full  min-h-screen p-6 pl-4 pr-4 font-[Poppins]"
             >
                 {filteredData && filteredData.length > 0 ? (
                     <div
-                        className="relative flex flex-col w-full overflow-scroll text-gray-700 bg-white bg-clip-border rounded-xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
+                        className="relative flex flex-col w-full overflow-scroll scrollbar-thin scrollbar-thumb-[#003a96] scrollbar-track-blue-100 scrollbar-hide text-gray-700 bg-white bg-clip-border rounded-tl-3xl overflow-hidden shadow-lg max-h-9/10 overflow-y-auto"
                         ref={menuRef}
                     >
                         <table className="w-full text-left table-auto min-w-max w-fit overflow-x-clip">
@@ -640,10 +634,12 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
                                                     size={20}
                                                     onClick={() => {
                                                         console.log(
-                                                            userRole
+                                                            window.sessionStorage.getItem('isAdmin')
                                                         );
                                                         if (
-                                                            userRole === 'Admin'
+                                                            window.sessionStorage.getItem(
+                                                                'isAdmin'
+                                                            ) === 'true'
                                                         ) {
                                                             console.log('Delete: ');
                                                             console.log(res);
@@ -654,7 +650,6 @@ export default function RequestTablePage({userRole}:{userRole: string}) {
                                                         }
                                                     }}
                                                     tooltip={'Delete Service Request'}
-                                                    blue={true}
                                                 />
                                             </div>
                                         </td>

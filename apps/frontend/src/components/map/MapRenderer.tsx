@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { createMGBOverlays, MGBOverlays } from './overlays/MGBOverlay';
-import { createPatriot20Overlays } from './overlays/20PatriotOverlay';
+import { createPatriot20Overlays, updatePatriotPlace20, Patriot20Overlays } from './overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from './overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, updatePatriotPlace22, Patriot22Overlays } from './overlays/22PatriotOverlay';
+import { createMainCampusOverlay, updateMainCampus, MainCampusOverlay } from './overlays/mainCampusOverlay.tsx';
 import { createMarkers } from './overlays/createMarkers';
 import { drawAllEdges, drawPath } from "./overlays/edgeHandler.ts";
 import HospitalViewControls from './HospitalViewControls';
@@ -12,9 +13,6 @@ import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfindi
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
-import { graph } from "./GraphObject.ts"
-import { StringKeyframeTrack } from 'three/src/Three.Core.js';
-
 interface MapRendererProps {
   onMapReady: (
     map: google.maps.Map,
@@ -23,8 +21,8 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: 3 | 4;
-  onFloorChange?: (floor: 3 | 4) => void;
+  selectedFloor?: 1| 2| 3 | 4;
+  onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
 }
@@ -33,8 +31,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onMapReady,
   selectedDestination,
   onZoomChange,
-  selectedFloor = 3,
-  onFloorChange = () => { },
+  selectedFloor = 1,
+  onFloorChange,
   departmentNumber
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -44,6 +42,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const [parkingOverlay, setParkingOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [floorOverlay, setFloorOverlay] = useState<google.maps.GroundOverlay | null>(null);
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
+  const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot20Overlays | null>(null);
+  const [mainCampusOverlays, setMainCampusOverlays] = useState<Patriot20Overlays | null>(null);
   // Markers and visualization
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [showNodes, setShowNodes] = useState(false);
@@ -176,6 +176,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
+  function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
+    const firstFloorNum: number = path[0].floor
+    const secondFloorStairs = path.find(n => n.floor != firstFloorNum);
+    if (secondFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
+      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+      return {
+        floor1: {path: floor1, floorNum: firstFloorNum},
+        floor2: {path: floor2, floorNum: secondFloorStairs.floor}
+      };
+    }
+    return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
+  }
+
   // Handle department pathfinding
   useEffect(() => {
     if (
@@ -195,10 +209,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Fixed entrance node and target department node
 
       const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 3900,
-        "20 Patriot Place": 1139,
-        "22 Patriot Place": 1952,
-        "Faulkner": 3995
+        "MGB (Chestnut Hill)": 2707,
+        "20 Patriot Place": 113,
+        "22 Patriot Place": 1290,
+        "Faulkner": 2708
       }
 
       const entrance = graph.getNode(entrances[selectedDestination!.name]);
@@ -214,9 +228,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         pathPolylineRef.current.setMap(null);
         pathPolylineRef.current = null;
       }
-
-
-
 
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
@@ -234,11 +245,26 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         context.setStrategyPathfind(new Dijkstras())
       }
 
-
       const pathNodes = context.pathFind(graph, entrance, target)
 
+      const multiFloors = getMultiFloor(pathNodes)
+
       console.log("Path:", pathNodes)
-      const newPolyline = drawPath(map, pathNodes);
+
+      let newPolyline: any
+
+      console.log("Floor: ", selectedFloor)
+
+      if(multiFloors.floor2.floorNum === multiFloors.floor1.floorNum){
+        newPolyline = drawPath(map, pathNodes);
+      } else {
+        if(multiFloors.floor1.floorNum === selectedFloor){
+          newPolyline = drawPath(map, multiFloors.floor1.path);
+        } else if (multiFloors.floor2.floorNum === selectedFloor){
+          newPolyline = drawPath(map, multiFloors.floor2.path);
+        }
+      }
+
       pathPolylineRef.current = newPolyline;
 
 
@@ -255,23 +281,27 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       }
 
       // Add new markers for start and destination
-      startMarkerRef.current = new google.maps.Marker({
-        position: { lat: entrance.x, lng: entrance.y },
-        map: map,
-        title: 'Start (Entrance)',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
-      });
+      if (entrance.floor === selectedFloor) {
+        startMarkerRef.current = new google.maps.Marker({
+          position: { lat: entrance.x, lng: entrance.y },
+          map: map,
+          title: 'Start (Entrance)',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
+        });
+      }
 
-      targetMarkerRef.current = new google.maps.Marker({
-        position: { lat: target.x, lng: target.y },
-        map: map,
-        title: 'Department',
-        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
-      });
+      if (target.floor === selectedFloor) {
+        targetMarkerRef.current = new google.maps.Marker({
+          position: { lat: target.x, lng: target.y },
+          map: map,
+          title: 'Department',
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' },
+        });
+      }
     } catch (error) {
       console.error('Error in pathfinding:', error);
     }
-  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination]);
+  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, selectedFloor]);
 
   // Handle overlay updates based on selected destination
   useEffect(() => {
@@ -292,6 +322,17 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
       }
+      if (patriot20Overlays) {
+        patriot20Overlays.floor1Overlay.setMap(null);
+        patriot20Overlays.floor2Overlay.setMap(null);
+        patriot20Overlays.floor3Overlay.setMap(null);
+        patriot20Overlays.floor4Overlay.setMap(null);
+        setPatriot20Overlays(null);
+      }
+      if (mainCampusOverlays) {
+        mainCampusOverlays.floor2Overlay.setMap(null);
+        setMainCampusOverlays(null);
+      }
     };
 
     cleanupOverlays();
@@ -304,12 +345,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           setParkingOverlay(overlays.parkingOverlay);
           setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
-          createPatriot20Overlays(map);
+          const overlays = createPatriot20Overlays(map);
+          setPatriot20Overlays(overlays);
+          updatePatriotPlace20(overlays, selectedFloor!);
         } else if (selectedDestination.name === "22 Patriot Place") {
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
+          updatePatriotPlace22(overlays, selectedFloor!);
         } else if (selectedDestination.name === "Faulkner") {
           createFaulknerOverlays(map);
+        }
+        else if (selectedDestination.name === "Main Campus") {
+          const overlays: MainCampusOverlay = createMainCampusOverlay(map);
+          createMainCampusOverlay(map);
+          setFloorOverlay(overlays.floor2Overlay);
         }
 
         // Center map on the selected destination
@@ -321,14 +370,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     }
 
     return cleanupOverlays;
-  }, [selectedDestination, map]);
+  }, [selectedDestination, map, selectedFloor]);
 
   // Update Patriot Place overlays on floor change
   useEffect(() => {
-    if (!map || !patriot22Overlays) return;
+    if (!map || !patriot22Overlays || !patriot20Overlays) return;
 
     try {
       updatePatriotPlace22(patriot22Overlays, selectedFloor);
+      updatePatriotPlace20(patriot20Overlays, selectedFloor);
 
       const patriotZoomListener = map.addListener('zoom_changed', () => {
         const zoom = map.getZoom();
@@ -341,7 +391,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     } catch (error) {
       console.error('Error updating Patriot Place overlays:', error);
     }
-  }, [selectedFloor, map, patriot22Overlays, onZoomChange]);
+  }, [selectedFloor, map, patriot22Overlays, patriot20Overlays, onZoomChange]);
 
   // Handle MGB overlay opacity animations
   useEffect(() => {

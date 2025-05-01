@@ -7,6 +7,7 @@ export const makeNode = publicProcedure
     .input(
         z.array(
             z.object({
+                id: z.optional(z.number()),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string(),

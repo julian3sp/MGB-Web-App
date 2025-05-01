@@ -13,7 +13,7 @@ export default function ImportPage() {
   const makeEdge = trpc.makeEdge.useMutation()
   const deleteEdges = trpc.deleteAllEdges.useMutation()
   const deleteAllDirectories = trpc.deleteAllDirectories.useMutation()
-
+  const { data: largestArr, isLoading} = trpc.getLargestNodeId.useQuery();
   const utils = trpc.useUtils();
 
   const makeManyDirectories = trpc.makeManyDirectories.useMutation({
@@ -27,6 +27,8 @@ export default function ImportPage() {
       toast.error("Please select at least one file to upload.")
       return
     }
+
+    let appendID = largestArr?.[0].id;
 
     for (const file of files) {
       const reader = new FileReader()
@@ -53,6 +55,21 @@ export default function ImportPage() {
             console.log(inputs)
             await makeNode.mutateAsync(inputs)
             toast.success(`Nodes from "${file.name}" uploaded successfully.`)
+          } else if (headers.length === 5){
+            const inputs = lines.slice(1).map((line) => {
+              const values = line.split(",")
+              return {
+                id: appendID++,
+                building: values[1]?.trim().replace(/"/g, ""),
+                floor: Number(values[2]?.trim().replace(/"/g, "")),
+                name: values[3]?.trim().replace(/"/g, ""),
+                x: Number(values[4]?.trim().replace(/"/g, "")),
+                y: Number(values[5]?.trim().replace(/"/g, "")),
+                type: values[6]?.trim().replace(/"/g, ""),
+              }
+            })
+            await makeNode.mutateAsync(inputs)
+            toast.success(`Nodes from "${file.name}" appended successfully.`)
           } else if (headers.length >= 4) {
             await deleteAllDirectories.mutateAsync()
             const inputs = lines.slice(1).map((line) => {

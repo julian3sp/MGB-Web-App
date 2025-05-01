@@ -41,13 +41,12 @@ export default function ImportPage() {
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")
               return {
-                id: Number(values[0]?.trim().replace(/"/g, "")),
-                building: values[1]?.trim().replace(/"/g, ""),
-                floor: Number(values[2]?.trim().replace(/"/g, "")),
-                name: values[3]?.trim().replace(/"/g, ""),
-                x: Number(values[4]?.trim().replace(/"/g, "")),
-                y: Number(values[5]?.trim().replace(/"/g, "")),
-                type: values[6]?.trim().replace(/"/g, ""),
+                building: values[0]?.trim().replace(/"/g, ""),
+                floor: Number(values[1]?.trim().replace(/"/g, "")),
+                name: values[2]?.trim().replace(/"/g, ""),
+                x: Number(values[3]?.trim().replace(/"/g, "")),
+                y: Number(values[4]?.trim().replace(/"/g, "")),
+                type: values[5]?.trim().replace(/"/g, ""),
               }
             })
             console.log(inputs)

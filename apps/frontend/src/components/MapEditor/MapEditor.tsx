@@ -1,42 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
-import { createPatriot20Overlays , Patriot20Overlays, updatePatriotPlace20} from '../../map/overlays/20PatriotOverlay';
+import { createMGBOverlays, MGBOverlays} from "@/components/map/overlays/MGBOverlay.tsx";
+import { createPatriot20Overlays , Patriot20Overlays, updatePatriotPlace20} from "@/components/map/overlays/20PatriotOverlay.tsx";
 import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
-import { createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22, } from '../../map/overlays/22PatriotOverlay';
-import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
-import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
+import { createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22} from "@/components/map/overlays/22PatriotOverlay.tsx";
+import { addNodeListener, createMarkers} from "@/components/map/overlays/createMarkers.ts";
 import {trpc} from '@/lib/trpc';
-import MapEditorControls from '../mapEditorComponent/MapEditorControl';
-import {Edge, Node, NodeType} from './Graph';
-import {graph} from "../../map/GraphObject.ts"
-import HelpDropdown from '../mapEditorComponent/HelpDropDown.tsx';
+import MapEditorControls from '@/components/MapEditor/MapEditorControl.tsx'
+import {Edge, Node, NodeType} from '../navigation/pathfinding/Graph';
+import {graph} from "../map/GraphObject.ts"
 import { drawAllEdges } from "@/components/map/overlays/edgeHandler.ts";
-import addNode from '../../../../assets/addNode-1.gif'
-import createEdge from '../../../../assets/createEdge-1.gif'
-import removeEdge from '../../../../assets/removeEdge-1.gif'
-import removeNode from '../../../../assets/removeNode-1.gif'
-
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from '../../ui/dropdown-menu.tsx';
+import addNode from '../../../assets/addNode-1.gif'
+import createEdge from '../../../assets/createEdge-1.gif'
+import removeEdge from '../../../assets/removeEdge-1.gif'
+import removeNode from '../../../assets/removeNode-1.gif'
 // import {NodeType} from ""
-import { WorldDistance } from "./worldCalculations.ts"
+import { WorldDistance} from "@/components/navigation/pathfinding/worldCalculations.ts";
 import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
-import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
-import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import PageWrapper from "@/components/UI/PageWrapper.tsx";
 import { createMainCampusOverlay } from '@/components/map/overlays/mainCampusOverlay.tsx';
-import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
-import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorners.tsx';
-import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
-import {importGraphFromZip} from "@/components/importZipGraph.ts";
+import { EditorPanel} from "@/components/MapEditor/EditorPanel.tsx";
+import {ImageProcessorPanel} from "./ImageProcessor/ImageProcessorPanel.tsx";
+import {importGraphFromZip} from "@/components/MapEditor/importZipGraph.ts";
 import JSZip from 'jszip';
 
 // resolve

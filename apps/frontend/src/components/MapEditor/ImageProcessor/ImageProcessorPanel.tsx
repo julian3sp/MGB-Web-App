@@ -1,4 +1,4 @@
-import {PictureCorners} from "@/components/navigation/mapEditorComponent/ImageProcessor/PictureCorners.tsx";
+import {PictureCorners} from "./PictureCorners.tsx";
 import {imageCornerMarkerContent, cornerState} from "../../../map/overlays/markerStyles.ts";
 import {useEffect} from "react";
 // import {graph} from "../../../map/GraphObject.ts"

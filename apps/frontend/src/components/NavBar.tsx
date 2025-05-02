@@ -25,6 +25,7 @@ export default function NavBar({ userRole, setUserRole }: Props) {
     const [tab, setTab] = useState<string>(() => {
         const path = location.pathname;
         if (path.startsWith("/directory")) return "directory";
+        if (path.startsWith("/chatbot")) return "Ai Assistant";
         if (path.startsWith("/navigation")) return "navigation";
         if (path.startsWith("/services")) return "services";
         if (path.startsWith("/requests")) return "requests";
@@ -77,6 +78,9 @@ export default function NavBar({ userRole, setUserRole }: Props) {
         } else if (lowerTranscript.includes("view")) {
             navigate("/requests");
             setTab("requests");
+        }else if (lowerTranscript.includes("Ai")) {
+            navigate("/chatbot");
+            setTab("Ai Assistant");
         }
     }, [navigate, logout, loginWithRedirect]);
 

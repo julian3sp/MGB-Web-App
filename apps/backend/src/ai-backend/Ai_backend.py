@@ -25,7 +25,7 @@ CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://127.0.
 
 @app.route('/api/chat', methods=['POST'])
 def chat_api():
-    data = request.json  # Get the JSON payload from the frontend
+    data = request.json  
     prompt = data.get("prompt", "")
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
@@ -73,24 +73,38 @@ def get_backend_context():
     chat_session.send_message(context)
     return context
 
+global new_data
+new_data = False
 def fetch_new_data(old_data):
+    global new_data  
     old_context = old_data
-    new_context = fetch_data_from_api("http://localhost:3000/trpc/getDirectories"), fetch_data_from_api("http://localhost:3000/trpc/requestList"), fetch_data_from_api("http://localhost:3000/trpc/getEmployees")
+    new_context = (
+        fetch_data_from_api("http://localhost:3000/trpc/getDirectories"),
+        fetch_data_from_api("http://localhost:3000/trpc/requestList"),
+        fetch_data_from_api("http://localhost:3000/trpc/getEmployees"),
+    )
+
     if old_context != new_context:
         print("New data fetched from API.")
-        update = (f"the backend data has changed and here is the new data: {new_context}. "
-                    f"Please answer based also in the new data aswell as what you had previously. ")
+        new_data = True  
+        update = (
+            f"The backend data has changed and here is the new data: {new_context}. "
+            f"Please answer based also in the new data as well as what you had previously."
+        )
         chat_session.send_message(update)
-        
+        return new_context
+    else:
+        print("No new data fetched from API.")
+        new_data = False  
+        return old_context
 
 
 if __name__ == "__main__":
     data = get_backend_context()
     get_backend_context()
-    app.run(port=3001,debug=False)
+    app.run(port=3001,debug=True)
     while True:
-        fetch_new_data(data)
-        user_input = input("You: ")
+        data = fetch_new_data(data)
         if user_input.lower() in ["adios"]:
             print("Exiting the chat. Goodbye!")
             break

@@ -86,6 +86,12 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
   onTransportChange,
   handleGetCurrentLocation
 }) => {
+  const handleZoomToDestination = () => {
+    if (mapInstance && selectedPlace?.location) {
+      mapInstance.setZoom(20);
+      mapInstance.panTo(selectedPlace.location)
+    }
+  }
   return (
     <div className="flex flex-col gap-0 items-center">
       {startLocation && selectedPlace && (
@@ -94,11 +100,10 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('driving')}
             className="flex flex-col font-[poppins] items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'driving'
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'driving'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_car</span>
+              }`}>directions_car</span>
             <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
               {travelTimes.driving || '--'}
             </span>
@@ -107,11 +112,10 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('transit')}
             className="flex flex-col items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'transit'
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'transit'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_transit</span>
+              }`}>directions_transit</span>
             <span className="text-[8px] mt-0.5 font-[poppins] max-w-[40px] truncate">
               {travelTimes.transit || '--'}
             </span>
@@ -120,11 +124,10 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('walking')}
             className="flex flex-col items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'walking'
+            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'walking'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_walk</span>
+              }`}>directions_walk</span>
             <span className="text-[8px] font-[poppins] mt-0.5 max-w-[40px] truncate">
               {travelTimes.walking || '--'}
             </span>
@@ -155,8 +158,18 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
               />
             )}
           </div>
-          <div className="mt-5 ">
+          <div className="mt-5">
             <DestinationDropdown onDestinationSelected={handleDestinationSelected} />
+          </div>
+          <div className='w-full flex justify-center mt-5'>
+            {selectedPlace && (
+              <button
+                onClick={handleZoomToDestination}
+                className='px-3 py-2 mx-auto text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
+              >
+                Zoom to destination
+              </button>
+            )}
           </div>
         </div>
       </div>

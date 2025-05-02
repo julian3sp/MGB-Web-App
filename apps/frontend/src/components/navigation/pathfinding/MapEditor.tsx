@@ -75,7 +75,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const makeNode = trpc.makeNode.useMutation();
     const makeEdge = trpc.makeEdge.useMutation()
-    const { data: largestArr, isLoading, refetch: refetchLargestId} = trpc.getLargestNodeId.useQuery();
+
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -297,6 +297,20 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         };
     }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
+    function buildingFloorKey(){
+        return selectedHospital === "MGB (Chestnut Hill)"
+            ? "chestnut"
+            : selectedHospital === "20 Patriot Place"
+                ? "pat20"
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital === "Main Campus"
+                        ? "mainCampus"
+                            : selectedHospital;
+    }
+
+
+
     function displayNodes() {
         if (!map || !selectedHospital || !markerLib) return;
 
@@ -514,6 +528,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [pixelCorners, setPixelCorners] = useState<[number, number][]>([]);
     const [worldCorners, setWorldCorners] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
     const [imgOverlay, setImgOverlay] = useState<google.maps.GroundOverlay | null>(null);
+    const { data: largestArr, isLoading, refetch: refetchLargestId} = trpc.getLargestNodeId.useQuery();
 
     async function sendToFastApi() {
         if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
@@ -549,9 +564,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const firstNode = latestLargestArr?.[0];
         console.log("Largest node: " , largestArr?.[0])
 
-        const building = ""
         form.append('name', 'test');
-        form.append('building', "pat20");
+        form.append('building', buildingFloorKey());
         form.append('floor', (selectedFloor ? selectedFloor.toString() : '1'));
         form.append('offset', (firstNode ? firstNode.id + 1 : 1).toString());
 

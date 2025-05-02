@@ -47,7 +47,6 @@ const MuteIcon = () => (
 const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   if (!directions) return null;
   const steps = directions.routes[0]?.legs[0]?.steps || [];
@@ -97,7 +96,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
       : 'text-gray-600 hover:text-blue-600';
 
   return (
-    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg max-h-60 overflow-y-auto text-sm">
+      <div className="mt-2 mb-4 px-1 text-sm max-h-60 overflow-y-auto">
       <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold">Step-by-step directions</h3>
             <button
@@ -107,14 +106,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
             >
               <Icon />
             </button>
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}  
-              className="transition duration-300 ease-in-out transform hover:scale-110"
-            >
-              {isDropdownOpen ? <ChevronDown /> : <ChevronUp />}
-            </button>
           </div>
-      {isDropdownOpen && (
         <div className="flex flex-col divide-y divide-gray-200">
           {steps.map((step, index) => (
             <div key={index} className="py-3 flex items-start gap-3">
@@ -128,7 +120,6 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
             </div>
           ))}
         </div>
-      )}
     </div>
   );
 };

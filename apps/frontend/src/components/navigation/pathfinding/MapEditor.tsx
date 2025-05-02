@@ -546,7 +546,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         worldCorners.forEach(m => m.position = null);
 
         const firstNode = largestArr?.[0];
-
+        console.log(largestArr?.[0])
 
         const building = ""
         form.append('name', 'test');
@@ -590,6 +590,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         await handleSubmit();
     }
 
+    function resetImageProcessor(){
+        setImgFile(null);
+        setPixelCorners([]);
+        setWorldCorners([]);
+        setImgOverlay(null);
+    }
 
 
     return (
@@ -624,19 +630,32 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 Select Floor and Building
                             </h2>
                         ) : (
-                            <ImageProcessorPanel
-                                map={map}
-                                imgFile={imgFile}
-                                setImgFile={setImgFile}
-                                pixelCorners={pixelCorners}
-                                setPixelCorners={setPixelCorners}
-                                // imgOverlay={imgOverlay}
-                                // setImgOverlay={setImgOverlay}
-                                // placeOverlay={placeOverlay}
-                                worldCorners={worldCorners}
-                                setWorldCorners={setWorldCorners}
-                                sendToFastApi={sendToFastApi}
-                            />
+                            <div className="flex flex-col gap-4">
+                                <div className="flex-grow">
+                                    <ImageProcessorPanel
+                                        map={map}
+                                        imgFile={imgFile}
+                                        setImgFile={setImgFile}
+                                        pixelCorners={pixelCorners}
+                                        // imgOverlay={imgOverlay}
+                                        // setImgOverlay={setImgOverlay}
+                                        // placeOverlay={placeOverlay}
+                                        setPixelCorners={setPixelCorners}
+                                        worldCorners={worldCorners}
+                                        setWorldCorners={setWorldCorners}
+                                        sendToFastApi={sendToFastApi}
+                                    />
+                                </div>
+
+                                <div className="pt-10">
+                                    <button
+                                        onClick={resetImageProcessor}
+                                        className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3"
+                                    >
+                                        Reset Image Processor
+                                    </button>
+                                </div>
+                            </div>
                         )}
 
                     </div>

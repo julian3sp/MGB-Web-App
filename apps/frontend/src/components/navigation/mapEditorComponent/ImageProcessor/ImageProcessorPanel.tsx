@@ -1,5 +1,6 @@
 import {PictureCorners} from "@/components/navigation/mapEditorComponent/ImageProcessor/PictureCorners.tsx";
 import {imageCornerMarkerContent, cornerState} from "../../../map/overlays/markerStyles.ts";
+import {useEffect} from "react";
 // import {graph} from "../../../map/GraphObject.ts"
 export interface ImageProcessorPanelProps {
     map: google.maps.Map | null;
@@ -68,13 +69,11 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
                 file={imgFile}
                 onDone={setPixelCorners}
                 cornerCount={pixelCorners.length}
+                map={map}
+                worldCorners={worldCorners}
+                setWorldCorners={setWorldCorners}
             />
         );
-    }
-
-    /** STEP 3 – drop world markers *******************************/
-    if (worldCorners.length === 0) {
-        placeMarkers(map, worldCorners, setWorldCorners)
     }
 
     /** STEP 4 – send to FastAPI **********************************/
@@ -95,45 +94,3 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
 };
 
 
-function placeMarkers(
-    map: google.maps.Map | null,
-    worldCorners: google.maps.marker.AdvancedMarkerElement[],
-    setWorldCorners: (markers: google.maps.marker.AdvancedMarkerElement[]) => void) {
-    if (!map) return;
-
-    // 1) compute initial bounds around center
-    const centre = map.getCenter()!;
-    const bounds = new google.maps.LatLngBounds(
-        { lat: centre.lat() - 0.0002, lng: centre.lng() - 0.0002 },
-        { lat: centre.lat() + 0.0002, lng: centre.lng() + 0.0002 },
-    );
-    worldCorners.forEach(m => m.position = null);
-    const newMarkers: google.maps.marker.AdvancedMarkerElement[] = [];
-
-
-    const ne = bounds.getNorthEast();
-    const sw = bounds.getSouthWest();
-    const nw = new google.maps.LatLng(ne.lat(), sw.lng());
-    const se = new google.maps.LatLng(sw.lat(), ne.lng());
-
-    // order them Top-Left (NW), Top-Right (NE), Bottom-Right (SE), Bottom-Left (SW)
-    const corners = [nw, ne, se, sw];
-    const cornerLabels = ["TL", "TR", "BR", "BL"];
-
-    corners.forEach((pos, idx) => {
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-            position: pos,
-            map,
-            title: `${idx + 1}`,
-            gmpDraggable: true,
-            content:imageCornerMarkerContent(cornerLabels[idx])
-        });
-        const content = marker.content as HTMLElement;
-        content.addEventListener('dragend', (e) => {
-            e.stopPropagation();
-            console.log(marker.position)
-        })
-        newMarkers.push(marker);
-    });
-    setWorldCorners(newMarkers);
-}

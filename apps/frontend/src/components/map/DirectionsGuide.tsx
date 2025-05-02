@@ -111,7 +111,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
       : 'text-gray-600 hover:text-blue-600';
 
   return (
-    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg max-h-60 overflow-y-auto text-sm">
+    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg h-15 overflow-y-auto text-sm">
       <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold">Text directions</h3>
             <button

@@ -48,6 +48,20 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [useMetric, setUseMetric] = useState(false);
+
+  const convertDistance = (text: string | undefined): string => {
+    if (!text) return '';
+    if (useMetric) {
+      const match = text.match(/([\d.]+)\s*ft/);
+      if (match) {
+        const feet = parseFloat(match[1]);
+        const meters = (feet * 0.3048).toFixed(1);
+        return `${meters}m`;
+      }
+    }
+    return text;
+  }
 
   if (!directions) return null;
   const steps = directions.routes[0]?.legs[0]?.steps || [];
@@ -55,7 +69,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   const combinedInstructions = steps.map(step => {
     const parser = new DOMParser();
     const html = parser.parseFromString(step.instructions, 'text/html');
-    return html.body.textContent + ` (${step.distance?.text})`;
+    return html.body.textContent + ` (${convertDistance(step.distance?.text)})`;
   }).join('. ');
 
   const startSpeaking = () => {
@@ -97,15 +111,21 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
       : 'text-gray-600 hover:text-blue-600';
 
   return (
-    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg max-h-60 overflow-y-auto text-sm">
+    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg h-15 overflow-y-auto text-sm">
       <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold">Step-by-step directions</h3>
+            <h3 className="font-semibold">Text directions</h3>
             <button
               onClick={handleToggleSpeak}
               aria-label="Toggle directions speech"
               className={`w-8 h-8 rounded-full p-1 transition ${bgColor}`}
             >
               <Icon />
+            </button>
+            <button 
+              onClick={() => setUseMetric(prev => !prev)}
+              className='text-md text-[#003a96] font-bold ml-3 w-10 cursor-pointer'
+            >
+              {useMetric ? 'feet' : 'meters'}
             </button>
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}  
@@ -122,7 +142,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
               <div className="flex flex-col">
                 <div dangerouslySetInnerHTML={{ __html: step.instructions }} className="leading-relaxed" />
                 <span className="text-xs text-gray-500 mt-1">
-                  {step.distance?.text} – {step.duration?.text}
+                  {convertDistance(step.distance?.text)} – {step.duration?.text}
                 </span>
               </div>
             </div>

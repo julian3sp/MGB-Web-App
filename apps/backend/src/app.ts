@@ -27,6 +27,7 @@ import {
     deleteSelectedNodes,
     editNodes,
     getAllNodes,
+    getLargestId,
     getNode,
     makeManyNodes,
     makeNode,
@@ -65,6 +66,7 @@ const appRouter = t.router({
     makeManyNodes: makeManyNodes,
     getNode: getNode,
     getAllNodes: getAllNodes,
+    getLargestNodeId: getLargestId,
     editNodes: editNodes,
     deleteAllNodes: deleteAllNodes,
     deleteSelectedNodes: deleteSelectedNodes,
@@ -83,6 +85,21 @@ app.use('/trpc', (req, res, next) => {
     console.log(`[TRPC] ${req.method} ${req.url}`);
     next();
 });
+
+//------ Python Fetcher------------//
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
+const PYTHON_URL = process.env.PYTHON_URL ?? 'http://localhost:8000';
+
+app.use(
+    '/image-api',
+    createProxyMiddleware({
+        target: process.env.PYTHON_URL || PYTHON_URL,
+        changeOrigin: true,
+        pathRewrite: { '^/image-api': '' }, // remove the prefix before forwarding
+        // logger: logger,
+    })
+);
 
 app.use(
     '/trpc',

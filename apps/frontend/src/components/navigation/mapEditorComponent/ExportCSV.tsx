@@ -71,11 +71,11 @@ export default function ExportCSV({type} : ExportCSVProps) {
 
         const downloadCSV = async () => {
             let csv_edge = "source_id, target_id, weight\n";
-            let csv_node = "building, floor, name, x, y, type\n";
+            let csv_node = "id, building, floor, name, x, y, type\n";
             let csv_directories = "name, services, location, telephone\n";
 
             nodes.forEach((file) => {
-                csv_node += `${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`;
+                csv_node += `${file.id}, ${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`;
             });
             edges.forEach((file) => {
                 csv_edge += `${file.sourceId}, ${file.targetId}, ${file.weight}\n`;

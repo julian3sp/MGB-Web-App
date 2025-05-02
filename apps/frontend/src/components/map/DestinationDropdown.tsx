@@ -25,6 +25,10 @@ const destinations = [
   {
     name: "Faulkner", 
     location: { lat: 42.30149071877142, lng: -71.12823221807406}
+  },
+  {
+    name: "Main Campus",
+    location: { lat:42.33539999367496 , lng: -71.10675757779984 }
   }
 ];
 

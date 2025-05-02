@@ -212,7 +212,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         "MGB (Chestnut Hill)": 2707,
         "20 Patriot Place": 113,
         "22 Patriot Place": 1290,
-        "Faulkner": 2708
+        "Faulkner": 3716,
+        "Main Campus": 4963
       }
 
       const entrance = graph.getNode(entrances[selectedDestination!.name]);

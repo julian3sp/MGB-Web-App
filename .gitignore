@@ -39,3 +39,5 @@ out
 **/.vite
 backend\package.json
 .venv/
+__pycache__/
+*.pyc

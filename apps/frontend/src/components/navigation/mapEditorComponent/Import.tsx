@@ -28,17 +28,27 @@ export default function ImportPage() {
       return
     }
 
-    let appendID = largestArr?.[0].id;
+    let appendID: number | undefined
+    if(largestArr && largestArr[0] && largestArr[0].id) {
+      console.log("Getting here")
+      appendID = largestArr[0].id + 1;
+    }
 
+    appendID = appendID || 0
+    console.log("Appender:", appendID)
+
+
+    console.log(appendID)
     for (const file of files) {
       const reader = new FileReader()
       reader.onload = async () => {
         const text = reader.result as string
         const lines = text.split("\n").filter(Boolean)
         const headers = lines[0].split(",")
+        console.log(headers)
 
         try {
-          if (headers.length >= 6) {
+          if (headers.length > 6) {
             await deleteNodes.mutateAsync()
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")
@@ -55,19 +65,23 @@ export default function ImportPage() {
             console.log(inputs)
             await makeNode.mutateAsync(inputs)
             toast.success(`Nodes from "${file.name}" uploaded successfully.`)
-          } else if (headers.length === 5){
+          } else if (headers.length >= 5){
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")
+              console.log("You shouldn't be here")
+              appendID += 1
               return {
-                id: appendID++,
-                building: values[1]?.trim().replace(/"/g, ""),
-                floor: Number(values[2]?.trim().replace(/"/g, "")),
-                name: values[3]?.trim().replace(/"/g, ""),
-                x: Number(values[4]?.trim().replace(/"/g, "")),
-                y: Number(values[5]?.trim().replace(/"/g, "")),
-                type: values[6]?.trim().replace(/"/g, ""),
+                id: appendID - 1,
+                building: values[0]?.trim().replace(/"/g, ""),
+                floor: Number(values[1]?.trim().replace(/"/g, "")),
+                name: values[2]?.trim().replace(/"/g, ""),
+                x: Number(values[3]?.trim().replace(/"/g, "")),
+                y: Number(values[4]?.trim().replace(/"/g, "")),
+                type: values[5]?.trim().replace(/"/g, ""),
               }
             })
+
+            console.log(inputs)
             await makeNode.mutateAsync(inputs)
             toast.success(`Nodes from "${file.name}" appended successfully.`)
           } else if (headers.length >= 4) {
@@ -92,9 +106,8 @@ export default function ImportPage() {
                 targetId: Number(values[1]?.trim().replace(/"/g, "")),
                 weight: Number(values[2]?.trim().replace(/"/g, "")),
               }
-
-
             })
+            console.log(inputs)
             await makeEdge.mutateAsync(inputs)
             toast.success(`Edges from "${file.name}" uploaded successfully.`)
           }else {

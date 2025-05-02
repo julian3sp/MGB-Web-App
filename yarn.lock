@@ -7326,12 +7326,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"image-api@workspace:apps/imageAPI":
-  version: 0.0.0-use.local
-  resolution: "image-api@workspace:apps/imageAPI"
-  languageName: unknown
-  linkType: soft
-
 "immediate@npm:~3.0.5":
   version: 3.0.6
   resolution: "immediate@npm:3.0.6"

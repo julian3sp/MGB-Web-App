@@ -519,6 +519,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
             return alert('Need all four image + map points!');
         }
+        worldCorners.forEach(m => m.position(null));
 
         const form = new FormData();
 
@@ -545,9 +546,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
         const firstNode = largestArr?.[0];
 
+
+        const building = ""
         form.append('name', 'test');
         form.append('building', "pat20");
-        form.append('floor', "1");
+        form.append('floor', (selectedFloor ? selectedFloor.toString() : '1'));
         form.append('offset', (firstNode ? firstNode.id + 1 : 1).toString());
 
         try {
@@ -604,7 +607,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
                         </button>
 
-                        {mode === 'edit' ?
+                        {mode === 'edit' ? (
                             <EditorPanel
                                 selectedNode={selectedNode}
                                 currentNodeType={currentNodeType}
@@ -613,23 +616,27 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 edgeMode={edgeMode}
                                 setEdgeMode={setEdgeMode}
                                 setShowEdges={setShowEdges}
-                                handleNodeTypeChange = {handleNodeTypeChange}
+                                handleNodeTypeChange={handleNodeTypeChange}
                             />
-                            :
+                        ) : !selectedFloor && !selectedHospital ? (
+                            <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
+                                Select Floor and Building
+                            </h2>
+                        ) : (
                             <ImageProcessorPanel
-                                map= {map}
+                                map={map}
                                 imgFile={imgFile}
                                 setImgFile={setImgFile}
                                 pixelCorners={pixelCorners}
                                 setPixelCorners={setPixelCorners}
-                                imgOverlay={imgOverlay}
-                                setImgOverlay={setImgOverlay}
-                                placeOverlay={placeOverlay}
+                                // imgOverlay={imgOverlay}
+                                // setImgOverlay={setImgOverlay}
+                                // placeOverlay={placeOverlay}
                                 worldCorners={worldCorners}
                                 setWorldCorners={setWorldCorners}
                                 sendToFastApi={sendToFastApi}
                             />
-                        }
+                        )}
 
                     </div>
                 }

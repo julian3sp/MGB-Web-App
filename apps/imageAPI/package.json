@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "uvicorn app.main:app --reload --port 8000",
-    "build": "echo 'Python build – nothing to do'"
+    "build": "echo 'Python build – nothing to do'",
+    "postinstall": "python -m venv \"$INIT_CWD/.venv\" && (cmd \"/k call ./.venv/Scripts/activate.bat && pip install -r requirements.txt\" || sh \".venv/bin/activate && pip install -r requirements.txt\")"
   }
 }

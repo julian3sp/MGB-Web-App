@@ -29,4 +29,24 @@ export function nodeMarker(
     return div;
 }
 
+export function imageCornerMarkerContent(
+    state: string = "BL"
+): HTMLElement {
+    const div = document.createElement("div");
+    div.className = "imageCorner-dot";
+    switch(state){
+        case "BL":
+            div.classList.add("corner-BL");
+            break
+        case "BR":
+            div.classList.add("corner-BR");
+            break
+        case "TR":
+            div.classList.add("corner-TR");
+            break
+        case "TL":
+            div.classList.add("corner-TL");
+    }
+    return div;
+}
 

@@ -35,7 +35,7 @@ import PageWrapper from '@/components/ui/PageWrapper.tsx';
 import { createMainCampusOverlay } from '@/components/map/overlays/mainCampusOverlay.tsx';
 import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
 import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorners.tsx';
-import {ImageProcessorPanel, placeOverlay} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
+import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
 import {importGraphFromZip} from "@/components/importZipGraph.ts";
 import JSZip from 'jszip';
 
@@ -519,7 +519,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
             return alert('Need all four image + map points!');
         }
-        worldCorners.forEach(m => m.position(null));
+
 
         const form = new FormData();
 
@@ -543,6 +543,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 })
             )
         );
+        worldCorners.forEach(m => m.position = null);
 
         const firstNode = largestArr?.[0];
 

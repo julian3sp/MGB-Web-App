@@ -1,11 +1,11 @@
 import React from 'react';
-import AmbulanceIcon from "@/components/SVGIcons/AmbulanceIcon.tsx";
-import AudioIcon from "@/components/SVGIcons/AudioIcon.tsx";
-import CleaningIcon from "@/components/SVGIcons/CleaningIcon.tsx";
-import LanguageIcon from "@/components/SVGIcons/LanguageIcon.tsx";
-import LockIcon from "@/components/SVGIcons/LockIcon.tsx";
-import MedicalIcon from "@/components/SVGIcons/MedicalIcon.tsx";
-import ElevatorIcon from "@/components/SVGIcons/ElevatorIcon.tsx";
+import AmbulanceIcon from "@/components/serviceRequest/SVGIcons/AmbulanceIcon.tsx";
+import AudioIcon from "@/components/serviceRequest/SVGIcons/AudioIcon.tsx";
+import CleaningIcon from "@/components/serviceRequest/SVGIcons/CleaningIcon.tsx";
+import LanguageIcon from "@/components/serviceRequest/SVGIcons/LanguageIcon.tsx";
+import LockIcon from "@/components/serviceRequest/SVGIcons/LockIcon.tsx";
+import MedicalIcon from "@/components/serviceRequest/SVGIcons/MedicalIcon.tsx";
+import ElevatorIcon from "@/components/serviceRequest/SVGIcons/ElevatorIcon.tsx";
 
 type formRequestButton = {
     label: string;

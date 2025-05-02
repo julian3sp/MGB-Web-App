@@ -9,6 +9,8 @@
 
 out
 
+.venv
+
 # testing
 **/coverage
 

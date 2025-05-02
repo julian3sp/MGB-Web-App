@@ -9,8 +9,6 @@
 
 out
 
-.venv
-
 # testing
 **/coverage
 
@@ -40,7 +38,3 @@ out
 **/.prettiercache
 **/.vite
 backend\package.json
-
-.venv/
-__pycache__/
-*.pyc

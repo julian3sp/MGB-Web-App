@@ -63,14 +63,14 @@ export const createMGBOverlays = (map: google.maps.Map): MGBOverlays => {
   return { parkingOverlay, floorOverlay };
 };
 
-// Helper function to update the department path (draw a polyline from the top entrance to the destination)
+// Helper function to update the Department path (draw a polyline from the top entrance to the destination)
 // In your overlays/MGBOverlay.tsx file
 export const updateDepartmentPath = (
     overlays: MGBOverlays,
     map: google.maps.Map,
     pathNodes: Node[]
 ) => {
-  // Remove any existing department path polyline.
+  // Remove any existing Department path polyline.
   if (overlays.navigationPolyline) {
     overlays.navigationPolyline.setMap(null);
   }

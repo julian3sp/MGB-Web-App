@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AppleCardsListing } from '../components/department/AppleCardsListing.tsx';
+import { AppleCardsListing } from '@/components/Department/AppleCardsListing.tsx';
 import FilterIcon from '../../assets/FilterIcon.png';
 import { DepartmentContext } from './departmentDirectory/DepartmentContext.tsx';
 import { flipCardsData } from '@/data/flipCardData.tsx';
 import SearchIcon from '../../assets/SearchIcon.png';
-import { PlaceholdersAndVanishInput } from "../components/ui/placeholders-and-vanish-input.tsx";
+import { PlaceholdersAndVanishInput } from "../components/Department/placeholders-and-vanish-input.tsx";
 
 export function BryanDirectoryPage() {
     const [showFilterPanel, setShowFilterPanel] = useState(false);

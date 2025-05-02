@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import DepartmentList from '../../components/DepartmentList.ts';
+import DepartmentList from '@/components/UI/DepartmentList.ts';
 import DepartmentRoutes from './DepartmentRoutes.tsx';
 import { trpc } from '../../lib/trpc.ts';
-import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import PageWrapper from '@/components/UI/PageWrapper.tsx';
 
 const DepartmentDirectory = () => {
     const Directories = trpc.getDirectories.useQuery();
@@ -42,12 +42,12 @@ const DepartmentDirectory = () => {
                             {Directories.error && <p>Error loading directories.</p>}
                             <ul>
                                 {/*key is used to track changes,
-                     each department name can be clicked on to display information about the department (li and NavLink),
+                     each Department name can be clicked on to display information about the Department (li and NavLink),
                      block p-2 ... userd to create a rounded rectangle around the departments. entire box is clickable
                      ` (grave key) is used to wrap the line mentioned above, not ' (single quote)
-                     the current selected department will be highlighted
-                     hovering a department will slightly change the shade of the box
-                     "to" line sets the URL to the correct department
+                     the current selected Department will be highlighted
+                     hovering a Department will slightly change the shade of the box
+                     "to" line sets the URL to the correct Department
                      */}
                                 {Directories.data?.map((dept) => (
                                     <li key={dept.id} className="mb-2 shadow-md">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapRenderer from './MapRenderer';
-import DisplayLottie from '../ui/DisplayLottie';
+import DisplayLottie from '@/components/UI/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
@@ -8,7 +8,7 @@ import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays
 import DirectionsGuide from './DirectionsGuide.tsx';
 import {trpc} from "@/lib/trpc.ts"
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
-import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import PageWrapper from "@/components/UI/PageWrapper.tsx";
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -328,16 +328,16 @@ const MapComponent: React.FC = () => {
       }
     }
   
-    // Also hide/show the department path polyline and its markers (from MGB overlays).
+    // Also hide/show the Department path polyline and its markers (from MGB overlays).
     if (mgbOverlays) {
       if (zoom < 20) {
-        // When zoomed out, hide the department overlay markers and polyline.
+        // When zoomed out, hide the Department overlay markers and polyline.
         mgbOverlays.navigationPolyline?.setVisible(false);
         if (mgbOverlays.markers) {
           mgbOverlays.markers.forEach(marker => marker.setVisible(false));
         }
       } else {
-        // When zoomed in, show the department overlay.
+        // When zoomed in, show the Department overlay.
         mgbOverlays.navigationPolyline?.setVisible(true);
         if (mgbOverlays.markers) {
           mgbOverlays.markers.forEach(marker => marker.setVisible(true));
@@ -358,7 +358,7 @@ const MapComponent: React.FC = () => {
                    contents=
                        {
         // put sidebar contents here:</p>
-        <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
+        <div className="h-[95vh] w-full p-5  border-[#003a96] flex flex-col gap-4 overflow-y-auto ">
           <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
           <GoogleMapSection
               startLocation={startLocation}

@@ -1,11 +1,11 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { InputHeader } from '../../signIn/InputHeader';
+import { InputHeader } from '../InputHeader.tsx';
 import { ErrorPopUp } from '../inputFields/ErrorPopUp';
 import { SRQDropdown } from '../inputFields/SRQDropdown';
 import { Combobox } from '../inputFields/Combobox';
 import { languages } from '../data/languages';
-import TextArea from '../../TextArea';
+import TextArea from '../TextArea.tsx';
 import { trpc } from '@/lib/trpc.ts';
 
 type FormStepsProps = {
@@ -219,7 +219,7 @@ export function FormSteps({
                                     value={location}
                                     setValue={(loc) => {
                                         setLocation(loc);
-                                        setDepartment(""); // Clear previous department
+                                        setDepartment(""); // Clear previous Department
                                         clearError("department");
                                     }}
                                     placeholder={'Select Location'}

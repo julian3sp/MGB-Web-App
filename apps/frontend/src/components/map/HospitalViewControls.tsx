@@ -5,9 +5,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuLabel
-} from '../ui/dropdown-menu';
-import ZoomControls from '../ZoomInAndOutButton';
-import RotateControl from '../RotateButton'
+} from '../MapEditor/DropdownMenu.tsx';
+import ZoomControls from './ZoomInAndOutButton.tsx';
+import RotateControl from './RotateButton.tsx'
 
 interface HospitalViewControlsProps {
   map: google.maps.Map | null;

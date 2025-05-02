@@ -1,19 +1,19 @@
 import { trpc } from '../../lib/trpc.ts';
 import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
-import DepartmentList from '../../components/DepartmentList.ts';
+import DepartmentList from '@/components/UI/DepartmentList.ts';
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
-import EditRequest from '@/components/ui/EditRequest.tsx';
-import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
+import EditRequest from '@/components/serviceRequest/EditRequest.tsx';
+import DeleteRequest from '@/components/serviceRequest/DeleteRequest.tsx';
 import { ServiceComponentDropdown } from '@/components/serviceRequest/inputFields/ServiceComponentDropdown.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
-import SubmitFormEdit from '@/components/ui/SubmitFormEdit.tsx';
-import ExitButton from '@/components/ui/ExitButton.tsx';
+import SubmitFormEdit from '@/components/serviceRequest/SubmitFormEdit.tsx';
+import ExitButton from '@/components/serviceRequest/ExitButton.tsx';
 import ServiceFormSideBar from '@/components/serviceRequest/ServiceFormSideBar.tsx';
-import PageWrapper from '@/components/ui/PageWrapper.tsx';
+import PageWrapper from '@/components/UI/PageWrapper.tsx';
 import ServiceRequestPage from '@/routes/ServiceRequestPage.tsx';
 
 /*

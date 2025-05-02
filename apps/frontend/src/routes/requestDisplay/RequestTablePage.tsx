@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useRequestData } from './RequestDataContext.tsx';
 import type { ServiceRequest } from '@/types.tsx';
 import { useNavigate } from 'react-router-dom';
-import DeleteRequest from '@/components/ui/DeleteRequest.tsx';
-import EditRequest from '@/components/ui/EditRequest.tsx';
-import ViewRequest from '@/components/ui/ViewRequest.tsx';
+import DeleteRequest from '@/components/serviceRequest/DeleteRequest.tsx';
+import EditRequest from '@/components/serviceRequest/EditRequest.tsx';
+import ViewRequest from '@/components/serviceRequest/ViewRequest.tsx';
 
 // function formatPhoneNumber(phone: string): string {
 //     // Get rid of all non numbers

@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { motion, useAnimationControls } from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
-import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
+import { AppleCardsCarouselDemo } from "@/components/UI/AppleCardsCarouselDemo.tsx";
 import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 

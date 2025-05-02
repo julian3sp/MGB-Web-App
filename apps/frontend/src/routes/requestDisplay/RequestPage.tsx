@@ -1,12 +1,12 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { Switch } from '../../components/ui/switch.tsx';
+import { Switch } from '../../components/serviceRequest/switch.tsx';
 import { trpc } from '@/lib/trpc.ts';
 import { RequestDataContext } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { ServiceRequest } from '@/types.tsx';
 import FilterIcon from '../../../assets/FilterIcon.png';
 import PlusIcon from '../../../assets/PlusIcon.png';
-import CustomSwitch from '@/components/ui/CustomSwitch.tsx';
+import CustomSwitch from '@/components/serviceRequest/CustomSwitch.tsx';
 
 //Handles closing the filter popup when you click outside the popup
 const useClickOutside = (handler: () => void) => {

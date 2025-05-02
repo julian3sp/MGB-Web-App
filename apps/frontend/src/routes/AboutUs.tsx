@@ -1,5 +1,5 @@
-import { BackgroundLines } from "../components/ui/background-lines";
-import { Card, CardContent } from "@/components/ui/card";
+import { BackgroundLines } from "../components/AboutUs/BackgroundLines.tsx";
+import { Card, CardContent } from "@/components/AboutUs/Card.tsx";
 
 
 import julian from "../../assets/team-f-photos/julian.png";

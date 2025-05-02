@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Check, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/components/UI/Button"
 import {
     Command,
     CommandEmpty,
@@ -11,12 +11,12 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-} from "@/components/ui/command"
+} from "@/components/UI/Command.tsx"
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "../../ui/Popover"
+} from "../Popover.tsx"
 
 export function Combobox({options, value, setValue, error, clearError, placeholder} : {
     options: string[];

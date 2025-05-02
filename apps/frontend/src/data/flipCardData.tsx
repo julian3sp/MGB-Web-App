@@ -19,7 +19,7 @@ import testingImg from '../../assets/insideMGB.png';
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
 import serviceImage from "../../assets/service.jpeg";
-import { CardContent } from "../components/department/CardContent.tsx";
+import { CardContent } from "@/components/Department/CardContent.tsx";
 
 
 

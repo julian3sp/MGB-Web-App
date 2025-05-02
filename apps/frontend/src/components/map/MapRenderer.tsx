@@ -190,7 +190,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
   }
 
-  // Handle department pathfinding
+  // Handle Department pathfinding
   useEffect(() => {
     if (
       !map ||
@@ -206,7 +206,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
 
-      // Fixed entrance node and target department node
+      // Fixed entrance node and target Department node
 
       const entrances: { [building: string]: number; } = {
         "MGB (Chestnut Hill)": 2707,
@@ -220,7 +220,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const target = graph.getNode(departmentNumber);
 
       if (!entrance || !target) {
-        console.error('Either the entrance or department node is missing');
+        console.error('Either the entrance or Department node is missing');
         return;
       }
 

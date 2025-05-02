@@ -2,7 +2,7 @@ import RequestForm from '../components/serviceRequest/RequestForm.tsx';
 import { useState } from 'react';
 import { trpc } from '../lib/trpc.ts';
 import { getRequests } from '../../../backend/src/server/procedures/requests.ts';
-import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import PageWrapper from "@/components/UI/PageWrapper.tsx";
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 
 export type serviceRequest = {

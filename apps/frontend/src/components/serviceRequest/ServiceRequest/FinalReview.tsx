@@ -1,8 +1,8 @@
-import { InputHeader } from '../../signIn/InputHeader';
+import { InputHeader } from '../InputHeader.tsx';
 import { ErrorPopUp } from '../inputFields/ErrorPopUp';
 import { SRQDropdown } from '../inputFields/SRQDropdown';
 import { Combobox } from '../inputFields/Combobox';
-import TextArea from '../../TextArea';
+import TextArea from '../TextArea.tsx';
 import { languages } from '../data/languages';
 import { trpc } from '@/lib/trpc.ts';
 
@@ -149,7 +149,7 @@ export function FinalReview({
                         value={location}
                         setValue={(loc) => {
                             setLocation(loc);
-                            setDepartment(''); // Clear previous department
+                            setDepartment(''); // Clear previous Department
                             clearError("department");
                         }}
                         placeholder="Select Location"

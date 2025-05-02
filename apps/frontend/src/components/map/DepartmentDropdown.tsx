@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Department_array from '../DepartmentList';//not needed anymore
+import Department_array from '@/components/UI/DepartmentList.ts';//not needed anymore
 import { trpc } from '../../lib/trpc.ts'
 import DepartmentIcon from '../../../assets/DepartmentIcon.png';
 

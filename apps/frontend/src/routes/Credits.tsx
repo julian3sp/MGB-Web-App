@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import CreditCard from '../components/CreditCard.tsx'
+import CreditCard from '../components/CreditPage/CreditCard.tsx'
 import Ian from '../../assets/Ian.png';
 import logo from '../../assets/Mass-General-Brigham-Logo.png';
 import postgre from '../../assets/postgre.png';

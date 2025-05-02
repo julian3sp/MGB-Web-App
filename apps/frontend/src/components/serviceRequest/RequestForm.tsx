@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 
-import ResetButton from '../ResetButton.tsx';
+import ResetButton from './ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
 import { ProgressBar } from './ServiceRequest/ProgressBar.tsx';
@@ -139,8 +139,8 @@ function RequestForm({ title, type }: requestFormProps) {
         }
 
         if (!department) {
-            errors.department = 'Please set a department';
-            console.log('department error');
+            errors.department = 'Please set a Department';
+            console.log('Department error');
         }
 
         if (!location) {

@@ -75,7 +75,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const makeNode = trpc.makeNode.useMutation();
     const makeEdge = trpc.makeEdge.useMutation()
-    const { data: largestArr, isLoading} = trpc.getLargestNodeId.useQuery();
+    const { data: largestArr, isLoading, refetch: refetchLargestId} = trpc.getLargestNodeId.useQuery();
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -545,8 +545,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         );
         worldCorners.forEach(m => m.position = null);
 
-        const firstNode = largestArr?.[0];
-        console.log(largestArr?.[0])
+        const { data: latestLargestArr } = await refetchLargestId();
+        const firstNode = latestLargestArr?.[0];
+        console.log("Largest node: " , largestArr?.[0])
 
         const building = ""
         form.append('name', 'test');

@@ -191,7 +191,10 @@ const MapComponent: React.FC = () => {
       };
 
       const mainCampusMapping: Record<string, number> = {
-        'test': 3000,
+        'Wound Care Center': 4684,
+        'Asthma Research Center': 4415,
+        'Emergency' : 4987,
+        'Neuroscience' : 5247
       };
 
 

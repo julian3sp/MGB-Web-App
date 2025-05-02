@@ -5,12 +5,9 @@
 
 */
 -- DropForeignKey
-ALTER TABLE "service_request" DROP CONSTRAINT "service_request_employee_id_fkey";
 
 -- AlterTable
-ALTER TABLE "service_request" ADD COLUMN     "assigned_employee" TEXT,
-ALTER COLUMN "employee_id" SET NOT NULL,
-ALTER COLUMN "language" DROP NOT NULL;
+
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -23,4 +20,3 @@ CREATE TABLE "User" (
 );
 
 -- AddForeignKey
-ALTER TABLE "service_request" ADD CONSTRAINT "service_request_assigned_employee_fkey" FOREIGN KEY ("assigned_employee") REFERENCES "employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;

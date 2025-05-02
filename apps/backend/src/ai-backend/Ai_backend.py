@@ -11,6 +11,7 @@ from flask_cors import CORS
 #pip install python-dotenv
 #pip install requests
 #pip install flask
+#pip install flask-cors
 
 load_dotenv()
 
@@ -65,7 +66,7 @@ def get_backend_context():
     context = (
         f"This is the hospital website in which you will be operating and basing all your data from.Always refer to the data from the website and advice that you are not a doctor and you should get help from a professional. "
         f"Here are the directories from each location: {directories}. "
-        f"Here are all the current services requests with their respective types: {requests}."
+        f"Here are all the current services requests(there are 8 types of requests Language, Sanitation, Security, Transportation, Audio/Visual, Medical and Facilities) with their respective types: {requests}."
         f"Here are all the employees in the hospital: {employees}. "
         f"Please answer the following questions based on this information. "
     )
@@ -76,7 +77,7 @@ def fetch_new_data(old_data):
     old_context = old_data
     new_context = fetch_data_from_api("http://localhost:3000/trpc/getDirectories"), fetch_data_from_api("http://localhost:3000/trpc/requestList"), fetch_data_from_api("http://localhost:3000/trpc/getEmployees")
     if old_context != new_context:
-        #print("New data fetched from API.")
+        print("New data fetched from API.")
         update = (f"the backend data has changed and here is the new data: {new_context}. "
                     f"Please answer based also in the new data aswell as what you had previously. ")
         chat_session.send_message(update)
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     while True:
         fetch_new_data(data)
         user_input = input("You: ")
-        if user_input.lower() in ["exit", "quit", "q", "bye"]:
+        if user_input.lower() in ["adios"]:
             print("Exiting the chat. Goodbye!")
             break
         response = chat(user_input)

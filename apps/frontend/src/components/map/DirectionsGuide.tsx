@@ -113,7 +113,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   return (
     <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg max-h-60 overflow-y-auto text-sm">
       <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold">Step-by-step directions</h3>
+            <h3 className="font-semibold">Text directions</h3>
             <button
               onClick={handleToggleSpeak}
               aria-label="Toggle directions speech"
@@ -123,7 +123,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
             </button>
             <button 
               onClick={() => setUseMetric(prev => !prev)}
-              className='text-md underline text-[#003a96] hover:text-blue-950 ml-3'
+              className='text-md text-[#003a96] font-bold ml-3 w-10 cursor-pointer'
             >
               {useMetric ? 'feet' : 'meters'}
             </button>

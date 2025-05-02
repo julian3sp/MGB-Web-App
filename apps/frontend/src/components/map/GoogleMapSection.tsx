@@ -165,7 +165,7 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             {selectedPlace && (
               <button
                 onClick={handleZoomToDestination}
-                className='mt-5 ml-1 px-3 py-2 mx-auto text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
+                className='px-3 py-2 mx-auto text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
               >
                 Zoom to destination
               </button>

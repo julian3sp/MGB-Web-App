@@ -242,15 +242,12 @@ export function ProgressBar(props: ProgressBarProps) {
                     </div>
                 )}
 
-                {/*/!* Step 3 Fields *!/*/}
-                {/*{(props.location && props.department && props.priority && props.status) && (*/}
-                {/*    <div className="space-y-2">*/}
-                {/*        <h3 className="font-semibold text-[13pt]">Step 3: {props.type} Details</h3>*/}
-                {/*        <ul className="space-y-1">*/}
-                {/*            */}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {/* Step 3 Fields */}
+                {(props.location && props.department && props.priority && props.status) && (
+                    <div className="space-y-2">
+                        <h3 className="font-semibold text-[13pt]">Step 3: Additional Information (Optional)</h3>
+                    </div>
+                )}
             </div>
         </div>
     );

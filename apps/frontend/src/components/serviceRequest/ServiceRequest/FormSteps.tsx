@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { InputHeader } from '../../signIn/InputHeader';
 import { ErrorPopUp } from '../inputFields/ErrorPopUp';
@@ -7,6 +7,7 @@ import { Combobox } from '../inputFields/Combobox';
 import { languages } from '../data/languages';
 import TextArea from '../../TextArea';
 import { trpc } from '@/lib/trpc.ts';
+import FileUploadService from "../../ui/fileUploadService.tsx"
 
 type FormStepsProps = {
     currentStep: number;
@@ -152,6 +153,7 @@ export function FormSteps({
         "Brigham & Women's Hospital Main Campus": ['Main Campus'], //None in CSV yet, assuming this would be format used
     };
 
+    const [files, setFiles] = useState<File[]>([])
     return (
         <div className="flex flex-col border-1 p-3  rounded-lg shadow-lg h-100">
             <div
@@ -544,6 +546,10 @@ export function FormSteps({
                                 value={comments}
                                 setState={setComments}
                             />
+                        </div>
+                        <div className="px-6 mt-4">
+                            <InputHeader children={'File Upload'} />
+                            <FileUploadService files={files} onFilesChange={setFiles} />
                         </div>
                     </motion.div>
                 </div>

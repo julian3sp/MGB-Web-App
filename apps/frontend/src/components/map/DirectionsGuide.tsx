@@ -47,7 +47,7 @@ const MuteIcon = () => (
 const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const [useMetric, setUseMetric] = useState(false);
 
   const convertDistance = (text: string | undefined): string => {
@@ -111,7 +111,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
       : 'text-gray-600 hover:text-blue-600';
 
   return (
-    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded shadow-lg max-h-96 overflow-y-auto text-sm">
+    <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded-md shadow-lg max-h-96 overflow-y-auto text-sm">
       <div className="flex justify-between items-center">
         <h3 className="font-semibold">Step-by-step directions</h3>
         <button
@@ -123,13 +123,13 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
         </button>
         <button
           onClick={() => setUseMetric(prev => !prev)}
-          className='text-md text-[#003a96] font-bold ml-3 w-10 cursor-pointer'
+          className='text-md text-[#003a96] font-bold ml-1 w-10 cursor-pointer'
         >
           {useMetric ? 'feet' : 'meters'}
         </button>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="transition duration-300 ease-in-out transform hover:scale-110"
+          className="transition duration-300 ease-in-out transform hover:scale-110 pl-[5px]"
         >
           {isDropdownOpen ? <ChevronDown /> : <ChevronUp />}
         </button>

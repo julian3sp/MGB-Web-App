@@ -3,6 +3,7 @@ import MapRenderer from './MapRenderer';
 import DisplayLottie from '../ui/DisplayLottie';
 import { TextGenerateEffectDemo } from '../GenerateText';
 import DepartmentDropdown from './DepartmentDropdown';
+import { ParkingLotButtons } from "../ParkingLotButtons.tsx";
 import GoogleMapSection, {
     calculateTravelTimes,
     formatDuration,
@@ -398,9 +399,9 @@ const MapComponent: React.FC = () => {
                         destination
                     </h2>
                     <div className="overflow-visible">
-                    <Accordion type="multiple" defaultValue={["item-1", "item-2"]} className={'w-full'}>
+                    <Accordion type="multiple" defaultValue={["item-1"]} className={'w-full'}>
                         <AccordionItem value={"item-1"}>
-                            <AccordionTrigger>Location</AccordionTrigger>
+                            <AccordionTrigger>Transit Directions</AccordionTrigger>
                             <AccordionContent className={"h-auto pb-8"}>
                         <GoogleMapSection
                             startLocation={startLocation}
@@ -411,6 +412,7 @@ const MapComponent: React.FC = () => {
                             handleStartLocationSelected={handleStartLocationSelected}
                             handleDestinationSelected={handleDestinationSelected}
                             handleViewMap={handleViewMap}
+                            directionsResult={directionsResult}
                             onTransportChange={(mode) => {
                                 setSelectedTransport(mode);
                                 if (
@@ -425,17 +427,25 @@ const MapComponent: React.FC = () => {
                             }}
                             handleGetCurrentLocation={handleGetCurrentLocation}
                         />
+
                             </AccordionContent>
                         </AccordionItem>
-
-                        {directionsResult && <AccordionItem value={"item3"}><AccordionTrigger>Directions</AccordionTrigger><AccordionContent className={"h-auto"}><DirectionsGuide directions={directionsResult} /> </AccordionContent></AccordionItem>}
                         <AccordionItem value={"item-2"}>
-                            <AccordionTrigger>Department</AccordionTrigger>
+                            <AccordionTrigger>Parking</AccordionTrigger>
+                            <AccordionContent className={"h-auto"}>
+                                {/* Select Department dropdown */}
+                                <div className="flex justify-between gap-3 items-center">
+                                    {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} />}
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value={"item-3"}>
+                            <AccordionTrigger>Hospital Department</AccordionTrigger>
                             <AccordionContent className={"h-auto"}>
                         {/* Select Department dropdown */}
-                        <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center pb-4">
-                            Select a department
-                        </h2>
+                        {/*<h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center pb-4">*/}
+                        {/*    Select a department*/}
+                        {/*</h2>*/}
                         <DepartmentDropdown
                             onDepartmentSelected={handleDepartmentSelected}
                             building={selectedPlace?.name ?? ''}

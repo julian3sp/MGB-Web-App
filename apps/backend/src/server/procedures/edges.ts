@@ -14,7 +14,7 @@ export const makeEdge = publicProcedure
         )
     )
     .mutation(async ({ input }) => {
-        console.log("Backend array: ", input)
+        console.log('Backend array: ', input);
         try {
             await client.edges.createMany({
                 data: input,

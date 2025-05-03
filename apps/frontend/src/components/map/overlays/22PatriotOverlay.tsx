@@ -1,4 +1,6 @@
-import floor3OverlayImg from '../../../../assets/pat22_floor3_rotated.png'
+// import floor3OverlayImg from '../../../../assets/pat22_floor3_rotated.png'
+
+import floor3OverlayImg from '../../../../assets/pat22Rotated/22-FLOOR1-1_rotated.png'
 import floor4OverlayImg from '../../../../assets/pat22_floor4_rotated.png'
 
 
@@ -9,8 +11,9 @@ export interface Patriot22Overlays {
 
 
 export const createPatriot22Overlays = (map: google.maps.Map) => {
-
-  const coordinates_3: number[] = [42.09319426546392 , 42.09195597432981 , -71.26619891316744 , -71.26765735462097]
+  const coordinates_1: number[] = [42.33823013520938 , 42.33485323661164 , -71.1045017426678 , -71.10960085746207]
+  const coordinates_3: number[] = [42.0930954228745 , 42.092208727856175 , -71.2663456485944 , -71.26744996670973]
+  // const coordinates_3: number[] = [42.09319426546392 , 42.09195597432981 , -71.26619891316744 , -71.26765735462097]
   const coordinates_4: number[] = [42.09317400927991 , 42.092096082400786 , -71.26633478170012 , -71.26760748755561]
 
   const bounds = {

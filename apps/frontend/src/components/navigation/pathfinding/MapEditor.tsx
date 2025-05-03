@@ -35,7 +35,7 @@ import PageWrapper from '@/components/ui/PageWrapper.tsx';
 import { createMainCampusOverlay } from '@/components/map/overlays/mainCampusOverlay.tsx';
 import { EditorPanel } from '../mapEditorComponent/EditorPanel.tsx';
 import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorners.tsx';
-import {ImageProcessorPanel, placeOverlay} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
+import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
 import {importGraphFromZip} from "@/components/importZipGraph.ts";
 import JSZip from 'jszip';
 
@@ -75,7 +75,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const deleteEdges = trpc.deleteSelectedEdges.useMutation();
     const makeNode = trpc.makeNode.useMutation();
     const makeEdge = trpc.makeEdge.useMutation()
-    const { data: largestArr, isLoading} = trpc.getLargestNodeId.useQuery();
+
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const [staticMarkers, setStaticMarkers] = useState<google.maps.Marker[]>([]);
     const [edgeRefresh, setEdgeRefresh] = useState(0);
@@ -297,6 +297,20 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         };
     }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
 
+    function buildingFloorKey(){
+        return selectedHospital === "MGB (Chestnut Hill)"
+            ? "chestnut"
+            : selectedHospital === "20 Patriot Place"
+                ? "pat20"
+                : selectedHospital === "22 Patriot Place"
+                    ? "pat22"
+                    : selectedHospital === "Main Campus"
+                        ? "mainCampus"
+                            : selectedHospital;
+    }
+
+
+
     function displayNodes() {
         if (!map || !selectedHospital || !markerLib) return;
 
@@ -514,11 +528,13 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [pixelCorners, setPixelCorners] = useState<[number, number][]>([]);
     const [worldCorners, setWorldCorners] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
     const [imgOverlay, setImgOverlay] = useState<google.maps.GroundOverlay | null>(null);
+    const { data: largestArr, isLoading, refetch: refetchLargestId} = trpc.getLargestNodeId.useQuery();
 
     async function sendToFastApi() {
         if (!imgFile || pixelCorners.length !== 4 || worldCorners.length !== 4) {
             return alert('Need all four image + map points!');
         }
+
 
         const form = new FormData();
 
@@ -542,12 +558,15 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 })
             )
         );
+        worldCorners.forEach(m => m.position = null);
 
-        const firstNode = largestArr?.[0];
+        const { data: latestLargestArr } = await refetchLargestId();
+        const firstNode = latestLargestArr?.[0];
+        console.log("Largest node: " , largestArr?.[0])
 
         form.append('name', 'test');
-        form.append('building', "pat20");
-        form.append('floor', "1");
+        form.append('building', buildingFloorKey());
+        form.append('floor', (selectedFloor ? selectedFloor.toString() : '1'));
         form.append('offset', (firstNode ? firstNode.id + 1 : 1).toString());
 
         try {
@@ -586,6 +605,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         await handleSubmit();
     }
 
+    function resetImageProcessor(){
+        setImgFile(null);
+        setPixelCorners([]);
+        setWorldCorners([]);
+        setImgOverlay(null);
+    }
 
 
     return (
@@ -604,7 +629,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
                         </button>
 
-                        {mode === 'edit' ?
+                        {mode === 'edit' ? (
                             <EditorPanel
                                 selectedNode={selectedNode}
                                 currentNodeType={currentNodeType}
@@ -613,23 +638,40 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 edgeMode={edgeMode}
                                 setEdgeMode={setEdgeMode}
                                 setShowEdges={setShowEdges}
-                                handleNodeTypeChange = {handleNodeTypeChange}
+                                handleNodeTypeChange={handleNodeTypeChange}
                             />
-                            :
-                            <ImageProcessorPanel
-                                map= {map}
-                                imgFile={imgFile}
-                                setImgFile={setImgFile}
-                                pixelCorners={pixelCorners}
-                                setPixelCorners={setPixelCorners}
-                                imgOverlay={imgOverlay}
-                                setImgOverlay={setImgOverlay}
-                                placeOverlay={placeOverlay}
-                                worldCorners={worldCorners}
-                                setWorldCorners={setWorldCorners}
-                                sendToFastApi={sendToFastApi}
-                            />
-                        }
+                        ) : !selectedFloor && !selectedHospital ? (
+                            <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
+                                Select Floor and Building
+                            </h2>
+                        ) : (
+                            <div className="flex flex-col gap-4">
+                                <div className="flex-grow">
+                                    <ImageProcessorPanel
+                                        map={map}
+                                        imgFile={imgFile}
+                                        setImgFile={setImgFile}
+                                        pixelCorners={pixelCorners}
+                                        // imgOverlay={imgOverlay}
+                                        // setImgOverlay={setImgOverlay}
+                                        // placeOverlay={placeOverlay}
+                                        setPixelCorners={setPixelCorners}
+                                        worldCorners={worldCorners}
+                                        setWorldCorners={setWorldCorners}
+                                        sendToFastApi={sendToFastApi}
+                                    />
+                                </div>
+
+                                <div className="pt-10">
+                                    <button
+                                        onClick={resetImageProcessor}
+                                        className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3"
+                                    >
+                                        Reset Image Processor
+                                    </button>
+                                </div>
+                            </div>
+                        )}
 
                     </div>
                 }

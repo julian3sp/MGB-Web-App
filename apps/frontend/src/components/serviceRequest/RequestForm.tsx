@@ -294,7 +294,7 @@ function RequestForm({ title, type }: requestFormProps) {
             status: status,
             request_type: type,
             additional_comments: comments,
-            image_upload: uploadedFileName,
+            image_upload: uploadedFileName ?? undefined,
             ...(type === 'Language' && {
                 language: {
                     sourceLanguage: sourceLanguage,

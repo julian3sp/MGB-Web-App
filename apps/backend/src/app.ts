@@ -40,7 +40,6 @@ import {
     makeManyEdges,
 } from './server/procedures/edges.ts';
 import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
-import uploadRouter from '../src/server/procedures/upload.ts'; // adjust path if needed
 import path from 'path';
 import uploadImageRouter from './server/procedures/uploadImage.ts';
 
@@ -83,14 +82,13 @@ const appRouter = t.router({
 });
 
 const app: Express = express(); // Set up the backend
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
+app.use('/uploads', express.static(path.join(__dirname, './uploads'))); // serve image files
+app.use('/upload-image', uploadImageRouter);
 app.use('/trpc', (req, res, next) => {
     console.log(`[TRPC] ${req.method} ${req.url}`);
     next();
 });
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // serve image files
-app.use('/upload', uploadRouter); // handle image upload
-app.use('/upload-image', uploadImageRouter);
 
 //------ Python Fetcher------------//
 import { createProxyMiddleware } from 'http-proxy-middleware';

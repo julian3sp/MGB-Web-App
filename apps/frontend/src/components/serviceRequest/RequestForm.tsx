@@ -270,7 +270,7 @@ function RequestForm({ title, type }: requestFormProps) {
             const imageFormData = new FormData();
             imageFormData.append('image_upload', files[0]);
 
-            const response = await fetch('http://localhost:3000/upload-image', {
+            const response = await fetch('http://localhost:3001/upload-image', {
                 method: 'POST',
                 body: imageFormData,
             });
@@ -396,9 +396,9 @@ function RequestForm({ title, type }: requestFormProps) {
 
     return (
         <div className={'w-full h-screen'}>
-            <div >
+            <div className={""}>
                 <form
-                    className=" ml-5 text-sm flex flex-row "
+                    className=" ml-5 text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
@@ -447,6 +447,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                 clearError={clearError}
                             />
                         ) : (
+                            <div className="max-h-[85vh] overflow-y-auto">
                             <FinalReview
                                 type={type}
                                 name={name} setName={setName}
@@ -470,9 +471,11 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
+                                files={files} setFiles={setFiles}
                                 errors={errors}
                                 clearError={clearError}
                             />
+                            </div>
 
                         )}
 

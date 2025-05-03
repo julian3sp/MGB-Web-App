@@ -243,7 +243,8 @@ export function ProgressBar(props: ProgressBarProps) {
                 )}
 
                 {/* Step 3 Fields */}
-                {(props.location && props.department && props.priority && props.status) && (
+                {(props.location && props.department && props.priority && props.status) && ((props.sourceLanguage && props.targetLanguage) || (props.cleaningType) || (props.accessZones && props.securityIssue) ||  (props.transportationType && props.transportationDestination) ||  (props.accommodationType) ||  (props.device && props.operatorRequired) ||  (props.maintenanceType && props.equipmentType)) && (
+
                     <div className="space-y-2">
                         <h3 className="font-semibold text-[13pt]">Step 3: Additional Information (Optional)</h3>
                     </div>

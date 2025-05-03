@@ -43,13 +43,12 @@ export default function FileUploadService({
                 <span className="text-sm font-medium text-gray-500">
           Drag and drop file(s) or click to browse
         </span>
-                <span className="text-xs text-gray-500">Only .pdf files accepted</span>
             </div>
 
             <input
                 ref={inputRef}
                 type="file"
-                accept=".pdf"
+                accept=".pdf, .png, .jpg, .jpeg, .webp, .heic, image/*"
                 multiple
                 onChange={handleFileChange}
                 className="hidden"

@@ -108,8 +108,8 @@ function InnerApp() {
                     <Route path="/editor" element={<MapEditor onMapReady={() => { }} />} />
                     <Route path="requests" element={<RequestPage />}>
                         <Route index element={<Navigate to="table" replace />} />
-                        <Route path="table" element={<RequestTablePage />} />
-                        <Route path="list" element={<RequestListPage />} />
+                        <Route path="table" element={<RequestTablePage userRole={userRole}/>} />
+                        <Route path="list" element={<RequestListPage userRole={userRole}/>} />
                     </Route>
                 </Route>
             </Routes>

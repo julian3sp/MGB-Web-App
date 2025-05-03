@@ -8,7 +8,7 @@
 **/.prisma
 **/.venv
 **/__pycache__
-
+**/imageAPI
 out
 
 # testing
@@ -41,3 +41,6 @@ out
 **/.vite
 backend\package.json
 __pycache__
+/apps/imageAPI/app/__pycache__
+/apps/imageAPI/.venv
+/apps/imageAPI

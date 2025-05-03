@@ -136,39 +136,29 @@ const MapComponent: React.FC = () => {
     function getDeptNum():number {
       const CNdepartmentMapping: Record<string, number> = {
         'Entrance': 2707,
-        'Multi-Specialty Clinic': 2573,
-        'Radiology': 2163,
-        'MRI': 2075,
-        'CT': 2108,
-        'Laboratory': 2630
+        'Multi-Specialty Clinic': 3592,
+        'Radiology': 3112,
+        'MRI': 3083,
+        'CT': 3076,
+        'Laboratory': 3556
       };
 
       const Pat20departmentMapping: Record<string, number> = {
-        'Blood Draw / Phlebotomy': 714,
-        'Pharmacy': 694,
-        'Orthopedics': 95,
-        'Rehabilitation': 10,
-        'Surgical Specialties': 204,
-        'Sports Medicine': 176,
-        'Day Surgery Center': 468,
-        'Pain Medicine': 351,
-        'Physiatry': 275,
-        'Pulmonary Testing': 271,
-        'Radiology': 535,
-        'Urgent Care Center': 817,
-        'Cardio Vascular Services': 859,
-        'Urology': 859,
-        'Main Entrance': 1139,
-        'South Entrance': 1027,
-        'Main Staircase': 1055,
-        'Main Checkin': 697,
-        'Reception': 814,
-        'East Checkin': 979,
-        'East Checkin 2': 988,
-        'East Elevator': 1063,
-        'East Staircase': 1063,
-        'East Entrance': 813,
-        'North Staircase': 54
+        'Urgent Care': 950,
+        'Urology': 973,
+        'Pharmacy': 766,
+        'Blood Work': 766,
+        'Radiology': 818,
+        'Cardiology': 973,
+        'Orthopedics': 1130,
+        'Rehabilitation': 1130,
+        'Surgical Specialties': 1239,
+        'Sports Medicine': 1215,
+        'Day Surgery': 1385,
+        'Pain Medicine/Nutrition': 1385,
+        'EMG': 1404,
+        'Physiatry': 1404,
+        'Pulmonary Testing': 1404
       };
       const Pat22departmentMapping: Record<string, number> = {
         'Gynecology': 1604,
@@ -176,18 +166,20 @@ const MapComponent: React.FC = () => {
         'Vein Treatment': 1798
       };
       const FaulknerMapping: Record<string, number> = {
-        'Admitting/Registration': 2774,
-        'Audiology': 2860,
-        'Blood Drawing Lab': 2863,
-        'Cardiac Rehab': 2838,
-        'Emergency Department': 2877,
-        'Endoscopy': 2882,
-        'MRI/CT': 2849,
-        'Pre-Admittance Screening': 2857,
-        'Pulmonary Lab': 2875,
-        'Radiology': 2831,
+        'Admitting/Registration': 3783,
+        'Audiology': 3868,
+        'Blood Drawing Lab': 3871,
+        'Cardiac Rehab': 3874,
+        'Emergency Department': 3886,
+        'Endoscopy': 3890,
+        'MRI/CT': 3857,
+        'Operation Rooms': 3895,
+        'Pre-Admittance Screening': 3865,
+        'Pulmonary Lab': 3883,
+        'Radiology': 3839,
         'Special Testing': 2881,
-        'Vascular Lab': 2883
+        'Vascular Lab': 3891,
+        'Recovery': 3880
       };
 
       const mainCampusMapping: Record<string, number> = {

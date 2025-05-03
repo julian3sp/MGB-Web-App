@@ -12,6 +12,9 @@ from flask_cors import CORS
 #pip install requests
 #pip install flask
 #pip install flask-cors
+#also make sure to cd to this location, run yarn dev first and then run this file. If something else happend then just call me
+#if you get this error: ERROR: Could not install packages due to an OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 
+#close all the terminals restart vs code and try again yarn install...
 
 load_dotenv()
 

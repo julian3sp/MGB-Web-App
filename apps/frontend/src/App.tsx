@@ -22,7 +22,7 @@ import RequestPage from "./routes/requestDisplay/RequestPage.tsx";
 import {Credits} from "./routes/Credits.tsx";
 
 function InnerApp() {
-    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+    const { user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     const [userRole, setUserRole] = React.useState<string>("Patient");
     const navigate = useNavigate();
     const location = useLocation();

@@ -44,12 +44,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const [patriot22Overlays, setPatriot22Overlays] = useState<Patriot22Overlays | null>(null);
   const [patriot20Overlays, setPatriot20Overlays] = useState<Patriot20Overlays | null>(null);
   const [mainCampusOverlays, setMainCampusOverlays] = useState<Patriot20Overlays | null>(null);
-  // Markers and visualization
-  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
-  const [showNodes, setShowNodes] = useState(false);
-  const [showEdges, setShowEdges] = useState(false);
-  const [nodeMarkers, setNodeMarkers] = useState<google.maps.Marker[]>([]);
-  const [edgePolylines, setEdgePolylines] = useState<google.maps.Polyline[]>([]);
 
   const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
@@ -178,7 +172,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
     const firstFloorNum: number = path[0].floor
-    const secondFloorStairs = path.find(n => n.floor != firstFloorNum);
+    const lastFloorNum: number = path[path.length - 1].floor
+    const secondFloorStairs = path.find(n => n.floor === lastFloorNum);
     if (secondFloorStairs) {
       const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
       const floor2 = path.slice(path.indexOf(secondFloorStairs))
@@ -209,8 +204,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Fixed entrance node and target department node
 
       const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 2707,
-        "20 Patriot Place": 113,
+        "MGB (Chestnut Hill)": 3715,
+        "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
         "Main Campus": 4963

@@ -6,6 +6,7 @@
 **/.turbo
 **/dist
 **/.prisma
+**/.venv
 
 out
 

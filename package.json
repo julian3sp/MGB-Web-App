@@ -41,6 +41,7 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-slot": "^1.2.0",

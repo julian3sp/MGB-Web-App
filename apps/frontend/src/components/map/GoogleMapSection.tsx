@@ -72,6 +72,7 @@ interface GoogleMapSectionProps {
   handleDestinationSelected: (destination: { name: string; location: { lat: number; lng: number } }) => void;
   handleViewMap: () => void;
   directionsResult: google.maps.DirectionsResult | null;
+  setAccordionItem:  React.Dispatch<React.SetStateAction<string[]>>;
   onTransportChange: (mode: 'driving' | 'walking' | 'transit') => void;
   handleGetCurrentLocation: () => void;
 }
@@ -86,6 +87,7 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
   handleDestinationSelected,
   handleViewMap,
   directionsResult,
+  setAccordionItem,
   onTransportChange,
   handleGetCurrentLocation
 }) => {
@@ -94,6 +96,7 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
       mapInstance.setZoom(20);
       mapInstance.panTo(selectedPlace.location)
     }
+    setAccordionItem(["item-2"]);
   }
   return (
     <div className="flex flex-col gap-0 items-center">

@@ -43,6 +43,7 @@ const MapComponent: React.FC = () => {
         floor: string[];
     } | null>(null);
     const [deptNumber, setDeptNumber] = useState<number | null>(null);
+    const [accordionItem, setAccordionItem] = useState<string[]>(["item-1"]);
     const [showHospitalMap, setShowHospitalMap] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [directionsResult, setDirectionsResult] = useState<google.maps.DirectionsResult | null>(
@@ -399,7 +400,7 @@ const MapComponent: React.FC = () => {
                         destination
                     </h2>
                     <div className="overflow-visible">
-                    <Accordion type="multiple" defaultValue={["item-1"]} className={'w-full'}>
+                    <Accordion type="multiple" value={accordionItem} onValueChange={setAccordionItem} defaultValue={["item-1"]} className={'w-full'}>
                         <AccordionItem value={"item-1"}>
                             <AccordionTrigger>Transit Directions</AccordionTrigger>
                             <AccordionContent className={"h-auto pb-8"}>
@@ -413,6 +414,7 @@ const MapComponent: React.FC = () => {
                             handleDestinationSelected={handleDestinationSelected}
                             handleViewMap={handleViewMap}
                             directionsResult={directionsResult}
+                            setAccordionItem={setAccordionItem}
                             onTransportChange={(mode) => {
                                 setSelectedTransport(mode);
                                 if (

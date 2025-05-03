@@ -23,7 +23,7 @@ const WaitingScreen = () => {
             onClick={handleClick}
         >
             <video
-                className="absolute inset-0 w-full h-full object-cover filter blur-xl scale-105"
+                className="absolute inset-0 w-full h-full object-cover filter blur-3xl scale-105"
                 src={movide}
                 autoPlay
                 muted
@@ -32,7 +32,7 @@ const WaitingScreen = () => {
             />
 
             {/* Foreground Content */}
-            <div className="relative p-10 rounded-xl max-w-5xl mx-auto">
+            <div className="relative p-10 rounded-3xl max-w-5xl mx-auto">
                 <h1 className="text-7xl font-bold mb-5 text-[#003a96]">
                     Welcome to Mass General Brigham.
                 </h1>

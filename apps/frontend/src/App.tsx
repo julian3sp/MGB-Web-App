@@ -24,7 +24,7 @@ import { AiFrontend } from './components/ai-chat/ai-frontend';
 import {ReviewPage} from "./routes/ReviewPage.tsx";
 
 function InnerApp() {
-    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+    const { user, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     const [userRole, setUserRole] = React.useState<string>("Patient");
     const navigate = useNavigate();
     const location = useLocation();
@@ -111,8 +111,8 @@ function InnerApp() {
                     <Route path="/editor" element={<MapEditor onMapReady={() => { }} />} />
                     <Route path="requests" element={<RequestPage />}>
                         <Route index element={<Navigate to="table" replace />} />
-                        <Route path="table" element={<RequestTablePage />} />
-                        <Route path="list" element={<RequestListPage />} />
+                        <Route path="table" element={<RequestTablePage userRole={userRole}/>} />
+                        <Route path="list" element={<RequestListPage userRole={userRole}/>} />
                     </Route>
                 </Route>
             </Routes>

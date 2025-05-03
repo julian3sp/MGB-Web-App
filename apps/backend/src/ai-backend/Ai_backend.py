@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 import requests
 import json
 from flask import Flask, jsonify, request
@@ -8,7 +8,7 @@ from flask_cors import CORS
 
 # If you wondering why doesnt it work try this
 #pip install google-generativeai
-#pip install python-dotenv
+#pip install python-dotenv(if it doesnt work uninstall it and install it again)
 #pip install requests
 #pip install flask
 #pip install flask-cors

@@ -170,13 +170,6 @@ export default function NavBar({ userRole, setUserRole }: Props) {
                         Navigation
                     </Link>
                     
-                    <Link
-                        to="/chatbot"
-                        onClick={() => setTab("Ai Assistant")}
-                        className={getNavLinkClass("Ai Assistant")}
-                    >
-                        Ai Assistant
-                    </Link>
 
                     {isAuthenticated && (userRole === "Staff" || userRole === "Admin") && (
                         <>

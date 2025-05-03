@@ -103,7 +103,6 @@ function InnerApp() {
                 <Route path="/directory" element={<BryanDirectoryPage />} />
                 <Route path="/aboutus" element={<AboutUs />} />
                 <Route path="/credits" element={<Credits />} />
-                <Route path="/chatbot" element={<AiFrontend />} />
                 <Route element={<PrivateRoutes />}>
                     <Route path="/services" element={<ServiceRequestPage />} />
                     <Route path="/admin/directory" element={<DirectoryPage />} />
@@ -116,7 +115,10 @@ function InnerApp() {
                 </Route>
             </Routes>
             {location.pathname !== '/waiting' && (
-                <FooterBar />
+                <>
+                    <FooterBar />
+                    <AiFrontend /> {/* Add the chat component here */}
+                </>
             )}
         </div>
     );

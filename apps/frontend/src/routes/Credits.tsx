@@ -14,6 +14,10 @@ import gsap from '../../assets/gsap.jpg';
 import framer from '../../assets/framer.png';
 import motion from '../../assets/motion.jfif';
 import aceternity from '../../assets/aceternity.png';
+import shadcn from '../../assets/shadcn.png';
+import auth0 from '../../assets/auth0.png';
+import maps from '../../assets/googlemaps.png';
+import trpc from '../../assets/trpc.png';
 
 export function Credits() {
     return (
@@ -52,6 +56,15 @@ export function Credits() {
                 <CreditCard image={motion} title="Motion" description="Animation Library" docs="https://motion.dev/" />
                 <p className="p-2"></p>
                 <CreditCard image={aceternity} title="Aceternity UI" description="UI Component Library" docs="https://ui.aceternity.com/components" />
+            </div>
+            <div className="flex justify-center h-110">
+                <CreditCard image={shadcn} title="Shadcn" description="UI Component Library" docs="https://ui.shadcn.com/" />
+                <p className="p-2"></p>
+                <CreditCard image={auth0} title="Auth0" description="User authentication platform" docs="https://auth0.com/" />
+                <p className="p-2"></p>
+                <CreditCard image={maps} title="Google Maps" description="Maps JavaScript API" docs="https://developers.google.com/maps/documentation/javascript" />
+                <p className="p-2"></p>
+                <CreditCard image={trpc} title="tRPC" description="Simplifies building type-safe APIs" docs="https://trpc.io/" />
             </div>
             <p className="flex justify-center font-bold pt-5 text-xl">Thank you to our sponsor!</p>
             <Link to="https://www.massgeneralbrigham.org/en">

@@ -102,9 +102,13 @@ Do NOT give medical advice. Always recommend users speak with a professional.Als
         <div className="fixed bottom-4 right-4 z-[9999]">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="bg-[#003a96] text-white p-4 rounded-full shadow-lg hover:bg-blue-950 transition-colors"
+                className="bg-[#003a96] text-white w-[48px] h-[48px] rounded-full shadow-lg hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl"
             >
-                {isOpen ? "×" : "💬"}
+                {isOpen ? (
+                    <span className="transform translate-y-[-1px]">×</span>
+                ) : (
+                    <span>💬</span>
+                )}
             </button>
 
             {isOpen && (

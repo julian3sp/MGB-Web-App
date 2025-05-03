@@ -30,7 +30,7 @@ const end = digits.slice(6, 10);
 return `(${start}) ${middle}-${end}`;
 */
 
-export default function RequestListPage() {
+export default function RequestListPage({userRole}: {userRole: string}) {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
@@ -385,8 +385,7 @@ export default function RequestListPage() {
                                             size={20}
                                             onClick={() => {
                                                 if (
-                                                    window.sessionStorage.getItem('isAdmin') ===
-                                                    'true'
+                                                    userRole === "Admin"
                                                 ) {
                                                     console.log('Delete: ');
                                                     console.log(selectedRequest);

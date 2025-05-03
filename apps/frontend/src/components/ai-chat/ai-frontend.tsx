@@ -6,6 +6,7 @@ const api_key = import.meta.env.VITE_GOOGLE_API_KEY;
 if (!api_key) {
     console.error("Missing API key. Please check your .env.local file");
 }
+//dont use ai backend
 
 const genAI = new GoogleGenerativeAI(api_key, { apiVersion: 'v1' });
 

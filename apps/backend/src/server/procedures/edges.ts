@@ -14,13 +14,12 @@ export const makeEdge = publicProcedure
         )
     )
     .mutation(async ({ input }) => {
-        console.log('Backend array: ', input);
         try {
             await client.edges.createMany({
                 data: input,
             });
         } catch (error) {
-            console.error('1st CreateMany error:', error);
+            console.error('CreateMany error:', error);
             console.log('Edges attempted to insert:', input);
         }
     });

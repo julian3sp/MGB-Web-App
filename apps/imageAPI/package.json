@@ -5,6 +5,6 @@
   "scripts": {
     "dev": "cmd \"/k call \"$INIT_CWD/.venv/Scripts/activate.bat\" && uvicorn app.main:app --reload --port 8000\" || sh \"$INIT_CWD/.venv/bin/activate && uvicorn app.main:app --reload --port 8000\"",
     "build": "echo 'Python build – nothing to do'",
-    "postinstall": "(python -m venv \"$INIT_CWD/.venv\" || python3 -m venv \"$INIT_CWD/.venv\") && (cmd \"/k call \"$INIT_CWD/.venv/Scripts/activate.bat\" && pip install -r \"$INIT_CWD/requirements.txt\"\" || sh \"$INIT_CWD/.venv/bin/activate && pip install -r ”$INIT_CWD/requirements.txt”\")"
+    "postinstall": "(python3 -m venv \"$INIT_CWD/.venv\" || python3 -m venv \"$INIT_CWD/.venv\") && (cmd \"/k call \\\"$INIT_CWD/.venv/Scripts/activate.bat\\\" && pip install -r \\\"$INIT_CWD/requirements.txt\\\"\" || sh -c 'source \"$INIT_CWD/.venv/bin/activate\" && pip install -r \"$INIT_CWD/requirements.txt\"')"
   }
 }

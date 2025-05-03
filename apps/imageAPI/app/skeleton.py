@@ -14,7 +14,7 @@ import numpy as np
 from itertools import combinations
 from dataclasses import dataclass
 import networkx as nx
-import os, cv2, csv, math
+import cv2, csv, math
 from collections import deque
 
 def annotate_nodes(skeleton_img):
@@ -86,8 +86,7 @@ def nodes_to_csv(newNodes, csv_filename, building, floor, source_points, target_
       source_points (np.ndarray): 2D array of source points used for estimating homography.
       target_points (np.ndarray): 2D array of corresponding target (world) coordinates.
     """
-    import numpy as np
-    import os, csv
+
 
     # Create an (N, 2) array of coordinates from newNodes.
     # Note: The nodes are stored as (x, y) where x is typically the column and y is the row.

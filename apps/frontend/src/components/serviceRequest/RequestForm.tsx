@@ -39,6 +39,7 @@ function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
     const [comments, setComments] = useState('');
+    const [files, setFiles] = useState<File[]>([]);
     const [employeeID, setEmployeeID] = useState('');
     const [priority, setPriority] = useState<string>("");
     const [location, setLocation] = useState<string>("");
@@ -251,8 +252,7 @@ function RequestForm({ title, type }: requestFormProps) {
         return true;
     };
 
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
         const isValid = form.checkValidity();
@@ -260,8 +260,30 @@ function RequestForm({ title, type }: requestFormProps) {
         if (Validate()) {
             console.log('submission error')
             return;
+        } else {
+            setOpen(true);
         }
-        else { setOpen(true); }
+
+        let uploadedFileName: string | undefined = undefined;
+
+        if (files && files.length > 0) {
+            const imageFormData = new FormData();
+            imageFormData.append('image_upload', files[0]);
+
+            const response = await fetch('http://localhost:3000/upload-image', {
+                method: 'POST',
+                body: imageFormData,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                uploadedFileName = result.filename;
+            } else {
+                console.error('Image upload failed:', result.error);
+                return;
+            }
+        }
+
 
         mutation.mutate({
             name: name,
@@ -272,6 +294,7 @@ function RequestForm({ title, type }: requestFormProps) {
             status: status,
             request_type: type,
             additional_comments: comments,
+            image_upload: uploadedFileName,
             ...(type === 'Language' && {
                 language: {
                     sourceLanguage: sourceLanguage,
@@ -324,6 +347,7 @@ function RequestForm({ title, type }: requestFormProps) {
         setName('');
         setEmployeeID('');
         setComments('');
+        setFiles([]);
         setLocation('');
         setDepartment('');
         setStatus('');
@@ -418,6 +442,7 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
+                                files={files} setFiles={setFiles}
                                 errors={errors}
                                 clearError={clearError}
                             />

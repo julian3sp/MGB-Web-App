@@ -54,6 +54,8 @@ type FormStepsProps = {
     setEquipmentType: (value: string) => void;
     comments: string;
     setComments: (value: string) => void;
+    files: File[];
+    setFiles: (files: File[]) => void;
     errors: any;
     clearError: (field: string) => void;
     formValid: boolean;
@@ -104,6 +106,8 @@ export function FormSteps({
     setEquipmentType,
     comments,
     setComments,
+    files,
+    setFiles,
     errors,
     clearError,
     formValid,
@@ -153,7 +157,6 @@ export function FormSteps({
         "Brigham & Women's Hospital Main Campus": ['Main Campus'], //None in CSV yet, assuming this would be format used
     };
 
-    const [files, setFiles] = useState<File[]>([])
     return (
         <div className="flex flex-col border-1 p-3 rounded-lg shadow-lg">
             <div

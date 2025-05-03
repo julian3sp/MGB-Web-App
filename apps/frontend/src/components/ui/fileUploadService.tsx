@@ -3,12 +3,12 @@
 import { useRef } from "react";
 
 interface FileUploadCardProps {
-    files: File[];
+    files?: File[];
     onFilesChange: (files: File[]) => void;
 }
 
 export default function FileUploadService({
-                                              files,
+                                              files = [],
                                               onFilesChange,
                                           }: FileUploadCardProps) {
     const inputRef = useRef<HTMLInputElement>(null);

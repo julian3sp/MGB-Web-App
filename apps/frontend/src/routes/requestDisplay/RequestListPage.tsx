@@ -810,6 +810,20 @@ export default function RequestListPage() {
                                     </ul>
                                     </div>
                                 </div>
+                                {selectedRequest.image_upload && (
+                                    <div className="border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg ml-6 mr-6 mt-4 p-3">
+                                        <h3 className="text-[14pt] font-semibold p-3 font-[Poppins]" style={{ color: '#003A96' }}>
+                                            Uploaded Image:
+                                        </h3>
+                                        <div className="flex justify-center p-3">
+                                            <img
+                                                src={`http://localhost:3000/uploads/${selectedRequest.image_upload}`}
+                                                alt="Uploaded File"
+                                                className="max-w-full max-h-[400px] rounded-md border"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
 
                             </div>
 

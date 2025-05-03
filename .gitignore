@@ -46,4 +46,4 @@ __pycache__/
 *.pyc
 
 #ignore uploaded iamges
-/backend/src/uploads/
+/backend/src/uploads/*

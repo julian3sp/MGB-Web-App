@@ -1,9 +1,13 @@
 import SubmitButton from "../components/SubmitButton.tsx";
 import React, { useState } from "react";
+import { trpc } from "@/lib/trpc.ts";
 
 export function ReviewPage() {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(0);
+
+    // Use the TRPC mutation for `makeReview`
+    const makeReviewMutation = trpc.makeReview.useMutation();
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(e.target.value);
@@ -13,9 +17,22 @@ export function ReviewPage() {
         setRating(value);
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        alert(`Rating: ${rating}\nReview: ${text}`);
+
+        try {
+            // Call the `makeReview` mutation
+            const newReview = await makeReviewMutation.mutateAsync({
+                review: text,
+                rating: rating,
+            });
+
+            console.log("Review created:", newReview);
+            alert("Review submitted successfully!");
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            alert("Failed to submit review.");
+        }
     };
 
     return (
@@ -29,7 +46,7 @@ export function ReviewPage() {
                             key={star}
                             type="button"
                             onClick={() => handleRatingClick(star)}
-                            className={`text-3xl ${star <= rating ? 'text-yellow-500' : 'text-gray-400'}`}
+                            className={`text-3xl ${star <= rating ? "text-yellow-500" : "text-gray-400"}`}
                         >
                             ★
                         </button>

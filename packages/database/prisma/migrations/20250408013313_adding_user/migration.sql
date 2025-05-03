@@ -7,7 +7,9 @@
 -- DropForeignKey
 
 -- AlterTable
-
+ALTER TABLE "service_request" 
+ALTER COLUMN "employee_id" SET NOT NULL,
+ALTER COLUMN "language" DROP NOT NULL;
 
 -- CreateTable
 CREATE TABLE "User" (

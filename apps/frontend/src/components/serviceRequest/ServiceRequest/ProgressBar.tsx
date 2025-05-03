@@ -12,8 +12,6 @@ type ProgressBarProps = {
     department: string;
     priority: string;
     status: string;
-
-    // Step 3 fields (varies by type, 1-2 fields = 12.5-25% total)
     type: string;
     sourceLanguage?: string;
     targetLanguage?: string;
@@ -27,6 +25,9 @@ type ProgressBarProps = {
     operatorRequired?: string;
     maintenanceType?: string;
     equipmentType?: string;
+
+    // Step 3 fields (varies by type, 1-2 fields = 12.5-25% total)
+
 };
 
 export function ProgressBar(props: ProgressBarProps) {
@@ -50,7 +51,6 @@ export function ProgressBar(props: ProgressBarProps) {
         if (props.priority) progress += 12.5;
         if (props.status) progress += 12.5;
 
-        // Step 3: Type-specific fields (12.5% each)
         switch (props.type) {
             case "Language":
                 if (props.sourceLanguage) progress += 12.5;
@@ -79,6 +79,9 @@ export function ProgressBar(props: ProgressBarProps) {
                 if (props.equipmentType) progress += 12.5;
                 break;
         }
+
+        // Step 3: Type-specific fields (12.5% each)
+
 
         const roundedProgress = Math.round(Math.min(progress, 100));
         setTotalPercent(roundedProgress);
@@ -226,15 +229,6 @@ export function ProgressBar(props: ProgressBarProps) {
                             >
                                 {props.status ? "✓" : "•"} Status
                             </motion.li>
-                        </ul>
-                    </div>
-                )}
-
-                {/* Step 3 Fields */}
-                {(props.location && props.department && props.priority && props.status) && (
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-[13pt]">Step 3: {props.type} Details</h3>
-                        <ul className="space-y-1">
                             {getStep3Fields().map((field, index) => (
                                 <motion.li
                                     key={index}
@@ -247,6 +241,16 @@ export function ProgressBar(props: ProgressBarProps) {
                         </ul>
                     </div>
                 )}
+
+                {/*/!* Step 3 Fields *!/*/}
+                {/*{(props.location && props.department && props.priority && props.status) && (*/}
+                {/*    <div className="space-y-2">*/}
+                {/*        <h3 className="font-semibold text-[13pt]">Step 3: {props.type} Details</h3>*/}
+                {/*        <ul className="space-y-1">*/}
+                {/*            */}
+                {/*        </ul>*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
         </div>
     );

@@ -20,6 +20,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
+import { NavButton } from '../NavButton.tsx';
 
 const MapComponent: React.FC = () => {
     const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -54,6 +55,7 @@ const MapComponent: React.FC = () => {
     );
     const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<number>(1);
+    const [checkInDesk, setCheckInDesk] = useState<boolean>(true);
     const [travelTimes, setTravelTimes] = useState<TravelTimes>({
         driving: null,
         transit: null,
@@ -101,6 +103,11 @@ const MapComponent: React.FC = () => {
         console.log(`Floor changed to: ${floor}`);
         setSelectedFloor(floor);
     };
+
+    const handleCheckInToggle = () => {
+        console.log('Check In Toggled');
+        setCheckInDesk(!checkInDesk);
+    }
 
     // Zoom-to-Destination button handler
     const handleZoomToDestination = () => {
@@ -437,7 +444,7 @@ const MapComponent: React.FC = () => {
                             <AccordionContent className={"h-auto"}>
                                 {/* Select Department dropdown */}
                                 <div className="flex justify-between gap-3 items-center">
-                                    {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} />}
+                                    {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} setAccordionItem={setAccordionItem}/>}
                                 </div>
                             </AccordionContent>
                         </AccordionItem>
@@ -448,10 +455,13 @@ const MapComponent: React.FC = () => {
                         {/*<h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center pb-4">*/}
                         {/*    Select a department*/}
                         {/*</h2>*/}
-                        <DepartmentDropdown
-                            onDepartmentSelected={handleDepartmentSelected}
-                            building={selectedPlace?.name ?? ''}
-                        />
+                                <DepartmentDropdown
+                                    onDepartmentSelected={handleDepartmentSelected}
+                                    building={selectedPlace?.name ?? ''}
+                                />
+                                <br />
+                                {checkInDesk ? <NavButton onClick={handleCheckInToggle}>Direct to Department</NavButton> : <NavButton onClick={handleCheckInToggle}>Direct to Check In Desk</NavButton>}
+
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>

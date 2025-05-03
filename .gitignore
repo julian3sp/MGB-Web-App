@@ -44,3 +44,6 @@ backend\package.json
 .venv/
 __pycache__/
 *.pyc
+
+#ignore uploaded iamges
+/backend/src/uploads/

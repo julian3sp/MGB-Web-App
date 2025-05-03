@@ -155,10 +155,10 @@ export function FormSteps({
 
     const [files, setFiles] = useState<File[]>([])
     return (
-        <div className="flex flex-col border-1 p-3  rounded-lg shadow-lg h-100">
+        <div className="flex flex-col border-1 p-3 rounded-lg shadow-lg">
             <div
                 ref={scrollContainerRef}
-                className="snap-y snap-mandatory overflow-y-auto w-full h-96 scroll-smooth"
+                className={`snap-y snap-mandatory overflow-y-auto w-full scroll-smooth ${currentStep === 3 ? `h-116` : 'h-96'}`} // grow more for step 3 to allow file names to be visible
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {/* Step 1 */}
@@ -529,7 +529,7 @@ export function FormSteps({
                 </div>
 
                 {/* Step 3 */}
-                <div className="snap-start w-full h-full flex flex-col">
+                <div className="snap-start w-full flex flex-col overflow-y-auto h-screen">
                     <motion.div
                         key="step3"
                         initial={{ y: 100, opacity: 0 }}
@@ -547,7 +547,7 @@ export function FormSteps({
                                 setState={setComments}
                             />
                         </div>
-                        <div className="px-6 mt-4">
+                        <div className="px-6 mt-4 h-auto">
                             <InputHeader children={'File Upload'} />
                             <FileUploadService files={files} onFilesChange={setFiles} />
                         </div>

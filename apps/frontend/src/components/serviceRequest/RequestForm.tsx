@@ -371,14 +371,14 @@ function RequestForm({ title, type }: requestFormProps) {
 
 
     return (
-        <div className={'w-full'}>
+        <div className={'w-full h-screen'}>
             <div >
                 <form
                     className=" ml-5 text-sm flex flex-row "
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-full  flex flex-col gap-5 gap-x-10">
+                    <div className="w-full flex flex-col gap-5 gap-x-10">
                         <motion.div
                             key="step1"
                             initial={{ y: 100, opacity: 0 }}

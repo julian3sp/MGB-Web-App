@@ -104,6 +104,7 @@ if __name__ == "__main__":
     get_backend_context()
     app.run(port=3001,debug=True)
     while True:
+        user_input = input("You: ")
         data = fetch_new_data(data)
         if user_input.lower() in ["adios"]:
             print("Exiting the chat. Goodbye!")

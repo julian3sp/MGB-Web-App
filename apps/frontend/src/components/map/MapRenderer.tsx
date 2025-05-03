@@ -209,8 +209,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       // Fixed entrance node and target department node
 
       const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 2707,
-        "20 Patriot Place": 113,
+        "MGB (Chestnut Hill)": 3715,
+        "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
         "Main Campus": 4963

@@ -18,7 +18,6 @@ export const makeNode = publicProcedure
         )
     )
     .mutation(async ({ input }) => {
-        console.log('createMany Called');
         return client.nodes.createMany({ data: input });
     });
 
@@ -47,7 +46,6 @@ export const makeManyNodes = publicProcedure
     .input(
         z.array(
             z.object({
-                id: z.optional(z.number()),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string().nullable(),

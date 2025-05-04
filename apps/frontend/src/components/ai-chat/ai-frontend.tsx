@@ -33,6 +33,28 @@ If they want to make a service request, guide them in the UI to click on service
 If you don't have info about any of the DB, remind the user to import a CSV or populate the database.
 `;
 
+    //close on clickaway
+    const useClickOutside = (handler: () => void) => {
+        const reference = useRef();
+
+        useEffect(() => {
+            const newHandler = (event: MouseEvent) => {
+                if (!reference.current?.contains(event.target)) handler();
+            };
+
+            document.addEventListener('mousedown', newHandler);
+
+            return () => {
+                document.removeEventListener('mousedown', newHandler);
+            };
+        }, [handler]);
+        return reference;
+    };
+
+    const chatBoxRef = useClickOutside(() => {
+        setIsOpen(false);
+    });
+
     // Auto-scroll effect
     useEffect(() => {
         if (messagesEndRef.current) {
@@ -109,28 +131,49 @@ If you don't have info about any of the DB, remind the user to import a CSV or p
     };
 
     return (
-        <div className="fixed bottom-4 right-4 z-[9999] font-poppins">
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`${
-                    isOpen 
-                        ? "bg-[#003a96] text-white" 
-                        : "bg-[#003a96] text-black"
-                } w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
-            >
-                {isOpen ? (
-                    <span className="transform translate-y-[-1px]">×</span>
-                ) : (
+        <div ref={chatBoxRef} className="fixed bottom-4 right-4 z-[9999] font-poppins">
+
+            {!isOpen ? (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className={`${
+                        isOpen
+                            ? "bg-[#003a96] text-white"
+                            : "bg-[#003a96] text-black"
+                    } cursor-pointer w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
+                >
                     <span>💬</span>
-                )}
-            </button>
+                </button>
+            ) : (
+                <button
+                    onClick={() => setIsOpen(false)}
+                    className={`${
+                        isOpen
+                            ? "bg-[#003a96] text-white"
+                            : "bg-[#003a96] text-black"
+                    } cursor-pointer w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
+                >
+                    <span className="transform translate-y-[-1px]">×</span>
+                </button>
+
+            )}
+
 
             {isOpen && (
                 <div className="absolute bottom-16 right-0 w-96 bg-white rounded-lg shadow-md">
                     <div className="flex flex-col h-[600px]">
+
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="absolute top-2 right-2 text-white text-3xl font-semibold cursor-pointer"
+                        >
+                            &times;
+                        </button>
+
                         <div className="p-4 border-b-5 border-[#44a6a6] bg-[#003a96] text-white rounded-t-lg">
                             <h2 className="text-xl font-bold font-poppins">AI Assistant</h2>
                         </div>
+
 
                         <div className="flex-1 overflow-y-scroll px-4 py-3 space-y-4">
                             {messages.map((message, index) => (
@@ -164,7 +207,7 @@ If you don't have info about any of the DB, remind the user to import a CSV or p
                                 />
                                 <button
                                     type="submit"
-                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950 shadow-md"
+                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950 shadow-md cursor-pointer"
                                 >
                                     Send
                                 </button>

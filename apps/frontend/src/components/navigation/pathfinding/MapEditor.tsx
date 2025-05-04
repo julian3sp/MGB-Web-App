@@ -266,7 +266,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
 
-    useEffect( () => {
+    useEffect(() => {
         if (!map || !selectedHospital || !showNodes) return;
 
         // detach any previous listener
@@ -282,27 +282,43 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     : selectedHospital === "Main Campus"
                         ? "mainCampus"
                         : selectedHospital;
-        async function fetchData() {
-            const { data: latestLargestArr } = await refetchLargestId();
-            return latestLargestArr?.[0];
-        }
-        const firstNode = fetchData()
 
-        // attach a single dbl-click listener
-        nodeListenerRef.current = addNodeListener(
-            map,
-            buildingKey,
-            floor,
-            setNodeDetails,
-            marker => setStaticMarkers(prev => [...prev, marker]),
-            firstNode
-        );
+        // Create an async IIFE (Immediately Invoked Function Expression)
+        (async () => {
+            try {
+                const firstNode = await fetchData();
+
+                if (!firstNode) {
+                    console.log("Bad fetch large");
+                    return;
+                }
+
+                console.log("Fetched node: ", firstNode);
+
+                // attach a single dbl-click listener
+                nodeListenerRef.current = addNodeListener(
+                    map,
+                    buildingKey,
+                    floor,
+                    setNodeDetails,
+                    marker => setStaticMarkers(prev => [...prev, marker]),
+                    firstNode
+                );
+            } catch (error) {
+                console.error("Error fetching node data:", error);
+            }
+        })();
 
         return () => {
             nodeListenerRef.current?.remove();
             nodeListenerRef.current = null;
         };
     }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
+
+    async function fetchData() {
+        const { data: latestLargestArr } = await refetchLargestId();
+        return latestLargestArr?.[0];
+    }
 
     function buildingFloorKey(){
         return selectedHospital === "MGB (Chestnut Hill)"

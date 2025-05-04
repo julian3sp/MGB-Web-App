@@ -129,21 +129,21 @@ Also important if you dont have info about any of the db remind the user to impo
                         <div className="flex-1 overflow-y-auto p-4 space-y-3 shadow-md">
                             {messages.map((message, index) => (
                                 <div
-                                    key={index}
-                                    className={`
-                                        px-4 py-2 rounded-lg shadow-md w-fit break-words
-                                        ${message.sender === "user"
-                                          ? "ml-auto bg-blue-200 text-right"
-                                          : "mr-auto bg-gray-200 text-left"}
-                                      `}
-                                      style={{ maxWidth: "80%" }}
-                                    >
+                                key={index}
+                                className={`
+                                  px-4 py-2 rounded-lg shadow-md w-fit break-words
+                                  ${message.sender === "user"
+                                    ? "ml-auto bg-blue-200 text-right"
+                                    : "mr-auto bg-gray-200 text-left"}
+                                `}
+                                style={{ maxWidth: "80%" }}
+                              >
                                     {message.text}
                                 </div>
                             ))}
                         </div>
 
-                        <form onSubmit={handleSubmit} className="p-4 bg-white border-t-2 rounded-b-lg" style={{ borderTopColor: '#ECECEC' }}>
+                        <form onSubmit={handleSubmit} className="p-4 bg-white border-t-2 rounded-b-lg"style={{ borderTopColor: '#ECECEC' }}>
                             <div className="flex gap-2">
                                 <input
                                     type="text"

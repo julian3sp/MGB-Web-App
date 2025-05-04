@@ -140,7 +140,7 @@ If you don't have info about any of the DB, remind the user to import a CSV or p
                         isOpen
                             ? "bg-[#003a96] text-white"
                             : "bg-[#003a96] text-black"
-                    } w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
+                    } cursor-pointer w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
                 >
                     <span>💬</span>
                 </button>
@@ -151,7 +151,7 @@ If you don't have info about any of the DB, remind the user to import a CSV or p
                         isOpen
                             ? "bg-[#003a96] text-white"
                             : "bg-[#003a96] text-black"
-                    } w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
+                    } cursor-pointer w-[48px] h-[48px] rounded-full hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
                 >
                     <span className="transform translate-y-[-1px]">×</span>
                 </button>
@@ -207,7 +207,7 @@ If you don't have info about any of the DB, remind the user to import a CSV or p
                                 />
                                 <button
                                     type="submit"
-                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950 shadow-md"
+                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950 shadow-md cursor-pointer"
                                 >
                                     Send
                                 </button>

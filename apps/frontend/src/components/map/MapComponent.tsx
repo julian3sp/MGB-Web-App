@@ -58,17 +58,17 @@ const MapComponent: React.FC = () => {
     const [selectedFloor, setSelectedFloor] = useState<number>(1);
     const [checkInDesk, setCheckInDesk] = useState<boolean>(true);
 
-  const [pathNodes, setPathNodes] = useState<Node[]>([]);
-  const [textDirections, setTextDirections] = useState<string[]>([]);
-  const [currentFloor, setCurrentFloor] = useState<number>(1)
+    const [pathNodes, setPathNodes] = useState<Node[]>([]);
+    const [textDirections, setTextDirections] = useState<string[]>([]);
+    const [currentFloor, setCurrentFloor] = useState<number>(1)
 
-  const [travelTimes, setTravelTimes] = useState<TravelTimes>({
-    driving: null,
-    transit: null,
-    walking: null,
-  });
+    const [travelTimes, setTravelTimes] = useState<TravelTimes>({
+        driving: null,
+        transit: null,
+        walking: null,
+    });
 
-  const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
+    const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
 
     // Calculate travel times when start or end location changes.
     useEffect(() => {
@@ -114,7 +114,8 @@ const MapComponent: React.FC = () => {
     }
 
     // When the user selects a starting location.
-  const handleStartLocationSelected = (place: { name: string; location: google.maps.LatLngLiteral;
+    const handleStartLocationSelected = (place: {
+        name: string; location: google.maps.LatLngLiteral;
     }) => {
         console.log('Start location selected:', place);
         setStartLocation(place);
@@ -164,63 +165,63 @@ const MapComponent: React.FC = () => {
         }
     };
 
-  const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
-    setSelectedDepartment(department);
+    const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
+        setSelectedDepartment(department);
 
-    function getDeptNum(): number {
-      const CNdepartmentMapping: Record<string, number> = {
-        'Entrance': 2707,
-        'Multi-Specialty Clinic': 3592,
-        'Radiology': 3112,
-        'MRI': 3083,
-        'CT': 3076,
-        'Laboratory': 3556
-      };
+        function getDeptNum(): number {
+            const CNdepartmentMapping: Record<string, number> = {
+                'Entrance': 2707,
+                'Multi-Specialty Clinic': 3592,
+                'Radiology': 3112,
+                'MRI': 3083,
+                'CT': 3076,
+                'Laboratory': 3556
+            };
 
-      const Pat20departmentMapping: Record<string, number> = {
-        'Urgent Care': 950,
-        'Urology': 973,
-        'Pharmacy': 766,
-        'Blood Work': 766,
-        'Radiology': 818,
-        'Cardiology': 973,
-        'Orthopedics': 1130,
-        'Rehabilitation Services': 1130,
-        'Surgical Specialties': 1239,
-        'Sports Medicine': 1215,
-        'Day Surgery': 1385,
-        'Pain Medicine/Nutrition': 1385,
-        'EMG': 1404,
-        'Physiatry': 1404,
-        'Pulmonary Testing': 1404
-      };
-      const Pat22departmentMapping: Record<string, number> = {
-        'Gynecology': 1604,
-        'Lactation': 1817,
-        'Vein Treatment': 1798
-      };
-      const FaulknerMapping: Record<string, number> = {
-        'Admitting/Registration': 3783,
-        'Audiology': 3868,
-        'Blood Drawing Lab': 3871,
-        'Cardiac Rehab': 3874,
-        'Emergency Department': 3886,
-        'Endoscopy': 3890,
-        'MRI/CT': 3857,
-        'Operation Rooms': 3895,
-        'Pre-Admittance Screening': 3865,
-        'Pulmonary Lab': 3883,
-        'Radiology': 3839,
-        'Special Testing': 2881,
-        'Vascular Lab': 3891,
-        'Recovery': 3880
-      };
+            const Pat20departmentMapping: Record<string, number> = {
+                'Urgent Care': 950,
+                'Urology': 973,
+                'Pharmacy': 766,
+                'Blood Work': 766,
+                'Radiology': 818,
+                'Cardiology': 973,
+                'Orthopedics': 1130,
+                'Rehabilitation Services': 1130,
+                'Surgical Specialties': 1239,
+                'Sports Medicine': 1215,
+                'Day Surgery': 1385,
+                'Pain Medicine/Nutrition': 1385,
+                'EMG': 1404,
+                'Physiatry': 1404,
+                'Pulmonary Testing': 1404
+            };
+            const Pat22departmentMapping: Record<string, number> = {
+                'Gynecology': 1604,
+                'Lactation': 1817,
+                'Vein Treatment': 1798
+            };
+            const FaulknerMapping: Record<string, number> = {
+                'Admitting/Registration': 3783,
+                'Audiology': 3868,
+                'Blood Drawing Lab': 3871,
+                'Cardiac Rehab': 3874,
+                'Emergency Department': 3886,
+                'Endoscopy': 3890,
+                'MRI/CT': 3857,
+                'Operation Rooms': 3895,
+                'Pre-Admittance Screening': 3865,
+                'Pulmonary Lab': 3883,
+                'Radiology': 3839,
+                'Special Testing': 2881,
+                'Vascular Lab': 3891,
+                'Recovery': 3880
+            };
 
             const mainCampusMapping: Record<string, number> = {
                 'Wound Care Center': 4684,
                 'Asthma Research Center': 4415,
                 Emergency: 4987,
-        Neuroscience: 5247,
+                Neuroscience: 5247,
             };
 
             if (selectedPlace?.name === null) {
@@ -240,21 +241,21 @@ const MapComponent: React.FC = () => {
             return 0;
         }
 
-    const deptNum = getDeptNum();
-    if (deptNum) {
-      setDeptNumber(deptNum);
-    } else {
-      console.error(`No mapping found for department: ${department.name}`);
-    }
-  };
+        const deptNum = getDeptNum();
+        if (deptNum) {
+            setDeptNumber(deptNum);
+        } else {
+            console.error(`No mapping found for department: ${department.name}`);
+        }
+    };
 
-  // When the "Show Google Map" button is clicked.
-  const handleViewMap = () => {
-    if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;
-    setShowMap(true);
-    setShowHospitalMap(false);
-    displayRouteOnMap(startLocation, selectedPlace);
-  };
+    // When the "Show Google Map" button is clicked.
+    const handleViewMap = () => {
+        if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;
+        setShowMap(true);
+        setShowHospitalMap(false);
+        displayRouteOnMap(startLocation, selectedPlace);
+    };
 
     const handleGetCurrentLocation = () => {
         if (navigator.geolocation) {
@@ -382,103 +383,103 @@ const MapComponent: React.FC = () => {
         }
     }, [selectedTransport, startLocation, selectedPlace]);
 
-  return (
-    <PageWrapper open={true}
-      contents={
-              // put sidebar contents here:</p>
+    return (
+        <PageWrapper open={true}
+            contents={
+                // put sidebar contents here:</p>
 
                 <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
                     <h2 className="font-bold font-[Poppins] text-center text-[#003a96]">Enter your location and <br />destination</h2>
-          <div className="overflow-visible">
-                    <Accordion type="multiple" value={accordionItem} onValueChange={setAccordionItem} defaultValue={["item-1"]} className={'w-full'}>
-                        <AccordionItem value={"item-1"}>
-                            <AccordionTrigger>Transit Directions</AccordionTrigger>
-                            <AccordionContent className={"h-auto pb-8"}>
-                        <GoogleMapSection
-            startLocation={startLocation}
-            selectedPlace={selectedPlace}
-            selectedTransport={selectedTransport}
-            travelTimes={travelTimes}
-            mapInstance={mapInstance}
-            handleStartLocationSelected={handleStartLocationSelected}
-            handleDestinationSelected={handleDestinationSelected}
-            handleViewMap={handleViewMap}
-            directionsResult={directionsResult}
-                            setAccordionItem={setAccordionItem}onTransportChange={(mode) => {
-              setSelectedTransport(mode);
-              if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) { displayRouteOnMap(startLocation, selectedPlace); }
-            }}
-            handleGetCurrentLocation={handleGetCurrentLocation}
-                        />
+                    <div className="overflow-visible">
+                        <Accordion type="multiple" value={accordionItem} onValueChange={setAccordionItem} defaultValue={["item-1"]} className={'w-full'}>
+                            <AccordionItem value={"item-1"}>
+                                <AccordionTrigger>Transit Directions</AccordionTrigger>
+                                <AccordionContent className={"h-auto pb-8"}>
+                                    <GoogleMapSection
+                                        startLocation={startLocation}
+                                        selectedPlace={selectedPlace}
+                                        selectedTransport={selectedTransport}
+                                        travelTimes={travelTimes}
+                                        mapInstance={mapInstance}
+                                        handleStartLocationSelected={handleStartLocationSelected}
+                                        handleDestinationSelected={handleDestinationSelected}
+                                        handleViewMap={handleViewMap}
+                                        directionsResult={directionsResult}
+                                        setAccordionItem={setAccordionItem} onTransportChange={(mode) => {
+                                            setSelectedTransport(mode);
+                                            if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) { displayRouteOnMap(startLocation, selectedPlace); }
+                                        }}
+                                        handleGetCurrentLocation={handleGetCurrentLocation}
+                                    />
 
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value={"item-2"}>
-                            <AccordionTrigger>Parking</AccordionTrigger>
-                            <AccordionContent className={"h-auto"}>
-                                {/* Select Department dropdown */}
-                                <div className="flex justify-between gap-3 items-center">
-                                    {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} setAccordionItem={setAccordionItem}/>}
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value={"item-3"}>
-                            <AccordionTrigger>Hospital Department</AccordionTrigger>
-                            <AccordionContent className={"h-auto"}>
-                        {/* Select Department dropdown */}
-                        {/*<h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center pb-4">*/}
-                        {/*    Select a department*/}
-                        {/*</h2>*/}
-                                <DepartmentDropdown
-                                    onDepartmentSelected={handleDepartmentSelected}
-                                    building={selectedPlace?.name ?? ''}
-          />
-                                <br />
-                                {checkInDesk ? <NavButton onClick={handleCheckInToggle}>Direct to Department</NavButton> : <NavButton onClick={handleCheckInToggle}>Direct to Check In Desk</NavButton>}
-
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                    <HospitalDirectionsGuide
-            pathNodes={pathNodes}
-            selectedFloor={currentFloor}
-            buildingName={selectedPlace?.name}
-            textDirections={textDirections}
-          />
-        </div>
-      </div>
-            }scaling={4}
-      absolute={false}
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value={"item-2"}>
+                                <AccordionTrigger>Parking</AccordionTrigger>
+                                <AccordionContent className={"h-auto"}>
+                                    {/* Select Department dropdown */}
+                                    <div className="flex justify-between gap-3 items-center">
+                                        {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} setAccordionItem={setAccordionItem} />}
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value={"item-3"}>
+                                <AccordionTrigger>Hospital Department</AccordionTrigger>
+                                <AccordionContent className={"h-auto"}>
+                                    {/* Select Department dropdown */}
+                                    {/*<h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center pb-4">*/}
+                                    {/*    Select a department*/}
+                                    {/*</h2>*/}
+                                    <DepartmentDropdown
+                                        onDepartmentSelected={handleDepartmentSelected}
+                                        building={selectedPlace?.name ?? ''}
+                                    />
+                                    <br />
+                                    {checkInDesk ? <NavButton onClick={handleCheckInToggle}>Direct to Department</NavButton> : <NavButton onClick={handleCheckInToggle}>Direct to Check In Desk</NavButton>}
+                                    <br /> <br />
+                                    <HospitalDirectionsGuide
+                                        pathNodes={pathNodes}
+                                        selectedFloor={currentFloor}
+                                        buildingName={selectedPlace?.name}
+                                        textDirections={textDirections}
+                                    />
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </div>
+            } scaling={4}
+            absolute={false}
         >
-      {/* Hospital Map Section */}
-      <div className="flex">
-        <div className="flex flex-col">
-          {showHospitalMap && (
-            <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
-              <div className="flex flex-col gap-2">
-                <div className="text-md font-medium font-bold mb-2">Map Legend</div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                    alt="Your Location"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Your Location</span>
+            {/* Hospital Map Section */}
+            <div className="flex">
+                <div className="flex flex-col">
+                    {showHospitalMap && (
+                        <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
+                            <div className="flex flex-col gap-2">
+                                <div className="text-md font-medium font-bold mb-2">Map Legend</div>
+                                <div className="flex items-center gap-2">
+                                    <img
+                                        src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                                        alt="Your Location"
+                                        className="w-6 h-6"
+                                    />
+                                    <span className="text-sm text-gray-600 font-bold">Your Location</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <img
+                                        src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                                        alt="Destination"
+                                        className="w-6 h-6"
+                                    />
+                                    <span className="text-sm text-gray-600 font-bold">Destination</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <img
-                    src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    alt="Destination"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-sm text-gray-600 font-bold">Destination</span>
-                </div>
-              </div>
+                {error && <div className="text-red-500">{error}</div>}
             </div>
-          )}
-        </div>
-        {error && <div className="text-red-500">{error}</div>}
-      </div>
 
             {/* Right Column: Map area */}
             <div className="w-full relative">
@@ -488,17 +489,17 @@ const MapComponent: React.FC = () => {
                     onZoomChange={handleZoomChange}
                     selectedFloor={currentFloor}
                     onFloorChange={setCurrentFloor}
-          departmentNumber={deptNumber}
-          disableDoubleClickZoom={true}
-          onPathFound={setPathNodes}
-          onTextDirectionsGenerated={setTextDirections}
-          onFloorChangeRequired={(newFloor) => setCurrentFloor(newFloor)}
-          currentFloor={currentFloor}
-        />
+                    departmentNumber={deptNumber}
+                    disableDoubleClickZoom={true}
+                    onPathFound={setPathNodes}
+                    onTextDirectionsGenerated={setTextDirections}
+                    onFloorChangeRequired={(newFloor) => setCurrentFloor(newFloor)}
+                    currentFloor={currentFloor}
+                />
 
-      </div>
-    </PageWrapper>
-  );
+            </div>
+        </PageWrapper>
+    );
 };
 
 export default MapComponent;

@@ -1,30 +1,25 @@
 import { publicProcedure } from '../trpc';
-import { z } from 'zod';
 import client from '../../bin/prisma-client';
+import { z } from 'zod';
+import { trpc } from '../trpc.ts';
 
 export const makeReview = publicProcedure
     .input(
         z.object({
+            employeeId: z.string(),
+            serviceRequestId: z.string(),
             review: z.string(),
-            rating: z.number(),
+            rating: z.number().min(1).max(5),
         })
     )
     .mutation(async ({ input }) => {
         try {
-            console.log('Creating review with input:', input);
-
-            const newReview = await client.review.create({
-                data: {
-                    review: input.review,
-                    rating: input.rating,
-                },
+            const review = await client.review.create({
+                data: input,
             });
-
-            console.log('Review created successfully:', newReview);
-            return newReview;
+            return review;
         } catch (error) {
-            console.error('Error in makeReview procedure:', error);
-            throw new Error('Failed to create review');
+            console.error(error);
         }
     });
 
@@ -32,3 +27,10 @@ export const getReviews = publicProcedure.query(async () => {
     const reviews = await client.review.findMany({});
     return reviews;
 });
+
+/*
+export const getUniqueReview = publicProcedure.query(async () => {
+        const array_of_names = await client.directory.findMany({ select: { id: true } });
+        return array_of_names;
+    });
+*/

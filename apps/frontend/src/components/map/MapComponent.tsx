@@ -191,7 +191,7 @@ const MapComponent: React.FC = () => {
         'Radiology': 818,
         'Cardiology': 973,
         'Orthopedics': 1130,
-        'Rehabilitation': 1130,
+        'Rehabilitation Services': 1130,
         'Surgical Specialties': 1239,
         'Sports Medicine': 1215,
         'Day Surgery': 1385,

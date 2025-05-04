@@ -209,6 +209,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
+        "Belkin House": 3716, // CHANGE THISSSSSS
         "Main Campus": 4963
       }
 
@@ -350,7 +351,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
           updatePatriotPlace22(overlays, selectedFloor!);
-        } else if (selectedDestination.name === "Faulkner") {
+        } else if (selectedDestination.name === "Faulkner" || selectedDestination.name === "Belkin House") {
           createFaulknerOverlays(map);
         }
         else if (selectedDestination.name === "Main Campus") {

@@ -33,7 +33,7 @@ export interface RouteWithDirectionResult {
     currentStep: number;
 }
 
-export function generateDirections(nodes: Node[]): DirectionStep[] {
+export function generateDirections(nodes: Node[], mapHeading: number = 0): DirectionStep[] {
     if (nodes.length < 2) return [];
     const steps: DirectionStep[] = [];
     const MIN_ANGLE_FOR_TURN = 15; // Minimum degrees to consider it a turn
@@ -64,7 +64,7 @@ export function generateDirections(nodes: Node[]): DirectionStep[] {
 
         // Only calculate direction if we have 3 consecutive nodes
         if (i >= 2) {
-            const direction = determineDirection(nodes[i - 2], nodes[i - 1], nodes[i]);
+            const direction = determineDirection(nodes[i - 2], nodes[i - 1], nodes[i], mapHeading);
 
             // If direction hasn't changed significantly, continue straight
             if (lastDirection &&
@@ -169,7 +169,7 @@ function simplifyDirections(steps: DirectionStep[]): DirectionStep[] {
 }
 
 // Updated determineDirection to be more forgiving
-function determineDirection(node1: Node, node2: Node, node3: Node): TurnDirection {
+function determineDirection(node1: Node, node2: Node, node3: Node, mapHeading: number = 0): TurnDirection {
     // Convert to vectors
     const vec1 = { x: node2.x - node1.x, y: node2.y - node1.y };
     const vec2 = { x: node3.x - node2.x, y: node3.y - node2.y };

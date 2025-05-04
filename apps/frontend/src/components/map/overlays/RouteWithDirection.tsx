@@ -21,13 +21,14 @@ export function showRouteWithDirections(
     map: google.maps.Map,
     nodes: Node[],
     currentFloor: number,
-    onFloorChange?: (floor: number) => void
+    onFloorChange?: (floor: number) => void,
+    mapHeading: number = 0
 ): RouteWithDirectionsResult {
     // draw the path on the map
     const path = drawPath(map, nodes);
 
     // generate the direction steps
-    const steps = generateDirections(nodes).map(step => {
+    const steps = generateDirections(nodes, mapHeading).map(step => {
         if (step.isFloorChange && step.changeType && onFloorChange) {
             return {
                 ...step,

@@ -60,6 +60,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
   const targetMarkerRef = useRef<google.maps.Marker | null>(null);
+  const pathNodesRef = useRef<Node[]>([]);
 
   const context = new PathContext();
 
@@ -255,6 +256,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
       const pathNodes = context.pathFind(graph, entrance, target)
       console.log("Path to: ", pathNodes)
+
+      pathNodesRef.current = pathNodes;
 
       if (pathNodes && onPathFound) {
         onPathFound(pathNodes)
@@ -487,7 +490,34 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     if (center) {
       map.panTo(center);
     }
+    updateDirectionsForViewpoint(newHeading);
   };
+
+  const updateDirectionsForViewpoint = (heading: number) => {
+    if (!map || !pathNodesRef.current.length || !onTextDirectionsGenerated) return;
+
+    const routeInfo = showRouteWithDirections(
+      map, 
+      pathNodesRef.current, 
+      selectedFloor, 
+      onFloorChangeRequired,
+      heading
+    )
+    onTextDirectionsGenerated(routeInfo.directions)
+  }
+
+  useEffect(() => {
+    if (!map) return;
+
+    const headingListener = map.addListener('heading_changed', () => {
+        const currentHeading = map.getHeading() ?? 0;
+        updateDirectionsForViewpoint(currentHeading);
+    });
+
+    return () => {
+        google.maps.event.removeListener(headingListener);
+    };
+}, [map]);
 
   // Handle path visibility based on zoom level
   useEffect(() => {

@@ -188,6 +188,10 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
     });
 }
 
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 export function addNodeListener(
     map: google.maps.Map,
     building: string,
@@ -196,7 +200,7 @@ export function addNodeListener(
     onNewMarker: (m: google.maps.marker.AdvancedMarkerElement) => void,
     onNodeMove: () => void): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
-        const id = Date.now();
+        const id = getRandomArbitrary(10000, 20000);
         graph.addNode({
             id: id,
             name: '',

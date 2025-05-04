@@ -5,6 +5,7 @@ import { Combobox } from '../inputFields/Combobox';
 import TextArea from '../../TextArea';
 import { languages } from '../data/languages';
 import { trpc } from '@/lib/trpc.ts';
+import FileUploadService from "@/components/ui/fileUploadService.tsx";
 
 type FinalReviewProps = {
     name: string;
@@ -49,6 +50,8 @@ type FinalReviewProps = {
     setEquipmentType: (value: string) => void;
     comments: string;
     setComments: (value: string) => void;
+    files: File[];
+    setFiles: (files: File[]) => void;
     type: string;
     errors: any;
     clearError: (field: string) => void;
@@ -98,6 +101,8 @@ export function FinalReview({
     setEquipmentType,
     comments,
     setComments,
+    files,
+    setFiles,
     errors,
     clearError,
 }: FinalReviewProps) {
@@ -460,6 +465,10 @@ export function FinalReview({
                     value={comments}
                     setState={setComments}
                 />
+            </div>
+            <div className="mr-5 mt-5 ml-5">
+                <InputHeader children={'File Upload'} />
+                <FileUploadService files={files} onFilesChange={setFiles} />
             </div>
         </div>
     );

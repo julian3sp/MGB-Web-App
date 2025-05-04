@@ -134,7 +134,8 @@ exports.Prisma.Service_requestScalarFieldEnum = {
   request_type: 'request_type',
   request_date: 'request_date',
   additional_comments: 'additional_comments',
-  assigned_employee: 'assigned_employee'
+  assigned_employee: 'assigned_employee',
+  image_upload: 'image_upload'
 };
 
 exports.Prisma.SanitationScalarFieldEnum = {

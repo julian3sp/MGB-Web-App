@@ -46,6 +46,7 @@ export const makeManyNodes = publicProcedure
     .input(
         z.array(
             z.object({
+                id: z.number().optional(),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string().nullable(),

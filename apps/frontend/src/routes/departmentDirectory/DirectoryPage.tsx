@@ -4,6 +4,7 @@ import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/I
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart.tsx";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import ExportCSV from "@/components/navigation/mapEditorComponent/ExportCSV.tsx";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuRadioItem} from "@/components/ui/dropdown-menu.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -29,6 +30,10 @@ const DirectoryPage = () => {
     const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
     const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
     const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
+    const newAlgo = trpc.setAlgoType.useMutation();
+
+
 
     const serviceRequestConfig = {
         number: {
@@ -46,6 +51,11 @@ const DirectoryPage = () => {
         { type: 'MedicalDevice', number: medicalDeviceRequests.data?.length ?? 0 },
         { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
     ];
+
+    function setAlgoTypeWrapper(algo: string) {
+        newAlgo.mutate({ algoType: algo })
+        setAlgoType(algo);
+    }
 
     const downloadDirectories = () => {
         if (!directories || directories.length === 0) {
@@ -130,13 +140,42 @@ const DirectoryPage = () => {
                 {/* Directory Import/Export */}
 
                     <div className="bg-white rounded-2xl shadow-lg border-1 ">
-                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Import/Export Tools</h2>
+                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Admin Tools</h2>
                         <ImportAllNodesAndEdges />
-                        <div className={'mb-30 p-3 flex justify-between space-y-10'}>
+                        <div className={'mb-15 p-3 flex justify-between space-y-10'}>
                             <ExportCSV type="Nodes" />
                             <ExportCSV type="Edges" />
                             <ExportCSV type="Directories" />
                         </div>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="bg-[#003a96] w-[80%] font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded-lg ml-15 p-3">
+                                    Choose Your Algorithm
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuRadioGroup
+                                    value={algoType}
+                                    onValueChange={setAlgoTypeWrapper}
+                                >
+                                    <DropdownMenuRadioItem value="A-Star">
+                                        A-Star
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="DFS">
+                                        Depth First Search
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="BFS">
+                                        Breadth First Search
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="Dijkstras">
+                                        Dijkstra's
+                                    </DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         {/*<button*/}
                         {/*    onClick={downloadDirectories}*/}

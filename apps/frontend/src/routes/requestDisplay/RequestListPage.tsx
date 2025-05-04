@@ -43,6 +43,12 @@ export default function RequestListPage({userRole}: {userRole: string}) {
     const [pendingRequest, setPendingRequest] = useState<ServiceRequest | null>(null);
     const [swapMenu, setSwapMenu] = useState(false);
     const [exitMenu, setExitMenu] = useState(false);
+    const [text, setText] = useState("");
+    const[response, setResponse] = useState("")
+
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [chatText, setChatText] = useState("");
+    const [chatMessages, setChatMessages] = useState<{ sender: string; text: string }[]>([]);
 
     const deleteRequest = trpc.deleteRequest.useMutation();
     const updateRequest = trpc.updateRequest.useMutation();
@@ -69,6 +75,11 @@ export default function RequestListPage({userRole}: {userRole: string}) {
             }
         );
     };
+    const handleChat = () => {
+        if(text){
+            setResponse("Currently all our operators are ocupated please reach out later. Meanwhile you could either go to a phisical location or chat with out AI assistant")
+        }
+    }
 
     const handleUpdate = () => {
         console.log('Trying to update:', selectedRequest);
@@ -91,6 +102,20 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                 },
             }
         );
+    };
+
+    const handleChatSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!chatText.trim()) return;
+
+        setChatMessages((prev) => [...prev, { sender: "user", text: chatText }]);
+        setChatText("");
+
+        // Add response message
+        setChatMessages((prev) => [...prev, { 
+            sender: "ai", 
+            text: "Currently all our operators are occupied. Please reach out later or use our AI assistant." 
+        }]);
     };
 
     if (isLoading) return <p>Loading...</p>;
@@ -574,9 +599,36 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                                     Status:
                                                 </h3>
                                                 <ul className="list-disc ml-2 mb-3 mt-3 ">
-                                                    <p className="text-[12pt]">
-                                                        {selectedRequest.status}
-                                                    </p>
+                                                    <p className="text-[12pt]">{selectedRequest.status}</p>
+                                                    
+                                                    {/* Add Progress Bar */}
+                                                    <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                                        <div 
+                                                            className="bg-[#003A96] h-2.5 rounded-full transition-all duration-500"
+                                                            style={{ 
+                                                                width: selectedRequest.status === 'Unassigned' ? '25%' :
+                                                                       selectedRequest.status === 'Assigned' ? '50%' :
+                                                                       selectedRequest.status === 'Working' ? '75%' :
+                                                                       selectedRequest.status === 'Done' ? '100%' : '0%'
+                                                            }}
+                                                        ></div>
+                                                    </div>
+                                                    
+                                                    {/* Status Steps */}
+                                                    <div className="flex justify-between text-xs mt-1 text-gray-600">
+                                                        <span className={selectedRequest.status === 'Unassigned' ? 'text-[#003A96] font-semibold' : ''}>
+                                                            Unassigned
+                                                        </span>
+                                                        <span className={selectedRequest.status === 'Assigned' ? 'text-[#003A96] font-semibold' : ''}>
+                                                            Assigned
+                                                        </span>
+                                                        <span className={selectedRequest.status === 'Working' ? 'text-[#003A96] font-semibold' : ''}>
+                                                            Working
+                                                        </span>
+                                                        <span className={selectedRequest.status === 'Done' ? 'text-[#003A96] font-semibold' : ''}>
+                                                            Done
+                                                        </span>
+                                                    </div>
                                                 </ul>
                                             </div>
                                         </>

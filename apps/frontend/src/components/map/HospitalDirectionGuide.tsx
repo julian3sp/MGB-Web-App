@@ -19,7 +19,7 @@ const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
  if (!pathNodes || pathNodes.length === 0 || !buildingName || textDirections.length === 0) {
    return (
      <div className="p-4 bg-white rounded-lg font-[Poppins] shadow-md">
-       <h3 className="font-bold text-lg mb-2">Hospital Directions</h3>
+       <h3 className="font-bold text-[16.5px] mb-2 text-[#003a96]">Hospital Directions</h3>
        <p className="text-gray-600">Select a department to see indoor navigation instructions.</p>
      </div>
    );

@@ -2,6 +2,7 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import DestinationDropdown from './DestinationDropdown';
 import icon from '../../../assets/icon.png';
+import DirectionsGuide from "@/components/map/DirectionsGuide.tsx";
 
 export interface TravelTimes {
   driving: string | null;
@@ -70,6 +71,8 @@ interface GoogleMapSectionProps {
   handleStartLocationSelected: (place: { name: string; location: google.maps.LatLngLiteral }) => void;
   handleDestinationSelected: (destination: { name: string; location: { lat: number; lng: number } }) => void;
   handleViewMap: () => void;
+  directionsResult: google.maps.DirectionsResult | null;
+  setAccordionItem:  React.Dispatch<React.SetStateAction<string[]>>;
   onTransportChange: (mode: 'driving' | 'walking' | 'transit') => void;
   handleGetCurrentLocation: () => void;
 }
@@ -83,6 +86,8 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
   handleStartLocationSelected,
   handleDestinationSelected,
   handleViewMap,
+  directionsResult,
+  setAccordionItem,
   onTransportChange,
   handleGetCurrentLocation
 }) => {
@@ -91,6 +96,7 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
       mapInstance.setZoom(20);
       mapInstance.panTo(selectedPlace.location)
     }
+    setAccordionItem(["item-2"]);
   }
   return (
     <div className="flex flex-col gap-0 items-center">
@@ -161,13 +167,16 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
           <div className="mt-5">
             <DestinationDropdown onDestinationSelected={handleDestinationSelected} />
           </div>
+          <div>
+            {directionsResult && <DirectionsGuide directions={directionsResult} />}
+          </div>
           <div className='w-full flex justify-center mt-5'>
             {selectedPlace && (
               <button
                 onClick={handleZoomToDestination}
-                className='px-3 py-2 mx-auto text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
+                className='px-3 py-2.5 mx-auto w-[60%] text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
               >
-                Zoom to destination
+                I Have Arrived
               </button>
             )}
           </div>

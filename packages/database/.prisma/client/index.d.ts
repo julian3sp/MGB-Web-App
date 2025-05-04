@@ -3289,6 +3289,7 @@ export namespace Prisma {
     request_date: Date | null
     additional_comments: string | null
     assigned_employee: string | null
+    image_upload: string | null
   }
 
   export type Service_requestMaxAggregateOutputType = {
@@ -3303,6 +3304,7 @@ export namespace Prisma {
     request_date: Date | null
     additional_comments: string | null
     assigned_employee: string | null
+    image_upload: string | null
   }
 
   export type Service_requestCountAggregateOutputType = {
@@ -3317,6 +3319,7 @@ export namespace Prisma {
     request_date: number
     additional_comments: number
     assigned_employee: number
+    image_upload: number
     _all: number
   }
 
@@ -3341,6 +3344,7 @@ export namespace Prisma {
     request_date?: true
     additional_comments?: true
     assigned_employee?: true
+    image_upload?: true
   }
 
   export type Service_requestMaxAggregateInputType = {
@@ -3355,6 +3359,7 @@ export namespace Prisma {
     request_date?: true
     additional_comments?: true
     assigned_employee?: true
+    image_upload?: true
   }
 
   export type Service_requestCountAggregateInputType = {
@@ -3369,6 +3374,7 @@ export namespace Prisma {
     request_date?: true
     additional_comments?: true
     assigned_employee?: true
+    image_upload?: true
     _all?: true
   }
 
@@ -3470,6 +3476,7 @@ export namespace Prisma {
     request_date: Date
     additional_comments: string | null
     assigned_employee: string | null
+    image_upload: string | null
     _count: Service_requestCountAggregateOutputType | null
     _avg: Service_requestAvgAggregateOutputType | null
     _sum: Service_requestSumAggregateOutputType | null
@@ -3503,6 +3510,7 @@ export namespace Prisma {
     request_date?: boolean
     additional_comments?: boolean
     assigned_employee?: boolean
+    image_upload?: boolean
     employee?: boolean | service_request$employeeArgs<ExtArgs>
     sanitation?: boolean | service_request$sanitationArgs<ExtArgs>
     language?: boolean | service_request$languageArgs<ExtArgs>
@@ -3525,6 +3533,7 @@ export namespace Prisma {
     request_date?: boolean
     additional_comments?: boolean
     assigned_employee?: boolean
+    image_upload?: boolean
     employee?: boolean | service_request$employeeArgs<ExtArgs>
   }, ExtArgs["result"]["service_request"]>
 
@@ -3540,6 +3549,7 @@ export namespace Prisma {
     request_date?: boolean
     additional_comments?: boolean
     assigned_employee?: boolean
+    image_upload?: boolean
     employee?: boolean | service_request$employeeArgs<ExtArgs>
   }, ExtArgs["result"]["service_request"]>
 
@@ -3555,9 +3565,10 @@ export namespace Prisma {
     request_date?: boolean
     additional_comments?: boolean
     assigned_employee?: boolean
+    image_upload?: boolean
   }
 
-  export type service_requestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"request_id" | "name" | "employee_id" | "priority" | "location" | "department" | "status" | "request_type" | "request_date" | "additional_comments" | "assigned_employee", ExtArgs["result"]["service_request"]>
+  export type service_requestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"request_id" | "name" | "employee_id" | "priority" | "location" | "department" | "status" | "request_type" | "request_date" | "additional_comments" | "assigned_employee" | "image_upload", ExtArgs["result"]["service_request"]>
   export type service_requestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | service_request$employeeArgs<ExtArgs>
     sanitation?: boolean | service_request$sanitationArgs<ExtArgs>
@@ -3599,6 +3610,7 @@ export namespace Prisma {
       request_date: Date
       additional_comments: string | null
       assigned_employee: string | null
+      image_upload: string | null
     }, ExtArgs["result"]["service_request"]>
     composites: {}
   }
@@ -4041,6 +4053,7 @@ export namespace Prisma {
     readonly request_date: FieldRef<"service_request", 'DateTime'>
     readonly additional_comments: FieldRef<"service_request", 'String'>
     readonly assigned_employee: FieldRef<"service_request", 'String'>
+    readonly image_upload: FieldRef<"service_request", 'String'>
   }
     
 
@@ -18542,7 +18555,8 @@ export namespace Prisma {
     request_type: 'request_type',
     request_date: 'request_date',
     additional_comments: 'additional_comments',
-    assigned_employee: 'assigned_employee'
+    assigned_employee: 'assigned_employee',
+    image_upload: 'image_upload'
   };
 
   export type Service_requestScalarFieldEnum = (typeof Service_requestScalarFieldEnum)[keyof typeof Service_requestScalarFieldEnum]
@@ -18830,6 +18844,7 @@ export namespace Prisma {
     request_date?: DateTimeFilter<"service_request"> | Date | string
     additional_comments?: StringNullableFilter<"service_request"> | string | null
     assigned_employee?: StringNullableFilter<"service_request"> | string | null
+    image_upload?: StringNullableFilter<"service_request"> | string | null
     employee?: XOR<EmployeeNullableScalarRelationFilter, employeeWhereInput> | null
     sanitation?: XOR<SanitationNullableScalarRelationFilter, SanitationWhereInput> | null
     language?: XOR<LanguageNullableScalarRelationFilter, LanguageWhereInput> | null
@@ -18852,6 +18867,7 @@ export namespace Prisma {
     request_date?: SortOrder
     additional_comments?: SortOrderInput | SortOrder
     assigned_employee?: SortOrderInput | SortOrder
+    image_upload?: SortOrderInput | SortOrder
     employee?: employeeOrderByWithRelationInput
     sanitation?: SanitationOrderByWithRelationInput
     language?: LanguageOrderByWithRelationInput
@@ -18877,6 +18893,7 @@ export namespace Prisma {
     request_date?: DateTimeFilter<"service_request"> | Date | string
     additional_comments?: StringNullableFilter<"service_request"> | string | null
     assigned_employee?: StringNullableFilter<"service_request"> | string | null
+    image_upload?: StringNullableFilter<"service_request"> | string | null
     employee?: XOR<EmployeeNullableScalarRelationFilter, employeeWhereInput> | null
     sanitation?: XOR<SanitationNullableScalarRelationFilter, SanitationWhereInput> | null
     language?: XOR<LanguageNullableScalarRelationFilter, LanguageWhereInput> | null
@@ -18899,6 +18916,7 @@ export namespace Prisma {
     request_date?: SortOrder
     additional_comments?: SortOrderInput | SortOrder
     assigned_employee?: SortOrderInput | SortOrder
+    image_upload?: SortOrderInput | SortOrder
     _count?: service_requestCountOrderByAggregateInput
     _avg?: service_requestAvgOrderByAggregateInput
     _max?: service_requestMaxOrderByAggregateInput
@@ -18921,6 +18939,7 @@ export namespace Prisma {
     request_date?: DateTimeWithAggregatesFilter<"service_request"> | Date | string
     additional_comments?: StringNullableWithAggregatesFilter<"service_request"> | string | null
     assigned_employee?: StringNullableWithAggregatesFilter<"service_request"> | string | null
+    image_upload?: StringNullableWithAggregatesFilter<"service_request"> | string | null
   }
 
   export type SanitationWhereInput = {
@@ -19667,6 +19686,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -19689,6 +19709,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -19708,6 +19729,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -19730,6 +19752,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -19751,6 +19774,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
   }
 
   export type service_requestUpdateManyMutationInput = {
@@ -19763,6 +19787,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type service_requestUncheckedUpdateManyInput = {
@@ -19777,6 +19802,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SanitationCreateInput = {
@@ -20582,6 +20608,7 @@ export namespace Prisma {
     request_date?: SortOrder
     additional_comments?: SortOrder
     assigned_employee?: SortOrder
+    image_upload?: SortOrder
   }
 
   export type service_requestAvgOrderByAggregateInput = {
@@ -20600,6 +20627,7 @@ export namespace Prisma {
     request_date?: SortOrder
     additional_comments?: SortOrder
     assigned_employee?: SortOrder
+    image_upload?: SortOrder
   }
 
   export type service_requestMinOrderByAggregateInput = {
@@ -20614,6 +20642,7 @@ export namespace Prisma {
     request_date?: SortOrder
     additional_comments?: SortOrder
     assigned_employee?: SortOrder
+    image_upload?: SortOrder
   }
 
   export type service_requestSumOrderByAggregateInput = {
@@ -21794,6 +21823,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualCreateNestedOneWithoutService_requestInput
@@ -21814,6 +21844,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -21864,6 +21895,7 @@ export namespace Prisma {
     request_date?: DateTimeFilter<"service_request"> | Date | string
     additional_comments?: StringNullableFilter<"service_request"> | string | null
     assigned_employee?: StringNullableFilter<"service_request"> | string | null
+    image_upload?: StringNullableFilter<"service_request"> | string | null
   }
 
   export type employeeCreateWithoutRequestsInput = {
@@ -22182,6 +22214,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualCreateNestedOneWithoutService_requestInput
@@ -22203,6 +22236,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
     security?: SecurityUncheckedCreateNestedOneWithoutService_requestInput
@@ -22237,6 +22271,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUpdateOneWithoutService_requestNestedInput
@@ -22258,6 +22293,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
     security?: SecurityUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22276,6 +22312,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualCreateNestedOneWithoutService_requestInput
@@ -22297,6 +22334,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
     security?: SecurityUncheckedCreateNestedOneWithoutService_requestInput
@@ -22331,6 +22369,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUpdateOneWithoutService_requestNestedInput
@@ -22352,6 +22391,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
     security?: SecurityUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22370,6 +22410,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -22391,6 +22432,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -22425,6 +22467,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -22446,6 +22489,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22464,6 +22508,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -22485,6 +22530,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     security?: SecurityUncheckedCreateNestedOneWithoutService_requestInput
@@ -22519,6 +22565,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -22540,6 +22587,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     security?: SecurityUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22558,6 +22606,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -22579,6 +22628,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -22613,6 +22663,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -22634,6 +22685,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22652,6 +22704,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -22673,6 +22726,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -22707,6 +22761,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -22728,6 +22783,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -22746,6 +22802,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
     employee?: employeeCreateNestedOneWithoutRequestsInput
     sanitation?: SanitationCreateNestedOneWithoutService_requestInput
     language?: LanguageCreateNestedOneWithoutService_requestInput
@@ -22767,6 +22824,7 @@ export namespace Prisma {
     request_date?: Date | string
     additional_comments?: string | null
     assigned_employee?: string | null
+    image_upload?: string | null
     sanitation?: SanitationUncheckedCreateNestedOneWithoutService_requestInput
     language?: LanguageUncheckedCreateNestedOneWithoutService_requestInput
     audioVisual?: AudioVisualUncheckedCreateNestedOneWithoutService_requestInput
@@ -22801,6 +22859,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: employeeUpdateOneWithoutRequestsNestedInput
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
@@ -22822,6 +22881,7 @@ export namespace Prisma {
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
     assigned_employee?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -23057,6 +23117,7 @@ export namespace Prisma {
     request_type: string
     request_date?: Date | string
     additional_comments?: string | null
+    image_upload?: string | null
   }
 
   export type service_requestUpdateWithoutEmployeeInput = {
@@ -23069,6 +23130,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUpdateOneWithoutService_requestNestedInput
     language?: LanguageUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUpdateOneWithoutService_requestNestedInput
@@ -23089,6 +23151,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
     sanitation?: SanitationUncheckedUpdateOneWithoutService_requestNestedInput
     language?: LanguageUncheckedUpdateOneWithoutService_requestNestedInput
     audioVisual?: AudioVisualUncheckedUpdateOneWithoutService_requestNestedInput
@@ -23109,6 +23172,7 @@ export namespace Prisma {
     request_type?: StringFieldUpdateOperationsInput | string
     request_date?: DateTimeFieldUpdateOperationsInput | Date | string
     additional_comments?: NullableStringFieldUpdateOperationsInput | string | null
+    image_upload?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type edgesCreateManySourceNodeInput = {

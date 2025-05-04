@@ -41,6 +41,8 @@ import {
     makeManyEdges,
 } from './server/procedures/edges.ts';
 import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
+import path from 'path';
+import uploadImageRouter from './server/procedures/uploadImage.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -83,7 +85,9 @@ const appRouter = t.router({
 });
 
 const app: Express = express(); // Set up the backend
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
+app.use('/uploads', express.static(path.join(__dirname, './uploads'))); // serve image files
+app.use('/upload-image', uploadImageRouter);
 app.use('/trpc', (req, res, next) => {
     console.log(`[TRPC] ${req.method} ${req.url}`);
     next();

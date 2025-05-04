@@ -40,7 +40,10 @@ out
 **/.prettiercache
 **/.vite
 backend\package.json
-__pycache__
-/apps/imageAPI/app/__pycache__
-/apps/imageAPI/.venv
-/apps/imageAPI
+
+.venv/
+__pycache__/
+*.pyc
+
+#ignore uploaded iamges
+/backend/src/uploads/*

@@ -21,6 +21,7 @@ export type ServiceRequest = {
     department: string;
     employee_id: string | null;
     additional_comments: string | null;
+    image_upload: string | null;
     assigned_employee: string | null;
 };
 

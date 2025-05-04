@@ -21,8 +21,8 @@ function ServiceRequestPage() {
                 <ServiceFormSideBar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
         } scaling = {4} absolute={false} x={-50} y={30} xOut={10} >
-            <div className=" rounded-3xl px-20 mt-20 mb-5 flex flex-col w-full h-full items-center ">
-                <div className={'w-full '}>
+            <div className=" rounded-3xl px-20 mt-20 mb-5 flex flex-col w-full min-h-screen items-center ">
+                <div className={'w-full'}>
                 <h2 className="text-center py-5 text-[20px]   font-[Poppins] border-b-4 border-[#44A6A6] font-semibold bg-[#003a96] text-white rounded-lg">
                     {activeTab.title}
                 </h2>

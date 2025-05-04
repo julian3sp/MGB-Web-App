@@ -1,4 +1,3 @@
-numpy
 matplotlib
 scikit-image
 dataclasses
@@ -7,3 +6,4 @@ opencv-python
 fastapi
 uvicorn
 python-multipart
+numpy

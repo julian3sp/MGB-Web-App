@@ -162,32 +162,173 @@ export function drawPath(map: google.maps.Map, nodes: Node[]): google.maps.Polyl
 
     const path = nodes.map(node => ({ lat: node.x, lng: node.y }));
 
-    // Base path (low opacity background)
+    // Create the 3D effect with a dark blue base and lighter gradient overlay
+    // Base path (dark blue with shadow effect)
     currentBasePath = new google.maps.Polyline({
         path: path,
         geodesic: true,
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.2,
-        strokeWeight: 8,
+        strokeColor: "#0A1F5C", // Dark blue base
+        strokeOpacity: 1.0,
+        strokeWeight: 10, // Wider base for 3D effect
         zIndex: 1
     });
     currentBasePath.setMap(map);
 
-    // Guide path (animated high opacity)
-    currentGuidePath = new google.maps.Polyline({
-        path: [path[0]], // Start with first point
+    // Middle layer for 3D effect (medium blue)
+    const middleLayer = new google.maps.Polyline({
+        path: path,
         geodesic: true,
-        strokeColor: "#FF0000",
+        strokeColor: "#1E3A8A", // Medium blue
         strokeOpacity: 1.0,
-        strokeWeight: 8,
+        strokeWeight: 6,
         zIndex: 2
     });
-    currentGuidePath.setMap(map);
+    middleLayer.setMap(map);
 
-    // Start infinite animation
-    animatePathInfinite(currentGuidePath, path);
+    // Top highlight layer (lighter blue)
+    const highlightLayer = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: "#2563EB", // Brighter blue for top highlight
+        strokeOpacity: 0.7,
+        strokeWeight: 3,
+        zIndex: 3
+    });
+    highlightLayer.setMap(map);
 
-    return currentGuidePath;
+    // Store all path elements for later cleanup
+    currentPathElements = [currentBasePath, middleLayer, highlightLayer];
+
+    // Create and animate arrows
+    animateArrows(map, path);
+
+    return currentBasePath;
+}
+
+let arrowMarkers: google.maps.Marker[] = [];
+let arrowAnimationId: number | null = null;
+
+function animateArrows(map: google.maps.Map, path: google.maps.LatLngLiteral[]) {
+    clearArrows();
+
+    const arrowIconBase: google.maps.Symbol = {
+        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+        scale: 3.5,
+        strokeColor: "#7DD3FC",
+        strokeWeight: 2,
+        fillColor: "#38BDF8",
+        fillOpacity: 0.9,
+        rotation: 0
+    };
+
+    const numArrows = 5;
+    const totalPathLength = calculatePathLength(path);
+    const arrowSpacing = totalPathLength / numArrows;
+
+    // Create arrow markers
+    for (let i = 0; i < numArrows; i++) {
+        const marker = new google.maps.Marker({
+            position: path[0],
+            map,
+            icon: { ...arrowIconBase },
+            zIndex: 4,
+            optimized: true
+        });
+        arrowMarkers.push(marker);
+    }
+
+    let step = 0;
+    const speed = 0.09; // Increase this for faster movement
+
+    function animateStep() {
+        step = (step + speed) % totalPathLength;
+
+        for (let i = 0; i < numArrows; i++) {
+            const arrowDistance = (step + i * arrowSpacing) % totalPathLength;
+            const { position, heading } = getPointAtDistance(path, arrowDistance);
+
+            const marker = arrowMarkers[i];
+            if (marker) {
+                marker.setPosition(position);
+                marker.setIcon({
+                    ...arrowIconBase,
+                    rotation: heading
+                });
+            }
+        }
+
+        arrowAnimationId = requestAnimationFrame(animateStep);
+    }
+
+    arrowAnimationId = requestAnimationFrame(animateStep);
+}
+
+function calculatePathLength(path: google.maps.LatLngLiteral[]): number {
+    let length = 0;
+    for (let i = 1; i < path.length; i++) {
+        length += google.maps.geometry.spherical.computeDistanceBetween(
+            new google.maps.LatLng(path[i - 1].lat, path[i - 1].lng),
+            new google.maps.LatLng(path[i].lat, path[i].lng)
+        );
+    }
+    return length;
+}
+
+function getPointAtDistance(path: google.maps.LatLngLiteral[], distance: number): { position: google.maps.LatLngLiteral, heading: number } {
+    let accDistance = 0;
+
+    for (let i = 1; i < path.length; i++) {
+        const start = new google.maps.LatLng(path[i - 1].lat, path[i - 1].lng);
+        const end = new google.maps.LatLng(path[i].lat, path[i].lng);
+        const segmentLength = google.maps.geometry.spherical.computeDistanceBetween(start, end);
+
+        if (accDistance + segmentLength >= distance) {
+            const ratio = (distance - accDistance) / segmentLength;
+
+            const lat = path[i - 1].lat + ratio * (path[i].lat - path[i - 1].lat);
+            const lng = path[i - 1].lng + ratio * (path[i].lng - path[i - 1].lng);
+            const heading = google.maps.geometry.spherical.computeHeading(start, end);
+
+            return {
+                position: { lat, lng },
+                heading
+            };
+        }
+
+        accDistance += segmentLength;
+    }
+
+    const lastIdx = path.length - 1;
+    const secondLastIdx = path.length - 2;
+
+    return {
+        position: path[lastIdx],
+        heading: google.maps.geometry.spherical.computeHeading(
+            new google.maps.LatLng(path[secondLastIdx].lat, path[secondLastIdx].lng),
+            new google.maps.LatLng(path[lastIdx].lat, path[lastIdx].lng)
+        )
+    };
+}
+
+// Cleanup
+let currentPathElements: google.maps.Polyline[] = [];
+
+function clearCurrentPath() {
+    if (currentPathElements) {
+        currentPathElements.forEach(element => element.setMap(null));
+        currentPathElements = [];
+    }
+    clearArrows();
+}
+
+function clearArrows() {
+    if (arrowAnimationId !== null) {
+        cancelAnimationFrame(arrowAnimationId);
+        arrowAnimationId = null;
+    }
+
+    arrowMarkers.forEach(marker => marker.setMap(null));
+    arrowMarkers = [];
 }
 
 function animatePathInfinite(
@@ -280,17 +421,17 @@ function getPathLength(path: google.maps.LatLngLiteral[]): number {
     return length;
 }
 
-export function clearCurrentPath() {
-    if (animationIntervalId !== null) {
-        clearInterval(animationIntervalId);
-        animationIntervalId = null;
-    }
-    if (currentBasePath) {
-        currentBasePath.setMap(null);
-        currentBasePath = null;
-    }
-    if (currentGuidePath) {
-        currentGuidePath.setMap(null);
-        currentGuidePath = null;
-    }
-}
+// export function clearCurrentPath() {
+//     if (animationIntervalId !== null) {
+//         clearInterval(animationIntervalId);
+//         animationIntervalId = null;
+//     }
+//     if (currentBasePath) {
+//         currentBasePath.setMap(null);
+//         currentBasePath = null;
+//     }
+//     if (currentGuidePath) {
+//         currentGuidePath.setMap(null);
+//         currentGuidePath = null;
+//     }
+// }

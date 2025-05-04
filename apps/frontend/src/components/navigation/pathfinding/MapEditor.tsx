@@ -491,7 +491,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setPatriot20Overlay(createPatriot20Overlays(map));
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));
-            } else if (selectedHospital === 'Faulkner') {
+            } else if (selectedHospital === 'Faulkner' || selectedHospital === 'Belkin House' ) {
                 createFaulknerOverlays(map);
             }
             else if (selectedHospital === 'Main Campus') {

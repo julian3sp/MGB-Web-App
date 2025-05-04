@@ -44,14 +44,16 @@ export const PictureCorners: React.FC<PictureCornersProps> = ({
 
     function handleClick(e: React.MouseEvent) {
         if (!cvs.current || pixelCorners.length === 4) return;
-        const rect = cvs.current.getBoundingClientRect();
+        // coordinates in the displayed (CSS) canvas
+        const cssX = e.nativeEvent.offsetX;
+        const cssY = e.nativeEvent.offsetY;
 
-        // offset because canvas is smaller than image
-        const scaleX = cvs.current.width  / rect.width;
-        const scaleY = cvs.current.height / rect.height;
+        // convert to the image’s real pixel grid
+        const scaleX = cvs.current.width  / cvs.current.clientWidth;
+        const scaleY = cvs.current.height / cvs.current.clientHeight;
 
-        const x = (e.clientX - rect.left) * scaleX;
-        const y = (e.clientY - rect.top)  * scaleY;
+        const x = cssX * scaleX;
+        const y = cssY * scaleY;
 
         // Next corner
         console.log("pixel: ", x, " ,", y)

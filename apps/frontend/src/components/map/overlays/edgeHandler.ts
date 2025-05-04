@@ -145,7 +145,6 @@ export function drawAllEdges(
             core  .setOptions({ strokeWeight: CORE_WEIGHT   });
         });
 
-
         // startEdgeAnimation(overlays);
         edgeComponents.push({edge: edge, layers: [border, core, overlay] }); // return only the main visible line
     }
@@ -154,6 +153,8 @@ export function drawAllEdges(
     return edgeComponents;
 }
 
+
+// draw path for navigation
 export function drawPath(map: google.maps.Map, nodes: Node[]): google.maps.Polyline | null {
     if (nodes.length < 2) return null;
 
@@ -162,19 +163,18 @@ export function drawPath(map: google.maps.Map, nodes: Node[]): google.maps.Polyl
 
     const path = nodes.map(node => ({ lat: node.x, lng: node.y }));
 
-    // Create the 3D effect with a dark blue base and lighter gradient overlay
-    // Base path (dark blue with shadow effect)
+    // Base path
     currentBasePath = new google.maps.Polyline({
         path: path,
         geodesic: true,
-        strokeColor: "#0A1F5C", // Dark blue base
+        strokeColor: "#0A1F5C",
         strokeOpacity: 1.0,
-        strokeWeight: 10, // Wider base for 3D effect
+        strokeWeight: 10,
         zIndex: 1
     });
     currentBasePath.setMap(map);
 
-    // Middle layer for 3D effect (medium blue)
+    // middle layer
     const middleLayer = new google.maps.Polyline({
         path: path,
         geodesic: true,
@@ -185,7 +185,7 @@ export function drawPath(map: google.maps.Map, nodes: Node[]): google.maps.Polyl
     });
     middleLayer.setMap(map);
 
-    // Top highlight layer (lighter blue)
+    // Top highlight layer
     const highlightLayer = new google.maps.Polyline({
         path: path,
         geodesic: true,

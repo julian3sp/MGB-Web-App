@@ -533,6 +533,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     const [pixelCorners, setPixelCorners] = useState<[number, number][]>([]);
     const [worldCorners, setWorldCorners] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
     const [imgOverlay, setImgOverlay] = useState<google.maps.GroundOverlay | null>(null);
+    const [calculatingNodes, setCalculatingNodes] = useState<boolean>(false);
     const { data: largestArr, isLoading, refetch: refetchLargestId} = trpc.getLargestNodeId.useQuery();
 
     async function sendToFastApi() {
@@ -577,6 +578,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         try {
             console.log("calculating")
             // 1) Fetch the ZIP from the FastAPI endpoint
+            setCalculatingNodes(true);
             const res = await fetch('http://localhost:3001/image-api/generate-new-map', {
                 method: 'POST',
                 body: form,
@@ -592,7 +594,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             await makeNode.mutateAsync(node_edge_input[0]);
             await makeEdge.mutateAsync(node_edge_input[1]);
 
-            alert('Graph appended successfully!');
+
         } catch (e) {
             console.error(e);
             alert('Import failed: ' + e.message);
@@ -608,6 +610,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         setWorldCorners([]);
         setImgOverlay(null);
         await handleSubmit();
+        setCalculatingNodes(false);
     }
 
     function resetImageProcessor(){
@@ -628,17 +631,26 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             Map Editor Controls
                         </h2>
 
-                        <button
+                        {!calculatingNodes ?
+                            (<button
                             className={`w-[80%] block mx-auto font-[poppins] border-2 shadow-lg rounded-xl p-3 transition duration-200
-    ${                          mode === 'edit'
+                                ${mode === 'edit'
                                 ? 'bg-[#003a96] text-white border-[#003a96] hover:bg-[#00286e]' 
                                 : 'bg-white text-[#003a96] border-[#003a96] hover:bg-[#f0f6ff]'}`}
                             onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
                         >
                             {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
-                        </button>
+                            </button>) : <div> </div>}
 
-                        {mode === 'edit' ? (
+                        {calculatingNodes ? (
+                                <div className="bg-blue-50 border-l-4 border-[#003a96] text-[#003a96] px-6 py-5 rounded shadow-sm mt-6 flex flex-col items-center gap-4"
+                                    role="alert">
+                                    <h2 className="font-bold text-center text-[#003a96] text-2xl font-[poppins]">
+                                        Calculating new paths...
+                                    </h2>
+                                    <div className="w-30 h-30 border-4 border-[#003a96] border-t-transparent rounded-full animate-spin"></div>
+                                </div>)
+                        :mode === 'edit' ? (
                             <EditorPanel
                                 selectedNode={selectedNode}
                                 currentNodeType={currentNodeType}

@@ -1,7 +1,4 @@
 import {PictureCorners} from "@/components/navigation/mapEditorComponent/ImageProcessor/PictureCorners.tsx";
-import {imageCornerMarkerContent, cornerState} from "../../../map/overlays/markerStyles.ts";
-import {useEffect} from "react";
-// import {graph} from "../../../map/GraphObject.ts"
 export interface ImageProcessorPanelProps {
     map: google.maps.Map | null;
 
@@ -12,15 +9,6 @@ export interface ImageProcessorPanelProps {
     /** Pixel Corners*/
     pixelCorners: [number, number][];
     setPixelCorners: React.Dispatch<React.SetStateAction<[number, number][]>>;
-
-    /**Google Maps Overlay*/
-    // imgOverlay: google.maps.GroundOverlay | null;
-    // placeOverlay: (map: google.maps.Map | null,
-    //                imgFile: File | null,
-    //                setImgOverlay: (overlay: google.maps.GroundOverlay | null) => void,
-    //                worldCorners: google.maps.marker.AdvancedMarkerElement[],
-    //                setWorldCorners: (markers: google.maps.marker.AdvancedMarkerElement[] | null) => void) => void;
-    // setImgOverlay: (overlay: google.maps.GroundOverlay | null) => void;
 
 
     /** World Coordinate corners */
@@ -37,9 +25,6 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
                                                                             setImgFile,
                                                                             pixelCorners,
                                                                             setPixelCorners,
-                                                                            // imgOverlay,
-                                                                            // setImgOverlay,
-                                                                            // placeOverlay,
                                                                             worldCorners,
                                                                             setWorldCorners,
                                                                             sendToFastApi,

@@ -107,6 +107,8 @@ model Review {
   createdAt DateTime @default(now())
 }
 
+
+
 model nodes {
   id        Int     @id @default(autoincrement())
   building  String

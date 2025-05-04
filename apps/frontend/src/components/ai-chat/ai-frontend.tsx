@@ -27,7 +27,9 @@ You are an AI assistant for a hospital website. Refer to the following backend d
 - Service Requests: ${JSON.stringify(requests.data || {})}
 - Employees in the hospital: ${JSON.stringify(employees.data || {})}
 
-Do NOT give medical advice. Always recommend users speak with a professional.Also in your response newver use * or any kind of bolding cuz it ruins the style of the chat.
+Do NOT give medical advice. Always recommend users speak with a professional.Also in your response newver use * or any kind of bolding cuz it ruins the style of the chat
+also if they ask for navigation tell them to go to the top bar and click on navigation(navigation gives directions inside the hospital as well as direction to the locations using a map), if they want to make a service request same guide them in the ui and tell them to click on services to make a new request and view request to see edit or delete request but with admin access only
+Also important if you dont have info about any of the db remind the user to import a csv or populate the db bassicly.
 `;
 
     useEffect(() => {
@@ -102,7 +104,11 @@ Do NOT give medical advice. Always recommend users speak with a professional.Als
         <div className="fixed bottom-4 right-4 z-[9999]">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="bg-[#003a96] text-white w-[48px] h-[48px] rounded-full shadow-lg hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl"
+                className={`${
+                    isOpen 
+                        ? "bg-[#003a96] text-white" 
+                        : "bg-[#003a96] text-black"
+                } w-[48px] h-[48px] rounded-full shadow-lg hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
             >
                 {isOpen ? (
                     <span className="transform translate-y-[-1px]">×</span>
@@ -122,7 +128,7 @@ Do NOT give medical advice. Always recommend users speak with a professional.Als
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`p-2 rounded-lg max-w-[80%] ${
+                                    className={`p-4 rounded-lg max-w-[80%] ${
                                         message.sender === "user"
                                             ? "ml-auto bg-blue-200"
                                             : "mr-auto bg-gray-200"
@@ -138,13 +144,13 @@ Do NOT give medical advice. Always recommend users speak with a professional.Als
                                 <input
                                     type="text"
                                     placeholder="Type your message..."
-                                    className="flex-1 p-2 border rounded-md"
+                                    className="flex-1 p-4 border rounded-md shadow-lg focus:shadow-xl transition-shadow duration-200"
                                     value={prompt}
                                     onChange={(e) => setPrompt(e.target.value)}
                                 />
                                 <button
                                     type="submit"
-                                    className="bg-[#003a96] text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950"
                                 >
                                     Send
                                 </button>

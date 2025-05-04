@@ -128,7 +128,7 @@ const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
           </button>
           <button
             onClick={() => setUseFeet(!useFeet)}
-            className="py-1 text-[#003a96] text-md font-bold cursor-pointer"
+            className="w-10 py-1 text-[#003a96] text-md font-bold cursor-pointer"
           >
             {useFeet ? 'Meters' : 'Feet'}
           </button>

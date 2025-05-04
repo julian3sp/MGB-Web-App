@@ -113,7 +113,7 @@ const DirectionsGuide: React.FC<DirectionsGuideProps> = ({ directions }) => {
   return (
     <div className="mt-4 mb-4 p-4 w-[90%] mx-auto bg-white rounded-md shadow-lg max-h-96 overflow-y-auto text-sm">
       <div className="flex justify-between items-center">
-        <h3 className="font-semibold">Step-by-step directions</h3>
+        <h3 className="font-semibold">Directions</h3>
         <button
           onClick={handleToggleSpeak}
           aria-label="Toggle directions speech"

@@ -14,6 +14,7 @@ export function AiFrontend() {
     const [prompt, setPrompt] = useState<string>("");
     const [isOpen, setIsOpen] = useState(false);
     const chatRef = useRef<any>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const directories = trpc.getDirectories.useQuery();
     const requests = trpc.requestList.useQuery();  
@@ -26,10 +27,18 @@ You are an AI assistant for a hospital website. Refer to the following backend d
 - Service Requests: ${JSON.stringify(requests.data || {})}
 - Employees in the hospital: ${JSON.stringify(employees.data || {})}
 
-Do NOT give medical advice. Always recommend users speak with a professional.Also in your response newver use * or any kind of bolding cuz it ruins the style of the chat
-also if they ask for navigation tell them to go to the top bar and click on navigation(navigation gives directions inside the hospital as well as direction to the locations using a map), if they want to make a service request same guide them in the ui and tell them to click on services to make a new request and view request to see edit or delete request but with admin access only
-Also important if you dont have info about any of the db remind the user to import a csv or populate the db bassicly.
+Do NOT give medical advice. Always recommend users speak with a professional. Also in your response never use * or any kind of bolding cuz it ruins the style of the chat.
+If they ask for navigation tell them to go to the top bar and click on navigation (navigation gives directions inside the hospital as well as direction to the locations using a map). 
+If they want to make a service request, guide them in the UI to click on services to make a new request and view request to see/edit/delete requests (admin access required for modifications).
+If you don't have info about any of the DB, remind the user to import a CSV or populate the database.
 `;
+
+    // Auto-scroll effect
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     useEffect(() => {
         const setupChat = async () => {
@@ -123,25 +132,25 @@ Also important if you dont have info about any of the db remind the user to impo
                             <h2 className="text-xl font-bold font-poppins">AI Assistant</h2>
                         </div>
 
-                        <div className="flex-1 overflow-y-scroll px-4 py-3 space-y-4 space "> {/*If chat padding is messed up, replace "px-4" with "pl-4". Has been different on different PCs not sure why */}
-                        {messages.map((message, index) => (
-                        <div key={index} className="space-y-1">
-                            {message.sender === "ai" && (
-                                <div className="text-sm font-semibold text-gray-600 ml-1 mr-1">AI chat bot:</div>
-                            )}
-                            <div
-                                className={`px-5 py-2 rounded-lg w-fit break-words ${
-                                    message.sender === "user"
-                                        ? "ml-auto bg-blue-200"
-                                        : "mr-auto bg-gray-200"
-                                }`}
-                                style={{ maxWidth: "80%" }}
-                            >
-                                {message.text}
-                            </div>
-                        </div>
-                    ))}
-
+                        <div className="flex-1 overflow-y-scroll px-4 py-3 space-y-4">
+                            {messages.map((message, index) => (
+                                <div key={index} className="space-y-1">
+                                    {message.sender === "ai" && (
+                                        <div className="text-sm font-semibold text-gray-600 ml-1 mr-1">AI chat bot:</div>
+                                    )}
+                                    <div
+                                        className={`px-5 py-2 rounded-lg w-fit break-words ${
+                                            message.sender === "user"
+                                                ? "ml-auto bg-blue-200"
+                                                : "mr-auto bg-gray-200"
+                                        }`}
+                                        style={{ maxWidth: "80%" }}
+                                    >
+                                        {message.text}
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef} />
                         </div>
 
                         <form onSubmit={handleSubmit} className="p-4 bg-grey border-t-2 rounded-b-lg" style={{ borderTopColor: '#ECECEC' }}>

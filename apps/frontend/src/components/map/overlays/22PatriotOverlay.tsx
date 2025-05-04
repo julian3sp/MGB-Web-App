@@ -1,22 +1,31 @@
 // import floor3OverlayImg from '../../../../assets/pat22_floor3_rotated.png'
 
-import floor3OverlayImg from '../../../../assets/pat22Rotated/22-FLOOR1-1_rotated.png'
-import floor4OverlayImg from '../../../../assets/pat22_floor4_rotated.png'
+import floor1OverlayImg from '../../../../assets/pat22Rotated/22-FLOOR1-1_rotated.png'
+import floor3OverlayImg from '../../../../assets/pat22Rotated/22-FLOOR2-1_rotated.png'
+import floor4OverlayImg from '../../../../assets/pat22Rotated/22-FLOOR4-1_rotated.png'
 
 
 export interface Patriot22Overlays {
+  floor1Overlay: google.maps.GroundOverlay;
   floor3Overlay: google.maps.GroundOverlay;
   floor4Overlay: google.maps.GroundOverlay;
 }
 
 
 export const createPatriot22Overlays = (map: google.maps.Map) => {
-  const coordinates_1: number[] = [42.33823013520938 , 42.33485323661164 , -71.1045017426678 , -71.10960085746207]
-  const coordinates_3: number[] = [42.0930954228745 , 42.092208727856175 , -71.2663456485944 , -71.26744996670973]
-  // const coordinates_3: number[] = [42.09319426546392 , 42.09195597432981 , -71.26619891316744 , -71.26765735462097]
-  const coordinates_4: number[] = [42.09317400927991 , 42.092096082400786 , -71.26633478170012 , -71.26760748755561]
+  const coordinates_1: number[] = [42.09306043938896 , 42.09211822307515 , -71.26617276939787 , -71.26743422403173]
+  const coordinates_3: number[] = [42.09312814054003 , 42.0921228813936 , -71.26620901757691 , -71.26743021876958]
 
-  const bounds = {
+  const coordinates_4: number[] = [42.09309165610839 , 42.092198140431805 , -71.26640595717775 , -71.2674542835565]
+
+  const bounds1 = {
+    north: coordinates_1[0],
+    south: coordinates_1[1],
+    east: coordinates_1[2],
+    west: coordinates_1[3],
+  };
+
+  const bounds3 = {
     north: coordinates_3[0],
     south: coordinates_3[1],
     east: coordinates_3[2],
@@ -30,9 +39,17 @@ export const createPatriot22Overlays = (map: google.maps.Map) => {
     west: coordinates_4[3],
   };
 
+  const floor1Overlay = new google.maps.GroundOverlay(
+      floor1OverlayImg,
+      bounds1,
+      {clickable: false,
+        opacity: 1}
+  )
+  floor1Overlay.setMap(map);
+
   const floor3Overlay = new google.maps.GroundOverlay(
     floor3OverlayImg, 
-    bounds, 
+    bounds3,
     {clickable: false,
       opacity: 1}
   )
@@ -46,19 +63,35 @@ export const createPatriot22Overlays = (map: google.maps.Map) => {
   )
   floor4Overlay.setMap(map);
 
-  return {floor3Overlay, floor4Overlay};
+  return {floor1Overlay, floor3Overlay, floor4Overlay};
 };
 
 export const updatePatriotPlace22 = (
   overlays: Patriot22Overlays, 
   selectedFloor: number
 ) => {
-  if (selectedFloor === 3) {
-    overlays.floor3Overlay.setOpacity(1);
-    overlays.floor4Overlay.setOpacity(0);
-  } else {
-    overlays.floor3Overlay.setOpacity(0);
-    overlays.floor4Overlay.setOpacity(1);
+  console.log(selectedFloor);
+  switch (selectedFloor) {
+    case 1:
+      overlays.floor1Overlay.setOpacity(1);
+      overlays.floor3Overlay.setOpacity(0);
+      overlays.floor4Overlay.setOpacity(0);
+      break;
+    case 3:
+      overlays.floor1Overlay.setOpacity(0);
+      overlays.floor3Overlay.setOpacity(1);
+      overlays.floor4Overlay.setOpacity(0);
+      break;
+    case 4:
+      overlays.floor1Overlay.setOpacity(0);
+      overlays.floor3Overlay.setOpacity(0);
+      overlays.floor4Overlay.setOpacity(1);
+      break;
+    default:
+      overlays.floor1Overlay.setOpacity(1);
+      overlays.floor3Overlay.setOpacity(0);
+      overlays.floor4Overlay.setOpacity(0);
+      break;
   }
 }
   

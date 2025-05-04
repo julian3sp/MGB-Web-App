@@ -314,6 +314,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         setFloorOverlay(null);
       }
       if (patriot22Overlays) {
+        patriot22Overlays.floor1Overlay.setMap(null);
         patriot22Overlays.floor3Overlay.setMap(null);
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
@@ -339,7 +340,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         if (selectedDestination.name === "MGB (Chestnut Hill)") {
           const overlays: MGBOverlays = createMGBOverlays(map);
           setParkingOverlay(overlays.parkingOverlay);
-          setFloorOverlay(overlays.floorOverlay);
+          // setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
           const overlays = createPatriot20Overlays(map);
           setPatriot20Overlays(overlays);

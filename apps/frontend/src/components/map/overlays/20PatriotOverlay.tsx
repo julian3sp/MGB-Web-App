@@ -1,8 +1,8 @@
 // import floor1OverlayImg from '../../../../assets/pat20_floor1_rotated.png'
-import floor1OverlayImg from '../../../../assets/20-FLOOR1-BASIC-LG_rotated.png'
-import floor2OverlayImg from '../../../../assets/20-FLOOR2-BASIC-LG_rotated.png'
-import floor3OverlayImg from '../../../../assets/20-FLOOR3-BASIC-LG_rotated.png'
-import floor4OverlayImg from '../../../../assets/20-FLOOR4-BASIC-LG_rotated.png'
+import floor1OverlayImg from '../../../../assets/pat20Rotated/20-FLOOR1-1_rotated.png'
+import floor2OverlayImg from '../../../../assets/pat20Rotated/20-FLOOR2-1_rotated.png'
+import floor3OverlayImg from '../../../../assets/pat20Rotated/20-FLOOR3-1_rotated.png'
+import floor4OverlayImg from '../../../../assets/pat20Rotated/20-FLOOR4-1_rotated.png'
 
 export interface Patriot20Overlays {
     floor1Overlay: google.maps.GroundOverlay;
@@ -14,10 +14,10 @@ export interface Patriot20Overlays {
 
 export const createPatriot20Overlays = (map: google.maps.Map) => {
 
-    const coordinates: number[] = [42.093337807724716 , 42.09249641261184 , -71.26550353512583 , -71.26660582113067]
-    const coordinates2: number[] = [42.093360887297486 , 42.09247356948301 , -71.26547814488669 , -71.26663027355382]
-    const coordinates3: number[] = [42.093360887297486 , 42.09247356948301 , -71.26547814488669 , -71.26663027355382]
-    const coordinates4: number[] = [42.093360887297486 , 42.09247356948301 , -71.26547814488669 , -71.26663027355382]
+    const coordinates: number[] = [42.09324402369457 , 42.092463386938896 , -71.26549860229635 , -71.26660553739771]
+    const coordinates2: number[] = [42.093202516968006 , 42.09245889166562 , -71.26551920665537 , -71.2665985583356]
+    const coordinates3: number[] = [42.09320067250373 , 42.09246273991819 , -71.2655198318874 , -71.26659530485105]
+    const coordinates4: number[] = [42.09320743705746 , 42.092462479799565 , -71.26552085088777 , -71.2665965954248]
 
     const bounds = {
         north: coordinates[0],

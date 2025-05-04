@@ -11,6 +11,10 @@ import HospitalViewControls from './HospitalViewControls';
 import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
 import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfinding/StrategyPathfind.ts"
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
+
+import { showRouteWithDirections } from './overlays/RouteWithDirection.tsx';
+import HospitalDirectionsGuide from './HospitalDirectionGuide.tsx';
+
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 interface MapRendererProps {
@@ -21,10 +25,14 @@ interface MapRendererProps {
   ) => void;
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
-  selectedFloor?: 1| 2| 3 | 4;
+  selectedFloor?: 1 | 2 | 3 | 4;
   onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
+  onPathFound?: (pathNodes: Node[]) => void;
+  onTextDirectionsGenerated?: (textDirections: string[]) => void;
+  onFloorChangeRequired?: (floor: number) => void;
+  currentFloor: number;
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({
@@ -33,7 +41,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onZoomChange,
   selectedFloor = 1,
   onFloorChange,
-  departmentNumber
+  departmentNumber,
+  onPathFound,
+  onTextDirectionsGenerated,
+  onFloorChangeRequired,
+  currentFloor
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -48,6 +60,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   const pathPolylineRef = useRef<google.maps.Polyline | null>(null);
   const startMarkerRef = useRef<google.maps.Marker | null>(null);
   const targetMarkerRef = useRef<google.maps.Marker | null>(null);
+  const pathNodesRef = useRef<Node[]>([]);
 
   const context = new PathContext();
 
@@ -170,22 +183,22 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
-  function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
+  function getMultiFloor(path: Node[]): { floor1: { path: Node[], floorNum: number }, floor2: { path: Node[], floorNum: number } } {
     const firstFloorNum: number = path[0].floor
     const lastFloorNum: number = path[path.length - 1].floor
-    const secondFloorStairs = path.find(n => n.floor === lastFloorNum);
-    if (secondFloorStairs) {
-      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
-      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+    const firstFloorStairs = path.find(n => n.floor != firstFloorNum);
+    const lastFloorStairs = path.find(n => n.floor === lastFloorNum);
+    if (lastFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(firstFloorStairs))
+      const floor2 = path.slice(path.indexOf(lastFloorStairs))
       return {
-        floor1: {path: floor1, floorNum: firstFloorNum},
-        floor2: {path: floor2, floorNum: secondFloorStairs.floor}
-      };
+        floor1: { path: floor1, floorNum: firstFloorNum },
+        floor2: { path: floor2, floorNum: lastFloorStairs.floor }
+      }
     }
-    return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
+    return { floor1: { path, floorNum: firstFloorNum }, floor2: { path: [], floorNum: firstFloorNum } }
   }
 
-  // Handle department pathfinding
   useEffect(() => {
     if (
       !map ||
@@ -196,18 +209,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       !edgesData
     ) return;
 
+    console.log('Running pathfinding for department: ', departmentNumber)
+
     try {
       // Build the graph from TRPC data
       const graph = new Graph();
       graph.populate(nodesData, edgesData);
 
       // Fixed entrance node and target department node
-
       const entrances: { [building: string]: number; } = {
         "MGB (Chestnut Hill)": 3715,
         "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
+        "Belkin House": 3716, // CHANGE THISSSSSS
         "Main Campus": 4963
       }
 
@@ -227,7 +242,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
-      if(algoType === "A-Star") {
+      if (algoType === "A-Star") {
         console.log("Using A-Star")
         context.setStrategyPathfind(new AStar());
       } else if (algoType === "DFS") {
@@ -236,33 +251,52 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       } else if (algoType === "BFS") {
         console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
-      } else if (algoType === "Dijkstras"){
+      } else if (algoType === "Dijkstras") {
         console.log("Using Dijkstra's")
         context.setStrategyPathfind(new Dijkstras())
       }
 
       const pathNodes = context.pathFind(graph, entrance, target)
+      console.log("Path to: ", pathNodes)
+
+      pathNodesRef.current = pathNodes;
+
+      if (pathNodes && onPathFound) {
+        onPathFound(pathNodes)
+      }
 
       const multiFloors = getMultiFloor(pathNodes)
-
       console.log("Path:", pathNodes)
-
-      let newPolyline: any
-
       console.log("Floor: ", selectedFloor)
 
-      if(multiFloors.floor2.floorNum === multiFloors.floor1.floorNum){
+      // Initialize newPolyline as let instead of const
+      let newPolyline;
+
+      if (multiFloors.floor2.floorNum === multiFloors.floor1.floorNum) {
         newPolyline = drawPath(map, pathNodes);
       } else {
-        if(multiFloors.floor1.floorNum === selectedFloor){
+        if (multiFloors.floor1.floorNum === selectedFloor) {
           newPolyline = drawPath(map, multiFloors.floor1.path);
-        } else if (multiFloors.floor2.floorNum === selectedFloor){
+        } else if (multiFloors.floor2.floorNum === selectedFloor) {
           newPolyline = drawPath(map, multiFloors.floor2.path);
         }
       }
 
+      // Fallback if no path was drawn (shouldn't happen)
+      if (!newPolyline) {
+        newPolyline = drawPath(map, pathNodes);
+      }
+
       pathPolylineRef.current = newPolyline;
 
+      const routeInfo = showRouteWithDirections(map, pathNodes, selectedFloor, onFloorChangeRequired);
+
+      if (onTextDirectionsGenerated) {
+        onTextDirectionsGenerated(routeInfo.directions)
+      }
+
+      console.log("Route Directions: ", routeInfo.directions);
+      console.log("Total distance: ", routeInfo.totalDistance)
 
       // Clear existing markers
       if (startMarkerRef.current) {
@@ -314,6 +348,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         setFloorOverlay(null);
       }
       if (patriot22Overlays) {
+        patriot22Overlays.floor1Overlay.setMap(null);
         patriot22Overlays.floor3Overlay.setMap(null);
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
@@ -339,7 +374,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         if (selectedDestination.name === "MGB (Chestnut Hill)") {
           const overlays: MGBOverlays = createMGBOverlays(map);
           setParkingOverlay(overlays.parkingOverlay);
-          setFloorOverlay(overlays.floorOverlay);
+          // setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
           const overlays = createPatriot20Overlays(map);
           setPatriot20Overlays(overlays);
@@ -348,7 +383,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
           updatePatriotPlace22(overlays, selectedFloor!);
-        } else if (selectedDestination.name === "Faulkner") {
+        } else if (selectedDestination.name === "Faulkner" || selectedDestination.name === "Belkin House") {
           createFaulknerOverlays(map);
         }
         else if (selectedDestination.name === "Main Campus") {
@@ -439,27 +474,54 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   const rotateMap = (direction: 'left' | 'right') => {
     if (!map) return;
-  
+
     const currentZoom = map.getZoom() || 0;
-  
+
     if (currentZoom < 18) {
       map.setZoom(18);
     }
-  
+
     const amount = direction === 'left' ? 20 : -20;
     const currentHeading = map.getHeading() ?? 0;
     const newHeading = (currentHeading + amount) % 360;
-  
+
     console.log("Rotating map from:", currentHeading, "to:", newHeading);
-  
+
     map.setHeading(newHeading);
-  
+
     const center = map.getCenter();
     if (center) {
       map.panTo(center);
     }
+    updateDirectionsForViewpoint(newHeading);
   };
-  
+
+  const updateDirectionsForViewpoint = (heading: number) => {
+    if (!map || !pathNodesRef.current.length || !onTextDirectionsGenerated) return;
+
+    const routeInfo = showRouteWithDirections(
+      map,
+      pathNodesRef.current,
+      selectedFloor,
+      onFloorChangeRequired,
+      heading
+    )
+    onTextDirectionsGenerated(routeInfo.directions)
+  }
+
+  useEffect(() => {
+    if (!map) return;
+
+    const headingListener = map.addListener('heading_changed', () => {
+        const currentHeading = map.getHeading() ?? 0;
+        updateDirectionsForViewpoint(currentHeading);
+    });
+
+    return () => {
+        google.maps.event.removeListener(headingListener);
+    };
+}, [map]);
+
   // Handle path visibility based on zoom level
   useEffect(() => {
     if (!map) return;

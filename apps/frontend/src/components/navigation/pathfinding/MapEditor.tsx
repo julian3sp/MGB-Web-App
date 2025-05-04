@@ -154,6 +154,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
         'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406 },
+        'Belkin House': { lat:42.301730 , lng: -71.127249 },
         'Main Campus': { lat:42.33539999367496 , lng: -71.10675757779984 }
     };
 
@@ -348,9 +349,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
-            const w = WorldDistance(startNodeRef.current, node);
-            const edge: Edge = { id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w }
-            graph.addEdge(edge);
+            let w = WorldDistance(startNodeRef.current, node);
+
+
             setStartNode(null);
 
 
@@ -366,8 +367,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 node.type = NodeType.Elevator;
                 graph.editNode(startNodeRef.current)
                 graph.editNode(node)
+                w = 1000;
                 console.log("set nodes to elevator (default)")
             }
+
+            const edge: Edge = { id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w }
+            graph.addEdge(edge);
 
             startNodeRef.current = null;
             console.log("end");
@@ -394,6 +399,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const edits = graph.getEditHistory()
         console.log("Edits: ", edits);
         await editNodes.mutateAsync(edits.editedNodes);
+        console.log("balls:", edits.addedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);
@@ -486,7 +492,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setPatriot20Overlay(createPatriot20Overlays(map));
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));
-            } else if (selectedHospital === 'Faulkner') {
+            } else if (selectedHospital === 'Faulkner' || selectedHospital === 'Belkin House' ) {
                 createFaulknerOverlays(map);
             }
             else if (selectedHospital === 'Main Campus') {

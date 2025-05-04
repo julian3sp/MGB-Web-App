@@ -6,10 +6,10 @@
 **/.turbo
 **/dist
 **/.prisma
-
+**/.venv
+**/__pycache__
+**/imageAPI
 out
-
-.venv
 
 # testing
 **/coverage

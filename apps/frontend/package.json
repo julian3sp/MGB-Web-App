@@ -13,9 +13,11 @@
     },
     "dependencies": {
         "@auth0/auth0-react": "^2.1.1",
+        "@google/generative-ai": "^0.24.1",
         "@googlemaps/js-api-loader": "^1.16.8",
         "@googlemaps/markerclusterer": "^2.5.3",
         "@popperjs/core": "^2.11.8",
+        "@radix-ui/react-accordion": "^1.2.8",
         "@radix-ui/react-alert-dialog": "^1.1.8",
         "@radix-ui/react-checkbox": "^1.2.3",
         "@radix-ui/react-dialog": "^1.1.10",

@@ -50,7 +50,12 @@ const useClickOutside = (handler: () => void) => {
     return reference;
 };
 
-export default function RequestListPage({ userRole }: { userRole: string }) {
+type RequestListPageProps = {
+    userRole: string;
+    userName: string;
+}
+
+export default function RequestListPage({userRole, userName}: RequestListPageProps) {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
@@ -1033,22 +1038,24 @@ export default function RequestListPage({ userRole }: { userRole: string }) {
                                         <div className={' mr-2 p-3  '}>
                                             <p className={'text-[12pt] ml-1'}>
                                                 {selectedRequest.additional_comments?.trim() ? (
-                                                    <p>{selectedRequest.additional_comments}</p>
+                                                    <p>{userName} : {selectedRequest.additional_comments}</p>
                                                 ) : (
                                                     'N/A'
                                                 )}
                                             </p>
                                         </div>
                                     </ul>
+                                    <div className="flex justify-center mt-2 mb-3">
                                     <button
-                                        className="flex justify-center mb-5 cursor-pointer"
+                                        className="flex justify-center mb-5 cursor-pointer border-black px-3 py-1 text-[#003a96] rounded"
                                         onClick={() => setOpenChat(true)}
                                     >
                                         View All
                                     </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg ml-6 mr-6 mb-10 mt-4 p-3">
+                            <div className="bg-white shadow-sm rounded-lg ml-6 mr-6 mb-10 mt-4 p-3">
                                 <h3
                                     className="text-[14pt] font-semibold p-3 pb-0 font-[Poppins]"
                                     style={{ color: '#003A96' }}

@@ -109,7 +109,7 @@ function InnerApp() {
                     <Route path="requests" element={<RequestPage />}>
                         <Route index element={<Navigate to="table" replace />} />
                         <Route path="table" element={<RequestTablePage userRole={userRole}/>} />
-                        <Route path="list" element={<RequestListPage userRole={userRole}/>} />
+                        <Route path="list" element={<RequestListPage userRole={userRole} userName={user?.name || ""}/>} />
                     </Route>
                 </Route>
             </Routes>

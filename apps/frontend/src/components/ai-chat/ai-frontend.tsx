@@ -123,7 +123,7 @@ Also important if you dont have info about any of the db remind the user to impo
                             <h2 className="text-xl font-bold font-poppins">AI Assistant</h2>
                         </div>
 
-                        <div className="flex-1 overflow-y-scroll px-4 py-3 space-y-4 space ">
+                        <div className="flex-1 overflow-y-scroll px-4 py-3 space-y-4 space "> {/*If chat padding is messed up, replace "px-4" with "pl-4". Has been different on different PCs not sure why */}
                         {messages.map((message, index) => (
                         <div key={index} className="space-y-1">
                             {message.sender === "ai" && (

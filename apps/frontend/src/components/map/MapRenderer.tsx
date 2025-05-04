@@ -173,14 +173,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   function getMultiFloor(path: Node[]): {floor1: {path: Node[], floorNum: number}, floor2: {path: Node[], floorNum: number}} {
     const firstFloorNum: number = path[0].floor
     const lastFloorNum: number = path[path.length - 1].floor
-    const secondFloorStairs = path.find(n => n.floor === lastFloorNum);
-    if (secondFloorStairs) {
-      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
-      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+    const firstFloorStairs = path.find(n => n.floor != firstFloorNum);
+    const lastFloorStairs = path.find(n => n.floor === lastFloorNum);
+    if (lastFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(firstFloorStairs))
+      const floor2 = path.slice(path.indexOf(lastFloorStairs))
       return {
         floor1: {path: floor1, floorNum: firstFloorNum},
-        floor2: {path: floor2, floorNum: secondFloorStairs.floor}
-      };
+        floor2: {path: floor2, floorNum: lastFloorStairs.floor}
+      }
     }
     return {floor1:{path,floorNum: firstFloorNum}, floor2: {path: [],floorNum: firstFloorNum}}
   }

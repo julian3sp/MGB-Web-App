@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 import tempfile, os, io, zipfile, json
 from .skeleton import generate_new_map
+from mangum import Mangum
 
 app = FastAPI()
 
@@ -13,6 +14,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# # Lambda entry‑point ───────────────────────────────────────────
+# handler = Mangum(
+#     app,
+#     binary_media_types=["application/zip"],   # let API Gateway pass ZIPs through
+#     lifespan="auto",                          # run startup/shutdown hooks
+# )
 
 @app.get("/health")
 async def health():

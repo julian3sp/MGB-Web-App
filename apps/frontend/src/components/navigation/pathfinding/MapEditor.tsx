@@ -628,7 +628,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </h2>
 
                         <button
-                            className="bg-[#0076CE] text-white font-[poppins] shadow rounded p-3 mb-4"
+                            className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
                             onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
                         >
                             {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
@@ -646,9 +646,14 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 handleNodeTypeChange={handleNodeTypeChange}
                             />
                         ) : !selectedFloor && !selectedHospital ? (
-                            <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
-                                Select Floor and Building
-                            </h2>
+                            <div className="bg-blue-50 border-l-4 border-[#003a96] text-[#003a96] px-4 py-3 rounded shadow-sm mt-4" role="alert">
+                                <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
+                                    Warning:
+                                </h2>
+                                <p className="font-semibold text-lg font-[poppins]">
+                                    Please select a building on the map controls below before continuing .
+                                </p>
+                            </div>
                         ) : (
                             <div className="flex flex-col gap-4">
                                 <div className="flex-grow">

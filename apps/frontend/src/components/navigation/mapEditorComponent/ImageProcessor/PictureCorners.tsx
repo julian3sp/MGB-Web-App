@@ -149,24 +149,30 @@ export const PictureCorners: React.FC<PictureCornersProps> = ({
 
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-4 bg-blue-50 border-l-4 border-[#003a96] p-4 rounded shadow-sm mt-6">
+            <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins] mb-2">Step 2: Select Image Corners</h2>
+            <p className="font-semibold text-lg font-[poppins] text-[#003a96]">
+                Please click on the four corners on the image to calibrate placement.
+            </p>
 
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="text-xl font-semibold text-[#003a96] font-[poppins]">
                 Click corner #{pixelCorners.length + 1} —{" "}
-                {cornerLabels[pixelCorners.length] || ""}
+                <span className="italic text-[#009CA6]">
+                  {cornerLabels[pixelCorners.length] || ""}
+                </span>
             </h2>
             <canvas
                 ref={cvs}
-                className="border w-full"
+                className=" rounded w-full cursor-crosshair"
                 onClick={handleClick}
             />
-            <button
-                className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
-                onClick={() => {removePreviousDot()}}
-            >
-                Remove Previous Click
-            </button>
 
+            <button
+                className="bg-[#003a96] w-3/4 mx-auto text-white font-semibold font-[poppins] hover:bg-[#00286e] shadow-md rounded-lg py-2 px-4 transition duration-200 block"
+                onClick={() => { removePreviousDot(); }}
+            >
+                ⬅ Remove Previous Click
+            </button>
         </div>
     );
 };

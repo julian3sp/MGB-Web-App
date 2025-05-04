@@ -50,6 +50,7 @@ export const makeRequest = publicProcedure
             status: z.string(),
             request_type: z.string(),
             additional_comments: z.optional(z.string()),
+            image_upload: z.optional(z.string()),
             sanitation: z.optional(
                 z.object({
                     cleaningType: z.string(),

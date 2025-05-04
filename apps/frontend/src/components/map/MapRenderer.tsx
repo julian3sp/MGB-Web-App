@@ -186,14 +186,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   function getMultiFloor(path: Node[]): { floor1: { path: Node[], floorNum: number }, floor2: { path: Node[], floorNum: number } } {
     const firstFloorNum: number = path[0].floor
     const lastFloorNum: number = path[path.length - 1].floor
-    const secondFloorStairs = path.find(n => n.floor === lastFloorNum);
-    if (secondFloorStairs) {
-      const floor1 = path.slice(0, path.indexOf(secondFloorStairs))
-      const floor2 = path.slice(path.indexOf(secondFloorStairs))
+    const firstFloorStairs = path.find(n => n.floor != firstFloorNum);
+    const lastFloorStairs = path.find(n => n.floor === lastFloorNum);
+    if (lastFloorStairs) {
+      const floor1 = path.slice(0, path.indexOf(firstFloorStairs))
+      const floor2 = path.slice(path.indexOf(lastFloorStairs))
       return {
         floor1: { path: floor1, floorNum: firstFloorNum },
-        floor2: { path: floor2, floorNum: secondFloorStairs.floor }
-      };
+        floor2: { path: floor2, floorNum: lastFloorStairs.floor }
+      }
     }
     return { floor1: { path, floorNum: firstFloorNum }, floor2: { path: [], floorNum: firstFloorNum } }
   }
@@ -221,6 +222,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
+        "Belkin House": 3716, // CHANGE THISSSSSS
         "Main Campus": 4963
       }
 
@@ -346,6 +348,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         setFloorOverlay(null);
       }
       if (patriot22Overlays) {
+        patriot22Overlays.floor1Overlay.setMap(null);
         patriot22Overlays.floor3Overlay.setMap(null);
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
@@ -371,7 +374,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         if (selectedDestination.name === "MGB (Chestnut Hill)") {
           const overlays: MGBOverlays = createMGBOverlays(map);
           setParkingOverlay(overlays.parkingOverlay);
-          setFloorOverlay(overlays.floorOverlay);
+          // setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
           const overlays = createPatriot20Overlays(map);
           setPatriot20Overlays(overlays);
@@ -380,7 +383,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
           updatePatriotPlace22(overlays, selectedFloor!);
-        } else if (selectedDestination.name === "Faulkner") {
+        } else if (selectedDestination.name === "Faulkner" || selectedDestination.name === "Belkin House") {
           createFaulknerOverlays(map);
         }
         else if (selectedDestination.name === "Main Campus") {
@@ -497,9 +500,9 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     if (!map || !pathNodesRef.current.length || !onTextDirectionsGenerated) return;
 
     const routeInfo = showRouteWithDirections(
-      map, 
-      pathNodesRef.current, 
-      selectedFloor, 
+      map,
+      pathNodesRef.current,
+      selectedFloor,
       onFloorChangeRequired,
       heading
     )

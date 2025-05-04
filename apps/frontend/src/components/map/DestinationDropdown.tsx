@@ -27,6 +27,10 @@ const destinations = [
     location: { lat: 42.30149071877142, lng: -71.12823221807406}
   },
   {
+    name: "Belkin House",
+    location: {  lat:42.301730 , lng: -71.127249}
+  },
+  {
     name: "Main Campus",
     location: { lat:42.33539999367496 , lng: -71.10675757779984 }
   }

@@ -706,7 +706,7 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                                     {selectedRequest.sanitation?.cleaningType && (
                                                         <div>
                                                             <div className={' '}>
-                                                                <span className="">
+                                                                <span className="ml-3 mt-4">
                                                                     Cleaning Type:
                                                                 </span>{' '}
                                                                 {
@@ -878,7 +878,7 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                                         <div>
                                                             <div
                                                                 className={
-                                                                    'border-1 rounded-lg border-[#D$D$D$]  shadow-sm bg-white  mr-2 p-3  '
+                                                                    ' rounded-lg   bg-white  mr-2 p-3  '
                                                                 }
                                                             >
                                                                 <span className="">

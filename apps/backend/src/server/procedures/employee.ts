@@ -20,3 +20,20 @@ export const makeEmployee = publicProcedure
         });
         return employee;
     });
+
+export const getEmployeeName = publicProcedure.query(async () => {
+    try {
+        console.log('Fetching employees...');
+        const employeeNames = await client.employee.findMany({
+            select: {
+                id: true,
+                employee_name: true,
+            },
+        });
+        console.log('Fetched employees:', employeeNames);
+        return employeeNames;
+    } catch (error) {
+        console.error('Error in getEmployeeName:', error);
+        throw new Error('Failed to fetch employees');
+    }
+});

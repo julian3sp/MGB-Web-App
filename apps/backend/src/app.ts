@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
+import { makeReview, getReviews } from './server/procedures/review';
 import {
     getRequests,
     makeRequest,
@@ -62,6 +63,8 @@ const appRouter = t.router({
     getRequestPriorityCounts: requestCountByPriority,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
+    makeReview: makeReview,
+    getReviews: getReviews,
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,

@@ -6,7 +6,6 @@ const api_key = import.meta.env.VITE_GOOGLE_API_KEY;
 if (!api_key) {
     console.error("Missing API key. Please check your .env.local file");
 }
-//dont use ai backend j
 
 const genAI = new GoogleGenerativeAI(api_key, { apiVersion: 'v1' });
 
@@ -108,7 +107,7 @@ Also important if you dont have info about any of the db remind the user to impo
                     isOpen 
                         ? "bg-[#003a96] text-white" 
                         : "bg-[#003a96] text-black"
-                } w-[48px] h-[48px] rounded-full shadow-lg hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
+                } w-[48px] h-[48px] rounded-full shadow-md hover:bg-blue-950 transition-colors flex items-center justify-center text-2xl border-2 border-white`}
             >
                 {isOpen ? (
                     <span className="transform translate-y-[-1px]">×</span>
@@ -118,17 +117,21 @@ Also important if you dont have info about any of the db remind the user to impo
             </button>
 
             {isOpen && (
-                <div className="absolute bottom-16 right-0 w-96 bg-white rounded-lg shadow-xl">
+                <div
+                className="absolute bottom-16 right-0 w-96 bg-white rounded-lg"
+                style={{ boxShadow: '0 -4px 6px rgba(0, 0, 0, 0.1)' }}
+              >
                     <div className="flex flex-col h-[600px]">
                         <div className="p-4 border-b bg-[#003a96] text-white rounded-t-lg">
                             <h2 className="text-xl font-semibold">AI Assistant</h2>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                        <div className="flex-1 overflow-y-auto p-4 space-y-3 shadow-md">
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`p-4 rounded-lg max-w-[80%] ${
+                                    className={`p-4 rounded-lg max-w-[80%] shadow-md
+                                         ${
                                         message.sender === "user"
                                             ? "ml-auto bg-blue-200"
                                             : "mr-auto bg-gray-200"
@@ -139,18 +142,18 @@ Also important if you dont have info about any of the db remind the user to impo
                             ))}
                         </div>
 
-                        <form onSubmit={handleSubmit} className="p-4 border-t">
+                        <form onSubmit={handleSubmit} className="p-4 bg-white border-t-2 rounded-b-lg" style={{ borderTopColor: '#ECECEC' }}>
                             <div className="flex gap-2">
                                 <input
                                     type="text"
                                     placeholder="Type your message..."
-                                    className="flex-1 p-4 border rounded-md shadow-lg focus:shadow-xl transition-shadow duration-200"
+                                    className="flex-1 p-4 border rounded-md shadow-md focus:shadow-md transition-shadow duration-200"
                                     value={prompt}
                                     onChange={(e) => setPrompt(e.target.value)}
                                 />
                                 <button
                                     type="submit"
-                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950"
+                                    className="bg-[#003a96] text-white p-4 rounded-md hover:bg-blue-950 shadow-md"
                                 >
                                     Send
                                 </button>

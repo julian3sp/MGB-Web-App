@@ -611,6 +611,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }
 
     function resetImageProcessor(){
+        worldCorners.forEach(marker => marker.position = null);
         setImgFile(null);
         setPixelCorners([]);
         setWorldCorners([]);
@@ -628,7 +629,10 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                         </h2>
 
                         <button
-                            className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                            className={`w-[80%] block mx-auto font-[poppins] border-2 shadow-lg rounded-xl p-3 transition duration-200
+    ${                          mode === 'edit'
+                                ? 'bg-[#003a96] text-white border-[#003a96] hover:bg-[#00286e]' 
+                                : 'bg-white text-[#003a96] border-[#003a96] hover:bg-[#f0f6ff]'}`}
                             onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
                         >
                             {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}

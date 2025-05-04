@@ -70,9 +70,13 @@ export const PictureCorners: React.FC<PictureCornersProps> = ({
 
     function drawDot(x: number, y: number) {
         const ctx = cvs.current!.getContext("2d")!;
+
+        const scaleFactor = 0.0085;
+        const radius = Math.max(3, cvs.current!.width * scaleFactor); // min radius = 3px
+
         ctx.fillStyle = "red";
         ctx.beginPath();
-        ctx.arc(x, y, 5 /* radius */, 0, 2*Math.PI);
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.fill();
     }
 

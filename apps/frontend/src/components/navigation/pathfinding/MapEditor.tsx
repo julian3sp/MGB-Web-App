@@ -399,6 +399,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         const edits = graph.getEditHistory()
         console.log("Edits: ", edits);
         await editNodes.mutateAsync(edits.editedNodes);
+        console.log("balls:", edits.addedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
         await addEdges.mutateAsync(edits.addedEdges);
         await deleteNodes.mutateAsync(edits.deletedNodes);

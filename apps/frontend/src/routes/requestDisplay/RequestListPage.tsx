@@ -882,6 +882,7 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                             </p>
                                         </div>
                                     </ul>
+                                    <button className="flex justify-center mb-5">View All</button>
                                 </div>
                             </div>
                             <div className="border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg ml-6 mr-6 mb-10 mt-4 p-3">

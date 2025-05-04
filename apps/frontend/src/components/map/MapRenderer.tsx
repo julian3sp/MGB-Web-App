@@ -209,6 +209,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         "20 Patriot Place": 1004,
         "22 Patriot Place": 1290,
         "Faulkner": 3716,
+        "Belkin House": 3716, // CHANGE THISSSSSS
         "Main Campus": 4963
       }
 
@@ -315,6 +316,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         setFloorOverlay(null);
       }
       if (patriot22Overlays) {
+        patriot22Overlays.floor1Overlay.setMap(null);
         patriot22Overlays.floor3Overlay.setMap(null);
         patriot22Overlays.floor4Overlay.setMap(null);
         setPatriot22Overlays(null);
@@ -340,7 +342,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
         if (selectedDestination.name === "MGB (Chestnut Hill)") {
           const overlays: MGBOverlays = createMGBOverlays(map);
           setParkingOverlay(overlays.parkingOverlay);
-          setFloorOverlay(overlays.floorOverlay);
+          // setFloorOverlay(overlays.floorOverlay);
         } else if (selectedDestination.name === "20 Patriot Place") {
           const overlays = createPatriot20Overlays(map);
           setPatriot20Overlays(overlays);
@@ -349,7 +351,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           const overlays = createPatriot22Overlays(map);
           setPatriot22Overlays(overlays);
           updatePatriotPlace22(overlays, selectedFloor!);
-        } else if (selectedDestination.name === "Faulkner") {
+        } else if (selectedDestination.name === "Faulkner" || selectedDestination.name === "Belkin House") {
           createFaulknerOverlays(map);
         }
         else if (selectedDestination.name === "Main Campus") {

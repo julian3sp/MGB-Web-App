@@ -154,6 +154,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         '20 Patriot Place': { lat: 42.09236331125932, lng: -71.26640880069897 },
         '22 Patriot Place': { lat: 42.09265105806092, lng: -71.26676051809467 },
         'Faulkner': { lat: 42.30149071877142, lng: -71.12823221807406 },
+        'Belkin House': { lat:42.301730 , lng: -71.127249 },
         'Main Campus': { lat:42.33539999367496 , lng: -71.10675757779984 }
     };
 
@@ -490,7 +491,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 setPatriot20Overlay(createPatriot20Overlays(map));
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));
-            } else if (selectedHospital === 'Faulkner') {
+            } else if (selectedHospital === 'Faulkner' || selectedHospital === 'Belkin House' ) {
                 createFaulknerOverlays(map);
             }
             else if (selectedHospital === 'Main Campus') {

@@ -1021,14 +1021,7 @@ __metadata:
 "@floating-ui/utils@npm:^0.2.9":
   version: 0.2.9
   resolution: "@floating-ui/utils@npm:0.2.9"
-  checksum: 10/0ca786347db3dd8d9034b86d1449fabb96642788e5900cc5f2aee433cd7b243efbcd7a165bead50b004ee3f20a90ddebb6a35296fc41d43cfd361b6f01b69ffb
-  languageName: node
-  linkType: hard
-
-"@google/generative-ai@npm:^0.24.1":
-  version: 0.24.1
-  resolution: "@google/generative-ai@npm:0.24.1"
-  checksum: 10/992a82e2d4a58d6eb0545254fe05e2da074c08560a9d51fb29c6f2a44db8c66ba44d87bc04e61b3676f5adc9ab94e527f171ee1395edf4ccbead3472fd8efff8
+  checksum: d518b80cec5a323e54a069a1dd99a20f8221a4853ed98ac16c75275a0cc22f75de4f8ac5b121b4f8990bd45da7ad1fb015b9a1e4bac27bb1cd62444af84e9784
   languageName: node
   linkType: hard
 
@@ -1364,45 +1357,21 @@ __metadata:
   dependencies:
     esbuild: "npm:>=0.12 <1"
     esbuild-register: "npm:3.6.0"
-  checksum: 10/0793c4d8facfee8eda59fbdab33f46beff2031bcaa18738ecf502d5a444cfef894d41f2cbe95d1f220e204f617050255860839989abbcfee9349d74d06bf0fa1
-  languageName: node
-  linkType: hard
-
-"@prisma/config@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@prisma/config@npm:6.7.0"
-  dependencies:
-    esbuild: "npm:>=0.12 <1"
-    esbuild-register: "npm:3.6.0"
-  checksum: 10/021491a9a98b686550ea6cd7323a4358d45bf842c91cb38dddfff8a7487c52890800da595093efc9b5c656b154f3e6aa764cfbb72a7ea7aad41f42d12bb99a54
+  checksum: 5d851a3987da78c0172c04ecd48b099ef37e5db1a7b1cea787177e3f2916ec0b826ea68cb66d22fa7154eba1defe547af6612f0213eb27508c4cc459a207643a
   languageName: node
   linkType: hard
 
 "@prisma/debug@npm:6.6.0":
   version: 6.6.0
   resolution: "@prisma/debug@npm:6.6.0"
-  checksum: 10/55c9817a43aaa34eac8388b866a75a113dc2109b45bbb735a82ad2b74ee312d840df95058fed1225f48ba21aa8f0b2b441bbc9e50eaea0329ed5b614d71d54b5
-  languageName: node
-  linkType: hard
-
-"@prisma/debug@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@prisma/debug@npm:6.7.0"
-  checksum: 10/a4bd17e93302b33838d89ff72ac4d01bd67ed326093e4c2f08583ba6a31911ea161a9613f8b528034422455d737443e169339694f845852f95c3a61537ecc7a3
+  checksum: abb3f5e020b5f0cb88d3383401c75f7bb5745768daf4fa10e9ff5d07bc1e774b142384f408cb4dd9edfa413e72e3a3de192d3dac4f274688cac3502d6e19943d
   languageName: node
   linkType: hard
 
 "@prisma/engines-version@npm:6.6.0-53.f676762280b54cd07c770017ed3711ddde35f37a":
   version: 6.6.0-53.f676762280b54cd07c770017ed3711ddde35f37a
   resolution: "@prisma/engines-version@npm:6.6.0-53.f676762280b54cd07c770017ed3711ddde35f37a"
-  checksum: 10/4e14e15b463729db4bee268477c13e7d2e23d0de1e6756acb801cf8e0df99c250b4326d4512c8ef1b7727be4acc301041cd3477cf528b3f62fbc4c81367b9ff4
-  languageName: node
-  linkType: hard
-
-"@prisma/engines-version@npm:6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed":
-  version: 6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
-  resolution: "@prisma/engines-version@npm:6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
-  checksum: 10/fcd94bde58d4ccd229c46aa6214e3ac8c9e5436ce227d2494d5e8bfdfbf7063b927c441a4cad3b20e2611c0c2783f480f87b49b53f18e2e20654cc246a73bbf4
+  checksum: d0e9cf279216313c10697b6be21753fd91ec00363f0cdf144033515bbe6a705bf9a8594bd7ef8c06d39932c18d333c9268dbbd3d8c6c7dd62cb2eeee5edd354c
   languageName: node
   linkType: hard
 
@@ -1414,19 +1383,7 @@ __metadata:
     "@prisma/engines-version": "npm:6.6.0-53.f676762280b54cd07c770017ed3711ddde35f37a"
     "@prisma/fetch-engine": "npm:6.6.0"
     "@prisma/get-platform": "npm:6.6.0"
-  checksum: 10/032b7b3ba7acc664a4022c5018a70aafc5f9ee416db548c27a255ff3871b72b58691dd98ccbc5ceae606c7a1f5bd8b13b1f4f6075fed5a0f07a04e48ac779dd2
-  languageName: node
-  linkType: hard
-
-"@prisma/engines@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@prisma/engines@npm:6.7.0"
-  dependencies:
-    "@prisma/debug": "npm:6.7.0"
-    "@prisma/engines-version": "npm:6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
-    "@prisma/fetch-engine": "npm:6.7.0"
-    "@prisma/get-platform": "npm:6.7.0"
-  checksum: 10/0862521eee51c0a304d69bdbcf3da02c33a8e80909ba17423b080a6c5db66edb2ab88c1c76e5b1bb346639bc39c7665b13935330fe9d4c8b3725410f28c60e1e
+  checksum: 8744f5ca1b53776cdea2d00ab3d1afe32b71c9a8e6705e8f53616083ea522ace29a384ca0f159cad77df6c8b2d921af79d9973ac3cdb667f6e90e95444aa593f
   languageName: node
   linkType: hard
 
@@ -1437,18 +1394,7 @@ __metadata:
     "@prisma/debug": "npm:6.6.0"
     "@prisma/engines-version": "npm:6.6.0-53.f676762280b54cd07c770017ed3711ddde35f37a"
     "@prisma/get-platform": "npm:6.6.0"
-  checksum: 10/d63b20ed7ad0e930882c5831c3d3984a26e858c1bc6c97d2443e8c64f1720d2ccc1233d69fb7c825632ec27b8513b17ce115eef70208114fa90b42c7499e1639
-  languageName: node
-  linkType: hard
-
-"@prisma/fetch-engine@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@prisma/fetch-engine@npm:6.7.0"
-  dependencies:
-    "@prisma/debug": "npm:6.7.0"
-    "@prisma/engines-version": "npm:6.7.0-36.3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
-    "@prisma/get-platform": "npm:6.7.0"
-  checksum: 10/14f0ff3ba3ab7078728074f4dd8069bb12cf0f07f5890f04cf436836abfe797c378394dd1f9026087f412a60be34695966b06aea0a772ae1468bcc5a05cd88f1
+  checksum: ae6b2a344b99d722e1bdd0272fe7c1a13946befd96f27e79392ad3be5aba927c439d454bd16a037b3529cb2a29970624b49d7e3c19ebfd2533a52435ab910154
   languageName: node
   linkType: hard
 
@@ -1457,16 +1403,7 @@ __metadata:
   resolution: "@prisma/get-platform@npm:6.6.0"
   dependencies:
     "@prisma/debug": "npm:6.6.0"
-  checksum: 10/e4fd0975298251b80dcf2b71cc46274b6e9d0ac3a5288b70b6e3623057df8cc0cf55ceb5e68db3b2809535e77ba62125ab5345a359a6e5b4087b142aeeb4fc1d
-  languageName: node
-  linkType: hard
-
-"@prisma/get-platform@npm:6.7.0":
-  version: 6.7.0
-  resolution: "@prisma/get-platform@npm:6.7.0"
-  dependencies:
-    "@prisma/debug": "npm:6.7.0"
-  checksum: 10/175724c45dd4b09035db0d4a9438e7cb5cc3f466ad91291973ea6c8442038fa68dc0364e73c3beeb01c4fe8d159f526e22760e118b00c7d198d961ef93a241b7
+  checksum: 9ab4826d3ccdda9b90464e923cd000d6d1ef3fb4d6d3842b9573d68331f6093086f9cee56d44a6776ab7ff5904e13aa2a04e4458907eedfcb25c153e23206b7c
   languageName: node
   linkType: hard
 
@@ -9704,28 +9641,7 @@ __metadata:
       optional: true
   bin:
     prisma: build/index.js
-  checksum: 10/a0df0eb4595e02cfd20fe5c9cecc5a4e6cae7c850c3adf94afc499314ab2a02e9aab7fdeb8fc0fc5cd5953b3d54d29e0aa3f1c5be07e54f3c9870c26b43c0218
-  languageName: node
-  linkType: hard
-
-"prisma@npm:^6.7.0":
-  version: 6.7.0
-  resolution: "prisma@npm:6.7.0"
-  dependencies:
-    "@prisma/config": "npm:6.7.0"
-    "@prisma/engines": "npm:6.7.0"
-    fsevents: "npm:2.3.3"
-  peerDependencies:
-    typescript: ">=5.1.0"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  bin:
-    prisma: build/index.js
-  checksum: 10/7f22fefeff4abb4735a01c9c37c183df2906c0d487edc1799f089d268d3c1b86ce6da534aebc448c7dcd917a2259d71b1e72acabff95ed22ea61fbb8abe747ad
+  checksum: 3fcf5c7065986e86b26ec4b74f439ffe39d816f1c925faa816b20aee336133772f1a6813eacebddee2093ba2e063d10c20ff0c608645f2f69fe3c506c738193d
   languageName: node
   linkType: hard
 
@@ -11056,7 +10972,26 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-startercode-d25@workspace:."
   dependencies:
-    "@google/generative-ai": "npm:^0.24.1"
+<<<<<<<<< Temporary merge branch 1
+    "@googlemaps/js-api-loader": ^1.16.8
+    "@popperjs/core": ^2.11.8
+    "@radix-ui/react-slot": ^1.2.0
+    "@react-google-maps/api": ^2.20.6
+    "@react-three/drei": ^10.0.6
+    "@react-three/fiber": ^9.1.2
+    "@tabler/icons-react": ^3.31.0
+    "@types/google.maps": ^3.58.1
+    "@types/node": ^22.13.13
+    "@types/pathfinding": ^0
+    "@types/react": latest
+    "@types/react-dom": latest
+    "@types/three": ^0
+    "@uidotdev/usehooks": ^2.4.1
+    "@vitest/ui": ^3.0.9
+    "@yarnpkg/pnpify": ^4.1.4
+    class-variance-authority: ^0.7.1
+    clsx: ^2.1.1
+=========
     "@googlemaps/js-api-loader": "npm:^1.16.8"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-slot": "npm:^1.2.0"
@@ -11089,17 +11024,16 @@ __metadata:
     pathfinding: "npm:^0.4.18"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"
-    prisma: "npm:^6.7.0"
-    react: "npm:latest"
-    react-card-flip: "npm:^1.2.3"
-    react-dom: "npm:latest"
-    react-intersection-observer: "npm:^9.16.0"
-    react-open-weather: "npm:^1.3.8"
-    tailwind-merge: "npm:^3.2.0"
-    tailwind-scrollbar: "npm:^4.0.2"
-    tailwind-scrollbar-utilities: "npm:^0.3.0"
-    tailwindcss: "npm:^4.1.4"
-    three: "npm:^0.175.0"
+    react: latest
+    react-card-flip: ^1.2.3
+    react-dom: latest
+    react-intersection-observer: ^9.16.0
+    react-open-weather: ^1.3.8
+    tailwind-merge: ^3.2.0
+    tailwind-scrollbar: ^4.0.2
+    tailwind-scrollbar-utilities: ^0.3.0
+    tailwindcss: ^4.1.4
+    three: ^0.175.0
     ts-config-custom: "workspace:*"
     turbo: "npm:*"
     tw-animate-css: "npm:^1.2.7"

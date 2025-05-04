@@ -396,7 +396,17 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
     }, [showEdges, selectedHospital, selectedFloor, map, edgeRefresh]);
 
     const handleSubmit = async () => {
+        const [nodesRes, edgesRes] = await Promise.all([
+            refetchNodes(),
+            refetchEdges(),
+        ]);
+        console.log("Pre Database fetched", {
+            nodes: nodesRes.data.length,
+            edges: edgesRes.data.length
+        });
+
         const edits = graph.getEditHistory()
+        console.log("Added nodes: ", edits.addedNodes)
         console.log("Edits: ", edits);
         await editNodes.mutateAsync(edits.editedNodes);
         await addNodes.mutateAsync(edits.addedNodes);
@@ -405,7 +415,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         await deleteEdges.mutateAsync(edits.deletedEdges);
         console.log("edits committed");
 
-        const [nodesRes, edgesRes] = await Promise.all([
+        const [PostnodesRes, PostedgesRes] = await Promise.all([
             refetchNodes(),
             refetchEdges(),
         ]);
@@ -414,9 +424,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             console.error("Failed to fetch fresh data");
             return;
         }
-        console.log("Database fetched", {
-            nodes: nodesRes.data.length,
-            edges: edgesRes.data.length
+        console.log("Post Database fetched", {
+            nodes: PostnodesRes.data.length,
+            edges: PostedgesRes.data.length
         });
 
         staticMarkers.forEach(m => m.setMap(null));

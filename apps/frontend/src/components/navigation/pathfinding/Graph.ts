@@ -24,8 +24,8 @@ export type Node = {
 }
 
 export type  Edge = {
-    id: number
-    sourceId: Node
+    id: number;
+    sourceId: Node;
     targetId: Node;
     weight: number;
     core?:google.maps.Polyline;
@@ -84,8 +84,16 @@ export class Graph {
         }
     }
 
-    populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
-                          edgeCost: number, totalCost: number, parent?: Node; type: string}[],
+    populate(nodesData: {
+                 type: string
+                 id: number
+                 building: string
+                 floor: number
+                 name: string | null
+                 x: number
+                 y: number
+                 edgeCost: number
+                 totalCost: number}[],
              edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
         // Reinit
         this.nodes = new Set<Node>();
@@ -191,7 +199,7 @@ export class Graph {
 
     editNode(node: Node): void {
         const isAdded = this.edits.addedNodes.some(n => n.id === node.id);
-
+        console.log("isAdded: ", isAdded)
         if (isAdded) {
             // Update the node in addedNodes if it's already there
             const n = this.edits.addedNodes.find(n => n.id === node.id);

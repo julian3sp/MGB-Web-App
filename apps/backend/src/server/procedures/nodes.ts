@@ -61,7 +61,7 @@ export const makeManyNodes = publicProcedure
                 data: input,
                 skipDuplicates: true, // optional: avoids inserting if unique constraints are violated
             });
-
+            console.log('Backend result: ', result);
             return {
                 success: true,
                 count: result.count,

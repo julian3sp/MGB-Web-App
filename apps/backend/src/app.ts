@@ -13,7 +13,7 @@ import {
 } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
-import { getUser, makeUser } from './server/procedures/login.ts';
+import { getUser, makeUser, gteUserName } from './server/procedures/login.ts';
 import {
     deleteAllDirectories,
     getDirectories,
@@ -22,6 +22,7 @@ import {
     makeDirectories,
     makeManyDirectories,
 } from './server/procedures/directories.ts';
+import { makeDm, getDm } from './server/procedures/chat.ts';
 import {
     deleteAllNodes,
     deleteSelectedNodes,
@@ -43,6 +44,7 @@ import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
 import path from 'path';
 import uploadImageRouter from './server/procedures/uploadImage.ts';
 
+
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
 const t = initTRPC.context<Context>().create();
@@ -54,10 +56,13 @@ const appRouter = t.router({
     createRequest: makeRequest,
     deleteRequest: deleteRequest,
     updateRequest: updateRequest,
+    makeDm: makeDm,
+    getDm: getDm,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
     validUser: getUser,
     makeUser: makeUser,
+    gteUserName: gteUserName,
     makeDirectory: makeDirectories,
     makeManyDirectories: makeManyDirectories,
     getAllNamesArray: getAllNamesArray,

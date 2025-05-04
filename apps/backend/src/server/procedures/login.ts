@@ -37,3 +37,9 @@ export const getUser = publicProcedure
         });
         return user;
     });
+
+
+export const gteUserName = publicProcedure.query(async() =>{
+    const Name = await client.login.findMany({select:{email:true}})
+    return Name;
+});

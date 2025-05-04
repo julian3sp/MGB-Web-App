@@ -207,6 +207,11 @@ exports.Prisma.UsersScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.ChatScalarFieldEnum = {
+  id: 'id',
+  menssage: 'menssage'
+};
+
 exports.Prisma.NodesScalarFieldEnum = {
   id: 'id',
   building: 'building',
@@ -255,6 +260,7 @@ exports.Prisma.ModelName = {
   AlgoType: 'AlgoType',
   directory: 'directory',
   users: 'users',
+  chat: 'chat',
   nodes: 'nodes',
   edges: 'edges'
 };

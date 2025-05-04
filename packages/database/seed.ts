@@ -14,6 +14,7 @@ async function main() {
     await insertServiceRequest('Mathew','111111113','Low','Chestnut Hill','Radiology','Language Interpreter','Done',prisma,'Spanish','French','','','','','','','','','','','','','');
     await insertServiceRequest('Alex','111111111','Medium','Faulkner Hospital','Laboratory','Security','Working',prisma,'','','','','','Assault','','','','','','','','','');
     await insertServiceRequest('Andrea','111111115','Low','Patriot Place','Laboratory','Language Interpreter','Done',prisma,'Spanish','French','','','','','','','','','','','','','');
+
 }
 
 

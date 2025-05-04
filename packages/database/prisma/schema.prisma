@@ -120,6 +120,11 @@ model users {
   password   String
 }
 
+model chat{
+  id String @id
+  menssage String
+}
+
 model nodes {
   id        Int     @id @default(autoincrement())
   building  String

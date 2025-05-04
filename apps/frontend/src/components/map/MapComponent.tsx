@@ -177,7 +177,9 @@ const MapComponent: React.FC = () => {
                 'CT': 3076,
                 'Laboratory': 3556
             };
+            const CNCheckin: Record<string, number> = {
 
+            };
             const Pat20departmentMapping: Record<string, number> = {
                 'Urgent Care': 950,
                 'Urology': 973,
@@ -220,8 +222,8 @@ const MapComponent: React.FC = () => {
             const mainCampusMapping: Record<string, number> = {
                 'Wound Care Center': 4684,
                 'Asthma Research Center': 4415,
-                Emergency: 4987,
-                Neuroscience: 5247,
+                'Emergency': 4987,
+                'Neuroscience': 5247
             };
 
             if (selectedPlace?.name === null) {

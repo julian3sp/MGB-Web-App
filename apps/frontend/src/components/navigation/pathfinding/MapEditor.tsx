@@ -266,7 +266,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
 
-    useEffect(() => {
+    useEffect( () => {
         if (!map || !selectedHospital || !showNodes) return;
 
         // detach any previous listener
@@ -282,6 +282,11 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     : selectedHospital === "Main Campus"
                         ? "mainCampus"
                         : selectedHospital;
+        async function fetchData() {
+            const { data: latestLargestArr } = await refetchLargestId();
+            return latestLargestArr?.[0];
+        }
+        const firstNode = fetchData()
 
         // attach a single dbl-click listener
         nodeListenerRef.current = addNodeListener(
@@ -289,7 +294,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             buildingKey,
             floor,
             setNodeDetails,
-            marker => setStaticMarkers(prev => [...prev, marker])
+            marker => setStaticMarkers(prev => [...prev, marker]),
+            firstNode
         );
 
         return () => {

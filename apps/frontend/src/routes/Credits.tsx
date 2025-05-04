@@ -18,6 +18,7 @@ import shadcn from '../../assets/shadcn.png';
 import auth0 from '../../assets/auth0.png';
 import maps from '../../assets/googlemaps.png';
 import trpc from '../../assets/trpc.png';
+import gemini from '../../assets/gemini.png'
 
 export function Credits() {
     return (
@@ -65,6 +66,10 @@ export function Credits() {
                 <CreditCard image={maps} title="Google Maps" description="Maps JavaScript API" docs="https://developers.google.com/maps/documentation/javascript" />
                 <p className="p-2"></p>
                 <CreditCard image={trpc} title="tRPC" description="Simplifies building type-safe APIs" docs="https://trpc.io/" />
+            </div>
+            <div className="flex justify-center h-110">
+                <CreditCard image={gemini} title="Gemini" description="Ai component for the chat" docs="https://ai.google.dev/gemini-api/docs" />
+                
             </div>
             <p className="flex justify-center font-bold pt-5 text-xl">Thank you to our sponsor!</p>
             <Link to="https://www.massgeneralbrigham.org/en">

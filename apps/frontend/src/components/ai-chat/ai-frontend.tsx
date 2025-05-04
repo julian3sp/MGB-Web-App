@@ -130,13 +130,14 @@ Also important if you dont have info about any of the db remind the user to impo
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`p-4 rounded-lg max-w-[80%] shadow-md
-                                         ${
-                                        message.sender === "user"
-                                            ? "ml-auto bg-blue-200"
-                                            : "mr-auto bg-gray-200"
-                                    }`}
-                                >
+                                    className={`
+                                        px-4 py-2 rounded-lg shadow-md w-fit break-words
+                                        ${message.sender === "user"
+                                          ? "ml-auto bg-blue-200 text-right"
+                                          : "mr-auto bg-gray-200 text-left"}
+                                      `}
+                                      style={{ maxWidth: "80%" }}
+                                    >
                                     {message.text}
                                 </div>
                             ))}

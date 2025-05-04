@@ -1,5 +1,5 @@
 import floor2OverlayImg from '../../../../assets/MainCampus_rotated.png'
-
+//
 
 export interface MainCampusOverlay {
     floor2Overlay: google.maps.GroundOverlay;
@@ -8,7 +8,7 @@ export interface MainCampusOverlay {
 
 export const createMainCampusOverlay = (map: google.maps.Map) => {
 
-    const coordinates_3: number[] = [42.3379417338057 , 42.332624091401264 , -71.10361647531688 , -71.10999068474283]
+    const coordinates_3: number[] = [42.33779971781792 , 42.33299200296785 , -71.10356312494518 , -71.10990349760286]
 
     const bounds = {
         north: coordinates_3[0],

@@ -11,6 +11,10 @@ import HospitalViewControls from './HospitalViewControls';
 import Graph, { Edge, Node } from '../navigation/pathfinding/Graph';
 import { StrategyPathfind, PathContext, BFS, DFS } from "../navigation/pathfinding/StrategyPathfind.ts"
 import { AStar, Dijkstras } from '../navigation/pathfinding/WeightedPaths.ts'
+
+import { showRouteWithDirections } from './overlays/RouteWithDirection.tsx';
+import HospitalDirectionsGuide from './HospitalDirectionGuide.tsx';
+
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
 interface MapRendererProps {
@@ -25,6 +29,10 @@ interface MapRendererProps {
   onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
+  onPathFound?: (pathNodes: Node[]) => void;
+  onTextDirectionsGenerated?: (textDirections: string[]) => void;
+  onFloorChangeRequired?: (floor: number) => void;
+  currentFloor: number;
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({
@@ -33,7 +41,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   onZoomChange,
   selectedFloor = 1,
   onFloorChange,
-  departmentNumber
+  departmentNumber,
+  onPathFound,
+  onTextDirectionsGenerated,
+  onFloorChangeRequired,
+  currentFloor
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -196,6 +208,8 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       !edgesData
     ) return;
 
+    console.log('Running pathfinding for department: ', departmentNumber)
+    
     try {
       // Build the graph from TRPC data
       const graph = new Graph();
@@ -242,6 +256,11 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       }
 
       const pathNodes = context.pathFind(graph, entrance, target)
+      console.log("Path to: ", pathNodes)
+
+      if (pathNodes && onPathFound){
+        onPathFound(pathNodes)
+      }
 
       const multiFloors = getMultiFloor(pathNodes)
 
@@ -263,6 +282,22 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
       pathPolylineRef.current = newPolyline;
 
+      const routeInfo = showRouteWithDirections(map, pathNodes, selectedFloor, onFloorChangeRequired);
+
+      if (onTextDirectionsGenerated) {
+        onTextDirectionsGenerated(routeInfo.directions)
+      }
+
+      if (routeInfo && onPathFound) {
+        onPathFound(pathNodes)
+      }
+
+      if (routeInfo && onTextDirectionsGenerated) {
+        onTextDirectionsGenerated(routeInfo.directions)
+      }
+
+      console.log("Route Direections: ", routeInfo.directions);
+      console.log("Total distance: ", routeInfo.totalDistance)
 
       // Clear existing markers
       if (startMarkerRef.current) {

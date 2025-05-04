@@ -6,9 +6,10 @@ import DepartmentDropdown from './DepartmentDropdown';
 import GoogleMapSection, { calculateTravelTimes, formatDuration, TravelTimes } from './GoogleMapSection';
 import { createMGBOverlays, updateDepartmentPath, MGBOverlays } from './overlays/MGBOverlay.tsx';
 import DirectionsGuide from './DirectionsGuide.tsx';
-import {trpc} from "@/lib/trpc.ts"
+import { trpc } from "@/lib/trpc.ts"
 import ServiceFormSideBar from "@/components/serviceRequest/ServiceFormSideBar.tsx";
 import PageWrapper from "@/components/ui/PageWrapper.tsx";
+import HospitalDirectionsGuide from './HospitalDirectionGuide.tsx';
 
 const MapComponent: React.FC = () => {
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
@@ -27,6 +28,11 @@ const MapComponent: React.FC = () => {
   const [selectedTransport, setSelectedTransport] = useState<'driving' | 'walking' | 'transit'>('driving');
   const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
   const [selectedFloor, setSelectedFloor] = useState<number>(1);
+
+  const [pathNodes, setPathNodes] = useState<Node[]>([]);
+  const [textDirections, setTextDirections] = useState<string[]>([]);
+  const [currentFloor, setCurrentFloor] = useState<number>(1)
+
   const [travelTimes, setTravelTimes] = useState<TravelTimes>({
     driving: null,
     transit: null,
@@ -34,8 +40,6 @@ const MapComponent: React.FC = () => {
   });
 
   const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
-  const { data: nodesData, isLoading: isNodesLoading } = trpc.getAllNodes.useQuery();
-  const { data: edgesData, isLoading: isEdgesLoading } = trpc.getAllEdges.useQuery();
 
   // Calculate travel times when start or end location changes.
   useEffect(() => {
@@ -73,14 +77,6 @@ const MapComponent: React.FC = () => {
   const handleFloorSelect = (floor: number) => {
     console.log(`Floor changed to: ${floor}`);
     setSelectedFloor(floor);
-  };
-
-  // Zoom-to-Destination button handler
-  const handleZoomToDestination = () => {
-    if (mapInstance && selectedPlace) {
-      mapInstance.setCenter(selectedPlace.location);
-      mapInstance.setZoom(19);
-    }
   };
 
   // When the user selects a starting location.
@@ -128,12 +124,12 @@ const MapComponent: React.FC = () => {
       setShowHospitalMap(false);
       displayRouteOnMap(startLocation, newDestination);
     }
-  };  
+  };
 
   const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
-      setSelectedDepartment(department);
+    setSelectedDepartment(department);
 
-    function getDeptNum():number {
+    function getDeptNum(): number {
       const CNdepartmentMapping: Record<string, number> = {
         'Entrance': 2707,
         'Multi-Specialty Clinic': 3592,
@@ -185,38 +181,38 @@ const MapComponent: React.FC = () => {
       const mainCampusMapping: Record<string, number> = {
         'Wound Care Center': 4684,
         'Asthma Research Center': 4415,
-        'Emergency' : 4987,
-        'Neuroscience' : 5247
+        'Emergency': 4987,
+        'Neuroscience': 5247
       };
 
 
 
-      if(selectedPlace?.name === null) {
+      if (selectedPlace?.name === null) {
         console.error("No location selected");
-      }else if(selectedPlace?.name === "MGB (Chestnut Hill)"){
+      } else if (selectedPlace?.name === "MGB (Chestnut Hill)") {
         return CNdepartmentMapping[department.name];
-      } else if(selectedPlace?.name === "20 Patriot Place"){
+      } else if (selectedPlace?.name === "20 Patriot Place") {
         return Pat20departmentMapping[department.name];
-      } else if(selectedPlace?.name === "22 Patriot Place"){
+      } else if (selectedPlace?.name === "22 Patriot Place") {
         return Pat22departmentMapping[department.name];
-      } else if(selectedPlace?.name === "Faulkner"){
+      } else if (selectedPlace?.name === "Faulkner") {
         return FaulknerMapping[department.name];
       }
-      else if(selectedPlace?.name === "Main Campus"){
+      else if (selectedPlace?.name === "Main Campus") {
         return mainCampusMapping[department.name];
       }
       console.log("Issues in finding dept node")
       return 0;
     }
 
-      const deptNum = getDeptNum();
-      if (deptNum) {
-        setDeptNumber(deptNum);
-      } else {
-        console.error(`No mapping found for department: ${department.name}`);
-      }
-    };
-    
+    const deptNum = getDeptNum();
+    if (deptNum) {
+      setDeptNumber(deptNum);
+    } else {
+      console.error(`No mapping found for department: ${department.name}`);
+    }
+  };
+
   // When the "Show Google Map" button is clicked.
   const handleViewMap = () => {
     if (!startLocation || !selectedPlace || !mapInstance || !directionsService || !directionsRenderer) return;
@@ -254,26 +250,26 @@ const MapComponent: React.FC = () => {
       console.warn('Map components not ready');
       return;
     }
-  
+
     // Clear existing routes and markers.
     directionsRenderer.setMap(null);
     directionsRenderer.setMap(mapInstance);
-  
+
     const request: google.maps.DirectionsRequest = {
       origin: start.location,
       destination: end.location,
       travelMode: selectedTransport.toUpperCase() as google.maps.TravelMode,
     };
-  
+
     console.log('Calculating route with request:', request);
-  
+
     directionsService.route(request, (result, status) => {
       console.log('Route calculation result:', { status, result });
-  
+
       if (status === google.maps.DirectionsStatus.OK && result) {
         setDirectionsResult(result);
         mapInstance.setOptions({ draggableCursor: 'default' });
-  
+
         // Add the start marker.
         new google.maps.Marker({
           position: start.location,
@@ -281,12 +277,12 @@ const MapComponent: React.FC = () => {
           title: start.name,
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' },
         });
-  
+
         // Remove any previous destination marker.
         if (destinationMarkerRef.current) {
           destinationMarkerRef.current.setMap(null);
         }
-  
+
         // Create the destination marker (red) and store its reference.
         const destMarker = new google.maps.Marker({
           position: end.location,
@@ -295,10 +291,10 @@ const MapComponent: React.FC = () => {
           icon: { url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' },
         });
         destinationMarkerRef.current = destMarker;
-  
+
         // Set the directions.
         directionsRenderer.setDirections(result);
-  
+
         // Fit bounds to the route.
         if (result.routes[0] && result.routes[0].bounds) {
           mapInstance.fitBounds(result.routes[0].bounds);
@@ -319,7 +315,7 @@ const MapComponent: React.FC = () => {
         destinationMarkerRef.current.setVisible(true);
       }
     }
-  
+
     // Also hide/show the department path polyline and its markers (from MGB overlays).
     if (mgbOverlays) {
       if (zoom < 20) {
@@ -337,7 +333,7 @@ const MapComponent: React.FC = () => {
       }
     }
   };
-  
+
   // Update route when transport mode or locations change.
   useEffect(() => {
     if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) {
@@ -346,63 +342,68 @@ const MapComponent: React.FC = () => {
   }, [selectedTransport, startLocation, selectedPlace]);
 
   return (
-      <PageWrapper open={true}
-                   contents=
-                       {
+    <PageWrapper open={true}
+      contents=
+      {
         // put sidebar contents here:</p>
         <div className="h-[95vh] w-full p-5 border-r border-[#003a96] border-r-3 flex flex-col gap-4 overflow-y-auto ">
-          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br/>destination</h2>
+          <h2 className="font-bold font-[Poppins] text-center">Enter your location and <br />destination</h2>
           <GoogleMapSection
-              startLocation={startLocation}
-              selectedPlace={selectedPlace}
-              selectedTransport={selectedTransport}
-              travelTimes={travelTimes}
-              mapInstance={mapInstance}
-              handleStartLocationSelected={handleStartLocationSelected}
-              handleDestinationSelected={handleDestinationSelected}
-              handleViewMap={handleViewMap}
-              onTransportChange={(mode) => {
-                setSelectedTransport(mode);
-                if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer)
-                {displayRouteOnMap(startLocation, selectedPlace);}
-              }}
-              handleGetCurrentLocation={handleGetCurrentLocation}/>
+            startLocation={startLocation}
+            selectedPlace={selectedPlace}
+            selectedTransport={selectedTransport}
+            travelTimes={travelTimes}
+            mapInstance={mapInstance}
+            handleStartLocationSelected={handleStartLocationSelected}
+            handleDestinationSelected={handleDestinationSelected}
+            handleViewMap={handleViewMap}
+            onTransportChange={(mode) => {
+              setSelectedTransport(mode);
+              if (startLocation && selectedPlace && mapInstance && directionsService && directionsRenderer) { displayRouteOnMap(startLocation, selectedPlace); }
+            }}
+            handleGetCurrentLocation={handleGetCurrentLocation} />
           {directionsResult && (<DirectionsGuide directions={directionsResult} />)}
 
           {/* Select Department dropdown */}
           <h2 className="text-sm font-semibold pt-4 font-[Poppins] self-center">Select a department</h2>
           <DepartmentDropdown onDepartmentSelected={handleDepartmentSelected} building={selectedPlace?.name ?? ""} />
+          <HospitalDirectionsGuide
+            pathNodes={pathNodes}
+            selectedFloor={currentFloor}
+            buildingName={selectedPlace?.name}
+            textDirections={textDirections}
+          />
         </div>}
-                   scaling = {4}
-                   absolute={false}>
+      scaling={4}
+      absolute={false}>
 
-        {/* Hospital Map Section */}
-        <div className="flex">
-          <div className="flex flex-col">
-            {showHospitalMap && (
-                <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
-                  <div className="flex flex-col gap-2">
-                    <div className="text-md font-medium font-bold mb-2">Map Legend</div>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                        alt="Your Location"
-                        className="w-6 h-6"
-                      />
-                      <span className="text-sm text-gray-600 font-bold">Your Location</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                        alt="Destination"
-                        className="w-6 h-6"
-                      />
-                      <span className="text-sm text-gray-600 font-bold">Destination</span>
-                    </div>
-                  </div>
+      {/* Hospital Map Section */}
+      <div className="flex">
+        <div className="flex flex-col">
+          {showHospitalMap && (
+            <div className="mt-4 bg-white rounded-lg shadow-lg p-4">
+              <div className="flex flex-col gap-2">
+                <div className="text-md font-medium font-bold mb-2">Map Legend</div>
+                <div className="flex items-center gap-2">
+                  <img
+                    src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                    alt="Your Location"
+                    className="w-6 h-6"
+                  />
+                  <span className="text-sm text-gray-600 font-bold">Your Location</span>
                 </div>
-              )}
+                <div className="flex items-center gap-2">
+                  <img
+                    src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                    alt="Destination"
+                    className="w-6 h-6"
+                  />
+                  <span className="text-sm text-gray-600 font-bold">Destination</span>
+                </div>
+              </div>
             </div>
+          )}
+        </div>
         {error && <div className="text-red-500">{error}</div>}
       </div>
 
@@ -412,13 +413,18 @@ const MapComponent: React.FC = () => {
           onMapReady={handleMapReady}
           selectedDestination={selectedPlace}
           onZoomChange={handleZoomChange}
-          selectedFloor={selectedFloor}
-          onFloorChange={handleFloorSelect}
+          selectedFloor={currentFloor}
+          onFloorChange={setCurrentFloor}
           departmentNumber={deptNumber}
           disableDoubleClickZoom={true}
+          onPathFound={setPathNodes}
+          onTextDirectionsGenerated={setTextDirections}
+          onFloorChangeRequired={(newFloor) => setCurrentFloor(newFloor)}
+          currentFloor={currentFloor}
         />
+
       </div>
-      </PageWrapper>
+    </PageWrapper>
   );
 };
 

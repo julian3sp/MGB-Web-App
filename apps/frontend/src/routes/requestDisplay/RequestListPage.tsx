@@ -2,7 +2,7 @@ import { trpc } from '../../lib/trpc.ts';
 import DepartmentRoutes from '../departmentDirectory/DepartmentRoutes.tsx';
 import DepartmentList from '../../components/DepartmentList.ts';
 import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import type { ServiceRequest } from '@/types.tsx';
 import { useRequestData } from '@/routes/requestDisplay/RequestDataContext.tsx';
 import { useLocation } from 'react-router-dom';
@@ -15,6 +15,9 @@ import ExitButton from '@/components/ui/ExitButton.tsx';
 import ServiceFormSideBar from '@/components/serviceRequest/ServiceFormSideBar.tsx';
 import PageWrapper from '@/components/ui/PageWrapper.tsx';
 import ServiceRequestPage from '@/routes/ServiceRequestPage.tsx';
+import SendIcon from '../../../assets/SendIcon.png';
+import EditIcon from '../../../assets/EditIcon.png';
+import EditIconWhite from '../../../assets/EditIconWhite.png';
 
 /*
 function formatPhoneNumber(phone: string): string {
@@ -30,7 +33,24 @@ const end = digits.slice(6, 10);
 return `(${start}) ${middle}-${end}`;
 */
 
-export default function RequestListPage({userRole}: {userRole: string}) {
+const useClickOutside = (handler: () => void) => {
+    const reference = useRef();
+
+    useEffect(() => {
+        const newHandler = (event: MouseEvent) => {
+            if (!reference.current?.contains(event.target)) handler();
+        };
+
+        document.addEventListener('mousedown', newHandler);
+
+        return () => {
+            document.removeEventListener('mousedown', newHandler);
+        };
+    }, [handler]);
+    return reference;
+};
+
+export default function RequestListPage({ userRole }: { userRole: string }) {
     const tableRequest = useLocation();
     const { filteredData, isLoading, error } = useRequestData();
     const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(
@@ -46,6 +66,73 @@ export default function RequestListPage({userRole}: {userRole: string}) {
 
     const deleteRequest = trpc.deleteRequest.useMutation();
     const updateRequest = trpc.updateRequest.useMutation();
+
+    const [openChat, setOpenChat] = useState(false);
+    const exampleMessages = [
+        {
+            name: 'Alice',
+            message:
+                "This is message one and I'm going to make the message a bit longer than this so I can see how the message wrapping works",
+            timestamp: new Date('2025-05-02T23:56:12'),
+        },
+        {
+            name: 'Bob',
+            message: 'Message 2',
+            timestamp: new Date('2025-05-02T23:58:45'),
+        },
+        {
+            name: 'Charlie',
+            message: 'Message on a new day',
+            timestamp: new Date('2025-05-03T00:02:04'),
+        },
+        {
+            name: 'Diana',
+            message: 'Follow-up on May 3rd',
+            timestamp: new Date('2025-05-03T13:24:10'),
+        },
+        {
+            name: 'Elliot',
+            message: 'First message for May 4th',
+            timestamp: new Date('2025-05-04T09:10:02'),
+        },
+        {
+            name: 'Fiona',
+            message: 'another.',
+            timestamp: new Date('2025-05-04T13:37:44'),
+        },
+        {
+            name: 'George',
+            message: 'again.',
+            timestamp: new Date('2025-05-04T17:55:22'),
+        },
+        {
+            name: 'Hannah',
+            message: 'new day.',
+            timestamp: new Date('2025-05-05T08:01:11'),
+        },
+    ];
+
+    const groupByDate = (messages: typeof exampleMessages) => {
+        const grouped: Record<string, typeof exampleMessages> = {};
+
+        messages.forEach((msg) => {
+            const dateKey = msg.timestamp.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push(msg);
+        });
+
+        return grouped;
+    };
+    const groupedMessages = groupByDate(exampleMessages);
+
+    const chatRef = useClickOutside(() => {
+        setOpenChat(false);
+    });
 
     const handleDelete = () => {
         console.log('Trying to delete:', selectedRequest);
@@ -129,7 +216,7 @@ export default function RequestListPage({userRole}: {userRole: string}) {
         .sort((a, b) => new Date(b.request_date).getTime() - new Date(a.request_date).getTime());
 
     return (
-        <div className={'flex gap-x-10  '}>
+        <div className={'flex gap-x-10 font-[Poppins]'}>
             <PageWrapper
                 contents={
                     <nav className="rounded-4xl ml-5 m-5 shadow-lg">
@@ -313,6 +400,79 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                         </div>
                     </div>
                 )}
+                {openChat && (
+                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-100 font-[Poppins]">
+                        <div ref={chatRef} className="relative w-full max-w-2xl h-[70vh] bg-white rounded-lg shadow-lg flex flex-col overflow-scroll">
+                            <button
+                                onClick={() => setOpenChat(false)}
+                                className="absolute top-2 right-2 text-white text-2xl font-semibold cursor-pointer"
+                            >
+                                &times;
+                            </button>
+
+                            <div className="bg-[#003a96] text-white text-lg font-semibold px-4 py-2 rounded-t-lg border-b-5 border-[#44a6a6]">
+                                Terminal Chat
+                            </div>
+
+                            {/* Messages */}
+                            <div className="flex-1 overflow-y-auto px-4 py-2 text-sm text-gray-800">
+                                {Object.entries(groupedMessages).map(([date, messages]) => (
+                                    <div key={date} className="mb-2">
+                                        <div className="flex items-center text-[#003a96] text-sm font-semibold my-2">
+                                            <div className="flex-grow border-t border-[#003a96]" />
+                                            <span className="px-3 whitespace-nowrap">{date}</span>
+                                            <div className="flex-grow border-t border-[#003a96]" />
+                                        </div>
+                                        <div className="space-y-2 font-mono">
+                                            {messages.map((msg, index) => {
+                                                const isLast = index === messages.length - 1;
+
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className={`pb-2 ${!isLast ? 'border-b border-gray-200' : ''}`}
+                                                    >
+                                                        <div className="flex items-center gap-4 text-sm text-[#003a96] font-bold">
+                                                            <span>{msg.name}</span>
+                                                            <span className="text-xs text-gray-500 font-normal">
+                                                                {msg.timestamp.toLocaleTimeString(
+                                                                    undefined,
+                                                                    {
+                                                                        hour: 'numeric',
+                                                                        minute: '2-digit',
+                                                                    }
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <div className="pl-1">{msg.message}</div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <form
+                                // onSubmit={handleSend}
+                                className="px-4 py-2 border-t-2 flex gap-2 bg-white border-[#003a96]"
+                            >
+                                <input
+                                    type="text"
+                                    className="flex-1 px-3 py-2 border rounded-md text-sm outline-none font-mono"
+                                    placeholder="Type a message..."
+                                    // value={input}
+                                    // onChange={(e) => setInput(e.target.value)}
+                                />
+                                <button className="bg-[#003a96] text-white px-4 py-2 rounded-md hover:bg-[#0050d6] text-sm">
+                                    <span className="flex items-center gap-2">
+                                        <img src={SendIcon} alt="Send" style={{ maxWidth: 20 }} />
+                                        Send
+                                    </span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
                 {selectedRequest ? (
                     <nav className="shadow-xl rounded-[26px] bg-blue-100 flex-1 text-blue-gray-900">
                         <div className={''}>
@@ -395,9 +555,7 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                     <DeleteRequest
                                         size={20}
                                         onClick={() => {
-                                            if (
-                                                userRole === "Admin"
-                                            ) {
+                                            if (userRole === 'Admin') {
                                                 console.log('Delete: ');
                                                 console.log(selectedRequest);
                                                 handleDelete();
@@ -882,7 +1040,12 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                             </p>
                                         </div>
                                     </ul>
-                                    <button className="flex justify-center mb-5">View All</button>
+                                    <button
+                                        className="flex justify-center mb-5 cursor-pointer"
+                                        onClick={() => setOpenChat(true)}
+                                    >
+                                        View All
+                                    </button>
                                 </div>
                             </div>
                             <div className="border-1 border-[#D$D$D$] bg-white shadow-sm rounded-lg ml-6 mr-6 mb-10 mt-4 p-3">

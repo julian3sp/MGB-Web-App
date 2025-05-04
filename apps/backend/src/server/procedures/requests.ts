@@ -156,3 +156,54 @@ export const updateRequest = publicProcedure
         });
         return updateRequest;
     });
+
+export const requestCountByStatus = publicProcedure.query(async () => {
+    const statuses = await client.service_request.groupBy({
+        by: ['status'],
+        _count: {
+            status: true,
+        },
+    });
+
+    // Format the result as { [status]: count }
+    const result: Record<string, number> = {};
+    for (const entry of statuses) {
+        result[entry.status] = entry._count.status;
+    }
+
+    return result;
+});
+
+export const requestCountByLocation = publicProcedure.query(async () => {
+    const locations = await client.service_request.groupBy({
+        by: ['location'],
+        _count: {
+            location: true,
+        },
+    });
+
+    // Format the result as { [location]: count }
+    const result: Record<string, number> = {};
+    for (const entry of locations) {
+        result[entry.location] = entry._count.location;
+    }
+
+    return result;
+});
+
+export const requestCountByPriority = publicProcedure.query(async () => {
+    const priorities = await client.service_request.groupBy({
+        by: ['priority'],
+        _count: {
+            priority: true,
+        },
+    });
+
+    // Format the result as { [priority]: count }
+    const result: Record<string, number> = {};
+    for (const entry of priorities) {
+        result[entry.priority] = entry._count.priority;
+    }
+
+    return result;
+});

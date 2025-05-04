@@ -348,9 +348,9 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         } else if (startNodeRef.current.id !== node.id) {
             console.log("end node:", node.id);
             // ADD WEIGHT TO EDGE
-            const w = WorldDistance(startNodeRef.current, node);
-            const edge: Edge = { id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w }
-            graph.addEdge(edge);
+            let w = WorldDistance(startNodeRef.current, node);
+
+
             setStartNode(null);
 
 
@@ -366,8 +366,12 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                 node.type = NodeType.Elevator;
                 graph.editNode(startNodeRef.current)
                 graph.editNode(node)
+                w = 1000;
                 console.log("set nodes to elevator (default)")
             }
+
+            const edge: Edge = { id: Date.now(), sourceId: startNodeRef.current, targetId: node, weight: w }
+            graph.addEdge(edge);
 
             startNodeRef.current = null;
             console.log("end");

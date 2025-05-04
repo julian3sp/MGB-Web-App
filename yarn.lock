@@ -1414,6 +1414,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-accordion@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "@radix-ui/react-accordion@npm:1.2.8"
+  dependencies:
+    "@radix-ui/primitive": "npm:1.1.2"
+    "@radix-ui/react-collapsible": "npm:1.1.8"
+    "@radix-ui/react-collection": "npm:1.1.4"
+    "@radix-ui/react-compose-refs": "npm:1.1.2"
+    "@radix-ui/react-context": "npm:1.1.2"
+    "@radix-ui/react-direction": "npm:1.1.1"
+    "@radix-ui/react-id": "npm:1.1.1"
+    "@radix-ui/react-primitive": "npm:2.1.0"
+    "@radix-ui/react-use-controllable-state": "npm:1.2.2"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/2b0d651c215507d2aa8a405d9176fc2fb6d0ac8f78ef8999e50a51217ce9de906ad1895136904e4b592aa8fc691eafb99051171d0c284fb04da9563ec242b19b
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-alert-dialog@npm:^1.1.8":
   version: 1.1.8
   resolution: "@radix-ui/react-alert-dialog@npm:1.1.8"
@@ -1480,6 +1507,32 @@ __metadata:
     "@types/react-dom":
       optional: true
   checksum: 10/6365528dacee7d3869a9c27954bb69b8f934305f9d764cc33de721625674871e64012122ee6d050fed1beb3b9027fd6f571c796a849bf8e8313d12c002419cbd
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-collapsible@npm:1.1.8":
+  version: 1.1.8
+  resolution: "@radix-ui/react-collapsible@npm:1.1.8"
+  dependencies:
+    "@radix-ui/primitive": "npm:1.1.2"
+    "@radix-ui/react-compose-refs": "npm:1.1.2"
+    "@radix-ui/react-context": "npm:1.1.2"
+    "@radix-ui/react-id": "npm:1.1.1"
+    "@radix-ui/react-presence": "npm:1.1.4"
+    "@radix-ui/react-primitive": "npm:2.1.0"
+    "@radix-ui/react-use-controllable-state": "npm:1.2.2"
+    "@radix-ui/react-use-layout-effect": "npm:1.1.1"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10/4b0f81d49b09469d6a3cb56dcf73083c4e979ce5493a250b894bc92f27043fea380df75391f875b7bc2d52e48fad67632307cbb61de645a447c73e75b3e64cf1
   languageName: node
   linkType: hard
 
@@ -3403,7 +3456,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/multer@npm:^1":
+"@types/multer@npm:^1, @types/multer@npm:^1.4.12":
   version: 1.4.12
   resolution: "@types/multer@npm:1.4.12"
   dependencies:
@@ -6646,6 +6699,7 @@ __metadata:
     "@googlemaps/js-api-loader": "npm:^1.16.8"
     "@googlemaps/markerclusterer": "npm:^2.5.3"
     "@popperjs/core": "npm:^2.11.8"
+    "@radix-ui/react-accordion": "npm:^1.2.8"
     "@radix-ui/react-alert-dialog": "npm:^1.1.8"
     "@radix-ui/react-checkbox": "npm:^1.2.3"
     "@radix-ui/react-dialog": "npm:^1.1.10"
@@ -10925,6 +10979,7 @@ __metadata:
     "@react-three/fiber": "npm:^9.1.2"
     "@tabler/icons-react": "npm:^3.31.0"
     "@types/google.maps": "npm:^3.58.1"
+    "@types/multer": "npm:^1.4.12"
     "@types/node": "npm:^22.13.13"
     "@types/pathfinding": "npm:^0"
     "@types/react": "npm:latest"
@@ -10944,6 +10999,7 @@ __metadata:
     husky: "npm:^9.1.7"
     lucide-react: "npm:^0.503.0"
     motion: "npm:^12.6.3"
+    multer: "npm:^1.4.5-lts.2"
     pathfinding: "npm:^0.4.18"
     prettier: "npm:^3.5.3"
     prettier-config-custom: "workspace:*"

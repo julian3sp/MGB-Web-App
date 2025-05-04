@@ -118,77 +118,48 @@ function isElevatorNode(node: Node): boolean {
     return node.type === NodeType.Elevator;
 }
 
-// determinme direction based on three consecutive points
 function determineDirection(node1: Node, node2: Node, node3: Node): TurnDirection {
-    // cpnver the nodes to vectors
-    const vector1 = {
-        x: node2.x - node1.x,
-        y: node2.y - node1.y
-    }
-
-    const vector2 = {
-        x: node3.x - node2.x,
-        y: node3.y - node2.y
-    }
-
-    // normalize the vectors
-    const magnitude1 = Math.sqrt(vector1.x * vector1.x + vector1.y * vector1.y);
-    const magnitude2 = Math.sqrt(vector2.x * vector2.x + vector2.y * vector2.y);
-
-    const normalizedVector1 = {
-        x: vector1.x / magnitude1,
-        y: vector1.y / magnitude1
-    }
-
-    const normalizedVector2 = {
-        x: vector2.x / magnitude2,
-        y: vector2.y / magnitude2
-    }
-
-    // calcualte the cross product to determine left or right
-    // for geographic coordinates, we need to be careful with the sign 
-
-    const crossProduct = normalizedVector1.x * normalizedVector2.y - normalizedVector1.y * normalizedVector2.x;
-
-    // calculate the dot product to determine the angle
-    const dotProduct = normalizedVector1.x * normalizedVector2.x + normalizedVector1.y * normalizedVector2.y;
-
-    // calculate the angle in degrees
-    let angle = Math.acos(clamp(dotProduct, -1, 1)) * (180 / Math.PI);
-
-    if (angle < 10) {
-        return TurnDirection.STRAIGHT;
-    } else if (angle < 45) {
-        return crossProduct > 0 ? TurnDirection.SLIGHT_LEFT : TurnDirection.SLIGHT_RIGHT;
-    } else if (angle < 100) {
-        return crossProduct > 0 ? TurnDirection.LEFT : TurnDirection.RIGHT;
-    } else if (angle < 160) {
-        return crossProduct > 0 ? TurnDirection.SHARP_LEFT : TurnDirection.SHARP_RIGHT;
-    } else {
-        return TurnDirection.U_TURN;
-    }
-}
+    // Convert to vectors
+    const vec1 = { x: node2.x - node1.x, y: node2.y - node1.y };
+    const vec2 = { x: node3.x - node2.x, y: node3.y - node2.y };
+  
+    // Calculate angle between vectors (in degrees)
+    const angle = Math.atan2(vec2.y, vec2.x) - Math.atan2(vec1.y, vec1.x);
+    let degrees = (angle * 180) / Math.PI;
+    
+    // Normalize to -180 to 180 range
+    degrees = ((degrees + 540) % 360) - 180;
+  
+    // Determine direction based on angle
+    if (Math.abs(degrees) < 10) return TurnDirection.STRAIGHT;
+    if (degrees > 10 && degrees <= 45) return TurnDirection.SLIGHT_RIGHT;
+    if (degrees > 45 && degrees <= 135) return TurnDirection.RIGHT;
+    if (degrees > 135) return TurnDirection.SHARP_RIGHT;
+    if (degrees < -10 && degrees >= -45) return TurnDirection.SLIGHT_LEFT;
+    if (degrees < -45 && degrees >= -135) return TurnDirection.LEFT;
+    if (degrees < -135) return TurnDirection.SHARP_LEFT;
+    
+    return TurnDirection.STRAIGHT;
+  }
 
 // Helper function to clamp a value between min and max
 function clamp(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(max, value))
 }
 
+// Update calculateDistance to use proper scale
 export function calculateDistance(node1: Node, node2: Node): number {
-    const R = 6371e3; // Earth radius in meters
-    const φ1 = node1.x * Math.PI / 180;
-    const φ2 = node2.x * Math.PI / 180;
-    const Δφ = (node2.x - node1.x) * Math.PI / 180;
-    const Δλ = (node2.y - node1.y) * Math.PI / 180;
-
-
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-
-    return R * c; // Distance in meters
+    // Assuming coordinates are in degrees (latitude/longitude)
+    const R = 6371000; // Earth radius in meters
+    const dLat = (node2.x - node1.x) * Math.PI/180;
+    const dLon = (node2.y - node1.y) * Math.PI/180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(node1.x * Math.PI/180) * 
+      Math.cos(node2.x * Math.PI/180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
 }
 
 // calculate the total distance of a path 

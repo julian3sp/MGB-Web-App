@@ -16,6 +16,7 @@ const convertDistance = (distance: string, useFeet: boolean): string => {
   const match = distance.match(/(.*?)(\d+\.?\d*)\s*(meters|miles|feet)(.*)/i);
   if (!match) return distance;
 
+
   const prefix = match[1] || '';
   const value = parseFloat(match[2]);
   const unit = match[3].toLowerCase();
@@ -52,8 +53,8 @@ const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
 
   if (!pathNodes || pathNodes.length === 0 || !buildingName || textDirections.length === 0) {
     return (
-      <div className="p-4 bg-white rounded-lg shadow-md">
-        <h3 className="font-bold text-lg mb-2">Hospital Directions</h3>
+      <div className="p-4 bg-white rounded-lg shadow-md font-[Poppins]">
+        <h3 className="font-bold mb-2 text-[16.5px] text-[#003a96]">Hospital Directions</h3>
         <p className="text-gray-600">Select a department to see indoor navigation instructions.</p>
       </div>
     );
@@ -72,9 +73,9 @@ const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
   const convertedDirections = textDirections.map(dir => convertDistance(dir, useFeet));
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md max-h-96 overflow-y-auto">
+    <div className="p-4 bg-white rounded-lg shadow-md max-h-96 overflow-y-auto font-[Poppins]">
       <div className='flex justify-between items-center'>
-        <h3 className="font-bold text-md">Directions for {buildingName}</h3>
+        <h3 className="font-bold text-[16.5px] text-[#003a96]">Directions for {buildingName}</h3>
         <UnitToggleButton />
       </div>
       <div className="mb-2 text-sm text-gray-500">

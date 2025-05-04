@@ -436,18 +436,16 @@ const MapComponent: React.FC = () => {
                                     />
                                     <br />
                                     {checkInDesk ? <NavButton onClick={handleCheckInToggle}>Direct to Department</NavButton> : <NavButton onClick={handleCheckInToggle}>Direct to Check In Desk</NavButton>}
-
+                                    <br /> <br />
+                                    <HospitalDirectionsGuide
+                                        pathNodes={pathNodes}
+                                        selectedFloor={currentFloor}
+                                        buildingName={selectedPlace?.name}
+                                        textDirections={textDirections}
+                                    />
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>
-                        <div>
-                        <HospitalDirectionsGuide
-                            pathNodes={pathNodes}
-                            selectedFloor={currentFloor}
-                            buildingName={selectedPlace?.name}
-                            textDirections={textDirections}
-                        />
-                        </div>
                     </div>
                 </div>
             } scaling={4}

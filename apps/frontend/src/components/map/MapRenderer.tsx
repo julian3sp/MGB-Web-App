@@ -17,6 +17,8 @@ import HospitalDirectionsGuide from './HospitalDirectionGuide.tsx';
 
 // TRPC hooks
 import { trpc } from "@/lib/trpc";
+type CheckInDesks = Map<string, Map<string, number>>;
+
 interface MapRendererProps {
   onMapReady: (
     map: google.maps.Map,
@@ -33,6 +35,9 @@ interface MapRendererProps {
   onTextDirectionsGenerated?: (textDirections: string[]) => void;
   onFloorChangeRequired?: (floor: number) => void;
   currentFloor: number;
+  checkin: boolean;
+  selectedLot: string
+  deptName: string
 }
 
 const MapRenderer: React.FC<MapRendererProps> = ({
@@ -42,10 +47,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   selectedFloor = 1,
   onFloorChange,
   departmentNumber,
+  disableDoubleClickZoom,
   onPathFound,
   onTextDirectionsGenerated,
   onFloorChangeRequired,
-  currentFloor
+  currentFloor,
+   checkin,
+   selectedLot,
+  deptName,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -101,7 +110,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
-            console.log("User location found:", userLocation);
 
             const newMap = new google.maps.Map(mapRef.current!, {
               center: userLocation,
@@ -217,16 +225,106 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       graph.populate(nodesData, edgesData);
 
       // Fixed entrance node and target department node
-      const entrances: { [building: string]: number; } = {
-        "MGB (Chestnut Hill)": 3715,
-        "20 Patriot Place": 1004,
-        "22 Patriot Place": 1290,
-        "Faulkner": 3716,
-        "Belkin House": 3716, // CHANGE THISSSSSS
-        "Main Campus": 4963
-      }
+      const lots: { [building: string]: number } = {
+          'MGB A': 3323,
+          'MGB B': 3327,
+          'MGB C': 3328,
+          '20 Patriot Place': 1004,
+          '22 Patriot Place': 1290,
+          'Faulkner': 3716,
+          'Belkin House': 3716, // CHANGE THISSSSSS
+          'Main Campus': 4963,
+      };
 
-      const entrance = graph.getNode(entrances[selectedDestination!.name]);
+      const checkInDesks: CheckInDesks = new Map();
+
+      checkInDesks.set(
+        "MGB (Chestnut Hill)",
+        new Map<string, number>([
+          ["Entrance", 3314],
+          ["Multi-Specialty Clinic", 3314],
+          ["Radiology", 3314],
+          ["MRI", 3314],
+          ["CT", 3314],
+          ["Laboratory", 3314],
+        ])
+      );
+
+      checkInDesks.set(
+        "20 Patriot Place",
+        new Map<string, number>([
+          ["Urology", 2003],
+          ["Cardiology", 2003],
+          ["Urgent Care", 2025],
+          ["Blood Work", 1869],
+          ["Radiology", 1852],
+          ["Pharmacy", 1743],
+          ["Orthopedics", 2209],
+          ["Rehabilitation Services", 2209],
+          ["Surgical Specialties", 2325],
+          ["Sports Medicine", 2301],
+          ["Day Surgery", 2471],
+          ["Pain Medicine/Nutrition", 2471],
+          ["EMG", 2442],
+          ["Physiatry", 2442],
+          ["Pulmonary Testing", 2442],
+        ])
+      );
+
+      checkInDesks.set(
+        "22 Patriot Place",
+        new Map<string, number>([
+          ["Multi-Specialty Clinic",  658],
+          ["Blood Draw/Phlebotomy", 1191],
+          ["Primary Care",           1082],
+        ])
+      );
+
+      checkInDesks.set(
+        "Faulkner",
+        new Map<string, number>([
+          ["Audiology",             3317],
+          ["Blood Drawing Lab",     3317],
+          ["Cardiac Rehab",         3317],
+          ["Emergency Department",  3317],
+          ["Endoscopy",             3317],
+          ["MRI/CT",                3317],
+          ["Operation Rooms",       3317],
+          ["Pre-Admittance Screening", 3317],
+          ["Pulmonary Lab",         3317],
+          ["Radiology",             3317],
+          ["Special Testing",       3317],
+          ["Vascular Lab",          3317],
+          ["Recovery",              3317],
+        ])
+      );
+
+      checkInDesks.set(
+        "Main Campus",
+        new Map<string, number>([
+          ["Wound Care Center",      4684],
+          ["Asthma Research Center", 4415],
+          ["Emergency",              4987],
+          ["Neuroscience",           5247],
+        ])
+      );
+
+      const mapBuild = checkInDesks.get(selectedDestination.name)
+
+      let entrance: Node | undefined
+      console.log("Checkin data: ", {
+        checkin: checkin,
+        building: selectedDestination.name,
+        department: deptName,
+        nodeNum: checkin ? mapBuild.get(deptName) : lots[selectedLot]
+      })
+      console.log("Render CI: ", checkin)
+      if(checkin) {
+        entrance = graph.getNode(lots[selectedLot]);
+      } else {
+        entrance = graph.getNode(mapBuild?.get(deptName));
+      }
+      
       const target = graph.getNode(departmentNumber);
 
       if (!entrance || !target) {
@@ -243,21 +341,17 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       context.setPathAlgorithm = new AStar()
       // Compute and draw the new path
       if (algoType === "A-Star") {
-        console.log("Using A-Star")
         context.setStrategyPathfind(new AStar());
       } else if (algoType === "DFS") {
-        console.log("Using DFS")
         context.setStrategyPathfind(new DFS())
       } else if (algoType === "BFS") {
-        console.log("Using BFS")
         context.setStrategyPathfind(new BFS())
       } else if (algoType === "Dijkstras") {
-        console.log("Using Dijkstra's")
         context.setStrategyPathfind(new Dijkstras())
       }
 
       const pathNodes = context.pathFind(graph, entrance, target)
-      console.log("Path to: ", pathNodes)
+      console.log("Path from: ", entrance, " to ", target, " is: ", pathNodes)
 
       pathNodesRef.current = pathNodes;
 
@@ -331,7 +425,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
     } catch (error) {
       console.error('Error in pathfinding:', error);
     }
-  }, [map, departmentNumber, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, selectedFloor]);
+  }, [map, departmentNumber, selectedLot, nodesData, edgesData, isNodesLoading, isEdgesLoading, selectedDestination, checkin, selectedFloor, deptName]);
 
   // Handle overlay updates based on selected destination
   useEffect(() => {

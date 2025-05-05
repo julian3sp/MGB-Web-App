@@ -32,7 +32,7 @@ const destinations = [
   },
   {
     name: "Main Campus",
-    location: { lat:42.33539999367496 , lng: -71.10675757779984 }
+    location: { lat: 42.336318 , lng: -71.108943 }
   }
 ];
 

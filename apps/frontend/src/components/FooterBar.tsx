@@ -19,7 +19,6 @@ function FooterBar() {
           <Link to="/directory">Directory</Link>
           <Link to="/navigation">Navigation</Link>
           <Link to="/Credits">Credits</Link>
-          <Link to="/reviews">Review</Link>
         </div>
 
         <div className="flex space-x-3">

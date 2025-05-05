@@ -219,7 +219,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           'Faulk B': 3364,
           'BH A': 3371,
           'BH B': 3375,
-          'Main Campus': 4963,
+          'MC A': 3639,
       };
 
       const checkInDesks: CheckInDesks = new Map();
@@ -286,13 +286,21 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       );
 
       checkInDesks.set(
-        "Main Campus",
-        new Map<string, number>([
-          ["Wound Care Center",      4684],
-          ["Asthma Research Center", 4415],
-          ["Emergency",              4987],
-          ["Neuroscience",           5247],
-        ])
+          "Main Campus",
+          new Map<string, number>([
+            ["Podiatry",                    3596],
+            ["Electrophysiology",           3596],
+            ["Echocardiography Lab",        3596],
+            ["Endoscopy",                   3596],
+            ["Dental Group Oral Medicine",  3596],
+            ["ENT",                         3596],
+            ["Ampitheater",                 3596],
+            ["Pharmacy",                    3462],
+            ["Pre-Op",                      3596],
+            ["Ambulatory Radiology",        3596],
+            ["Thoracic Surgery",            3596],
+            ["Lung Center",                 3596],
+          ])
       );
 
       const mapBuild = checkInDesks.get(selectedDestination.name)

@@ -25,15 +25,13 @@ export function ParkingLotButtons( { selectedPlace, setAccordionItem, setLot} : 
         case '20 Patriot Place':
             return (
                 <>
-                    <NavButton onClick={() => accordionEdit('20 Patriot Place')}>Lot A</NavButton>
-                    <NavButton onClick={() => accordionEdit('20 Patriot Place')}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('20 Patriot Place')}>Main Entrance</NavButton>
                 </>
             );
         case '22 Patriot Place':
             return (
                 <>
-                    <NavButton onClick={() => accordionEdit('22 Patriot Place')}>Lot A</NavButton>
-                    <NavButton onClick={() => accordionEdit('22 Patriot Place')}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('22 Patriot Place')}>Main Entrance</NavButton>
                 </>
             );
         case 'Faulkner':
@@ -51,7 +49,11 @@ export function ParkingLotButtons( { selectedPlace, setAccordionItem, setLot} : 
                 </>
             );
         case 'Main Campus':
-            return (<></>);
+            return (
+                <>
+                    <NavButton onClick={() => accordionEdit('MC A')}>Lot A</NavButton>
+                </>
+            );
         default:
             return (<></>);
     }

@@ -260,16 +260,32 @@ const MapComponent: React.FC = () => {
         };
 
         const mainCampusMapping: Record<string, number> = {
-            'Wound Care Center': 4684,
-            'Asthma Research Center': 4415,
-            'Emergency': 4987,
-            'Neuroscience': 5247
+            'Podiatry': 3668,
+            'Electrophysiology': 3654,
+            'Echocardiography Lab': 3645,
+            'Endoscopy': 3582,
+            'Dental Group Oral Medicine': 3433,
+            'ENT': 3536,
+            'Ampitheater': 3572,
+            'Pharmacy': 3462,
+            'Pre-Op': 3447,
+            'Ambulatory Radiology': 3420,
+            'Thoracic Surgery': 3386,
+            'Lung Center': 3372,
         };
         const mainCampusCheckin: Record<string, number> = {
-            'Wound Care Center': 4684,
-            'Asthma Research Center': 4415,
-            'Emergency': 4987,
-            'Neuroscience': 5247
+            'Podiatry': 3596,
+            'Electrophysiology': 3596,
+            'Echocardiography Lab': 3596,
+            'Endoscopy': 3596,
+            'Dental Group Oral Medicine': 3596,
+            'ENT': 3596,
+            'Ampitheater': 3596,
+            'Pharmacy': 3462,
+            'Pre-Op': 3596,
+            'Ambulatory Radiology': 3596,
+            'Thoracic Surgery': 3596,
+            'Lung Center': 3596,
         };
 
         if (!checkInDesk) {

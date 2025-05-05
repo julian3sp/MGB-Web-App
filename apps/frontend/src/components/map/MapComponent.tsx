@@ -237,10 +237,10 @@ const MapComponent: React.FC = () => {
             'MRI/CT': 3095,
             'Operation Rooms': 3175,
             'Pre-Admittance Screening': 3318,
-            'Pulmonary Lab': 3319,
+            'Pulmonary Lab': 3320,
             'Radiology': 3105,
             'Special Testing': 3322,
-            'Vascular Lab': 3319,
+            'Vascular Lab': 3320,
             'Recovery': 3143
         };
         const FaulknerCheckin: Record<string, number> = {

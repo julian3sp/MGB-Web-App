@@ -191,22 +191,6 @@ const MapRenderer: React.FC<MapRendererProps> = ({
 
   }, [onMapReady, apiKey]);
 
-  function getMultiFloor(path: Node[]): { floor1: { path: Node[], floorNum: number }, floor2: { path: Node[], floorNum: number } } {
-    const firstFloorNum: number = path[0].floor
-    const lastFloorNum: number = path[path.length - 1].floor
-    const firstFloorStairs = path.find(n => n.floor != firstFloorNum);
-    const lastFloorStairs = path.find(n => n.floor === lastFloorNum);
-    if (lastFloorStairs) {
-      const floor1 = path.slice(0, path.indexOf(firstFloorStairs))
-      const floor2 = path.slice(path.indexOf(lastFloorStairs))
-      return {
-        floor1: { path: floor1, floorNum: firstFloorNum },
-        floor2: { path: floor2, floorNum: lastFloorStairs.floor }
-      }
-    }
-    return { floor1: { path, floorNum: firstFloorNum }, floor2: { path: [], floorNum: firstFloorNum } }
-  }
-
   useEffect(() => {
     if (
       !map ||
@@ -229,10 +213,12 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           'MGB A': 3323,
           'MGB B': 3327,
           'MGB C': 3328,
-          '20 Patriot Place': 1004,
-          '22 Patriot Place': 1290,
-          'Faulkner': 3716,
-          'Belkin House': 3716, // CHANGE THISSSSSS
+          '20 Patriot Place': 3343,
+          '22 Patriot Place': 3339,
+          'Faulk A': 3363,
+          'Faulk B': 3364,
+          'BH A': 3371,
+          'BH B': 3375,
           'Main Campus': 4963,
       };
 
@@ -353,37 +339,20 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       const pathNodes = context.pathFind(graph, entrance, target)
       console.log("Path from: ", entrance, " to ", target, " is: ", pathNodes)
 
-      pathNodesRef.current = pathNodes;
 
-      if (pathNodes && onPathFound) {
-        onPathFound(pathNodes)
+
+      const floorNodes = pathNodes.filter(n => n.floor === selectedFloor)
+
+      pathNodesRef.current = floorNodes;
+
+      if (floorNodes && onPathFound) {
+        onPathFound(floorNodes)
       }
-
-      const multiFloors = getMultiFloor(pathNodes)
-      console.log("Path:", pathNodes)
+      // Initialize newPolyline as let instead of const
       console.log("Floor: ", selectedFloor)
 
-      // Initialize newPolyline as let instead of const
-      let newPolyline;
 
-      if (multiFloors.floor2.floorNum === multiFloors.floor1.floorNum) {
-        newPolyline = drawPath(map, pathNodes);
-      } else {
-        if (multiFloors.floor1.floorNum === selectedFloor) {
-          newPolyline = drawPath(map, multiFloors.floor1.path);
-        } else if (multiFloors.floor2.floorNum === selectedFloor) {
-          newPolyline = drawPath(map, multiFloors.floor2.path);
-        }
-      }
-
-      // Fallback if no path was drawn (shouldn't happen)
-      if (!newPolyline) {
-        newPolyline = drawPath(map, pathNodes);
-      }
-
-      pathPolylineRef.current = newPolyline;
-
-      const routeInfo = showRouteWithDirections(map, pathNodes, selectedFloor, onFloorChangeRequired);
+      const routeInfo = showRouteWithDirections(map, floorNodes, selectedFloor, onFloorChangeRequired);
 
       if (onTextDirectionsGenerated) {
         onTextDirectionsGenerated(routeInfo.directions)

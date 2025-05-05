@@ -5,13 +5,15 @@ import pharmacyImg from '../../assets/department/pharmacy.png';
 import cardiacImg from '../../assets/department/cardiac.jpeg';
 import urologyImg from '../../assets/department/urology.png';
 import gynecologyImg from '../../assets/department/gynecology.jpg';
-import lactationImg from '../../assets/department/lactation.webp';
-import veinTreatmentImg from '../../assets/department/veinTreatment.jpeg';
+import ortho from '../../assets/department/ortho.jpg';
+import sport from '../../assets/department/sports.jpg';
+import rehab from '../../assets/department/primary.jpeg';
 import audiologyImg from '../../assets/department/audiology.png';
 import pulmonologyImg from '../../assets/department/pulmonology.jpg';
 import mriCTImg from '../../assets/department/mriCT.png';
 import endoImg from '../../assets/department/endocrinology.jpg';
 import vascularImg from '../../assets/department/vascular.png';
+import radiology2 from '../../assets/department/mriCT.png';
 
 import lebron1 from '../../assets/lebron-dunk.jpg';
 import lebron2 from '../../assets/lebron-poster.jpg';
@@ -119,31 +121,41 @@ export const flipCardsData = [
     },
     {
         category: "Patriot Place",
-        title: "Gynecology",
-        src: gynecologyImg,
+        title: "Radiology",
+        src: radiology2,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                Location: 20 Patriot Place
             </p>
         ),
     },
     {
         category: "Patriot Place",
-        title: "Lactation",
-        src: lactationImg,
+        title: "Orthopaedics",
+        src: ortho,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                Location: 20 Patriot Place
             </p>
         ),
     },
     {
         category: "Patriot Place",
-        title: "Vein Treatment",
-        src: veinTreatmentImg,
+        title: "Rehabilitation Services",
+        src: rehab,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                Location: 20 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Sports Medicine Center",
+        src: sport,
+        content: (
+            <p className={"text-white"}>
+                Location: 20 Patriot Place
             </p>
         ),
     },

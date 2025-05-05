@@ -4,20 +4,24 @@ import urgentCareImg from '../../assets/department/urgent-care.png';
 import pharmacyImg from '../../assets/department/pharmacy.png';
 import cardiacImg from '../../assets/department/cardiac.jpeg';
 import urologyImg from '../../assets/department/urology.png';
-import gynecologyImg from '../../assets/department/gynecology.jpg';
+import surgery from '../../assets/department/surgery.webp';
 import ortho from '../../assets/department/ortho.jpg';
 import sport from '../../assets/department/sports.jpg';
 import rehab from '../../assets/department/primary.jpeg';
-import audiologyImg from '../../assets/department/audiology.png';
+import audiologyImg from '../../assets/department/aud2.webp';
 import pulmonologyImg from '../../assets/department/pulmonology.jpg';
 import mriCTImg from '../../assets/department/mriCT.png';
 import endoImg from '../../assets/department/endocrinology.jpg';
 import vascularImg from '../../assets/department/vascular.png';
 import radiology2 from '../../assets/department/mriCT.png';
+import nutrition from '../../assets/department/nutrition.jpg';
+import primary from '../../assets/department/neurology.jpg';
+import multispecpat22 from '../../assets/department/pat22multisp.jpg';
+import pfs from '../../assets/department/pfs.jpg'
+import phl from '../../assets/department/veinTreatment.jpeg';
+import prcr from '../../assets/department/primcar.jpg';
+import cardiacrehab from '../../assets/department/cardiacrehab.jpg';
 
-import lebron1 from '../../assets/lebron-dunk.jpg';
-import lebron2 from '../../assets/lebron-poster.jpg';
-import testingImg from '../../assets/insideMGB.png';
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
 import serviceImage from "../../assets/service.jpeg";
@@ -160,12 +164,82 @@ export const flipCardsData = [
         ),
     },
     {
-        category: "Faulkner",
-        title: "Admitting/Registration",
-        src: pathImage,
+        category: "Patriot Place",
+        title: "Surgical Specialties",
+        src: surgery,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                Location: 20 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Pain Medicine / Nutrition",
+        src: nutrition,
+        content: (
+            <p className={"text-white"}>
+                Location: 20 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Physiatry",
+        src: primary,
+        content: (
+            <p className={"text-white"}>
+                Location: 20 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Pulmonary Lab",
+        src: pulmonologyImg,
+        content: (
+            <p className={"text-white"}>
+                Location: 20 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Multi Specialty Clinic",
+        src: multispecpat22,
+        content: (
+            <p className={"text-white"}>
+                Location: 22 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Patient Financial Services",
+        src: pfs,
+        content: (
+            <p className={"text-white"}>
+                Location: 22 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Phlebotomy",
+        src: phl,
+        content: (
+            <p className={"text-white"}>
+                Location: 22 Patriot Place
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Primary Care",
+        src: prcr,
+        content: (
+            <p className={"text-white"}>
+                Location: 22 Patriot Place
             </p>
         ),
     },
@@ -233,16 +307,6 @@ export const flipCardsData = [
         category: "Faulkner",
         title: "Pre-Admittance Screening",
         src: pathImage,
-        content: (
-            <p className={"text-white"}>
-                Location: Floor 1
-            </p>
-        ),
-    },
-    {
-        category: "Faulkner",
-        title: "Pulmonary Lab",
-        src: pulmonologyImg,
         content: (
             <p className={"text-white"}>
                 Location: Floor 1

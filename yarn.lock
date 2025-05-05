@@ -9826,7 +9826,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:6.6.0, prisma@npm:^6.6.0":
+"prisma@npm:^6.6.0":
   version: 6.6.0
   resolution: "prisma@npm:6.6.0"
   dependencies:

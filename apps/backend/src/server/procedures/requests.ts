@@ -21,6 +21,24 @@ export const getRequests = trpc.procedure.query(async () => {
     return requests;
 });
 
+export const getRequestOfType = publicProcedure
+    .input(
+        z.object({
+            type: z.string(),
+        })
+    )
+    .query(async (opts) => {
+        const { input } = opts;
+        console.log(input);
+        const requests = await client.service_request.findMany({
+            where: {
+                request_type: input.type,
+            },
+        });
+        console.log('getRequestOfType returned');
+        return requests;
+    });
+
 export const makeRequest = publicProcedure
     .input(
         z.object({
@@ -32,6 +50,7 @@ export const makeRequest = publicProcedure
             status: z.string(),
             request_type: z.string(),
             additional_comments: z.optional(z.string()),
+            image_upload: z.optional(z.string()),
             sanitation: z.optional(
                 z.object({
                     cleaningType: z.string(),
@@ -137,3 +156,54 @@ export const updateRequest = publicProcedure
         });
         return updateRequest;
     });
+
+export const requestCountByStatus = publicProcedure.query(async () => {
+    const statuses = await client.service_request.groupBy({
+        by: ['status'],
+        _count: {
+            status: true,
+        },
+    });
+
+    // Format the result as { [status]: count }
+    const result: Record<string, number> = {};
+    for (const entry of statuses) {
+        result[entry.status] = entry._count.status;
+    }
+
+    return result;
+});
+
+export const requestCountByLocation = publicProcedure.query(async () => {
+    const locations = await client.service_request.groupBy({
+        by: ['location'],
+        _count: {
+            location: true,
+        },
+    });
+
+    // Format the result as { [location]: count }
+    const result: Record<string, number> = {};
+    for (const entry of locations) {
+        result[entry.location] = entry._count.location;
+    }
+
+    return result;
+});
+
+export const requestCountByPriority = publicProcedure.query(async () => {
+    const priorities = await client.service_request.groupBy({
+        by: ['priority'],
+        _count: {
+            priority: true,
+        },
+    });
+
+    // Format the result as { [priority]: count }
+    const result: Record<string, number> = {};
+    for (const entry of priorities) {
+        result[entry.priority] = entry._count.priority;
+    }
+
+    return result;
+});

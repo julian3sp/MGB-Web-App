@@ -91,8 +91,6 @@ model directory {
   services  String
   location  String
   telephone String
-  node      nodes  @relation(fields: [nodesId], references: [id])
-  nodesId   Int
 }
 
 model users {
@@ -102,6 +100,15 @@ model users {
   password   String
 }
 
+model Review {
+  id      String  @id @default(uuid())
+  review  String
+  rating  Int
+  createdAt DateTime @default(now())
+}
+
+
+
 model nodes {
   id        Int     @id @default(autoincrement())
   building  String
@@ -109,12 +116,12 @@ model nodes {
   name      String?
   x         Float
   y         Float
+  type      String
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 
-  outgoingEdges edges[]     @relation("SourceEdges")
-  incomingEdges edges[]     @relation("TargetEdges")
-  directory     directory[]
+  outgoingEdges edges[] @relation("SourceEdges")
+  incomingEdges edges[] @relation("TargetEdges")
 }
 
 model edges {

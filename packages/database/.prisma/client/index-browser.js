@@ -134,7 +134,8 @@ exports.Prisma.Service_requestScalarFieldEnum = {
   request_type: 'request_type',
   request_date: 'request_date',
   additional_comments: 'additional_comments',
-  assigned_employee: 'assigned_employee'
+  assigned_employee: 'assigned_employee',
+  image_upload: 'image_upload'
 };
 
 exports.Prisma.SanitationScalarFieldEnum = {
@@ -206,6 +207,13 @@ exports.Prisma.UsersScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  review: 'review',
+  rating: 'rating',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.NodesScalarFieldEnum = {
   id: 'id',
   building: 'building',
@@ -213,6 +221,7 @@ exports.Prisma.NodesScalarFieldEnum = {
   name: 'name',
   x: 'x',
   y: 'y',
+  type: 'type',
   edgeCost: 'edgeCost',
   totalCost: 'totalCost'
 };
@@ -253,6 +262,7 @@ exports.Prisma.ModelName = {
   AlgoType: 'AlgoType',
   directory: 'directory',
   users: 'users',
+  Review: 'Review',
   nodes: 'nodes',
   edges: 'edges'
 };

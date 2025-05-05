@@ -4,11 +4,16 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
+import { makeReview, getReviews } from './server/procedures/review';
 import {
     getRequests,
     makeRequest,
     deleteRequest,
     updateRequest,
+    getRequestOfType,
+    requestCountByStatus,
+    requestCountByLocation,
+    requestCountByPriority,
 } from './server/procedures/requests';
 import { getEmployee, makeEmployee } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
@@ -19,12 +24,14 @@ import {
     getUniqueDirectories,
     getAllNamesArray,
     makeDirectories,
+    makeManyDirectories,
 } from './server/procedures/directories.ts';
 import {
     deleteAllNodes,
     deleteSelectedNodes,
     editNodes,
     getAllNodes,
+    getLargestId,
     getNode,
     makeManyNodes,
     makeNode,
@@ -37,6 +44,8 @@ import {
     makeManyEdges,
 } from './server/procedures/edges.ts';
 import { getAlgoType, setAlgoType } from './server/procedures/algoType.ts';
+import path from 'path';
+import uploadImageRouter from './server/procedures/uploadImage.ts';
 
 const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({}); // no context
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -45,14 +54,21 @@ const cors = require('cors');
 
 const appRouter = t.router({
     requestList: getRequests,
+    requestListOfType: getRequestOfType,
     createRequest: makeRequest,
     deleteRequest: deleteRequest,
     updateRequest: updateRequest,
+    getRequestStatusCounts: requestCountByStatus,
+    getRequestLocationCounts: requestCountByLocation,
+    getRequestPriorityCounts: requestCountByPriority,
     getEmployees: getEmployee,
     makeEmployee: makeEmployee,
+    makeReview: makeReview,
+    getReviews: getReviews,
     validUser: getUser,
     makeUser: makeUser,
     makeDirectory: makeDirectories,
+    makeManyDirectories: makeManyDirectories,
     getAllNamesArray: getAllNamesArray,
     getDirectories: getDirectories,
     getUniqueDirectory: getUniqueDirectories,
@@ -61,6 +77,7 @@ const appRouter = t.router({
     makeManyNodes: makeManyNodes,
     getNode: getNode,
     getAllNodes: getAllNodes,
+    getLargestNodeId: getLargestId,
     editNodes: editNodes,
     deleteAllNodes: deleteAllNodes,
     deleteSelectedNodes: deleteSelectedNodes,
@@ -74,11 +91,28 @@ const appRouter = t.router({
 });
 
 const app: Express = express(); // Set up the backend
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
+app.use('/uploads', express.static(path.join(__dirname, './uploads'))); // serve image files
+app.use('/upload-image', uploadImageRouter);
 app.use('/trpc', (req, res, next) => {
     console.log(`[TRPC] ${req.method} ${req.url}`);
     next();
 });
+
+//------ Python Fetcher------------//
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
+const PYTHON_URL = process.env.PYTHON_URL ?? 'http://localhost:8000';
+
+app.use(
+    '/image-api',
+    createProxyMiddleware({
+        target: process.env.PYTHON_URL || PYTHON_URL,
+        changeOrigin: true,
+        pathRewrite: { '^/image-api': '' }, // remove the prefix before forwarding
+        // logger: logger,
+    })
+);
 
 app.use(
     '/trpc',

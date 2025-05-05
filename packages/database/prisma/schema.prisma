@@ -31,6 +31,7 @@ model service_request {
   request_date        DateTime  @default(now())
   additional_comments String?
   assigned_employee   String?
+  image_upload        String?
   employee            employee? @relation(fields: [assigned_employee], references: [id])
 
   sanitation     Sanitation?
@@ -119,6 +120,13 @@ model users {
   password   String
 }
 
+model Review {
+  id      String  @id @default(uuid())
+  review  String
+  rating  Int
+  createdAt DateTime @default(now())
+}
+
 model nodes {
   id        Int     @id @default(autoincrement())
   building  String
@@ -126,6 +134,7 @@ model nodes {
   name      String?
   x         Float
   y         Float
+  type      String
   edgeCost  Int     @default(0)
   totalCost Int     @default(0)
 

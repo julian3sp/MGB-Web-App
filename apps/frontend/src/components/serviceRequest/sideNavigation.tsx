@@ -7,23 +7,27 @@ interface SideNavProps {
     children: React.ReactNode;
     width?: number;
     absolute?: boolean;
+    x?: number;
+    y?: number;
+    xOut?: number;
+    padding?: number;
 }
 
-const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256, absolute}) => {
+const SideNav: React.FC<SideNavProps> = ({ children, isOpen, setIsOpen, width = 256, absolute, x = -68 , y= 25, xOut = 20, padding = 0}) => {
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
     const translateX = isOpen ? 0 : -width;
-    const translateButton = isOpen ? width-68 : 20;
+    const translateButton = isOpen ? width + x : xOut;
 
 
     return (
         <>
             <motion.div
                 className="bg-[#F4F4F4] z-20"
-                animate={{x: translateButton, y: 25}}
-                initial={{x: translateButton, y: 25}}
+                animate={{x: translateButton, y: y}}
+                initial={{x: translateButton, y: y}}
                 transition={{ type: 'tween', ease: 'easeOut', duration: 0.35}}>
 
                 {/*sidebar toggle button*/}

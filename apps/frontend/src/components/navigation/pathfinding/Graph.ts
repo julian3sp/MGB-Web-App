@@ -1,4 +1,14 @@
-// import {CommitEdits} from "@/components/map/CommitEdits.tsx";
+export enum NodeType {
+    Department = "Department",
+    Elevator  = "Elevator",
+    Stairwell = "Stairwell",
+    Checkin = "Checkin",
+    Entrance = "Entrance",
+    ParkingLot = "Parking Lot",
+    Hall = "Hall",
+    Restroom = "Restroom",
+    SkyBridge = "Sky Bridge",
+}
 
 export type Node = {
     name: string
@@ -10,6 +20,7 @@ export type Node = {
     edgeCost: number
     totalCost: number
     parent?: Node;
+    type: NodeType;
 }
 
 export type  Edge = {
@@ -17,6 +28,9 @@ export type  Edge = {
     sourceId: Node
     targetId: Node;
     weight: number;
+    core?:google.maps.Polyline;
+    border?:google.maps.Polyline;
+    overlay?:google.maps.Polyline;
 }
 
 type Edit = {
@@ -43,11 +57,35 @@ export class Graph {
             addedNodes: [],
             deletedEdges: [],
             addedEdges: [],
+            editedNodes: [],
+        }
+    }
+
+    string2NT(string: string): NodeType {
+        switch (string) {
+            case "Department":
+                return NodeType.Department;
+            case "Elevator":
+                return NodeType.Elevator;
+            case "Stairwell":
+                return NodeType.Stairwell;
+            case "Checkin":
+                return NodeType.Checkin;
+            case "Entrance":
+                return NodeType.Entrance;
+            case "ParkingLot":
+                return NodeType.ParkingLot;
+            case "Restroom":
+                return NodeType.Restroom;
+            case "SkyBridge":
+                return NodeType.SkyBridge;
+            default:
+                return NodeType.Hall;
         }
     }
 
     populate(nodesData: { id: number, name: string, building: string, floor: number, x: number, y: number,
-                          edgeCost: number, totalCost: number, parent?: Node; }[],
+                          edgeCost: number, totalCost: number, parent?: Node; type: string}[],
              edgesData: { id:number, sourceId: number, targetId: number, weight: number }[]) {
         // Reinit
         this.nodes = new Set<Node>();
@@ -56,6 +94,40 @@ export class Graph {
         this.resetEditHistory();
 
         for (const raw of nodesData) {
+            let nodeType;
+            switch (raw.type) {
+                case "Department":
+                    nodeType = NodeType.Department;
+                    break;
+                case "Elevator":
+                    nodeType = NodeType.Elevator;
+                    break;
+                case "Stairwell":
+                    nodeType = NodeType.Stairwell;
+                    break;
+                case "Checkin":
+                    nodeType = NodeType.Checkin;
+                    break;
+                case "Entrance":
+                    nodeType = NodeType.Entrance;
+                    break;
+                case "Parking Lot":
+                    nodeType = NodeType.ParkingLot;
+                    break;
+                case "Hall":
+                    nodeType = NodeType.Hall;
+                    break;
+                case "Restroom":
+                    nodeType = NodeType.Restroom;
+                    break;
+                case "Sky Bridge":
+                    nodeType = NodeType.SkyBridge;
+                    break;
+                default:
+                    nodeType = NodeType.Hall;
+                    break;
+            }
+
             const node: Node = {
                 id: raw.id,
                 name: `node-${raw.id}`,
@@ -66,6 +138,8 @@ export class Graph {
                 edgeCost: 0,
                 totalCost: 0,
                 parent: undefined,
+                type: nodeType,
+
             };
             this.nodes.add(node);
             this.adjacencyList.set(node, []);
@@ -76,6 +150,9 @@ export class Graph {
             id: e.id,
             sourceId: this.getNode(e.sourceId),
             targetId: this.getNode(e.targetId),
+
+            // node = this.getNode(e.sourceId),
+            // this.nodesClass.push(new NodeClass(node.))
         }));
 
 
@@ -121,6 +198,7 @@ export class Graph {
             if (n) {
                 n.x = node.x;
                 n.y = node.y;
+                n.type = node.type;
             }
         } else {
             // Either update existing edited node or push it in
@@ -128,10 +206,12 @@ export class Graph {
             if (existing) {
                 existing.x = node.x;
                 existing.y = node.y;
+                existing.type = node.type
             } else {
                 this.edits.editedNodes.push({ ...node });
             }
         }
+        // console.log(this.edits.editedNodes);
     }
 
     deleteNode(id:number): void {
@@ -193,14 +273,16 @@ export class Graph {
         const targetId = edge.targetId;
         const weight = edge.weight;
 
-
+        if (!sourceId && !targetId) return;
         this.addNode(sourceId);
         this.addNode(targetId);
 
-        this.adjacencyList.get(sourceId)?.push({id: id, sourceId: sourceId, targetId: targetId, weight: weight });
+        this.adjacencyList
+            .get(sourceId)
+            ?.push({ id: id, sourceId: sourceId, targetId: targetId, weight: weight });
         this.adjacencyList.get(targetId)?.push({id: id, sourceId: targetId, targetId: sourceId, weight: weight });
 
-        this.edits.addedEdges.push(edge);
+        this.edits.addedEdges.push({sourceId: sourceId.id, targetId: targetId.id, weight: weight});
         this.edges.push(edge)
     }
 
@@ -266,6 +348,13 @@ export class Graph {
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
         }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
+        }
+        else if (building === "Main Campus"){
+            building = "Main Campus";
+        }
+
 
         // console.log("Getting nodes building: ", building, " Floor:", floor);
 
@@ -284,12 +373,21 @@ export class Graph {
         else if (building === "MGB (Chestnut Hill)"){
             building = "chestnut";
         }
+        else if (building === "Faulkner"){
+            building = "Faulkner";
+        }
 
-        // console.log("Getting edges building: ", building, " Floor:", floor);
         return Array.from(this.edges).filter(
             edge => edge.sourceId.building === building && edge.targetId.floor  === floor &&
                 edge.targetId.building === building && edge.targetId.floor  === floor
         );
+    }
+
+     neighborCount(nodeID: number): number {
+         const node = this.getNode(nodeID);
+         if (!node) return 0;
+         const neighbors = this.adjacencyList.get(node);
+         return neighbors ? neighbors.length : 0;
     }
 
 }

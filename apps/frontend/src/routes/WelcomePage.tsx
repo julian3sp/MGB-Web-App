@@ -7,7 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import videoSrc from "../../assets/Mass General Brigham in Your Community - Mass General Brigham (1080p, h264).mp4";
 import { AppleCardsCarouselDemo } from "@/components/AppleCardsCarouselDemo";
 import { Link } from "react-router-dom";
-import Popup from "../components/ui/Popup.tsx"
+import { ChevronDown } from "lucide-react";
+
 gsap.registerPlugin(ScrollTrigger);
 
 export function WelcomePage() {
@@ -16,6 +17,22 @@ export function WelcomePage() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [sidePadding, setSidePadding] = useState(0);
+  const [scrolling, setScrolling] = useState(false);
+  const [inactive, setInactive] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  }
 
   const calculatePadding = () => {
     const viewportWidth = window.innerWidth; // get the width of the viewport
@@ -28,8 +45,6 @@ export function WelcomePage() {
     const padding = calculatePadding();
     setSidePadding(padding);
   };
-
-  const bannerControls = useAnimationControls();
 
   useEffect(() => {
     const tl = gsap.timeline({ // create a gsap timeline which is a sequence of animations
@@ -57,27 +72,71 @@ export function WelcomePage() {
     return () => ScrollTrigger.getAll().forEach(t => t.kill());
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolling(true);
+      setInactive(false);
+    };
+
+    // if scroll, call function handleScroll to set setScrolling to true
+    window.addEventListener("scroll", handleScroll);
+
+    const inactivityTimer = setTimeout(() => {
+      setInactive(true);
+    }, 60000);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(inactivityTimer);
+    };
+  }, []);
+
   return (
     <div className="flex flex-col">
       {/* pinned section */}
       <div ref={containerRef}>
         <div
-          ref={wrapperRef}
-          className="w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
+          ref={wrapperRef} // everthing inside wrapper ref including the video and the button's parent is being shrunk
+          className="relative w-full h-screen mx-auto overflow-hidden flex justify-center items-center"
         >
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            className="w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+          <div className="relative w-full h-full">
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+
+            <button
+              /**
+               * before the button was absolutely positioned, fixed in place and not transformed with the video
+               * after the button is treated as part of the animation timeline and follows the same changes in width, height, scale as it's tied to layout
+               */
+              onClick={togglePlayback}
+              className="absolute bottom-5 right-5 bg-[#f2f2f7]/80 hover:bg-[#e5e5ea]/90 text-[#3c3c43] p-2 rounded-full transition shadow-md backdrop-blur z-50"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                width="18"
+                height="18"
+              >
+                {isPlaying ? (
+                  <path d="M6 4h4v16H6zm8 0h4v16h-4z" />
+                ) : (
+                  <path d="M8 5v14l11-7z" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+
       </div>
 
-      {/* centered text */}
       <motion.div
         className="w-full flex flex-col items-center justify-center px-4 text-center"
         initial={{ opacity: 0, y: 50 }}

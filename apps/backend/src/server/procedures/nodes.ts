@@ -7,11 +7,13 @@ export const makeNode = publicProcedure
     .input(
         z.array(
             z.object({
+                id: z.optional(z.number()),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string(),
                 x: z.number(),
                 y: z.number(),
+                type: z.string(),
             })
         )
     )
@@ -26,6 +28,7 @@ export const editNodes = publicProcedure
                 id: z.number(),
                 x: z.number(),
                 y: z.number(),
+                type: z.string(),
             })
         )
     )
@@ -33,7 +36,7 @@ export const editNodes = publicProcedure
         for (const node of input) {
             await client.$executeRaw`
         UPDATE nodes 
-        SET x = ${node.x}, y = ${node.y} 
+        SET x = ${node.x}, y = ${node.y} , type = ${node.type}
         WHERE id = ${node.id}
         `;
         }
@@ -43,11 +46,13 @@ export const makeManyNodes = publicProcedure
     .input(
         z.array(
             z.object({
+                id: z.number().optional(),
                 building: z.string(),
                 floor: z.number(),
                 name: z.string().nullable(),
                 x: z.number(),
                 y: z.number(),
+                type: z.string(),
             })
         )
     )
@@ -91,6 +96,17 @@ export const getNode = publicProcedure
         });
         return node;
     });
+
+export const getLargestId = publicProcedure.query(() => {
+    return client.nodes.findMany({
+        orderBy: [
+            {
+                id: 'desc',
+            },
+        ],
+        take: 1,
+    });
+});
 export const deleteSelectedNodes = publicProcedure
     .input(z.array(z.number())) // expects an array of node IDs
     .mutation(async ({ input }) => {

@@ -26,7 +26,7 @@ export const getUniqueDirectories = publicProcedure
 
 export const makeDirectories = publicProcedure
     .input(
-        z.object({
+        z.strictObject({
             name: z.string(),
             services: z.string(),
             location: z.string(),
@@ -34,10 +34,29 @@ export const makeDirectories = publicProcedure
         })
     )
     .mutation(async ({ input }) => {
-        const directory = await client.directory.create({
-            data: input,
-        });
-        return directory;
+        try {
+            const directory = await client.directory.create({
+                data: input,
+            });
+            return directory;
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+export const makeManyDirectories = publicProcedure
+    .input(
+        z.array(
+            z.object({
+                name: z.string(),
+                services: z.string(),
+                location: z.string(),
+                telephone: z.string(),
+            })
+        )
+    )
+    .mutation(async ({ input }) => {
+        return client.directory.createMany({ data: input });
     });
 
 export const deleteAllDirectories = publicProcedure.mutation(async () => {

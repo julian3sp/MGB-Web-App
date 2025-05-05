@@ -5,7 +5,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/Tooltip.tsx';
+} from '@/components/ui/tooltip.tsx';
 import DeleteIcon from '../../../assets/DeleteIcon.png';
 
 export default function EditRequest({

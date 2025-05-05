@@ -1,6 +1,6 @@
 import {Node, Edge, Graph} from "./Graph.ts"
 import {StrategyPathfind} from "./StrategyPathfind.ts";
-
+import {WorldDistance} from "./worldCalculations.ts"
 abstract class WeightedPath implements StrategyPathfind {
     getNeighbors(graph: Graph, node: Node): Edge[] {
         return graph.adjacencyList.get(node) || [];
@@ -80,9 +80,7 @@ abstract class WeightedPath implements StrategyPathfind {
 
 export class AStar extends WeightedPath {
     costDifference(startNode: Node, targetNode: Node): number {
-        return Math.sqrt(
-            Math.pow(targetNode.x - startNode.x, 2) + Math.pow(targetNode.y - startNode.y, 2)
-        );
+        return WorldDistance(startNode, targetNode) // edge weight in metres
     }
 }
 

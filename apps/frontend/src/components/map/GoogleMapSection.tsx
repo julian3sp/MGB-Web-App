@@ -2,6 +2,7 @@ import React from 'react';
 import SearchContainer from './SearchContainer';
 import DestinationDropdown from './DestinationDropdown';
 import icon from '../../../assets/icon.png';
+import DirectionsGuide from "@/components/map/DirectionsGuide.tsx";
 
 export interface TravelTimes {
   driving: string | null;
@@ -70,6 +71,8 @@ interface GoogleMapSectionProps {
   handleStartLocationSelected: (place: { name: string; location: google.maps.LatLngLiteral }) => void;
   handleDestinationSelected: (destination: { name: string; location: { lat: number; lng: number } }) => void;
   handleViewMap: () => void;
+  directionsResult: google.maps.DirectionsResult | null;
+  setAccordionItem:  React.Dispatch<React.SetStateAction<string[]>>;
   onTransportChange: (mode: 'driving' | 'walking' | 'transit') => void;
   handleGetCurrentLocation: () => void;
 }
@@ -83,22 +86,30 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
   handleStartLocationSelected,
   handleDestinationSelected,
   handleViewMap,
+  directionsResult,
+  setAccordionItem,
   onTransportChange,
   handleGetCurrentLocation
 }) => {
+  const handleZoomToDestination = () => {
+    if (mapInstance && selectedPlace?.location) {
+      mapInstance.setZoom(20);
+      mapInstance.panTo(selectedPlace.location)
+    }
+    setAccordionItem(["item-2"]);
+  }
   return (
     <div className="flex flex-col gap-0 items-center">
       {startLocation && selectedPlace && (
         <div className="flex items-center justify-center gap-4 mb-4 w-[90%]">
           <button
             onClick={() => onTransportChange('driving')}
-            className="flex flex-col items-center px-3 py-1.5"
+            className="flex flex-col font-[poppins] items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'driving'
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'driving'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_car</span>
+              }`}>directions_car</span>
             <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
               {travelTimes.driving || '--'}
             </span>
@@ -107,12 +118,11 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('transit')}
             className="flex flex-col items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'transit'
+            <span className={`material-icons text-sm font-[poppins] rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'transit'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_transit</span>
-            <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
+              }`}>directions_transit</span>
+            <span className="text-[8px] mt-0.5 font-[poppins] max-w-[40px] truncate">
               {travelTimes.transit || '--'}
             </span>
           </button>
@@ -120,21 +130,21 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             onClick={() => onTransportChange('walking')}
             className="flex flex-col items-center px-3 py-1.5"
           >
-            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${
-              selectedTransport === 'walking'
+            <span className={`material-icons text-sm rounded-full p-1 transition-colors duration-200 ${selectedTransport === 'walking'
                 ? 'bg-[#E9F4FF] text-[#1A73E8]'
                 : ''
-            }`}>directions_walk</span>
-            <span className="text-[8px] mt-0.5 max-w-[40px] truncate">
+              }`}>directions_walk</span>
+            <span className="text-[8px] font-[poppins] mt-0.5 max-w-[40px] truncate">
               {travelTimes.walking || '--'}
             </span>
           </button>
         </div>
       )}
+
       <div className="flex items-start relative w-[90%]">
         <div className="flex flex-col items-center absolute -left-3">
           <div className="flex items-center h-[40px]">
-            <div className="w-3 h-3 rounded-full bg-white border-2 border-gray-600"></div>
+            <div className="w-3 h-3 rounded-full bg-white border-2 border-[#003a96]"></div>
           </div>
           <div className="w-0.5 h-5 bg-gray-300" style={{ background: 'repeating-linear-gradient(to bottom, #9CA3AF 0, #9CA3AF 2px, transparent 2px, transparent 6px)' }}></div>
           <div className="flex items-center h-[40px]">
@@ -143,8 +153,9 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
             </div>
           </div>
         </div>
-        <div className="flex-1">
-          <div>
+
+        <div className="flex-1 ">
+          <div >
             {mapInstance && (
               <SearchContainer
                 onPlaceSelected={handleStartLocationSelected}
@@ -155,6 +166,19 @@ export const GoogleMapSection: React.FC<GoogleMapSectionProps> = ({
           </div>
           <div className="mt-5">
             <DestinationDropdown onDestinationSelected={handleDestinationSelected} />
+          </div>
+          <div>
+            {directionsResult && <DirectionsGuide directions={directionsResult} />}
+          </div>
+          <div className='w-full flex justify-center mt-5'>
+            {selectedPlace && (
+              <button
+                onClick={handleZoomToDestination}
+                className='px-3 py-2.5 mx-auto w-[60%] text-md text-white font-bold bg-[#003a96] cursor-pointer rounded-3xl items-center'
+              >
+                I Have Arrived
+              </button>
+            )}
           </div>
         </div>
       </div>

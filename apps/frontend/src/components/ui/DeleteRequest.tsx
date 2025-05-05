@@ -9,10 +9,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/Tooltip.tsx';
-import ExitButton from '@/components/ui/ExitButton.tsx';
-import EditIcon from "../../../assets/EditIcon.png";
-import EditIconWhite from "../../../assets/EditIconWhite.png";
+} from '@/components/ui/tooltip.tsx';
 
 export default function DeleteRequest({
     size = 20,
@@ -47,7 +44,7 @@ export default function DeleteRequest({
                                 />
                             </div>
                         </TooltipTrigger>
-                        <TooltipContent className="bg-red-600 border-2 border-red-800 w-auto">
+                        <TooltipContent className="bg-white border-2 border-[#003a96] text-[#003a96] w-auto">
                             <p>{tooltip}</p>
                         </TooltipContent>
                     </Tooltip>
@@ -74,7 +71,7 @@ export default function DeleteRequest({
                         </PopoverClose>
                         <PopoverClose asChild>
                             <button
-                                className="p-4 pt-1 pb-1 text-base font-medium text-white bg-red-600 hover:bg-red-800 shadow-lg rounded-lg"
+                                className="p-4 pt-1 pb-1 text-base font-medium bg-white border-2 border-[#003a96] text-[#003a96] hover:bg-gray-200 shadow-lg rounded-lg"
                                 onClick={(e) => {
                                     onClick();
                                 }}

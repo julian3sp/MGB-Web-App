@@ -26,7 +26,7 @@ const ImportDept = () => {
 
             for (let i = 1; i < lines.length; i++) { //skip first line
                 // for each line, split on commas
-                const values = lines[i].split(';');
+                const values = lines[i].split(',');
 
 
                 //insert each entry in line into our entry struct

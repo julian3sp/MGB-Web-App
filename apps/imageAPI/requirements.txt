@@ -1,0 +1,10 @@
+numpy
+matplotlib
+scikit-image
+dataclasses
+networkx
+opencv-python
+fastapi
+uvicorn
+python-multipart
+mangum

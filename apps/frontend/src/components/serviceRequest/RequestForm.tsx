@@ -3,9 +3,10 @@ import { FormEvent, useState } from 'react';
 import ResetButton from '../ResetButton.tsx';
 import { trpc } from '../../lib/trpc.ts';
 import Modal from './modal.tsx';
-import { ProgressBar } from './ProgressBar.tsx';
-import { FormSteps } from './FormSteps.tsx';
-import { FinalReview } from './FinalReview.tsx';
+import { ProgressBar } from './ServiceRequest/ProgressBar.tsx';
+import { FormSteps } from './ServiceRequest/FormSteps.tsx'
+import { FinalReview } from './ServiceRequest/FinalReview.tsx';
+import { motion } from 'framer-motion';
 
 type requestFormProps = {
     title: string;
@@ -38,6 +39,7 @@ function RequestForm({ title, type }: requestFormProps) {
     const [response, setResponse] = useState('');
     const [name, setName] = useState('');
     const [comments, setComments] = useState('');
+    const [files, setFiles] = useState<File[]>([]);
     const [employeeID, setEmployeeID] = useState('');
     const [priority, setPriority] = useState<string>("");
     const [location, setLocation] = useState<string>("");
@@ -250,17 +252,38 @@ function RequestForm({ title, type }: requestFormProps) {
         return true;
     };
 
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.currentTarget; 
+        const form = e.currentTarget;
         const isValid = form.checkValidity();
 
         if (Validate()) {
             console.log('submission error')
             return;
+        } else {
+            setOpen(true);
         }
-        else { setOpen(true); }
+
+        let uploadedFileName: string | undefined = undefined;
+
+        if (files && files.length > 0) {
+            const imageFormData = new FormData();
+            imageFormData.append('image_upload', files[0]);
+
+            const response = await fetch('http://localhost:3001/upload-image', {
+                method: 'POST',
+                body: imageFormData,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                uploadedFileName = result.filename;
+            } else {
+                console.error('Image upload failed:', result.error);
+                return;
+            }
+        }
+
 
         mutation.mutate({
             name: name,
@@ -271,6 +294,7 @@ function RequestForm({ title, type }: requestFormProps) {
             status: status,
             request_type: type,
             additional_comments: comments,
+            image_upload: uploadedFileName ?? undefined,
             ...(type === 'Language' && {
                 language: {
                     sourceLanguage: sourceLanguage,
@@ -316,13 +340,14 @@ function RequestForm({ title, type }: requestFormProps) {
         });
 
         handleReset(e);
-        setCurrentStep(1); 
+        setCurrentStep(1);
     };
     const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setName('');
         setEmployeeID('');
         setComments('');
+        setFiles([]);
         setLocation('');
         setDepartment('');
         setStatus('');
@@ -370,22 +395,27 @@ function RequestForm({ title, type }: requestFormProps) {
 
 
     return (
-        <>
-            <div>
+        <div className={'w-full h-screen'}>
+            <div className={""}>
                 <form
-                    className="justify-center text-sm flex flex-row"
+                    className=" ml-5 text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-[90vh] flex flex-col gap-5">
+                    <div className="w-full flex flex-col gap-5 gap-x-10">
+                        <motion.div
+                            key="step1"
+                            initial={{ y: 100, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -100, opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
 
-                        <h2 className="text-center py-5 text-[20px] font-[Poppins] text-lg font-semibold bg-[#003a96] text-white rounded-full">
-                            {title}
-                        </h2>
+                        </motion.div>
 
-                        {type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}
-                        {type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}
-                        {type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}
+                        {/*{type === "Sanitation" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Bryan and D</h6> : null}*/}
+                        {/*{type === "AudioVisual" ? <h6 className="font-[Poppins] text-[12px] text-center">Created by Ayush and Conor</h6> : null}*/}
+                        {/*{type === "Security" ? <h6 className="font-[Poppins] text-[12px] text-center">Jackson and Brendon</h6> : null}*/}
 
                         {currentStep <= 3 ? (
                             <FormSteps
@@ -412,10 +442,12 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
+                                files={files} setFiles={setFiles}
                                 errors={errors}
                                 clearError={clearError}
                             />
                         ) : (
+                            <div className="max-h-[85vh] overflow-y-auto">
                             <FinalReview
                                 type={type}
                                 name={name} setName={setName}
@@ -439,14 +471,18 @@ function RequestForm({ title, type }: requestFormProps) {
                                 maintenanceType={maintenanceType} setMaintenanceType={setMaintenanceType}
                                 equipmentType={equipmentType} setEquipmentType={setEquipmentType}
                                 comments={comments} setComments={setComments}
+                                files={files} setFiles={setFiles}
+                                errors={errors}
+                                clearError={clearError}
                             />
+                            </div>
 
                         )}
 
-                        <div className="flex justify-center gap-6 mt-6">
+                        <div className="flex justify-center gap-6 mt-3">
                             {currentStep > 1 && (
                                 <button onClick={(e) => { e.preventDefault(); setCurrentStep(currentStep - 1); }}
-                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'    
+                                    className='w-30 h-11 bg-[#003a96] hover:bg-blue-950 transition text-[11pt] p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Back
                                 </button>
@@ -457,40 +493,42 @@ function RequestForm({ title, type }: requestFormProps) {
                                     if (!validateCurrentStep()) return;
                                     setCurrentStep(currentStep + 1);
                                 }}
-                                    className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'
+                                    className='w-30 h-11 bg-[#003a96] hover:bg-blue-950 text-[11pt] transition p-5 rounded-lg flex items-center justify-center cursor-pointer text-white font-bold'
                                 >
                                     Next
                                 </button>
                             )}
                             {currentStep === 4 && (
-                                <button type="submit" className='w-30 h-10 bg-[#003a96] hover:bg-blue-950 transition p-5 rounded-lg mt-5 flex items-center justify-center cursor-pointer text-white font-bold'>
+                                <button type="submit" className='w-30 h-11 bg-[#003a96] text-[11pt] hover:bg-blue-950 transition p-5 rounded-lg  flex items-center justify-center cursor-pointer text-white font-bold'>
                                     Submit
                                 </button>
                             )}
                         </div>
                     </div>
+                    <div className={'p-5 pt-5 '}>
                     <ProgressBar
-                            currentStep={currentStep}
-                            name={name}
-                            employeeID={employeeID}
-                            location={location}
-                            department={department}
-                            priority={priority}
-                            status={status}
-                            type={type}
-                            sourceLanguage={sourceLanguage}
-                            targetLanguage={targetLanguage}
-                            cleaningType={cleaningType}
-                            accessZones={accessZones}
-                            securityIssue={securityIssue}
-                            transportationType={transportationType}
-                            transportationDestination={transportationDestination}
-                            accommodationType={accommodationType}
-                            device={device}
-                            operatorRequired={operatorRequired}
-                            maintenanceType={maintenanceType}
-                            equipmentType={equipmentType}
-                        />
+                        currentStep={currentStep}
+                        name={name}
+                        employeeID={employeeID}
+                        location={location}
+                        department={department}
+                        priority={priority}
+                        status={status}
+                        type={type}
+                        sourceLanguage={sourceLanguage}
+                        targetLanguage={targetLanguage}
+                        cleaningType={cleaningType}
+                        accessZones={accessZones}
+                        securityIssue={securityIssue}
+                        transportationType={transportationType}
+                        transportationDestination={transportationDestination}
+                        accommodationType={accommodationType}
+                        device={device}
+                        operatorRequired={operatorRequired}
+                        maintenanceType={maintenanceType}
+                        equipmentType={equipmentType}
+                    />
+                    </div>
                 </form>
                 <Modal isOpen={open} onClose={() => setOpen(false)}>
                     <div className="flex flex-col gap-4">
@@ -513,7 +551,7 @@ function RequestForm({ title, type }: requestFormProps) {
                 </Modal>
 
             </div>
-        </>
+        </div>
     );
 }
 

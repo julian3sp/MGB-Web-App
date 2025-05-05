@@ -6,7 +6,9 @@
 **/.turbo
 **/dist
 **/.prisma
-
+**/.venv
+**/__pycache__
+**/imageAPI
 out
 
 # testing
@@ -38,3 +40,10 @@ out
 **/.prettiercache
 **/.vite
 backend\package.json
+
+.venv/
+__pycache__/
+*.pyc
+
+#ignore uploaded iamges
+/backend/src/uploads/*

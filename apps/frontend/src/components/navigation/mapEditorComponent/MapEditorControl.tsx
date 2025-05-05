@@ -38,7 +38,7 @@ const MapEditorControls: React.FC<MapEditorControlsProps> = ({
 }) => {
     const handleHospitalSelect = (hospital: string) => {
         onHospitalChange(hospital);
-        onFloorChange(null);
+        onFloorChange(1);
 
         const location = hospitalLocationMap[hospital];
         if (map && location) {

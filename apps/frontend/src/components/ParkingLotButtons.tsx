@@ -1,11 +1,15 @@
 import React from 'react'
 import { NavButton } from "./NavButton.tsx";
 
-export function ParkingLotButtons( { selectedPlace, setAccordionItem } : {
+export function ParkingLotButtons( { selectedPlace, setAccordionItem, setLot} : {
     selectedPlace: string;
     setAccordionItem:  React.Dispatch<React.SetStateAction<string[]>>;
+    setLot: (
+        lot: string,
+    ) => void
 }) {
-    const accordionEdit = () => {
+    const accordionEdit = (location: string) => {
+        setLot(location)
         setAccordionItem(["item-3"]);
     };
 
@@ -13,30 +17,30 @@ export function ParkingLotButtons( { selectedPlace, setAccordionItem } : {
         case 'MGB (Chestnut Hill)':
             return(
                 <>
-                    <NavButton onClick={accordionEdit}>Lot A</NavButton>
-                    <NavButton onClick={accordionEdit}>Lot B</NavButton>
-                    <NavButton onClick={accordionEdit}>Lot C</NavButton>
+                    <NavButton onClick={() => accordionEdit('MGB A')}>Lot A</NavButton>
+                    <NavButton onClick={() => accordionEdit('MGB B')}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('MGB C')}>Lot C</NavButton>
                 </>
             );
         case '20 Patriot Place':
             return (
                 <>
-                    <NavButton onClick={accordionEdit}>Lot A</NavButton>
-                    <NavButton onClick={accordionEdit}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('Pat20 A')}>Lot A</NavButton>
+                    <NavButton onClick={() => accordionEdit('Pat20 B')}>Lot B</NavButton>
                 </>
             );
         case '22 Patriot Place':
             return (
                 <>
-                    <NavButton onClick={accordionEdit}>Lot A</NavButton>
-                    <NavButton onClick={accordionEdit}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('Pat22 A')}>Lot A</NavButton>
+                    <NavButton onClick={() => accordionEdit('Pat22 B')}>Lot B</NavButton>
                 </>
             );
         case 'Faulkner':
             return (
                 <>
-                    <NavButton onClick={accordionEdit}>Lot A</NavButton>
-                    <NavButton onClick={accordionEdit}>Lot B</NavButton>
+                    <NavButton onClick={() => accordionEdit('Faulk A')}>Lot A</NavButton>
+                    <NavButton onClick={() => accordionEdit('Faulk B')}>Lot B</NavButton>
                 </>
             );
         case 'Main Campus':

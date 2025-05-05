@@ -203,10 +203,9 @@ export function addNodeListener(
     onNodeMove: () => void
     ): google.maps.MapsEventListener {
     console.log("Marker Node: ", firstNode)
-    const id = firstNode.id + 1
+    let id = firstNode.id + 1
     console.log("New node ID:", id)
     return google.maps.event.addListener(map, "dblclick", (event) => {
-
         graph.addNode({
             id: id,
             name: '',
@@ -218,6 +217,7 @@ export function addNodeListener(
             totalCost: 0,
             type: NodeType.Hall
         });
+        id +=1
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,

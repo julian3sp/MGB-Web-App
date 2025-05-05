@@ -4,74 +4,62 @@ import React, { useRef } from "react";
 import { useInView } from "framer-motion";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 import {motion} from "framer-motion";
-import allergy from '../../assets/department/allergy.jpg';
-import dermatology from '../../assets/department/dermatology.jpg';
-import endocrinology from '../../assets/department/endocrinology.jpg';
-import gastroenterology from '../../assets/department/gastroenterology.jpg';
-import kidney from '../../assets/department/kidney.jpeg';
-import veinTreatment from '../../assets/department/veinTreatment.jpeg';
+import cardiology from '../../assets/department/cardiac.jpeg';
+import audiology from '../../assets/department/neurology.jpg';
+import community from '../../assets/department/community.png';
+import dialysis from '../../assets/department/urgent-care.png';
+import pharmacy from '../../assets/department/pharmacy.png';
+import radiologymgbh from '../../assets/department/mriCT.png';
 
 import { Link } from "react-router-dom";
 
 const cardsData = [
   {
     category: "Department",
-    title: "Vein Treatment",
-    src: veinTreatment,
+    title: "Radiology",
+    src: radiologymgbh,
     content: (
-      <p className="text-gray-600">
-        Minimally invasive procedures for varicose and spider veins to improve circulation.
-      </p>
+      <></>
     ),
   },
   {
     category: "Department",
-    title: "Allergy",
-    src: allergy,
+    title: "Cardiology",
+    src: cardiology,
     content: (
-      <p className="text-gray-600">
-        Testing and treatment for seasonal, food, and environmental allergies.
-      </p>
+      <></>
     ),
   },
   {
     category: "Department",
-    title: "Dermatology",
-    src: dermatology,
+    title: "Audiology",
+    src: audiology,
     content: (
-      <p className="text-gray-600">
-        Skin health services: acne, eczema, skin cancer screenings, and cosmetic dermatology.
-      </p>
+        <></>
     ),
   },
   {
     category: "Department",
-    title: "Endocrinology",
-    src: endocrinology,
+    title: "Orthopaedics",
+    src: community,
     content: (
-      <p className="text-gray-600">
-        Hormonal disorder management, including diabetes, thyroid, and adrenal conditions.
-      </p>
+        <></>
     ),
   },
   {
     category: "Department",
-    title: "Gastroenterology",
-    src: gastroenterology,
+    title: "Dialysis",
+    src: dialysis,
     content: (
-      <p className="text-gray-600">
-        Digestive system care: endoscopy, colonoscopy, and treatment of GI disorders.
-      </p>
+        <></>
     ),
   },
   {
     category: "Department",
-    title: "Kidney (Renal) Medicine",
-    src: kidney,
+    title: "Pharmacy",
+    src: pharmacy,
     content: (
-      <p className="text-gray-600">
-        Care for kidney disease, dialysis coordination, and transplant evaluation.
-      </p>
+        <></>
     ),
   },
 

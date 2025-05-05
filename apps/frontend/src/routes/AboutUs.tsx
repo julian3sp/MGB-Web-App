@@ -17,12 +17,12 @@ const quotes: Record<string, string> = {
     brendon: "“If you only do what you can do now, you will never be more than you are” -Master Shifu",
     kang: "“Knowledge is knowing that a tomato is a fruit. Wisdom is knowing not to put it in a fruit salad.” -Brian O'Driscoll",
     d: "“(774)-525-0770.”",
-    ayush: "“Life is like a Github repository: Nothing is going to change if don't commit",
     wheeler: "“You won’t realize your in the moment until it’s a memory” - Noizu",
     jackson: "“I’m a better father than you, Rick. I’m better for Lori than you, man!” - Shane, The Walking Dead",
     demas: "“Prior preparation prevents poor performance”",
     conor: "“Whether you think you can or you think you can't, you're probably right.” - Henry Ford",
     alejandro: "“Navigation.”",
+    ayush: "“Life is like a Github repository: Nothing is going to change if don't commit",
 };
 
 const team = [
@@ -30,12 +30,12 @@ const team = [
     { id: "brendon", name: "Brendon Peters", role: "Co-Lead Eng, Full-Stack Dev.", src: brendon, github: "https://github.com/bjpeters2027" },
     { id: "kang", name: "Kang Zhang", role: "Project Manager, Full-Stack Dev.", src: kang, github: "https://github.com/KZhang101" },
     { id: "d", name: "Doanh Phung", role: "Ass. Lead Eng, Full-Stack Dev.", src: d, github: "https://github.com/doanh280605" },
-    { id: "ayush", name: "Ayush Kulkarni", role: "Product Owner, Full-Stack Dev.", src: ayush, github: "https://github.com/Ayushk2023" },
     { id: "wheeler", name: "Bryan Wheeler", role: "Document Analyst, Full-Stack Dev.", src: wheeler, github: "https://github.com/wheeler-bryan" },
     { id: "jackson", name: "Jackson Colegrove", role: "Scrum Master, Full-Stack Dev.", src: jackson, github: "https://github.com/jacksoncolegrove" },
     { id: "demas", name: "Evan Demas", role: "Full-Stack Dev.", src: demas, github: "https://github.com/EvanDemas" },
     { id: "conor", name: "Conor McCoy", role: "Full-Stack Dev.", src: conor, github: "https://github.com/Conor-McCoy" },
     { id: "alejandro", name: "Alejandro Laredo Lazaro", role: "Full-Stack Dev.", src: alejandro, github: "https://github.com/Alejandr02212" },
+    { id: "ayush", name: "Ayush Kulkarni", role: "Product Owner, Full-Stack Dev.", src: ayush, github: "https://github.com/Ayushk2023" },
 ];
 
 export default function AboutUs() {

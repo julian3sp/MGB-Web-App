@@ -14,6 +14,7 @@ export function createMarkers(
     type: 'normal' | 'removed' = 'normal',
     onNodeMove: () => void,
     setSelectedNode?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
+
     ) {
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
@@ -198,9 +199,13 @@ export function addNodeListener(
     floor: number,
     setNodeDetails: (node: Node) => void,
     onNewMarker: (m: google.maps.marker.AdvancedMarkerElement) => void,
-    onNodeMove: () => void): google.maps.MapsEventListener {
+    firstNode: Node,
+    onNodeMove: () => void
+    ): google.maps.MapsEventListener {
+    console.log("Marker Node: ", firstNode)
+    let id = firstNode.id + 1
+    console.log("New node ID:", id)
     return google.maps.event.addListener(map, "dblclick", (event) => {
-        const id = getRandomArbitrary(10000, 20000);
         graph.addNode({
             id: id,
             name: '',
@@ -212,6 +217,7 @@ export function addNodeListener(
             totalCost: 0,
             type: NodeType.Hall
         });
+        id +=1
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,

@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/accordion';
 import { NavButton } from '../NavButton.tsx';
 import HospitalDirectionsGuide from './HospitalDirectionGuide.tsx';
-
 const MapComponent: React.FC = () => {
     const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
     const [directionsService, setDirectionsService] =
@@ -57,18 +56,16 @@ const MapComponent: React.FC = () => {
     const destinationMarkerRef = useRef<google.maps.Marker | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<number>(1);
     const [checkInDesk, setCheckInDesk] = useState<boolean>(true);
-
     const [pathNodes, setPathNodes] = useState<Node[]>([]);
     const [textDirections, setTextDirections] = useState<string[]>([]);
     const [currentFloor, setCurrentFloor] = useState<number>(1)
-
     const [travelTimes, setTravelTimes] = useState<TravelTimes>({
         driving: null,
         transit: null,
         walking: null,
     });
-
     const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
+    const [parkingLot, setParkingLot] = useState("")
 
     // Calculate travel times when start or end location changes.
     useEffect(() => {
@@ -94,7 +91,6 @@ const MapComponent: React.FC = () => {
         service: google.maps.DirectionsService,
         renderer: google.maps.DirectionsRenderer
     ) => {
-        console.log('Map is ready with components');
         setMapInstance(map);
         setDirectionsService(service);
         setDirectionsRenderer(renderer);
@@ -104,14 +100,20 @@ const MapComponent: React.FC = () => {
     };
 
     const handleFloorSelect = (floor: number) => {
-        console.log(`Floor changed to: ${floor}`);
         setSelectedFloor(floor);
     };
 
+
     const handleCheckInToggle = () => {
-        console.log('Check In Toggled');
-        setCheckInDesk(!checkInDesk);
+        setCheckInDesk(prev => !prev);
     }
+
+    useEffect(() => {
+        console.log("Check in bool: ", checkInDesk)
+        if (selectedDepartment) {
+            setDeptNumber(getDeptNum(selectedDepartment, checkInDesk));
+        }
+    }, [selectedDepartment, checkInDesk]);
 
     // When the user selects a starting location.
     const handleStartLocationSelected = (place: {
@@ -165,65 +167,112 @@ const MapComponent: React.FC = () => {
         }
     };
 
-    const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
-        setSelectedDepartment(department);
+    function getDeptNum(department: { name: string; floor: string[] }): number {
+        const CNdepartmentMapping: Record<string, number> = {
+            'Multi-Specialty Clinic': 1267,
+            'Radiology': 1358,
+            'MRI': 1358,
+            'CT': 1358,
+            'Laboratory': 1277
+        };
+        const CNCheckin: Record<string, number> = {
+            'Entrance': 3314,
+            'Multi-Specialty Clinic': 3314,
+            'Radiology': 3314,
+            'MRI': 3314,
+            'CT': 3314,
+            'Laboratory': 3314
+        };
+        const Pat20departmentMapping: Record<string, number> = {
+            'Urgent Care': 1861,
+            'Urology': 2009,
+            'Pharmacy': 1743,
+            'Blood Work': 1784,
+            'Radiology': 1739,
+            'Cardiology': 3315,
+            'Orthopedics': 2181,
+            'Rehabilitation Services': 2162,
+            'Surgical Specialties': 2318,
+            'Sports Medicine': 2271,
+            'Day Surgery': 2562,
+            'Pain Medicine/Nutrition': 2458,
+            'EMG': 3316,
+            'Physiatry': 2379,
+            'Pulmonary Testing': 2365
+        };
+        const Pat20Checkin: Record<string, number> = {
+            'Urology': 2003,
+            'Cardiology': 2003,
+            'Urgent Care': 2025,
+            'Blood Work': 1869,
+            'Radiology': 1852,
+            'Pharmacy': 1743,
+            'Orthopedics': 2209,
+            'Rehabilitation Services': 2209,
+            'Surgical Specialties': 2325,
+            'Sports Medicine': 2301,
+            'Day Surgery': 2471,
+            'Pain Medicine/Nutrition': 2471,
+            'EMG': 2442,
+            'Physiatry': 2442,
+            'Pulmonary Testing': 2442
 
-        function getDeptNum(): number {
-            const CNdepartmentMapping: Record<string, number> = {
-                'Entrance': 2707,
-                'Multi-Specialty Clinic': 3592,
-                'Radiology': 3112,
-                'MRI': 3083,
-                'CT': 3076,
-                'Laboratory': 3556
-            };
+        }
+        const Pat22departmentMapping: Record<string, number> = {
+            'Multi-Specialty Clinic': 257,
+            'Blood Draw/Phlebotomy': 1168,
+            'Primary Care': 797,
+        };
+        const Pat22Checkin: Record<string, number> = {
+            'Multi-Specialty Clinic': 658,
+            'Blood Draw/Phlebotomy': 1191,
+            'Primary Care': 1082,
+        };
+        const FaulknerMapping: Record<string, number> = {
+            'Audiology': 3136,
+            'Blood Drawing Lab': 3135,
+            'Cardiac Rehab': 3139,
+            'Emergency Department': 3158,
+            'Endoscopy': 3163,
+            'MRI/CT': 3095,
+            'Operation Rooms': 3175,
+            'Pre-Admittance Screening': 3318,
+            'Pulmonary Lab': 3319,
+            'Radiology': 3105,
+            'Special Testing': 3322,
+            'Vascular Lab': 3319,
+            'Recovery': 3143
+        };
+        const FaulknerCheckin: Record<string, number> = {
+            'Audiology': 3317,
+            'Blood Drawing Lab': 3317,
+            'Cardiac Rehab': 3317,
+            'Emergency Department': 3317,
+            'Endoscopy': 3317,
+            'MRI/CT': 3317,
+            'Operation Rooms': 3317,
+            'Pre-Admittance Screening': 3317,
+            'Pulmonary Lab': 3317,
+            'Radiology': 3317,
+            'Special Testing': 3317,
+            'Vascular Lab': 3317,
+            'Recovery': 3317
+        };
 
-            const Pat20departmentMapping: Record<string, number> = {
-                'Urgent Care': 950,
-                'Urology': 973,
-                'Pharmacy': 766,
-                'Blood Work': 766,
-                'Radiology': 818,
-                'Cardiology': 973,
-                'Orthopedics': 1130,
-                'Rehabilitation Services': 1130,
-                'Surgical Specialties': 1239,
-                'Sports Medicine': 1215,
-                'Day Surgery': 1385,
-                'Pain Medicine/Nutrition': 1385,
-                'EMG': 1404,
-                'Physiatry': 1404,
-                'Pulmonary Testing': 1404
-            };
-            const Pat22departmentMapping: Record<string, number> = {
-                'Gynecology': 1604,
-                'Lactation': 1817,
-                'Vein Treatment': 1798
-            };
-            const FaulknerMapping: Record<string, number> = {
-                'Admitting/Registration': 3783,
-                'Audiology': 3868,
-                'Blood Drawing Lab': 3871,
-                'Cardiac Rehab': 3874,
-                'Emergency Department': 3886,
-                'Endoscopy': 3890,
-                'MRI/CT': 3857,
-                'Operation Rooms': 3895,
-                'Pre-Admittance Screening': 3865,
-                'Pulmonary Lab': 3883,
-                'Radiology': 3839,
-                'Special Testing': 2881,
-                'Vascular Lab': 3891,
-                'Recovery': 3880
-            };
+        const mainCampusMapping: Record<string, number> = {
+            'Wound Care Center': 4684,
+            'Asthma Research Center': 4415,
+            'Emergency': 4987,
+            'Neuroscience': 5247
+        };
+        const mainCampusCheckin: Record<string, number> = {
+            'Wound Care Center': 4684,
+            'Asthma Research Center': 4415,
+            'Emergency': 4987,
+            'Neuroscience': 5247
+        };
 
-            const mainCampusMapping: Record<string, number> = {
-                'Wound Care Center': 4684,
-                'Asthma Research Center': 4415,
-                Emergency: 4987,
-                Neuroscience: 5247,
-            };
-
+        if (!checkInDesk) {
             if (selectedPlace?.name === null) {
                 console.error('No location selected');
             } else if (selectedPlace?.name === 'MGB (Chestnut Hill)') {
@@ -237,11 +286,28 @@ const MapComponent: React.FC = () => {
             } else if (selectedPlace?.name === 'Main Campus') {
                 return mainCampusMapping[department.name];
             }
-            console.log('Issues in finding dept node');
-            return 0;
+        } else {
+            if (selectedPlace?.name === null) {
+                console.error('No location selected');
+            } else if (selectedPlace?.name === 'MGB (Chestnut Hill)') {
+                return CNCheckin[department.name];
+            } else if (selectedPlace?.name === '20 Patriot Place') {
+                return Pat20Checkin[department.name];
+            } else if (selectedPlace?.name === '22 Patriot Place') {
+                return Pat22Checkin[department.name];
+            } else if (selectedPlace?.name === 'Faulkner') {
+                return FaulknerCheckin[department.name];
+            } else if (selectedPlace?.name === 'Main Campus') {
+                return mainCampusCheckin[department.name];
+            }
         }
+        console.log('Issues in finding dept node');
+        return 0;
+    }
 
-        const deptNum = getDeptNum();
+    const handleDepartmentSelected = (department: { name: string; floor: string[] }) => {
+        setSelectedDepartment(department);
+        const deptNum = getDeptNum(department);
         if (deptNum) {
             setDeptNumber(deptNum);
         } else {
@@ -277,6 +343,10 @@ const MapComponent: React.FC = () => {
         }
     };
 
+    const handleParkingLot = (lot: string)=> {
+        setParkingLot(lot)
+    }
+
     // Helper function to add marker and draw the route.
     const displayRouteOnMap = (
         start: { name: string; location: google.maps.LatLngLiteral },
@@ -296,8 +366,6 @@ const MapComponent: React.FC = () => {
             destination: end.location,
             travelMode: selectedTransport.toUpperCase() as google.maps.TravelMode,
         };
-
-        console.log('Calculating route with request:', request);
 
         directionsService.route(request, (result, status) => {
             console.log('Route calculation result:', { status, result });
@@ -419,7 +487,7 @@ const MapComponent: React.FC = () => {
                                 <AccordionContent className={"h-auto"}>
                                     {/* Select Department dropdown */}
                                     <div className="flex justify-between gap-3 items-center">
-                                        {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} setAccordionItem={setAccordionItem} />}
+                                        {selectedPlace && <ParkingLotButtons selectedPlace={selectedPlace.name} setAccordionItem={setAccordionItem} setLot={handleParkingLot} />}
                                     </div>
                                 </AccordionContent>
                             </AccordionItem>
@@ -495,6 +563,9 @@ const MapComponent: React.FC = () => {
                     onTextDirectionsGenerated={setTextDirections}
                     onFloorChangeRequired={(newFloor) => setCurrentFloor(newFloor)}
                     currentFloor={currentFloor}
+                    selectedLot={parkingLot}
+                    checkin ={checkInDesk}
+                    deptName={selectedDepartment?.name || ""}
                 />
 
             </div>

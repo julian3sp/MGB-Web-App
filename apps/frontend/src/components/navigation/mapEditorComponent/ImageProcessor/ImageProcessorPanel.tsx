@@ -1,4 +1,6 @@
 import {PictureCorners} from "@/components/navigation/mapEditorComponent/ImageProcessor/PictureCorners.tsx";
+import FileUploadCardSingle from "./FileUploadCardSingle";
+
 export interface ImageProcessorPanelProps {
     map: google.maps.Map | null;
 
@@ -33,37 +35,18 @@ export const ImageProcessorPanel: React.FC<ImageProcessorPanelProps> = ({
     /** STEP 1 – upload ********************************************/
     if (!imgFile) {
         return (
-
-            <div className="bg-blue-50 border-l-4 border-[#003a96] text-[#003a96] px-4 py-4 rounded shadow-sm mt-4" role="alert">
-                <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins] mb-2">Step 1: Import Image</h2>
-                <p className="font-semibold text-lg font-[poppins]">
-                    Please first choose a blank image of the building to process.
-                </p>
-
-                <label
-                    htmlFor="image-upload"
-                    className="inline-block cursor-pointer bg-[#0076CE] text-white font-semibold py-2 px-4 rounded hover:bg-[#005fa3] transition duration-200 font-[poppins]"
-                >
-                    Choose Image
-                </label>
-
-                <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                        if (e.target.files?.[0]) setImgFile(e.target.files[0]);
-                    }}
-                    className="hidden"
-                />
-
-                {/*{imgFile && (*/}
-                {/*    <p className="mt-2 text-sm text-[#003a96] font-[poppins]">*/}
-                {/*        Selected: <span className="font-medium">{imgFile.name}</span>*/}
-                {/*    </p>*/}
-                {/*)}*/}
-            </div>
-        );
+          <div className="bg-blue-50 border-l-4 w-[80%] mx-auto border-[#003a96] text-[#003a96] px-4 py-4 rounded shadow-sm mt-4" role="alert">
+            <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins] mb-4">Step 1: Import Image</h2>
+            <p className="font-semibold text-lg font-[poppins] mb-6">
+              Please choose a blank image of the building to process.
+            </p>
+      
+            <FileUploadCardSingle
+              file={imgFile}
+              onFileChange={(file) => setImgFile(file)}
+            />
+          </div>
+        )
     }
 
     /** STEP 2 – pick pixel corners *******************************/

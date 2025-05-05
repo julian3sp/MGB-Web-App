@@ -672,7 +672,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                                 handleNodeTypeChange={handleNodeTypeChange}
                             />
                         ) : !selectedFloor && !selectedHospital ? (
-                            <div className="bg-blue-50 border-l-4 border-[#003a96] text-[#003a96] px-4 py-3 rounded shadow-sm mt-4" role="alert">
+                            <div className="bg-blue-50 border-l-4 w-[80%] mx-auto border-[#003a96] text-[#003a96] px-4 py-3 rounded shadow-sm mt-4" role="alert">
                                 <h2 className="font-bold text-left text-[#003a96] text-2xl font-[poppins]">
                                     Warning:
                                 </h2>

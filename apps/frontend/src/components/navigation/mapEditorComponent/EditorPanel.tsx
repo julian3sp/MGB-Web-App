@@ -1,16 +1,5 @@
 import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
-import {NodeType} from "@/components/navigation/pathfinding/Graph.ts";
-import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu.tsx';
-import PageWrapper from "@/components/ui/PageWrapper";
+import {NodeType, Node} from "@/components/navigation/pathfinding/Graph.ts";
 
 export interface EditorPanelProps {
     selectedNode: Node | null;
@@ -37,9 +26,9 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
 
                                                         }) => {
     return (
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-3 w-[85%] mx-auto">
                 {selectedNode ? (
-                    <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 pb-2  font-[poppins] text-center space-y-3 ">
+                    <div className=" bg-white shadow-lg border-2 pb-5 border-frey rounded-2xl m-3 font-[poppins] text-center space-y-3 ">
 
                         <h2 className="text-xl font-bold text-white p-5  rounded-t-lg border-b-5 bg-[#003a96] border-b-[#44A6A6] ">Node Info</h2>
                         <p className="text-black pt-2 text-lg">
@@ -91,7 +80,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 {/*</div>*/}
 
                 <button
-                    className="bg-[#003a96] w-[80%] block mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                    className="bg-[#003a96] w-[95%] block mt-3 mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
                     onClick={() => {
                         setEdgeMode((prevState) => !prevState);
                         setShowEdges(true);
@@ -101,7 +90,7 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 </button>
                 <button
                     className={
-                        'bg-white  text-[#003a96] w-[80%] block mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
+                        'bg-white  text-[#003a96] w-[95%] mt-3 block mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '
                     }
                     type={'submit'}
                     onClick={handleSubmit}

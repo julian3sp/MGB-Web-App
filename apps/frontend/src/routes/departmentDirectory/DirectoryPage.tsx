@@ -4,6 +4,17 @@ import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/I
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart.tsx";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import ExportCSV from "@/components/navigation/mapEditorComponent/ExportCSV.tsx";
+import { TrendingUp } from "lucide-react"
+import { LabelList, Pie, PieChart } from "recharts"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuRadioItem} from "@/components/ui/dropdown-menu.tsx";
 
 const DirectoryPage = () => {
     const [formData, setFormData] = useState({
@@ -29,6 +40,10 @@ const DirectoryPage = () => {
     const transportationRequests = trpc.requestListOfType.useQuery({ type: 'Transportation' });
     const medicalDeviceRequests = trpc.requestListOfType.useQuery({ type: 'MedicalDevice' });
     const facilitiesRequests = trpc.requestListOfType.useQuery({ type: 'Facilities' });
+    const [algoType, setAlgoType] = useState(window.sessionStorage.getItem('algoType') || "A-Star");
+    const newAlgo = trpc.setAlgoType.useMutation();
+
+
 
     const serviceRequestConfig = {
         number: {
@@ -46,6 +61,11 @@ const DirectoryPage = () => {
         { type: 'MedicalDevice', number: medicalDeviceRequests.data?.length ?? 0 },
         { type: 'Facilities', number: facilitiesRequests.data?.length ?? 0 },
     ];
+
+    function setAlgoTypeWrapper(algo: string) {
+        newAlgo.mutate({ algoType: algo })
+        setAlgoType(algo);
+    }
 
     const downloadDirectories = () => {
         if (!directories || directories.length === 0) {
@@ -77,6 +97,118 @@ const DirectoryPage = () => {
     const handleSubmit = () => {
         addDirectory.mutate(formData);
     };
+
+    const { data: statusCounts } = trpc.getRequestStatusCounts.useQuery();
+
+    const statusChartData = [
+        { status: "unassigned", statusRequests: statusCounts?.Unassigned ?? 0, fill: "var(--color-unassigned)" },
+        { status: "assigned", statusRequests: statusCounts?.Assigned ?? 0, fill: "var(--color-assigned)" },
+        { status: "working", statusRequests: statusCounts?.Working ?? 0, fill: "var(--color-working)" },
+        { status: "done", statusRequests: statusCounts?.Done ?? 0, fill: "var(--color-done)" },
+    ]
+    const statusChartConfig = {
+        statusRequests: {
+            label: "Status Requests",
+        },
+        unassigned: {
+            label: "Unassigned",
+            color: "hsl(var(--chart-1))",
+        },
+        assigned: {
+            label: "Assigned",
+            color: "hsl(var(--chart-2))",
+        },
+        working: {
+            label: "Working",
+            color: "hsl(var(--chart-3))",
+        },
+        done: {
+            label: "Done",
+            color: "hsl(var(--chart-4))",
+        },
+    };
+
+    const { data: locationCounts } = trpc.getRequestLocationCounts.useQuery();
+    console.log(locationCounts)
+    const locationChartData = [
+        { location: "main", locationRequests: locationCounts?.["Brigham & Women's Hospital Main Campus"] ?? 0, fill: "var(--color-main)" },
+        { location: "chestnut", locationRequests: locationCounts?.["Chestnut Hill"] ?? 0, fill: "var(--color-chestnut)" },
+        { location: "faulkner", locationRequests: locationCounts?.["Faulkner Hospital"] ?? 0, fill: "var(--color-faulkner)" },
+        { location: "patriot", locationRequests: locationCounts?.["Patriot Place"] ?? 0, fill: "var(--color-patriot)" },
+    ]
+    const locationChartConfig = {
+        locationRequests: {
+            label: "Location Requests",
+        },
+        main: {
+            label: "Main Campus",
+            color: "hsl(var(--chart-1))",
+        },
+        chestnut: {
+            label: "Chestnut Hill",
+            color: "hsl(var(--chart-2))",
+        },
+        faulkner: {
+            label: "Faulkner Hospital",
+            color: "hsl(var(--chart-3))",
+        },
+        patriot: {
+            label: "Patriot Place",
+            color: "hsl(var(--chart-4))",
+        },
+    };
+
+    const { data: priorityCounts } = trpc.getRequestPriorityCounts.useQuery();
+
+    const priorityChartData = [
+        { priority: "low", priorityRequests: priorityCounts?.Low ?? 0, fill: "var(--color-low)" },
+        { priority: "medium", priorityRequests: priorityCounts?.Medium ?? 0, fill: "var(--color-medium)" },
+        { priority: "high", priorityRequests: priorityCounts?.High ?? 0, fill: "var(--color-high)" },
+        { priority: "emergency", priorityRequests: priorityCounts?.Emergency ?? 0, fill: "var(--color-emergency)" },
+    ]
+    const priorityChartConfig = {
+        priorityRequests: {
+            label: "Priority Requests",
+        },
+        low: {
+            label: "Low",
+            color: "hsl(var(--chart-1))",
+        },
+        medium: {
+            label: "Medium",
+            color: "hsl(var(--chart-2))",
+        },
+        high: {
+            label: "High",
+            color: "hsl(var(--chart-3))",
+        },
+        emergency: {
+            label: "Emergency",
+            color: "hsl(var(--chart-4))",
+        },
+    };
+
+    const pieLabelStyle = {
+        fill: 'white',
+        fontSize: 16,
+        fontWeight: 600,
+    };
+
+    const pieTitleStyle = {
+        fontSize: 25, // smaller text
+        fontWeight: 600,
+        fontFamily: 'Poppins, sans-serif',
+        backgroundColor: '#003a96',
+        padding: 20,
+        textAlign: 'center',
+        color: 'white',
+        borderBottom: '5px solid #44A6A6',
+        borderTopLeftRadius: '1rem',
+        borderTopRightRadius: '1rem'
+    };
+
+
+
 
     return (
         <div className="p-6 min-h-screen ">
@@ -130,13 +262,42 @@ const DirectoryPage = () => {
                 {/* Directory Import/Export */}
 
                     <div className="bg-white rounded-2xl shadow-lg border-1 ">
-                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Import/Export Tools</h2>
+                        <h2 className="text-2xl font-[poppins] mb-10 bg-[#003a96] border-b-5 border-b-[#44A6A6] text-center p-5 rounded-t-lg font-semibold text-white">Admin Tools</h2>
                         <ImportAllNodesAndEdges />
-                        <div className={'mb-30 p-3 flex justify-between space-y-10'}>
+                        <div className={'mb-15 p-3 flex justify-between space-y-10'}>
                             <ExportCSV type="Nodes" />
                             <ExportCSV type="Edges" />
                             <ExportCSV type="Directories" />
                         </div>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="bg-[#003a96] w-[80%] font-[poppins] text-white hover:bg-blue-950 shadow-lg rounded-lg ml-15 p-3">
+                                    Choose Your Algorithm
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>Pathfinding Algorithms</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuRadioGroup
+                                    value={algoType}
+                                    onValueChange={setAlgoTypeWrapper}
+                                >
+                                    <DropdownMenuRadioItem value="A-Star">
+                                        A-Star
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="DFS">
+                                        Depth First Search
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="BFS">
+                                        Breadth First Search
+                                    </DropdownMenuRadioItem>
+                                    <DropdownMenuRadioItem value="Dijkstras">
+                                        Dijkstra's
+                                    </DropdownMenuRadioItem>
+                                </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         {/*<button*/}
                         {/*    onClick={downloadDirectories}*/}
@@ -145,6 +306,96 @@ const DirectoryPage = () => {
                         {/*    Download CSV*/}
                         {/*</button>*/}
                     </div>
+            </div>
+
+            {/* Pie Charts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 text-white lg:grid-cols-3 gap-6 mt-10">
+                <Card className="flex flex-col">
+                    <CardHeader className="items-center pb-0">
+                        <CardTitle style={pieTitleStyle}>Status Chart</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 pb-0">
+                        <ChartContainer
+                            config={statusChartConfig}
+                            className="mx-auto aspect-square max-h-[300px] [&_.recharts-text]:fill-foreground"
+                        >
+                            <PieChart>
+                                <ChartTooltip
+                                    content={<ChartTooltipContent nameKey="statusRequests" hideLabel />}
+                                />
+                                <Pie data={statusChartData.filter((d) => d.statusRequests > 0)} dataKey="statusRequests" outerRadius={150}>
+                                    <LabelList
+                                        dataKey="status"
+                                        stroke="none"
+                                        style={pieLabelStyle}
+                                        className="fill-foreground"
+                                        formatter={(value ) => statusChartConfig[value]?.label}
+                                    />
+                                </Pie>
+                            </PieChart>
+                        </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="flex-col gap-2 text-sm">
+                    </CardFooter>
+                </Card>
+
+                <Card className="flex flex-col">
+                    <CardHeader className="items-center pb-0">
+                        <CardTitle style={pieTitleStyle}>Location Chart</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 pb-0">
+                        <ChartContainer
+                            config={locationChartConfig}
+                            className="mx-auto aspect-square max-h-[300px] [&_.recharts-text]:fill-foreground"
+                        >
+                            <PieChart>
+                                <ChartTooltip
+                                    content={<ChartTooltipContent nameKey="locationRequests" hideLabel />}
+                                />
+                                <Pie data={locationChartData.filter((d) => d.locationRequests > 0)} dataKey="locationRequests" outerRadius={150}>
+                                    <LabelList
+                                        dataKey="location"
+                                        stroke="none"
+                                        style={pieLabelStyle}
+                                        className="fill-foreground"
+                                        formatter={(value) => locationChartConfig[value]?.label}
+                                    />
+                                </Pie>
+                            </PieChart>
+                        </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="flex-col gap-2 text-sm">
+                    </CardFooter>
+                </Card>
+
+                <Card className="flex flex-col">
+                    <CardHeader className="items-center pb-0">
+                        <CardTitle style={pieTitleStyle}>Priority Chart</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 pb-0">
+                        <ChartContainer
+                            config={priorityChartConfig}
+                            className="mx-auto aspect-square max-h-[300px] [&_.recharts-text]:fill-foreground"
+                        >
+                            <PieChart>
+                                <ChartTooltip
+                                    content={<ChartTooltipContent nameKey="priorityRequests" hideLabel />}
+                                />
+                                <Pie data={priorityChartData.filter((d) => d.priorityRequests > 0)} dataKey="priorityRequests" outerRadius={150}>
+                                    <LabelList
+                                        dataKey="priority"
+                                        stroke="none"
+                                        style={pieLabelStyle}
+                                        className="fill-foreground text-white"
+                                        formatter={(value) => priorityChartConfig[value]?.label}
+                                    />
+                                </Pie>
+                            </PieChart>
+                        </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="flex-col gap-2 text-sm">
+                    </CardFooter>
+                </Card>
             </div>
 
             {/* Directory Table */}

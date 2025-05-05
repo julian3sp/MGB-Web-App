@@ -207,6 +207,13 @@ exports.Prisma.UsersScalarFieldEnum = {
   password: 'password'
 };
 
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  review: 'review',
+  rating: 'rating',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.NodesScalarFieldEnum = {
   id: 'id',
   building: 'building',
@@ -255,6 +262,7 @@ exports.Prisma.ModelName = {
   AlgoType: 'AlgoType',
   directory: 'directory',
   users: 'users',
+  Review: 'Review',
   nodes: 'nodes',
   edges: 'edges'
 };

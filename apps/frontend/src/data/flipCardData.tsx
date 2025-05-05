@@ -21,6 +21,10 @@ import pfs from '../../assets/department/pfs.jpg'
 import phl from '../../assets/department/veinTreatment.jpeg';
 import prcr from '../../assets/department/primcar.jpg';
 import cardiacrehab from '../../assets/department/cardiacrehab.jpg';
+import spectest from '../../assets/department/spectest.jpg';
+import recoveryImg from '../../assets/department/recovery.jpg';
+import dialysis from '../../assets/department/dialysis.jpg';
+import lungcenter from '../../assets/department/lungcenter.jpg';
 
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
@@ -79,7 +83,11 @@ export const flipCardsData = [
         src: pharmacyImg,
         content: (
                 <p className={"text-white"}>
-                    Location: 20 Patriot Place
+                    <CardContent
+                        location={"20 Patriot Place, 1st Floor"}
+                        specialties={[""]}
+                        phoneNumber={""}
+                    />
                 </p>
         ),
     },
@@ -89,7 +97,11 @@ export const flipCardsData = [
         src: bloodImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -99,7 +111,11 @@ export const flipCardsData = [
         src: urgentCareImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -109,7 +125,11 @@ export const flipCardsData = [
         src: cardiacImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -119,7 +139,11 @@ export const flipCardsData = [
         src: urologyImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -129,7 +153,11 @@ export const flipCardsData = [
         src: radiology2,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -139,7 +167,11 @@ export const flipCardsData = [
         src: ortho,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -149,7 +181,11 @@ export const flipCardsData = [
         src: rehab,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -159,7 +195,11 @@ export const flipCardsData = [
         src: sport,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -169,7 +209,11 @@ export const flipCardsData = [
         src: surgery,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -179,7 +223,11 @@ export const flipCardsData = [
         src: nutrition,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -189,7 +237,11 @@ export const flipCardsData = [
         src: primary,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -199,7 +251,11 @@ export const flipCardsData = [
         src: pulmonologyImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -209,7 +265,11 @@ export const flipCardsData = [
         src: multispecpat22,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"22 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -219,7 +279,11 @@ export const flipCardsData = [
         src: pfs,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"22 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -229,7 +293,11 @@ export const flipCardsData = [
         src: phl,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"22 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -239,7 +307,11 @@ export const flipCardsData = [
         src: prcr,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"22 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -249,7 +321,11 @@ export const flipCardsData = [
         src: audiologyImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -259,17 +335,39 @@ export const flipCardsData = [
         src: bloodImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
         title: "Cardiac Rehab",
-        src: cardiacImg,
+        src: cardiacrehab,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Faulkner",
+        title: "Dialysis",
+        src: dialysis,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"Belkin House"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -279,7 +377,11 @@ export const flipCardsData = [
         src: urgentCareImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -289,7 +391,11 @@ export const flipCardsData = [
         src: endoImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -299,17 +405,11 @@ export const flipCardsData = [
         src: mriCTImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
-            </p>
-        ),
-    },
-    {
-        category: "Faulkner",
-        title: "Pre-Admittance Screening",
-        src: pathImage,
-        content: (
-            <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -319,27 +419,53 @@ export const flipCardsData = [
         src: radiologyImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
         title: "Special Testing",
-        src: bloodImg,
+        src: spectest,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
-        title: "Vascular Lab",
-        src: vascularImg,
+        title: "Recovery",
+        src: recoveryImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Main Campus",
+        title: "Lung Center",
+        src: lungcenter,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },

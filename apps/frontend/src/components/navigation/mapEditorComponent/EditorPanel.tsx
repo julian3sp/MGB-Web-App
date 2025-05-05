@@ -1,16 +1,5 @@
 import {SRQDropdown} from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 import {NodeType, Node} from "@/components/navigation/pathfinding/Graph.ts";
-import ImportAllNodesAndEdges from "@/components/navigation/mapEditorComponent/Import.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu.tsx';
-import PageWrapper from "@/components/ui/PageWrapper";
 
 export interface EditorPanelProps {
     selectedNode: Node | null;

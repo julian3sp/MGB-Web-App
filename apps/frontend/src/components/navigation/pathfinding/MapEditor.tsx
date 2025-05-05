@@ -16,18 +16,6 @@ import addNode from '../../../../assets/addNode-1.gif'
 import createEdge from '../../../../assets/createEdge-1.gif'
 import removeEdge from '../../../../assets/removeEdge-1.gif'
 import removeNode from '../../../../assets/removeNode-1.gif'
-
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from '../../ui/dropdown-menu.tsx';
-// import {NodeType} from ""
 import { WorldDistance } from "./worldCalculations.ts"
 import { SRQDropdown } from "@/components/serviceRequest/inputFields/SRQDropdown.tsx";
 import ExportCSV from "../mapEditorComponent/ExportCSV.tsx"
@@ -510,7 +498,6 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             if (selectedHospital === 'MGB (Chestnut Hill)') {
                 setMgbOverlay(createMGBOverlays(map));
             } else if (selectedHospital === '20 Patriot Place') {
-                createPatriot20Overlays(map);
                 setPatriot20Overlay(createPatriot20Overlays(map));
             } else if (selectedHospital === '22 Patriot Place') {
                 setPatriot22Overlay(createPatriot22Overlays(map));

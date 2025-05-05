@@ -67,20 +67,20 @@ export default function NavBar({ userRole, setUserRole }: Props) {
             logout({ logoutParams: { returnTo: window.location.origin } });
         } else if (lowerTranscript.includes("log in")) {
             loginWithRedirect({});
-        } else if (lowerTranscript.includes("service")) {
+        } else if (userRole === "Admin" && lowerTranscript.includes("service")) {
             navigate("/services");
             setTab("services");
         } else if(lowerTranscript.includes("off")) {
             setVoiceControls(false)
-        } else if (lowerTranscript.includes("edit")) {
+        } else if (userRole === "Admin" && lowerTranscript.includes("edit")) {
             navigate("/editor");
             setTab("editor");
         } else if (lowerTranscript.includes("view")) {
             navigate("/requests");
             setTab("requests");
-        }else if (lowerTranscript.includes("Ai")) {
-            navigate("/chatbot");
-            setTab("Ai Assistant");
+        } else if (userRole === "Admin" && lowerTranscript.includes("admin")) {
+            navigate("/admin/directory");
+            setTab("admin/directory");
         }
     }, [navigate, logout, loginWithRedirect]);
 

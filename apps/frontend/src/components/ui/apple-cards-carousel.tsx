@@ -244,9 +244,9 @@ export const Card = ({
       </AnimatePresence>
       <motion.div
         layoutId={layout ? `card-${card.title}` : undefined}
-        onClick={handleOpen}
+        // onClick={handleOpen}
         className={cn(
-          "group relative cursor-pointer overflow-hidden rounded-3xl shadow-xl",
+          "group relative overflow-hidden rounded-3xl shadow-xl",
           "h-80 w-56 md:h-[40rem] md:w-96"
         )}
       >

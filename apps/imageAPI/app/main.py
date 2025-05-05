@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 import tempfile, os, io, zipfile, json
 from .skeleton import generate_new_map
-from mangum import Mangum
+# from mangum import Mangum
 
 app = FastAPI()
 

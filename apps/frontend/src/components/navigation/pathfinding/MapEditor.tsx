@@ -26,6 +26,8 @@ import { PictureCorners } from '../mapEditorComponent/ImageProcessor/PictureCorn
 import {ImageProcessorPanel} from "@/components/navigation/mapEditorComponent/ImageProcessor/ImageProcessorPanel.tsx";
 import {importGraphFromZip} from "@/components/importZipGraph.ts";
 import JSZip from 'jszip';
+import imagelogo from '../../SVGIcons/AudioIcon.tsx'
+import AudioIcon from "../../SVGIcons/AudioIcon.tsx";
 
 // resolve
 interface MapEditorProps {
@@ -641,16 +643,20 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                             Map Editor Controls
                         </h2>
 
-                        {!calculatingNodes ?
-                            (<button
-                            className={`w-[80%] block mx-auto font-[poppins] border-2 shadow-lg rounded-xl p-3 transition duration-200
-                                ${mode === 'edit'
-                                ? 'bg-[#003a96] text-white border-[#003a96] hover:bg-[#00286e]' 
-                                : 'bg-white text-[#003a96] border-[#003a96] hover:bg-[#f0f6ff]'}`}
-                            onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
-                        >
-                            {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
-                            </button>) : <div> </div>}
+                        {!calculatingNodes ? (
+                            <button
+                                className={`w-[80%] flex items-center justify-center mx-auto font-[poppins] border-2 shadow-lg rounded-xl p-5 text-[13pt] transition duration-200
+      ${mode === 'edit'
+                                    ? 'bg-[#003a96] text-white border-[#003a96] hover:bg-[#00286e]'
+                                    : 'bg-white text-[#003a96] border-[#003a96] hover:bg-[#f0f6ff]'
+                                }`}
+                                onClick={() => setMode(m => (m === 'edit' ? 'image' : 'edit'))}
+                            >
+                                <AudioIcon size={30} stroke="currentColor" fill="currentColor" className="mr-2" />
+                                {mode === 'edit' ? 'Switch to Image-Processor' : 'Back to Map-Editor'}
+                            </button>
+                        ) : <div></div>}
+
 
                         {calculatingNodes ? (
                                 <div className="bg-blue-50 border-l-4 border-[#003a96] text-[#003a96] px-6 py-5 rounded shadow-sm mt-6 flex flex-col items-center gap-4"

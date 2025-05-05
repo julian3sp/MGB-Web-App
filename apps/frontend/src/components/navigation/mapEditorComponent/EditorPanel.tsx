@@ -80,14 +80,29 @@ export const EditorPanel: React.FC<EditorPanelProps> = ({
                 {/*</div>*/}
 
                 <button
-                    className="bg-[#003a96] w-[95%] block mt-3 mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg rounded-xl p-3 "
+                    className="bg-[#003a96] w-[95%] flex items-center justify-center mt-3 mx-auto text-white border-2 border-[#003a96] font-[poppins] hover:bg-blue-950 shadow-lg text-[13pt] rounded-xl p-3"
                     onClick={() => {
                         setEdgeMode((prevState) => !prevState);
                         setShowEdges(true);
                     }}
                 >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 mr-2"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <path d="M18 6L6 18" />
+                        <circle cx="18" cy="6" r="2" />
+                        <circle cx="6" cy="18" r="2" />
+                    </svg>
                     {edgeMode ? 'Exit Edge Mode' : 'Add Edge Mode'}
                 </button>
+
                 <button
                     className={
                         'bg-white  text-[#003a96] w-[95%] mt-3 block mx-auto font-[poppins] border-2 border-[#003a96] hover:bg-accent shadow-lg rounded-xl p-3 '

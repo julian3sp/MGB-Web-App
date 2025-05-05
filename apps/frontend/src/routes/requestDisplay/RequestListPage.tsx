@@ -705,8 +705,8 @@ export default function RequestListPage({userRole}: {userRole: string}) {
                                                 <p className={'text-[12pt]'}>
                                                     {selectedRequest.sanitation?.cleaningType && (
                                                         <div>
-                                                            <div className={' pt-5'}>
-                                                                <span className=" ml-3">
+                                                            <div className={'pt-5'}>
+                                                                <span className="ml-3">
                                                                     Cleaning Type:
                                                                 </span>{' '}
                                                                 {

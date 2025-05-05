@@ -4,18 +4,29 @@ import urgentCareImg from '../../assets/department/urgent-care.png';
 import pharmacyImg from '../../assets/department/pharmacy.png';
 import cardiacImg from '../../assets/department/cardiac.jpeg';
 import urologyImg from '../../assets/department/urology.png';
-import gynecologyImg from '../../assets/department/gynecology.jpg';
-import lactationImg from '../../assets/department/lactation.webp';
-import veinTreatmentImg from '../../assets/department/veinTreatment.jpeg';
-import audiologyImg from '../../assets/department/audiology.png';
+import surgery from '../../assets/department/surgery.webp';
+import ortho from '../../assets/department/ortho.jpg';
+import sport from '../../assets/department/sports.jpg';
+import rehab from '../../assets/department/primary.jpeg';
+import audiologyImg from '../../assets/department/aud2.webp';
 import pulmonologyImg from '../../assets/department/pulmonology.jpg';
 import mriCTImg from '../../assets/department/mriCT.png';
 import endoImg from '../../assets/department/endocrinology.jpg';
 import vascularImg from '../../assets/department/vascular.png';
+import radiology2 from '../../assets/department/mriCT.png';
+import nutrition from '../../assets/department/nutrition.jpg';
+import primary from '../../assets/department/neurology.jpg';
+import multispecpat22 from '../../assets/department/pat22multisp.jpg';
+import pfs from '../../assets/department/pfs.jpg'
+import phl from '../../assets/department/veinTreatment.jpeg';
+import prcr from '../../assets/department/primcar.jpg';
+import cardiacrehab from '../../assets/department/cardiacrehab.jpg';
+import spectest from '../../assets/department/spectest.jpg';
+import recoveryImg from '../../assets/department/recovery.jpg';
+import dialysis from '../../assets/department/dialysis.jpg';
+import lungcenter from '../../assets/department/lungcenter.jpg';
+import tsurg from '../../assets/department/tsurg.jpg';
 
-import lebron1 from '../../assets/lebron-dunk.jpg';
-import lebron2 from '../../assets/lebron-poster.jpg';
-import testingImg from '../../assets/insideMGB.png';
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
 import serviceImage from "../../assets/service.jpeg";
@@ -73,7 +84,11 @@ export const flipCardsData = [
         src: pharmacyImg,
         content: (
                 <p className={"text-white"}>
-                    Location: 20 Patriot Place
+                    <CardContent
+                        location={"20 Patriot Place, 1st Floor"}
+                        specialties={[""]}
+                        phoneNumber={""}
+                    />
                 </p>
         ),
     },
@@ -83,7 +98,11 @@ export const flipCardsData = [
         src: bloodImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -93,7 +112,11 @@ export const flipCardsData = [
         src: urgentCareImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -103,7 +126,11 @@ export const flipCardsData = [
         src: cardiacImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -113,47 +140,179 @@ export const flipCardsData = [
         src: urologyImg,
         content: (
             <p className={"text-white"}>
-                Location: 20 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Patriot Place",
-        title: "Gynecology",
-        src: gynecologyImg,
+        title: "Radiology",
+        src: radiology2,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Patriot Place",
-        title: "Lactation",
-        src: lactationImg,
+        title: "Orthopaedics",
+        src: ortho,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Patriot Place",
-        title: "Vein Treatment",
-        src: veinTreatmentImg,
+        title: "Rehabilitation Services",
+        src: rehab,
         content: (
             <p className={"text-white"}>
-                Location: 22 Patriot Place
+                <CardContent
+                    location={"20 Patriot Place, 2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
-        category: "Faulkner",
-        title: "Admitting/Registration",
-        src: pathImage,
+        category: "Patriot Place",
+        title: "Sports Medicine Center",
+        src: sport,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"20 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Surgical Specialties",
+        src: surgery,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"20 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Pain Medicine / Nutrition",
+        src: nutrition,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Physiatry",
+        src: primary,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Pulmonary Lab",
+        src: pulmonologyImg,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"20 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Multi Specialty Clinic",
+        src: multispecpat22,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"22 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Patient Financial Services",
+        src: pfs,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"22 Patriot Place, 3rd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Phlebotomy",
+        src: phl,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"22 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Patriot Place",
+        title: "Primary Care",
+        src: prcr,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"22 Patriot Place, 4th Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -163,7 +322,11 @@ export const flipCardsData = [
         src: audiologyImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -173,17 +336,39 @@ export const flipCardsData = [
         src: bloodImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
         title: "Cardiac Rehab",
-        src: cardiacImg,
+        src: cardiacrehab,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Faulkner",
+        title: "Dialysis",
+        src: dialysis,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"Belkin House"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -193,7 +378,11 @@ export const flipCardsData = [
         src: urgentCareImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -203,7 +392,11 @@ export const flipCardsData = [
         src: endoImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -213,27 +406,11 @@ export const flipCardsData = [
         src: mriCTImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
-            </p>
-        ),
-    },
-    {
-        category: "Faulkner",
-        title: "Pre-Admittance Screening",
-        src: pathImage,
-        content: (
-            <p className={"text-white"}>
-                Location: Floor 1
-            </p>
-        ),
-    },
-    {
-        category: "Faulkner",
-        title: "Pulmonary Lab",
-        src: pulmonologyImg,
-        content: (
-            <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
@@ -243,27 +420,67 @@ export const flipCardsData = [
         src: radiologyImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
         title: "Special Testing",
-        src: bloodImg,
+        src: spectest,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },
     {
         category: "Faulkner",
-        title: "Vascular Lab",
-        src: vascularImg,
+        title: "Recovery",
+        src: recoveryImg,
         content: (
             <p className={"text-white"}>
-                Location: Floor 1
+                <CardContent
+                    location={"1st Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Main Campus",
+        title: "Lung Center",
+        src: lungcenter,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Main Campus",
+        title: "Thoracic Surgery Clinic",
+        src: tsurg,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
             </p>
         ),
     },

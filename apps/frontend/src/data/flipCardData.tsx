@@ -25,6 +25,7 @@ import spectest from '../../assets/department/spectest.jpg';
 import recoveryImg from '../../assets/department/recovery.jpg';
 import dialysis from '../../assets/department/dialysis.jpg';
 import lungcenter from '../../assets/department/lungcenter.jpg';
+import tsurg from '../../assets/department/tsurg.jpg';
 
 import pathImage from "../../assets/insideMGB.png";
 import editorImage from "../../assets/phoneMap.jpeg";
@@ -459,6 +460,20 @@ export const flipCardsData = [
         category: "Main Campus",
         title: "Lung Center",
         src: lungcenter,
+        content: (
+            <p className={"text-white"}>
+                <CardContent
+                    location={"2nd Floor"}
+                    specialties={[""]}
+                    phoneNumber={""}
+                />
+            </p>
+        ),
+    },
+    {
+        category: "Main Campus",
+        title: "Thoracic Surgery Clinic",
+        src: tsurg,
         content: (
             <p className={"text-white"}>
                 <CardContent

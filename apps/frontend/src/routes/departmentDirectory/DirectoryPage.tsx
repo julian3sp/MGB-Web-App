@@ -361,19 +361,19 @@ const DirectoryPage = () => {
                                     content={<ChartTooltipContent nameKey="locationRequests" hideLabel />}
                                 />
                                 <Pie
-                                    data={statusChartData.filter((d) => d.statusRequests > 0)}
-                                    dataKey="statusRequests"
+                                    data={locationChartData.filter((d) => d.locationRequests > 0)}
+                                    dataKey="locationRequests"
                                     outerRadius={150}
                                 >
-                                    {statusChartData.filter((d) => d.statusRequests > 0).map((entry, index) => (
+                                    {locationChartData.filter((d) => d.locationRequests > 0).map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                                     ))}
                                     <LabelList
-                                        dataKey="status"
+                                        dataKey="location"
                                         stroke="none"
                                         style={pieLabelStyle}
                                         className="fill-foreground"
-                                        formatter={(value) => statusChartConfig[value]?.label}
+                                        formatter={(value) => locationChartConfig[value]?.label}
                                     />
                                 </Pie>
                             </PieChart>
@@ -397,19 +397,19 @@ const DirectoryPage = () => {
                                     content={<ChartTooltipContent nameKey="priorityRequests" hideLabel />}
                                 />
                                 <Pie
-                                    data={statusChartData.filter((d) => d.statusRequests > 0)}
-                                    dataKey="statusRequests"
+                                    data={priorityChartData.filter((d) => d.priorityRequests > 0)}
+                                    dataKey="priorityRequests"
                                     outerRadius={150}
                                 >
-                                    {statusChartData.filter((d) => d.statusRequests > 0).map((entry, index) => (
+                                    {priorityChartData.filter((d) => d.priorityRequests > 0).map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                                     ))}
                                     <LabelList
-                                        dataKey="status"
+                                        dataKey="priority"
                                         stroke="none"
                                         style={pieLabelStyle}
                                         className="fill-foreground"
-                                        formatter={(value) => statusChartConfig[value]?.label}
+                                        formatter={(value) => priorityChartConfig[value]?.label}
                                     />
                                 </Pie>
                             </PieChart>

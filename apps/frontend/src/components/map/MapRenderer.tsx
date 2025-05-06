@@ -28,6 +28,7 @@ interface MapRendererProps {
   selectedDestination?: { name: string; location: { lat: number; lng: number } } | null;
   onZoomChange?: (zoom: number) => void;
   selectedFloor?: 1 | 2 | 3 | 4;
+  setTargetFloor: (floor: number) => void;
   onFloorChange?: (floor: number) => void;
   departmentNumber?: number | null;
   disableDoubleClickZoom: true
@@ -45,6 +46,7 @@ const MapRenderer: React.FC<MapRendererProps> = ({
   selectedDestination,
   onZoomChange,
   selectedFloor = 1,
+  setTargetFloor,
   onFloorChange,
   departmentNumber,
   disableDoubleClickZoom,
@@ -260,9 +262,10 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       checkInDesks.set(
         "22 Patriot Place",
         new Map<string, number>([
-          ["Multi-Specialty Clinic",  658],
-          ["Blood Draw/Phlebotomy", 1191],
-          ["Primary Care",           1082],
+            ["Multi-Specialty Clinic",  658],
+            ["Patient Financial Services",  396],
+            ["Blood Draw/Phlebotomy", 1191],
+            ["Primary Care",           1082],
         ])
       );
 
@@ -284,6 +287,15 @@ const MapRenderer: React.FC<MapRendererProps> = ({
           ["Recovery",              3317],
         ])
       );
+
+      checkInDesks.set(
+          "Belkin House",
+          new Map<string, number>([
+            ['Radiology Admin', 3280],
+            ['Dialysis', 3280],
+            ['Community Health', 3280],
+          ])
+      )
 
       checkInDesks.set(
           "Main Campus",
@@ -321,10 +333,14 @@ const MapRenderer: React.FC<MapRendererProps> = ({
       
       const target = graph.getNode(departmentNumber);
 
+
+
       if (!entrance || !target) {
         console.error('Either the entrance or department node is missing');
         return;
       }
+
+      setTargetFloor(target.floor)
 
       // Clear previous path if exists
       if (pathPolylineRef.current) {

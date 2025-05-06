@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Toaster } from "../../ui/sonner";
 
-type ExportType = 'Nodes' | 'Edges' | 'Directories';
+type ExportType = 'Nodes' | 'Edges' | 'Directories' | 'Employees';
 
 interface ExportCSVProps {
     type: ExportType;
@@ -55,24 +55,32 @@ export default function ExportCSV({type} : ExportCSVProps) {
         services: string;
         telephone: string;
     }[]>([]);
+    const [employees, setEmployees] = useState<{
+        id: string;
+        employee_name: string;
+        created_at: string;
+    }[]>([]);
 
     const { data: nodesData, isLoading: isLoadingNodes } = trpc.getAllNodes.useQuery();
     const { data: edgesData, isLoading: isLoadingEdges } = trpc.getAllEdges.useQuery();
     const { data: directoriesData, isLoading: isLoadingDirectories } = trpc.getDirectories.useQuery();
+    const { data: employeesData, isLoading: isLoadingEmployees} = trpc.getEmployees.useQuery();
 
     useEffect(() => {
-        if(nodesData && edgesData && directoriesData) {
+        if(nodesData && edgesData && directoriesData && employeesData) {
             setNodes(nodesData);
             setEdges(edgesData);
             setDirectories(directoriesData);
+            setEmployees(employeesData);
         }
-    }, [nodesData, edgesData, directoriesData]);
+    }, [nodesData, edgesData, directoriesData, employeesData]);
 
 
         const downloadCSV = async () => {
             let csv_edge = "source_id, target_id, weight\n";
             let csv_node = "id, building, floor, name, x, y, type\n";
             let csv_directories = "name, services, location, telephone\n";
+            let csv_employees = "name, id\n";
 
             nodes.forEach((file) => {
                 csv_node += `${file.id}, ${file.building}, ${file.floor}, ${file.name}, ${file.x}, ${file.y}, ${file.type}\n`;
@@ -82,6 +90,9 @@ export default function ExportCSV({type} : ExportCSVProps) {
             });
             directories.forEach((file) => {
                 csv_directories += `${file.name}, ${file.services}, ${file.location}, ${file.telephone}\n`;
+            });
+            employees.forEach((file) => {
+                csv_employees += `${file.employee_name}, ${file.id}\n`;
             });
 
             let encodedUri: string;
@@ -99,6 +110,10 @@ export default function ExportCSV({type} : ExportCSVProps) {
                 case 'Directories':
                     encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_directories);
                     filename = 'directories_export.csv';
+                    break;
+                case 'Employees':
+                    encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_employees);
+                    filename = 'employees_export.csv';
                     break;
                 default:
                     console.error("Invalid export type.");

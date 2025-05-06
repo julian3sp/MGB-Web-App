@@ -4,6 +4,7 @@ import {toast} from "sonner"
 import { Toaster } from '../../ui/sonner';
 import { trpc } from '@/lib/trpc';
 import {makeDirectories} from "../../../../../backend/src/server/procedures/directories.ts";
+import {makeManyEmployees} from "../../../../../backend/src/server/procedures/employee.ts";
 
 export default function ImportPage() {
   const [files, setFiles] = useState<File[]>([])
@@ -13,6 +14,8 @@ export default function ImportPage() {
   const makeEdge = trpc.makeEdge.useMutation()
   const deleteEdges = trpc.deleteAllEdges.useMutation()
   const deleteAllDirectories = trpc.deleteAllDirectories.useMutation()
+  const deleteAllEmployees = trpc.deleteEmployees.useMutation()
+  const makeManyEmployees = trpc.makeManyEmployees.useMutation()
 
   const utils = trpc.useUtils();
 
@@ -68,6 +71,7 @@ export default function ImportPage() {
             toast.success(`Directories from "${file.name}" uploaded successfully.`)
           } else if (headers.length === 3) {
             await deleteEdges.mutateAsync()
+            console.log("Employees deleted.")
             const inputs = lines.slice(1).map((line) => {
               const values = line.split(",")
               return {
@@ -80,7 +84,18 @@ export default function ImportPage() {
             })
             await makeEdge.mutateAsync(inputs)
             toast.success(`Edges from "${file.name}" uploaded successfully.`)
-          }else {
+          } else if (headers.length === 2) {
+            await deleteAllEmployees.mutateAsync()
+            const inputs = lines.slice(1).map((line) => {
+              const values = line.split(",")
+              return {
+                employee_name: values[0]?.trim().replace(/"/g, ""),
+                id: values[1]?.trim().replace(/"/g, "")
+              }
+            })
+            await makeManyEmployees.mutateAsync(inputs)
+            toast.success(`Employees from "${file.name}" uploaded successfully.`)
+          } else {
             toast.error(`Invalid file format for "${file.name}". Please check the headers.`)
           }
         } catch (err) {

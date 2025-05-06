@@ -14,10 +14,9 @@ export function createMarkers(
     nodes: Node[],
     setNodeDetails: (node: Node) => void,
     type: 'normal' | 'removed' = 'normal',
-    onNodeMove: () => void,
+    onNodeMove: () => void = () => {},
     setSelectedNode?: (n: Node, m: google.maps.marker.AdvancedMarkerElement) => void
-
-    ) {
+){
     const markers: google.maps.marker.AdvancedMarkerElement[] = [];
     const zIndex = type === 'removed' ? 9999 : 1; // Red dot on top, Blue dot at the bottom
     console.log("number of nodes for floor: ", nodes);
@@ -196,47 +195,26 @@ function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+let numAdded = 1
+
+export function resetInc(){
+    numAdded = 1
+}
+
 export function addNodeListener(
     map: google.maps.Map,
     building: string,
     floor: number,
     setNodeDetails: (node: Node) => void,
-    onNewMarker: (m: google.maps.marker.AdvancedMarkerElement) => void,
     firstNode: Node,
     onNodeMove: () => void
-    ): google.maps.MapsEventListener {
-    console.log("Last Node: ", firstNode)
-    let id = firstNode.id + 1
-    console.log("New node ID:", id, " type: ", typeof(id))
-
+): google.maps.MapsEventListener {
     return google.maps.event.addListener(map, "dblclick", (event) => {
-        const newNode = {
-            id: id,
-            name: '',
-            building,
-            floor,
-            x: event.latLng.lat(),
-            y: event.latLng.lng(),
-            edgeCost: 0,
-            totalCost: 0,
-            type: NodeType.Hall
-        }
-        console.log("New node: ", newNode)
+        const id = firstNode.id + numAdded;
+        const newNode: Node = { id, name:'', building, floor, x:event.latLng.lat(), y:event.latLng.lng(), edgeCost:0, totalCost:0, type:NodeType.Hall };
         graph.addNode(newNode);
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-            position: event.latLng,
-            map,
-            title: "New Node",
-            zIndex: 1,
-            gmpDraggable: true,
-            content: nodeMarker(graph.neighborCount(id), "normal"),
-        });
-        console.log("New node added");
-        // if (!node.id) continue;
+        onNodeMove();
 
-        markerUI(marker, graph.getNode(id), setNodeDetails, onNodeMove);
-        onNewMarker(marker);
-        id += 1
+        numAdded += 1;
     });
 }
-

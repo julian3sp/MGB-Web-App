@@ -4,7 +4,7 @@ import { createMGBOverlays, MGBOverlays } from '../../map/overlays/MGBOverlay';
 import { createPatriot20Overlays , Patriot20Overlays, updatePatriotPlace20} from '../../map/overlays/20PatriotOverlay';
 import { createFaulknerOverlays } from '@/components/map/overlays/FaulknerOverlay.tsx';
 import { createPatriot22Overlays, Patriot22Overlays, updatePatriotPlace22, } from '../../map/overlays/22PatriotOverlay';
-import { addNodeListener, createMarkers } from '../../map/overlays/createMarkers';
+import { addNodeListener, createMarkers, resetInc} from '../../map/overlays/createMarkers';
 import ImportAllNodesAndEdges from '../mapEditorComponent/Import';
 import {trpc} from '@/lib/trpc';
 import MapEditorControls from '../mapEditorComponent/MapEditorControl';
@@ -291,8 +291,8 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
                     buildingKey,
                     floor,
                     setNodeDetails,
-                    marker => setStaticMarkers(prev => [...prev, marker]),
-                    firstNode
+                    firstNode,
+                    () => displayNodes()             // <-- your onNodeMove callback
                 );
             } catch (error) {
                 console.error("Error fetching node data:", error);
@@ -417,6 +417,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
         await deleteNodes.mutateAsync(edits.deletedNodes);
         await deleteEdges.mutateAsync(edits.deletedEdges);
         console.log("edits committed");
+        resetInc()
 
         const [nodesRes, edgesRes] = await Promise.all([
             refetchNodes(),

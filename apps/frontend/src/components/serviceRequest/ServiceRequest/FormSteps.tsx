@@ -8,6 +8,7 @@ import { languages } from '../data/languages';
 import TextArea from '../../TextArea';
 import { trpc } from '@/lib/trpc.ts';
 import FileUploadService from "../../ui/fileUploadService.tsx"
+import {EmployeeDropdown} from "@/components/serviceRequest/inputFields/EmployeeDropdown.tsx";
 
 type FormStepsProps = {
     currentStep: number;
@@ -60,6 +61,11 @@ type FormStepsProps = {
     clearError: (field: string) => void;
     formValid: boolean;
 };
+
+interface Employee {
+    id: string;
+    name: string;
+}
 
 export function FormSteps({
     currentStep,
@@ -128,6 +134,13 @@ export function FormSteps({
         }
     }, [currentStep]);
 
+    const setEmployee = (employee: Employee | null) => {
+        setName(employee.name)
+        setEmployeeID(employee.id)
+    }
+
+
+
     // Prevent scrolling when form is not valid
     const handleWheel = (e: WheelEvent) => {
         if (!formValid) {
@@ -176,32 +189,7 @@ export function FormSteps({
                     >
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6  mt-6">
                             <div>
-                                <InputHeader>Name</InputHeader>
-                                <ErrorPopUp
-                                    value={name}
-                                    setState={setName}
-                                    placeholder="Name"
-                                    width="w-full"
-                                    error={errors.name}
-                                    clearError={() => clearError('name')}
-                                />
-                            </div>
-
-                            <div>
-                                <InputHeader>Employee ID</InputHeader>
-                                <ErrorPopUp
-                                    value={employeeID}
-                                    setState={(value) => {
-                                        if (/^\d*$/.test(value)) {
-                                            setEmployeeID(value);
-                                        }
-                                    }}
-                                    maxLength={9}
-                                    placeholder="Employee ID"
-                                    width="w-full"
-                                    error={errors.employeeID}
-                                    clearError={() => clearError('employeeID')}
-                                />
+                                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee}/>
                             </div>
                         </div>
                     </motion.div>

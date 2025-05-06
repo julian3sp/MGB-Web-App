@@ -470,7 +470,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
-        setselectedNode({ id: node.id.toString(), name: node.name, x: node.x, y: node.y, nodeType: node.type });
+        setselectedNode({ id: node.id, name: node.name, x: node.x, y: node.y, nodeType: node.type });
     };
 
     useEffect(() => {

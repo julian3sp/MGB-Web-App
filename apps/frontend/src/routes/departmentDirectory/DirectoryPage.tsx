@@ -269,6 +269,7 @@ const DirectoryPage = () => {
                             <ExportCSV type="Nodes" />
                             <ExportCSV type="Edges" />
                             <ExportCSV type="Directories" />
+                            <ExportCSV type="Employees" />
                         </div>
 
                         <DropdownMenu>

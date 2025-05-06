@@ -15,7 +15,11 @@ import {
     requestCountByLocation,
     requestCountByPriority,
 } from './server/procedures/requests';
-import { getEmployee, makeEmployee } from './server/procedures/employee';
+import {
+    getEmployees,
+    deleteEmployees,
+    makeManyEmployees,
+} from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
 import {
@@ -61,8 +65,9 @@ const appRouter = t.router({
     getRequestStatusCounts: requestCountByStatus,
     getRequestLocationCounts: requestCountByLocation,
     getRequestPriorityCounts: requestCountByPriority,
-    getEmployees: getEmployee,
-    makeEmployee: makeEmployee,
+    getEmployees: getEmployees,
+    deleteEmployees: deleteEmployees,
+    makeManyEmployees: makeManyEmployees,
     makeReview: makeReview,
     getReviews: getReviews,
     validUser: getUser,

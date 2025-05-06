@@ -88,6 +88,7 @@ function markerUI(marker: google.maps.marker.AdvancedMarkerElement, node: Node,
     }[] = [];
 
     marker.addListener('dragstart', () => {
+        console.log("Clicked: ", node);
         const connectedEdges = graph.getAllEdges().filter(
             edge => edge.sourceId.id === node.id || edge.targetId.id === node.id
         );
@@ -222,7 +223,6 @@ export function addNodeListener(
         }
         console.log("New node: ", newNode)
         graph.addNode(newNode);
-        id +=1
         const marker = new google.maps.marker.AdvancedMarkerElement({
             position: event.latLng,
             map,
@@ -233,8 +233,10 @@ export function addNodeListener(
         });
         console.log("New node added");
         // if (!node.id) continue;
+
         markerUI(marker, graph.getNode(id), setNodeDetails, onNodeMove);
         onNewMarker(marker);
+        id += 1
     });
 }
 

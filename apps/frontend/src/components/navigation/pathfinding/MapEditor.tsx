@@ -303,7 +303,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
             nodeListenerRef.current?.remove();
             nodeListenerRef.current = null;
         };
-    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode]);
+    }, [map, selectedHospital, selectedFloor, showNodes, edgeMode, selectedNode]);
 
     async function fetchData() {
         const { data: latestLargestArr } = await refetchLargestId();
@@ -470,6 +470,7 @@ const MapEditor: React.FC<MapEditorProps> = ({ onMapReady }) => {
 
 
     const setNodeDetails = (node: Node) => {
+        console.log("Attempted selection: ", node)
         setselectedNode({ id: node.id, name: node.name, x: node.x, y: node.y, nodeType: node.type });
     };
 

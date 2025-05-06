@@ -23,6 +23,7 @@ const MuteIcon = () => (
 
 interface HospitalDirectionsGuideProps {
   pathNodes?: Node[];
+  targetFloor: number;
   selectedFloor: number;
   buildingName?: string;
   textDirections: string[];
@@ -59,6 +60,7 @@ const convertDistance = (distance: string, useFeet: boolean): string => {
 const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
   pathNodes,
   selectedFloor,
+  targetFloor,
   buildingName,
   textDirections,
 }) => {
@@ -147,19 +149,18 @@ const HospitalDirectionsGuide: React.FC<HospitalDirectionsGuideProps> = ({
 
       {isDropdownOpen && (
         <>
+          {targetFloor !== 1 && (
+              <div className="mt-4 p-3 bg-[#b1e4e3] border-l-4 border-[#003a96] text-[#003a96] font-semibold">
+                <p className="text-[16px] inline font-extrabold">Note:</p><p className="text-[15px] inline"> Your destination is on floor: {targetFloor}.</p>
+              </div>
+          )}
           <ol className="space-y-2 list-decimal pl-5">
             {convertedDirections.map((direction, index) => (
-              <li key={index} className="text-gray-700">
+              <li key={index} className="text-gray-700 ">
                 {direction}
               </li>
             ))}
           </ol>
-
-          {pathNodes.some(node => node.floor !== selectedFloor) && (
-            <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
-              <p>Note: Your destination requires changing floors.</p>
-            </div>
-          )}
         </>
       )}
     </div>

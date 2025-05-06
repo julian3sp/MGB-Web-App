@@ -66,6 +66,7 @@ const MapComponent: React.FC = () => {
     });
     const [mgbOverlays, setMgbOverlays] = useState<MGBOverlays | null>(null);
     const [parkingLot, setParkingLot] = useState("")
+    const [targetFloor, setTargetFloor] = useState<number>(1);
 
     // Calculate travel times when start or end location changes.
     useEffect(() => {
@@ -167,6 +168,10 @@ const MapComponent: React.FC = () => {
         }
     };
 
+    const floorWrap = (floor: number) => {
+        setTargetFloor(floor);
+    }
+
     function getDeptNum(department: { name: string; floor: string[] }): number {
         const CNdepartmentMapping: Record<string, number> = {
             'Multi-Specialty Clinic': 1267,
@@ -222,9 +227,12 @@ const MapComponent: React.FC = () => {
             'Multi-Specialty Clinic': 257,
             'Blood Draw/Phlebotomy': 1168,
             'Primary Care': 797,
+            'Community Room': 1062,
+
         };
         const Pat22Checkin: Record<string, number> = {
             'Multi-Specialty Clinic': 658,
+            'Patient Financial Services': 396,
             'Blood Draw/Phlebotomy': 1191,
             'Primary Care': 1082,
         };
@@ -258,6 +266,18 @@ const MapComponent: React.FC = () => {
             'Vascular Lab': 3317,
             'Recovery': 3317
         };
+
+        const BelkinMapping: Record<string, number> = {
+            'Radiology Admin': 3286,
+            'Dialysis': 3232,
+            'Community Health': 3273,
+        }
+
+        const BelkinCheckin: Record<string, number> = {
+            'Radiology Admin': 3280,
+            'Dialysis': 3280,
+            'Community Health': 3280,
+        }
 
         const mainCampusMapping: Record<string, number> = {
             'Podiatry': 3668,
@@ -299,6 +319,8 @@ const MapComponent: React.FC = () => {
                 return Pat22departmentMapping[department.name];
             } else if (selectedPlace?.name === 'Faulkner') {
                 return FaulknerMapping[department.name];
+            } else if (selectedPlace?.name === 'Belkin House') {
+                return BelkinMapping[department.name];
             } else if (selectedPlace?.name === 'Main Campus') {
                 return mainCampusMapping[department.name];
             }
@@ -313,6 +335,8 @@ const MapComponent: React.FC = () => {
                 return Pat22Checkin[department.name];
             } else if (selectedPlace?.name === 'Faulkner') {
                 return FaulknerCheckin[department.name];
+            } else if (selectedPlace?.name === 'Belkin House') {
+                return BelkinCheckin[department.name];
             } else if (selectedPlace?.name === 'Main Campus') {
                 return mainCampusCheckin[department.name];
             }
@@ -523,6 +547,7 @@ const MapComponent: React.FC = () => {
                                     <br /> <br />
                                     <HospitalDirectionsGuide
                                         pathNodes={pathNodes}
+                                        targetFloor={targetFloor}
                                         selectedFloor={currentFloor}
                                         buildingName={selectedPlace?.name}
                                         textDirections={textDirections}
@@ -572,6 +597,7 @@ const MapComponent: React.FC = () => {
                     selectedDestination={selectedPlace}
                     onZoomChange={handleZoomChange}
                     selectedFloor={currentFloor}
+                    setTargetFloor={floorWrap}
                     onFloorChange={setCurrentFloor}
                     departmentNumber={deptNumber}
                     disableDoubleClickZoom={true}

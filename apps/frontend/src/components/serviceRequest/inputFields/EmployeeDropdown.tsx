@@ -51,10 +51,10 @@ export function EmployeeDropdown({
     )
 
     return (
-        <div className="flex items-start space-x-4">
+        <div className="flex items-start  space-x-4">
             {/* Employee Name section */}
-            <div className="flex flex-col">
-        <span className="text-[11pt] font-[Poppins] text-gray-600 mb-1">
+            <div className="flex flex-col w-full">
+        <span className="text-[11pt] font-[Poppins] text-black mb-1">
           Employee Name
         </span>
                 <div className="relative">
@@ -65,8 +65,8 @@ export function EmployeeDropdown({
                                 role="combobox"
                                 aria-expanded={open}
                                 className={cn(
-                                    `h-[48px] bg-white font-[Poppins] text-[11pt] shadow font-normal justify-between ${width}`,
-                                    !selectedEmployee && !open ? 'text-gray-500' : 'text-black'
+                                    `h-[48px] bg-white font-[Poppins] w-full text-[11pt] shadow font-normal justify-between ${width}`,
+                                    !selectedEmployee && !open ? 'text-black' : 'text-black'
                                 )}
                             >
                                 {selectedEmployee?.name || placeholder}
@@ -115,11 +115,11 @@ export function EmployeeDropdown({
 
             {/* Employee ID section */}
             {selectedEmployee && (
-                <div className="flex flex-col">
-          <span className="text-[11pt] font-[Poppins] text-gray-600 mb-1">
+                <div className={'w-full'}>
+          <span className="text-[11pt] font-[Poppins] text-black">
             Employee ID
           </span>
-                    <div className="h-[48px] w-[200px] bg-white shadow border border-input rounded-md px-4 py-2 font-[Poppins] text-[11pt] text-black flex items-center">
+                    <div className="h-[48px] mt-1 w-full bg-white shadow border border-input rounded-md px-4 py-2 font-[Poppins] text-[11pt] text-black flex items-center">
                         {selectedEmployee.id}
                     </div>
                 </div>

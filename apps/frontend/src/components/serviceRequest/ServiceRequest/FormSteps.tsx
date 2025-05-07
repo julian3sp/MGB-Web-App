@@ -171,27 +171,22 @@ export function FormSteps({
     };
 
     return (
-        <div className="flex flex-col border-1 p-3 rounded-lg shadow-lg">
+        <div className="flex flex-col border-1 p-2 rounded-lg shadow-lg">
             <div
                 ref={scrollContainerRef}
                 className={`snap-y snap-mandatory overflow-y-auto w-full scroll-smooth ${currentStep === 3 ? `h-116` : 'h-96'}`} // grow more for step 3 to allow file names to be visible
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {/* Step 1 */}
-                <div className="snap-start w-full h-full flex flex-col">
+                <div className="snap-start w-full p-5 h-full">
                     <motion.div
                         key="step1"
                         initial={{ y: 100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="flex-grow"
                     >
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6  mt-6">
-                            <div>
-                                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee} width={'w-[300px]'}/>
-                            </div>
-                        </div>
+                                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee}/>
                     </motion.div>
                 </div>
 

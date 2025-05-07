@@ -128,12 +128,12 @@ export function FinalReview({
 
     return (
         <div className={'border-1 shadow-lg rounded-lg  ml-5 py-5 '}>
+            <div className={'px-6 pb-3'}>
+                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee} width={'w-full'}/>
+            </div>
             <div className="grid  grid-cols-2 gap-x-4 gap-y-4 px-6">
                 {/* General Info */}
-                <div>
-                    <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee} width={'w-[235px]'}/>
-                </div>
-                <br/>
+
                 <div>
                     <InputHeader>Location</InputHeader>
                     <SRQDropdown

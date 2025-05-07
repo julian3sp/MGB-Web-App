@@ -33,7 +33,7 @@ export function EmployeeDropdown({
                                      selectedEmployee,
                                      setEmployee,
                                      placeholder = 'Select an employee...',
-                                     width = 'w-[300px]',
+                                     width,
                                  }: EmployeeDropdownProps) {
     const [open, setOpen] = React.useState(false)
     const {
@@ -119,7 +119,7 @@ export function EmployeeDropdown({
           <span className="text-[11pt] font-[Poppins] text-gray-600 mb-1">
             Employee ID
           </span>
-                    <div className="h-[48px] w-[200px] border border-gray-300 rounded bg-white px-3 py-2 font-[Poppins] text-[11pt] text-gray-800 flex items-center">
+                    <div className="h-[48px] w-[200px] bg-white shadow border border-input rounded-md px-4 py-2 font-[Poppins] text-[11pt] text-black flex items-center">
                         {selectedEmployee.id}
                     </div>
                 </div>

@@ -189,7 +189,7 @@ export function FormSteps({
                     >
                         <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-6  mt-6">
                             <div>
-                                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee}/>
+                                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee} width={'w-[300px]'}/>
                             </div>
                         </div>
                     </motion.div>

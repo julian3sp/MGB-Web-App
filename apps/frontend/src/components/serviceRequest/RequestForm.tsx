@@ -398,11 +398,11 @@ function RequestForm({ title, type }: requestFormProps) {
         <div className={'w-full h-screen'}>
             <div className={""}>
                 <form
-                    className=" ml-5 text-sm flex flex-row"
+                    className=" text-sm flex flex-row"
                     onSubmit={handleSubmit}
                     onReset={handleReset}
                 >
-                    <div className="w-full flex flex-col gap-5 gap-x-10">
+                    <div className="w-full flex flex-col gap-5 gap-x-2">
                         <motion.div
                             key="step1"
                             initial={{ y: 100, opacity: 0 }}
@@ -505,7 +505,7 @@ function RequestForm({ title, type }: requestFormProps) {
                             )}
                         </div>
                     </div>
-                    <div className={'p-5 pt-5 '}>
+                    <div className={'pl-5 pt-5 '}>
                     <ProgressBar
                         currentStep={currentStep}
                         name={name}

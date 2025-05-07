@@ -15,11 +15,7 @@ import {
     requestCountByLocation,
     requestCountByPriority,
 } from './server/procedures/requests';
-import {
-    getEmployees,
-    deleteEmployees,
-    makeManyEmployees,
-} from './server/procedures/employee';
+import { getEmployees, deleteEmployees, makeManyEmployees } from './server/procedures/employee';
 import { router } from './server/trpc.ts';
 import { getUser, makeUser } from './server/procedures/login.ts';
 import {

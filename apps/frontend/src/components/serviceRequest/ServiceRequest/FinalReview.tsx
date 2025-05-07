@@ -6,6 +6,7 @@ import TextArea from '../../TextArea';
 import { languages } from '../data/languages';
 import { trpc } from '@/lib/trpc.ts';
 import FileUploadService from "@/components/ui/fileUploadService.tsx";
+import {EmployeeDropdown} from "@/components/serviceRequest/inputFields/EmployeeDropdown.tsx";
 
 type FinalReviewProps = {
     name: string;
@@ -56,6 +57,11 @@ type FinalReviewProps = {
     errors: any;
     clearError: (field: string) => void;
 };
+
+interface Employee {
+    id: string;
+    name: string;
+}
 
 export function FinalReview({
     type,
@@ -115,38 +121,18 @@ export function FinalReview({
         "Brigham & Women's Hospital Main Campus": ['Main Campus'], //None in CSV yet, assuming this would be format used
     };
 
+    const setEmployee = (employee: Employee | null) => {
+        setName(employee.name)
+        setEmployeeID(employee.id)
+    }
+
     return (
         <div className={'border-1 shadow-lg rounded-lg  ml-5 py-5 '}>
+            <div className={'px-6 pb-3'}>
+                <EmployeeDropdown selectedEmployee={{name: name, id: employeeID}} setEmployee={setEmployee} width={'w-full'}/>
+            </div>
             <div className="grid  grid-cols-2 gap-x-4 gap-y-4 px-6">
                 {/* General Info */}
-                <div>
-                    <InputHeader>Name</InputHeader>
-                    <ErrorPopUp
-                        value={name}
-                        setState={setName}
-                        placeholder="Name"
-                        width="w-full"
-                        error={errors.name}
-                        clearError={() => clearError('name')}
-                    />
-                </div>
-
-                <div>
-                    <InputHeader>Employee ID</InputHeader>
-                    <ErrorPopUp
-                        value={employeeID}
-                        setState={(value) => {
-                            if (/^\d*$/.test(value)) {
-                                setEmployeeID(value);
-                            }
-                        }}
-                        placeholder="Employee ID"
-                        width="w-full"
-                        maxLength={9}
-                        error={errors.employeeID}
-                        clearError={() => clearError('employeeID')}
-                    />
-                </div>
 
                 <div>
                     <InputHeader>Location</InputHeader>
